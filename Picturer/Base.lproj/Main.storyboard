@@ -1464,6 +1464,7 @@
                     </view>
                     <connections>
                         <outlet property="_btn_back" destination="a5u-Yd-sYU" id="vZK-lX-G79"/>
+                        <outlet property="_btn_title" destination="o94-bX-5fM" id="ybz-oB-9se"/>
                         <outlet property="_collectionView" destination="CT1-pg-RIT" id="7dZ-OJ-cV5"/>
                     </connections>
                 </viewController>

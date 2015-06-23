@@ -14,6 +14,8 @@ import AssetsLibrary
 
 
 
+
+
 // Group Model
 class DKAssetGroup : NSObject {
     var groupName: String!
@@ -40,14 +42,12 @@ class DKAsset: NSObject {
     }
 }
 
-
-
-
-
 class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{    
         
         @IBOutlet weak var _btn_back:UIButton?
         @IBOutlet weak var _collectionView:UICollectionView!
+        @IBOutlet weak var _btn_title:UIButton?
+    
         lazy private var library: ALAssetsLibrary = {
             return ALAssetsLibrary()
         }()
@@ -80,10 +80,23 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                     if group.numberOfAssets() != 0 {
                         let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
                         
+                        
+                        
+                        self._btn_title?.setTitle(groupName, forState: UIControlState.Normal)
+                       
+                        
+                        //---三角位置
+                        var size = CGRect()
+                        var size2 = CGSize()
+                        size = (groupName+"weewtewt").boundingRectWithSize(size2, options: NSStringDrawingOptions.UsesFontLeading, attributes: nil, context: nil);
+                        
+                        
+                        
                         let assetGroup = DKAssetGroup()
                         assetGroup.groupName = groupName
                         assetGroup.thumbnail = UIImage(CGImage: group.posterImage().takeUnretainedValue())
                         assetGroup.group = group
+                        
                         
                         
                         assetGroup.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in

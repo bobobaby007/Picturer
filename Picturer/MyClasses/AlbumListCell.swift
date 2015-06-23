@@ -19,7 +19,7 @@ class AlbumListCell :  UITableViewCell{
     
     
     func setThumbImage(_image:NSString)->Void{
-        _imageView=UIImageView(frame: CGRectMake(4, 3, self.bounds.height-6, self.bounds.height-4))
+        _imageView=UIImageView(frame: CGRectMake(5, 5, self.bounds.height-10, self.bounds.height-10))
         _imageView?.contentMode=UIViewContentMode.ScaleAspectFill
         _imageView?.layer.cornerRadius=5
         _imageView?.layer.masksToBounds=true
