@@ -1,10 +1,12 @@
 //
 //  Manage_imagePicker.swift
-//  Picturers
+//  Picturer
 //
 //  Created by Bob Huang on 15/6/20.
 //  Copyright (c) 2015年 4view. All rights reserved.
 //
+
+//----弹出选择相册
 
 import Foundation
 import UIKit
