@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Picturer.xcodeproj">
+      location = "self:/Users/bobobaby007/Documents/work/2015/Picturers/xcode/Picturers/Picturer.xcodeproj">
    </FileRef>
 </Workspace>
