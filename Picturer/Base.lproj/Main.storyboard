@@ -1203,6 +1203,12 @@
                                             <action selector="clickAction:" destination="RFK-fv-XPR" eventType="touchUpInside" id="7Ec-2T-C4H"/>
                                         </connections>
                                     </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow.png" translatesAutoresizingMaskIntoConstraints="NO" id="31U-7a-mNi">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <variation key="widthClass=compact" fixedFrame="YES">
+                                            <rect key="frame" x="900" y="32" width="10" height="10"/>
+                                        </variation>
+                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VQx-Eu-g4j">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                         <constraints>
@@ -1310,6 +1316,7 @@
                                 <variation key="default">
                                     <mask key="subviews">
                                         <exclude reference="o94-bX-5fM"/>
+                                        <exclude reference="31U-7a-mNi"/>
                                         <exclude reference="VQx-Eu-g4j"/>
                                         <exclude reference="a5u-Yd-sYU"/>
                                     </mask>
@@ -1346,6 +1353,7 @@
                                 <variation key="widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="o94-bX-5fM"/>
+                                        <include reference="31U-7a-mNi"/>
                                         <include reference="VQx-Eu-g4j"/>
                                         <include reference="a5u-Yd-sYU"/>
                                     </mask>
@@ -1447,6 +1455,7 @@
                         <outlet property="_btn_back" destination="a5u-Yd-sYU" id="vZK-lX-G79"/>
                         <outlet property="_btn_title" destination="o94-bX-5fM" id="ybz-oB-9se"/>
                         <outlet property="_collectionView" destination="CT1-pg-RIT" id="7dZ-OJ-cV5"/>
+                        <outlet property="_img_arrow" destination="31U-7a-mNi" id="JyO-Ko-E8S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VT5-wg-sAc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1454,4 +1463,7 @@
             <point key="canvasLocation" x="276" y="1579"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="arrow.png" width="18" height="10"/>
+    </resources>
 </document>

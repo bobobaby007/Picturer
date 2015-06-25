@@ -50,6 +50,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         @IBOutlet weak var _btn_back:UIButton?
         @IBOutlet weak var _collectionView:UICollectionView!
         @IBOutlet weak var _btn_title:UIButton?
+        @IBOutlet weak var _img_arrow:UIImageView?
     
         var _groupPicker:groupPickerController?
     
@@ -89,23 +90,10 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                         
                         let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
                         
-                        
-                        
-                        
-                       
-                        
-                        //---三角位置
-                        var size = CGRect()
-                        var size2 = CGSize()
-                        size = (groupName+"weewtewt").boundingRectWithSize(size2, options: NSStringDrawingOptions.UsesFontLeading, attributes: nil, context: nil);
-                        
-                        
-                        
                         let assetGroup = DKAssetGroup()
                         assetGroup.groupName = groupName
                         assetGroup.thumbnail = UIImage(CGImage: group.posterImage().takeUnretainedValue())
                         assetGroup.group = group
-                        
                         
                         
                         
@@ -135,15 +123,22 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     
     func _loadImagesAt(_groupIndex:Int)->Void{
         let _group:DKAssetGroup=self._groups.objectAtIndex(_groupIndex) as! DKAssetGroup
-        self._images=NSMutableArray()
+        self._images=[DKAsset()]
         self._btn_title?.setTitle(_group.groupName, forState: UIControlState.Normal)
+        
+        //---三角位置
+        var size = CGRect()
+        var size2 = CGSize()
+        size = (_group.groupName+"").boundingRectWithSize(size2, options: NSStringDrawingOptions.UsesFontLeading, attributes: nil, context: nil);
+        _img_arrow?.frame=CGRect(x: self.view.bounds.width/2+size.width,y: 32,width: 10,height: 10)
+        
         _group.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
                 let asset = DKAsset()
                 asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
                 asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
                 asset.originalAsset = result
-                self._images.insertObject(asset, atIndex: 0)
+                self._images.insertObject(asset, atIndex: 1)
                 self._collectionView!.reloadData()
             } else {
                 self._collectionView!.reloadData()
@@ -160,10 +155,16 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 let identify:String = "PicsShowCell"
                 let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                     identify, forIndexPath: indexPath) as! PicsShowCell
-                let _asset:DKAsset=_images[indexPath.item] as! DKAsset
-                let _image:UIImage=_asset.thumbnailImage!
-                cell._setImageByImage(_image)
-                cell._setSelected(false)
+                
+                if indexPath.item==0{
+                    cell._setImage("camara.png")
+                    cell._setTagHidden(true)
+                }else{
+                    let _asset:DKAsset=_images[indexPath.item] as! DKAsset
+                    let _image:UIImage=_asset.thumbnailImage!
+                    cell._setImageByImage(_image)
+                    cell._setSelected(false)
+                }
                 return cell
         }
         func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -172,11 +173,13 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             // println(_show)
             //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
             
-            let _asset:DKAsset=_images[indexPath.item] as! DKAsset
-             _pic?._setImageByImage(_asset.fullScreenImage!)
-            
-            self.navigationController?.pushViewController(_pic!, animated: true)
-            
+            if indexPath.item==0{
+                
+            }else{
+                let _asset:DKAsset=_images[indexPath.item] as! DKAsset
+                _pic?._setImageByImage(_asset.fullScreenImage!)
+                self.navigationController?.pushViewController(_pic!, animated: true)
+            }
            // _pic?._setImage(_collectionArray[indexPath.item])
             
         }
@@ -276,8 +279,10 @@ class groupPickerController: UIViewController {
         
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
 }
+
+
+
 
 
 
