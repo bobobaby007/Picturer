@@ -29,7 +29,6 @@ class Manage_pic: UIViewController{
     }    
     
     func _setImage(_img:String){
-        
         _imgPath=_img
         _imgView=UIImageView(frame: self.view.frame)
         _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
