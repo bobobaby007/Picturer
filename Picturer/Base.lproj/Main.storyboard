@@ -656,9 +656,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8Mc-Mw-ATg">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                            </imageView>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="4Au-tS-Rso" userLabel="Top">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
@@ -869,30 +866,17 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                         <constraints>
-                            <constraint firstItem="8Mc-Mw-ATg" firstAttribute="bottom" secondItem="zKf-ZX-1MU" secondAttribute="bottomMargin" id="AzT-A1-ngV"/>
-                            <constraint firstItem="8Mc-Mw-ATg" firstAttribute="top" secondItem="zKf-ZX-1MU" secondAttribute="topMargin" id="Q5o-Jr-dJI"/>
                             <constraint firstItem="4Au-tS-Rso" firstAttribute="top" secondItem="zKf-ZX-1MU" secondAttribute="topMargin" id="Yg0-AY-Z0C">
                                 <variation key="widthClass=compact" constant="0.0"/>
-                            </constraint>
-                            <constraint firstAttribute="trailingMargin" secondItem="8Mc-Mw-ATg" secondAttribute="trailing" constant="16" id="Z4L-k4-5Yb">
-                                <variation key="widthClass=compact" constant="-16"/>
-                            </constraint>
-                            <constraint firstItem="8Mc-Mw-ATg" firstAttribute="leading" secondItem="zKf-ZX-1MU" secondAttribute="leadingMargin" constant="16" id="dhp-pu-EvD">
-                                <variation key="widthClass=compact" constant="-16"/>
                             </constraint>
                             <constraint firstAttribute="trailing" secondItem="4Au-tS-Rso" secondAttribute="trailing" id="twH-LV-gp7"/>
                             <constraint firstItem="4Au-tS-Rso" firstAttribute="leading" secondItem="zKf-ZX-1MU" secondAttribute="leading" id="weD-ax-y69"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="8Mc-Mw-ATg"/>
                                 <exclude reference="4Au-tS-Rso"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="AzT-A1-ngV"/>
-                                <exclude reference="Q5o-Jr-dJI"/>
-                                <exclude reference="Z4L-k4-5Yb"/>
-                                <exclude reference="dhp-pu-EvD"/>
                                 <exclude reference="Yg0-AY-Z0C"/>
                                 <exclude reference="twH-LV-gp7"/>
                                 <exclude reference="weD-ax-y69"/>
@@ -900,14 +884,9 @@
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
-                                <include reference="8Mc-Mw-ATg"/>
                                 <include reference="4Au-tS-Rso"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="AzT-A1-ngV"/>
-                                <include reference="Q5o-Jr-dJI"/>
-                                <include reference="Z4L-k4-5Yb"/>
-                                <include reference="dhp-pu-EvD"/>
                                 <include reference="Yg0-AY-Z0C"/>
                                 <include reference="twH-LV-gp7"/>
                                 <include reference="weD-ax-y69"/>
@@ -916,7 +895,6 @@
                     </view>
                     <connections>
                         <outlet property="_btn_back" destination="vk5-8z-ADT" id="eqE-ua-dxk"/>
-                        <outlet property="_imgView" destination="8Mc-Mw-ATg" id="beG-nB-PiV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eJH-Co-Qru" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1142,7 +1120,7 @@
                                 </variation>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                         <constraints>
                             <constraint firstItem="3mC-ZQ-BSQ" firstAttribute="leading" secondItem="eEj-U3-twk" secondAttribute="leading" id="ADj-bu-mVx"/>
@@ -1221,6 +1199,9 @@
                                                 <exclude reference="cjj-MN-zoP"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="clickAction:" destination="RFK-fv-XPR" eventType="touchUpInside" id="7Ec-2T-C4H"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VQx-Eu-g4j">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -1414,7 +1395,7 @@
                                 </connections>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                         <constraints>
                             <constraint firstItem="CT1-pg-RIT" firstAttribute="top" secondItem="jZs-rh-3ed" secondAttribute="topMargin" constant="62" id="2r1-US-pjq"/>

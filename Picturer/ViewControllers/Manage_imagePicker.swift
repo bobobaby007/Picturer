@@ -42,11 +42,16 @@ class DKAsset: NSObject {
     }
 }
 
-class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{    
+
+
+
+class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource{
         
         @IBOutlet weak var _btn_back:UIButton?
         @IBOutlet weak var _collectionView:UICollectionView!
         @IBOutlet weak var _btn_title:UIButton?
+    
+        var _groupPicker:groupPickerController?
     
         lazy private var library: ALAssetsLibrary = {
             return ALAssetsLibrary()
@@ -77,12 +82,16 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             
             library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
                 if group != nil {
+                    
                     if group.numberOfAssets() != 0 {
+                        
+                       
+                        
                         let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
                         
                         
                         
-                        self._btn_title?.setTitle(groupName, forState: UIControlState.Normal)
+                        
                        
                         
                         //---三角位置
@@ -99,34 +108,50 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                         
                         
                         
-                        assetGroup.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-                            if result != nil {
-                                let asset = DKAsset()
-                                asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
-                                asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
-                                asset.originalAsset = result
-                                self._images.addObject(asset)
-                                self._collectionView!.reloadData()
-                            } else {
-                               self._collectionView!.reloadData()
-                            }
-                        }
+                        
                         
                         self._groups.insertObject(assetGroup, atIndex: 0)
+                        
+                        self._loadImagesAt(0)
+                      //  self._groups.addObject(assetGroup)
                     }
+                    
+                    
+                    
+                    
+                    
+                    
                 } else {
-                    self._collectionView.reloadData()
+                    //self._collectionView.reloadData()
                 }
                 }, failureBlock: {(error: NSError!) in
                     //---没有相册
             })
-            
-            
 
-
+            
             
         }
-        
+    
+    
+    func _loadImagesAt(_groupIndex:Int)->Void{
+        let _group:DKAssetGroup=self._groups.objectAtIndex(_groupIndex) as! DKAssetGroup
+        self._images=NSMutableArray()
+        self._btn_title?.setTitle(_group.groupName, forState: UIControlState.Normal)
+        _group.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            if result != nil {
+                let asset = DKAsset()
+                asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
+                asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
+                asset.originalAsset = result
+                self._images.insertObject(asset, atIndex: 0)
+                self._collectionView!.reloadData()
+            } else {
+                self._collectionView!.reloadData()
+            }
+        }
+
+    }
+    
         func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return _images.count;
         }
@@ -147,21 +172,113 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             // println(_show)
             //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
             
-            // _pic?._setImage(_collectionArray[indexPath.item])
+            let _asset:DKAsset=_images[indexPath.item] as! DKAsset
+             _pic?._setImageByImage(_asset.fullScreenImage!)
             
             self.navigationController?.pushViewController(_pic!, animated: true)
             
            // _pic?._setImage(_collectionArray[indexPath.item])
             
         }
+    
+    
+    
+    //-------弹出相册列表代理方法
+    
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return _groups.count
+    }
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return tableView.bounds.size.height/6
+    }
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+        let cell:AlbumListCell=tableView.dequeueReusableCellWithIdentifier("AlbumListCell", forIndexPath: indexPath) as! AlbumListCell
+        let _group:DKAssetGroup=_groups[indexPath.row] as! DKAssetGroup
+        cell.setThumbImageByImage(_group.thumbnail)
+        cell.setTitle(_group.groupName)
+        cell.setDescription(String(_group.group.numberOfAssets()))
+        //cell.imageView?.image=UIImage(named: _albumArray[indexPath.row] as! String)
         
         
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+       // tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.dismissViewControllerAnimated(false, completion: nil)
+        self._loadImagesAt(indexPath.row)
+        
+    }
+    
         
         @IBAction func clickAction(_btn:UIButton)->Void{
             if _btn == _btn_back{
                 self.navigationController?.popViewControllerAnimated(true)
             }
+            if _btn == _btn_title{
+                _groupPicker=groupPickerController()
+               // _groupPicker._tableView?.dataSource=self
+               // _groupPicker._tableView?.delegate=self
+                _groupPicker!._setDelegateAndSource(self, _s: self)
+                //self.navigationController?.presentViewController(_groupPicker, animated: true, completion: nil)
+                self.presentViewController(_groupPicker!, animated: true, completion: nil)
+                
+            }
         }
         
     
 }
+
+
+class groupPickerController: UIViewController {
+    
+    var _topBar:UIView?
+    var _btn_cancel:UIButton?
+    
+    var _tableView:UITableView?
+    
+    var _delegate:UITableViewDelegate?
+    var _source:UITableViewDataSource?
+    
+    
+    func _setDelegateAndSource(_d:UITableViewDelegate,_s:UITableViewDataSource){
+        _tableView=UITableView()
+        _tableView?.delegate=_d
+        _tableView?.dataSource=_s
+    }
+    
+    override func viewDidLoad() {
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        
+        _topBar?.backgroundColor=UIColor.blackColor()
+        
+        _btn_cancel=UIButton(frame:CGRect(x: 0, y: 0, width: 40, height: 62))
+        _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
+        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+        _tableView?.frame = CGRect(x: 0, y: 62, width: self.view.frame.width, height: self.view.frame.height-62)
+        _tableView?.registerClass(AlbumListCell.self, forCellReuseIdentifier: "AlbumListCell")
+        
+        
+        self.view.addSubview(_tableView!)
+        
+        self.view.addSubview(_topBar!)
+        _topBar?.addSubview(_btn_cancel!)
+            }
+    
+    func clickAction(sender:UIButton){
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+}
+
+
+
+

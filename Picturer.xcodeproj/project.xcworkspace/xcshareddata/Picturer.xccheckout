@@ -22,7 +22,7 @@
 		<key>6D88DBCC11FDE8CF9DD0604470D3493C1A47452E</key>
 		<string>../..</string>
 		<key>F26508F60EB715F8B44BA3DB809332C51BED3907</key>
-		<string>../..Picturer/</string>
+		<string>../..Picturer</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/bobobaby007/Picturer.git</string>
@@ -46,7 +46,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>F26508F60EB715F8B44BA3DB809332C51BED3907</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Picturer</string>
+			<string>PicturerPicturer</string>
 		</dict>
 	</array>
 </dict>

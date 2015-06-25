@@ -26,10 +26,18 @@ class AlbumListCell :  UITableViewCell{
         _imageView?.image=UIImage(named: _image as String)
         self.addSubview(_imageView!)
     }
+    
+    func setThumbImageByImage(_image:UIImage)->Void{
+        _imageView=UIImageView(frame: CGRectMake(5, 5, self.bounds.height-10, self.bounds.height-10))
+        _imageView?.contentMode=UIViewContentMode.ScaleAspectFill
+        _imageView?.layer.cornerRadius=5
+        _imageView?.layer.masksToBounds=true
+        _imageView?.image=_image
+        self.addSubview(_imageView!)
+    }
     func setTitle(_text:NSString)->Void{
         _titleLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-20, self.bounds.width-26, 30))
         _titleLable?.text=(_text as String)
-        
         self.addSubview(_titleLable!)
     }
     func setDescription(_text:NSString)->Void{

@@ -12,13 +12,14 @@ import UIKit
 class Manage_pic: UIViewController{
     
     @IBOutlet weak var _btn_back:UIButton?
-    @IBOutlet weak var _imgView:UIImageView?
+    var _imgView:UIImageView?
 
     var _imgPath:String?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        _imgView!.image=UIImage(named: _imgPath!)
+        
     }
     
     @IBAction func clickAction(_btn:UIButton)->Void{
@@ -30,7 +31,20 @@ class Manage_pic: UIViewController{
     func _setImage(_img:String){
         
         _imgPath=_img
-       
+        _imgView=UIImageView(frame: self.view.frame)
+        _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
+       _imgView!.image=UIImage(named: _imgPath!)
+        
+        
+        self.view.addSubview(_imgView!)
     }
+    func _setImageByImage(_img:UIImage){
+        _imgView=UIImageView(frame: self.view.frame)
+        _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
+        _imgView?.image=_img
+        self.view.addSubview(_imgView!)
+    }
+    
+    
     
 }
