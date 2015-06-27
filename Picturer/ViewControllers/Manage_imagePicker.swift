@@ -11,7 +11,7 @@
 import Foundation
 import UIKit
 import AssetsLibrary
-
+import AVFoundation
 
 
 
@@ -45,7 +45,7 @@ class DKAsset: NSObject {
 
 
 
-class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource{
+class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate{
         
         @IBOutlet weak var _btn_back:UIButton?
         @IBOutlet weak var _collectionView:UICollectionView!
@@ -53,6 +53,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         @IBOutlet weak var _img_arrow:UIImageView?
     
         var _groupPicker:groupPickerController?
+        var _cameraPicker: UIImagePickerController!
     
         lazy private var library: ALAssetsLibrary = {
             return ALAssetsLibrary()
@@ -67,7 +68,6 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             return NSMutableArray()
         }()
     
-        var _collectionArray=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
     
     
@@ -168,19 +168,26 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 return cell
         }
         func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-            var _pic:Manage_pic?
-            _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
+            
             // println(_show)
             //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
             
             if indexPath.item==0{
                 
+                _cameraPicker =  UIImagePickerController()
+                //_cameraPicker.delegate = self
+                _cameraPicker.sourceType = .Camera
+                presentViewController(_cameraPicker, animated: true, completion: nil)
+                
+                
             }else{
                 let _asset:DKAsset=_images[indexPath.item] as! DKAsset
+                var _pic:Manage_pic?
+                _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
                 _pic?._setImageByImage(_asset.fullScreenImage!)
                 self.navigationController?.pushViewController(_pic!, animated: true)
             }
-           // _pic?._setImage(_collectionArray[indexPath.item])
+           
             
         }
     
@@ -218,8 +225,19 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         
     }
     
+    
+    //----相机代理方法
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        _cameraPicker.dismissViewControllerAnimated(true, completion: nil)
+        _loadImagesAt(0)
         
-        @IBAction func clickAction(_btn:UIButton)->Void{
+        //_cameraPicker.image = info[UIImagePickerControllerOriginalImage] as? UIImage
+    }
+    
+    
+    
+    @IBAction func clickAction(_btn:UIButton)->Void{
             if _btn == _btn_back{
                 self.navigationController?.popViewControllerAnimated(true)
             }
@@ -230,11 +248,8 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 _groupPicker!._setDelegateAndSource(self, _s: self)
                 //self.navigationController?.presentViewController(_groupPicker, animated: true, completion: nil)
                 self.presentViewController(_groupPicker!, animated: true, completion: nil)
-                
             }
         }
-        
-    
 }
 
 
@@ -268,7 +283,6 @@ class groupPickerController: UIViewController {
         _tableView?.frame = CGRect(x: 0, y: 62, width: self.view.frame.width, height: self.view.frame.height-62)
         _tableView?.registerClass(AlbumListCell.self, forCellReuseIdentifier: "AlbumListCell")
         
-        
         self.view.addSubview(_tableView!)
         
         self.view.addSubview(_topBar!)
@@ -280,6 +294,7 @@ class groupPickerController: UIViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
+
 
 
 

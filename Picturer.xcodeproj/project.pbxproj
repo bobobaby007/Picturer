@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A04ED521B3E720100E884FD /* entroLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A04ED511B3E720100E884FD /* entroLogo.png */; };
 		7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */; };
 		7A2021D31B3C41CF0048AD7C /* camara.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A2021D21B3C41CF0048AD7C /* camara.png */; };
 		7A2021D51B3C41DC0048AD7C /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A2021D41B3C41DC0048AD7C /* arrow.png */; };
@@ -34,6 +35,8 @@
 		7ADD50131B2D402000E44F99 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD50121B2D402000E44F99 /* Images.xcassets */; };
 		7ADD50161B2D402000E44F99 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD50141B2D402000E44F99 /* LaunchScreen.xib */; };
 		7ADD50221B2D402000E44F99 /* PicturersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADD50211B2D402000E44F99 /* PicturersTests.swift */; };
+		7AEC21281B3D9CE800D19D22 /* Social_home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEC21271B3D9CE800D19D22 /* Social_home.swift */; };
+		7AEC212A1B3DA09600D19D22 /* SocialAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AEC21291B3DA09600D19D22 /* SocialAlbumCell.swift */; };
 		7AFB23531B317849001C75C9 /* tableTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB23521B317849001C75C9 /* tableTest.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7A04ED511B3E720100E884FD /* entroLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = entroLogo.png; sourceTree = "<group>"; };
 		7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_home.swift; sourceTree = "<group>"; };
 		7A2021D21B3C41CF0048AD7C /* camara.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camara.png; sourceTree = "<group>"; };
 		7A2021D41B3C41DC0048AD7C /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
@@ -79,6 +83,8 @@
 		7ADD501B1B2D402000E44F99 /* PicturerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PicturerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ADD50201B2D402000E44F99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7ADD50211B2D402000E44F99 /* PicturersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturersTests.swift; sourceTree = "<group>"; };
+		7AEC21271B3D9CE800D19D22 /* Social_home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Social_home.swift; sourceTree = "<group>"; };
+		7AEC21291B3DA09600D19D22 /* SocialAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialAlbumCell.swift; sourceTree = "<group>"; };
 		7AFB23521B317849001C75C9 /* tableTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tableTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,6 +115,7 @@
 				7AA180A81B3413EB005B42C0 /* Manage_pic.swift */,
 				7AA740A51B347D690064C9C9 /* Manage_new.swift */,
 				7A49DC961B3544A7004FAF14 /* Manage_imagePicker.swift */,
+				7AEC21271B3D9CE800D19D22 /* Social_home.swift */,
 			);
 			name = ViewControllers;
 			path = ../Picturer/ViewControllers;
@@ -121,6 +128,7 @@
 				7A9C86C71B32DD490051D067 /* AlbumListCell.swift */,
 				7AA180A41B34034D005B42C0 /* CustomLayout.swift */,
 				7AA180A61B341006005B42C0 /* PicsShowCell.swift */,
+				7AEC21291B3DA09600D19D22 /* SocialAlbumCell.swift */,
 			);
 			name = MyClasses;
 			path = ../Picturer/MyClasses;
@@ -129,6 +137,7 @@
 		7A9C86B81B32D52D0051D067 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				7A04ED511B3E720100E884FD /* entroLogo.png */,
 				7A49DC981B354DB4004FAF14 /* pic_selected.png */,
 				7A49DC991B354DB4004FAF14 /* pic_unSelected.png */,
 				7A2021D21B3C41CF0048AD7C /* camara.png */,
@@ -286,6 +295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A04ED521B3E720100E884FD /* entroLogo.png in Resources */,
 				7ADD50111B2D402000E44F99 /* Main.storyboard in Resources */,
 				7A9C86C31B32D52D0051D067 /* 4.png in Resources */,
 				7A9C86C01B32D52D0051D067 /* 1.png in Resources */,
@@ -326,7 +336,9 @@
 				7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */,
 				7A9C86C81B32DD490051D067 /* AlbumListCell.swift in Sources */,
 				7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */,
+				7AEC21281B3D9CE800D19D22 /* Social_home.swift in Sources */,
 				7ADD50091B2D402000E44F99 /* AppDelegate.swift in Sources */,
+				7AEC212A1B3DA09600D19D22 /* SocialAlbumCell.swift in Sources */,
 				7A9C86CA1B3348700051D067 /* Manage_show.swift in Sources */,
 				7ADD500C1B2D402000E44F99 /* Picturers.xcdatamodeld in Sources */,
 				7A9C86B71B324F4D0051D067 /* AlbumObj.swift in Sources */,
@@ -407,7 +419,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -445,7 +457,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

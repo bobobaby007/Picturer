@@ -13,73 +13,27 @@ import UIKit
 
 
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
-   
+class Social_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
+    
     var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
     @IBOutlet weak var _tableView:UITableView!
-    @IBOutlet weak var _btn_new:UIButton!
     
-    var _offset:CGFloat=0
+    @IBOutlet weak var _btn_back:UIButton!
+
+    
     
     @IBAction func btnHander(btn:UIButton){
         switch btn{
-        case _btn_new:
-            openNewActions()
-            
+        
+        case _btn_back:
+           
+            self.navigationController?.popViewControllerAnimated(true)
         default:
             println("")
         }
         
         
-    }
-    
-    func switchToSocial(){
-        var _controller:Social_home?
-        _controller=self.storyboard?.instantiateViewControllerWithIdentifier("Social_home") as? Social_home
-        
-        let animation = CABasicAnimation(keyPath: "cornerRadius")
-        
-        // Set the starting value
-        animation.fromValue = self.navigationController?.view.layer.cornerRadius
-        
-        // Set the completion value
-        animation.toValue = 0
-        
-        // How may times should the animation repeat?
-        animation.repeatCount = 1000
-        
-        // Finally, add the animation to the layer
-        self.navigationController?.view.layer.addAnimation(animation, forKey: "cornerRadius")
-        
-        self.navigationController?.pushViewController(_controller!, animated: false)
-        
-        
-        
-     
-    }
-    
-    
-    
-    //-----拖动方法
-    
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        println("did end")
-    }
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
-        if _offset < -80.0{
-          _offset=0.0
-          switchToSocial()
-        }
-        _offset=0.0
-    }
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        let _h:CGFloat=scrollView.contentOffset.y
-        
-        if _offset>_h{
-            _offset=_h
-        }
     }
     
     //---------tableview delegate
@@ -88,20 +42,20 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-       return 1
+        return 1
     }
-
+    
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return _tableView.bounds.size.height/5
+        return _tableView.bounds.size.height/2
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var _show:Manage_show?
-         _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
+        _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
         _show?._setPicArray(["1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","6.png","7.png"])
-       // println(_show)
-     //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
+        // println(_show)
+        //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
         self.navigationController?.pushViewController(_show!, animated: true)
     }
     
@@ -115,15 +69,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
         
         
         
-        let cell:AlbumListCell=_tableView.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
+        let cell:SocialAlbumCell=_tableView.dequeueReusableCellWithIdentifier("SocialAlbumCell", forIndexPath: indexPath) as! SocialAlbumCell
         
         
         
-        //cell.textLabel?.text=_albumArray[indexPath.row] as? String
-        cell.setTitle((_albumArray[indexPath.row] as? String)!)
-        cell.setTime("下午2:00")
-        cell.setDescription((_albumArray[indexPath.row] as? String)!+"张")
-        //cell.detailTextLabel?.text="ss"
         cell.setThumbImage(_albumArray[indexPath.row] as! String)
         //cell.imageView?.image=UIImage(named: _albumArray[indexPath.row] as! String)
         
@@ -156,14 +105,14 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     //---左滑动作
     func actionHander(action:UITableViewRowAction!,index:NSIndexPath!)->Void{
         
-       // println(action, index.row)
+        // println(action, index.row)
         switch action.title{
-            case "删除":
+        case "删除":
             println("删除")
             deleteCell(index)
-            case "分享":
+        case "分享":
             openShare()
-            default:
+        default:
             println(action.title)
         }
     }
@@ -206,7 +155,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
         // println(_show)
         //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
         self.navigationController?.pushViewController(_controller!, animated: true)
-
+        
     }
     //---添加新照片
     func newFromLocal(action:UIAlertAction!) -> Void{
@@ -224,10 +173,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
         self.automaticallyAdjustsScrollViewInsets=false
         //self.navigationController?.navigationBarHidden=true
         
-       //_tableView.registerClass(AlbumListCell.self, forCellReuseIdentifier: "AlbumListCell")
+        //_tableView.registerClass(AlbumListCell.self, forCellReuseIdentifier: "AlbumListCell")
         
         //_tableView.hidden=true
-       // _tableView.numberOfSections()=1
+        // _tableView.numberOfSections()=1
         //_tableView.numberOfRowsInSection(2)
         var _app:UIApplication=UIApplication.sharedApplication()
         _app.statusBarHidden=true
