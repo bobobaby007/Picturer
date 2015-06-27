@@ -222,16 +222,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
         
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets=false
-        //self.navigationController?.navigationBarHidden=true
         
-       //_tableView.registerClass(AlbumListCell.self, forCellReuseIdentifier: "AlbumListCell")
-        
-        //_tableView.hidden=true
-       // _tableView.numberOfSections()=1
-        //_tableView.numberOfRowsInSection(2)
-        var _app:UIApplication=UIApplication.sharedApplication()
-        _app.statusBarHidden=true
-        _app.statusBarStyle=UIStatusBarStyle.LightContent
+        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         
         
     }
