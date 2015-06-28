@@ -68,6 +68,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             return NSMutableArray()
         }()
     
+       var _firstLoaded:Bool=true
     
     
     
@@ -100,7 +101,11 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                         
                         self._groups.insertObject(assetGroup, atIndex: 0)
                         
-                        self._loadImagesAt(0)
+                        if self._firstLoaded{
+                           
+                            self._firstLoaded=false
+                        }
+                        
                       //  self._groups.addObject(assetGroup)
                     }
                     
@@ -110,6 +115,8 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                     
                     
                 } else {
+                    
+                     self._loadImagesAt(0)
                     //self._collectionView.reloadData()
                 }
                 }, failureBlock: {(error: NSError!) in
@@ -135,13 +142,14 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         _group.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
                 let asset = DKAsset()
-                asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
-                asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
+                //asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
+                //asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
                 asset.originalAsset = result
                 self._images.insertObject(asset, atIndex: 1)
-                self._collectionView!.reloadData()
+//                self._collectionView!.reloadData()
             } else {
                 self._collectionView!.reloadData()
+                self._collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.None, animated: true)
             }
         }
 
@@ -161,7 +169,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                     cell._setTagHidden(true)
                 }else{
                     let _asset:DKAsset=_images[indexPath.item] as! DKAsset
-                    let _image:UIImage=_asset.thumbnailImage!
+                    let _image:UIImage=UIImage(CGImage:_asset.originalAsset.thumbnail().takeUnretainedValue())!
                     cell._setImageByImage(_image)
                     cell._setSelected(false)
                 }

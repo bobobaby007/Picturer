@@ -19,7 +19,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     var _offset:CGFloat=0
 
-    var _collectionArray:NSArray=["icon_1.png","icon_2.png","icon_3.png","icon_4.png","icon_5.png","icon_6.png","icon_7.png",]
+    var _collectionArray:NSArray=[["pic":"icon_1.png","title":"主页"],["pic":"icon_2.png","title":"朋友"],["pic":"icon_3.png","title":"妙人"],["pic":"icon_4.png","title":"发现"],["pic":"icon_5.png","title":"收藏"],["pic":"icon_6.png","title":"通讯录"],["pic":"icon_7.png","title":"设置"]]
     
     
     @IBAction func btnHander(btn:UIButton){
@@ -61,29 +61,48 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return _collectionArray.count;
     }
-  
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        switch indexPath.item{
+        case 0:
+            let _contr:MyHomepage=MyHomepage()
+            self.navigationController?.pushViewController(_contr, animated: true)
+            
+        default:
+            println("22")
+        }
+    }
+    
+    
+    
+    
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let identify:String = "SocailHomeCell"
         let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
             identify, forIndexPath: indexPath) as! SocailHomeCell
         
-        cell._setImage( _collectionArray[indexPath.item] as! String)
-        
+        cell._setImage( _collectionArray[indexPath.item]["pic"] as! String)
+        cell._setTitle(_collectionArray[indexPath.item]["title"] as! String)
         
         if indexPath.item%2==1{
-            cell._setSelected(true)
+            
+            cell._setAlertNum(8)
+           // cell._setAlertNum(2120)
         }else{
-            cell._setSelected(false)
+            cell._setAlertNum(-1)
         }
         
         if indexPath.item%3==1{
-            cell._setTagHidden(true)
+            cell._setAlertNum(0)
         }else{
             
         }
         return cell
     }
+    
+    
+    
     
     
     func switchToManage(){

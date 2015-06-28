@@ -18,7 +18,7 @@ class LayoutForSocailHome : UICollectionViewLayout {
         smallCellSide=(smallCellSide-CGFloat(2*lineSpacing))/3
         var _cellNum:CGFloat=CGFloat(collectionView!.numberOfItemsInSection(0))
         //println(ceil(_cellNum/3))
-        return CGSizeMake(collectionView!.bounds.size.width,ceil(_cellNum/3)*(smallCellSide+lineSpacing))
+        return CGSizeMake(collectionView!.bounds.size.width,ceil(_cellNum/3)*(smallCellSide+lineSpacing+10))
     }
     // 所有单元格位置属性
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject] {
@@ -50,7 +50,7 @@ class LayoutForSocailHome : UICollectionViewLayout {
             //当前行数，每行显示3个图片，1大2小
             var line:Int =  indexPath.item / 3
             //当前行的Y坐标
-            var lineOriginY =  smallCellSide * CGFloat(line) + lineSpacing * CGFloat(line) + insets.top
+            var lineOriginY =  (smallCellSide + lineSpacing + 10) * CGFloat(line) + insets.top
             var lineOriginX =  smallCellSide * CGFloat(indexPath.item % 3) + CGFloat(indexPath.item % 3)*lineSpacing + insets.top
             //右侧单元格X坐标，这里按左右对齐，所以中间空隙大
             //var rightLargeX =  collectionView!.bounds.size.width - largeCellSide - insets.right
