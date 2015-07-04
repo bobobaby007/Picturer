@@ -10,23 +10,42 @@ import Foundation
 
 class CoreAction: AnyObject {
     //---读取plist
-   class func _loadPlist(__name:String) {
+    
+    class func _fileFullPath(__name:String) -> String{
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
         let documentsDirectory = paths[0] as! String
-        let path = documentsDirectory.stringByAppendingPathComponent(__name+".plist")
+        let path:String = documentsDirectory.stringByAppendingPathComponent(__name)
+        return path
+    }
+    
+   class func _loadPlist(__name:String) -> NSMutableDictionary? {
+    
+        let path = _fileFullPath(__name+".plist")
         let fileManager = NSFileManager.defaultManager()
+    
+       // println(path)
         if(!fileManager.fileExistsAtPath(path)) {
-            println("file is not exist")
+            println("file is not exist"+path)
         } else {
            
         }
-        let resultDictionary = NSMutableDictionary(contentsOfFile: path)
-        println("Loaded GameData.plist file is --> \(resultDictionary?.description)")
+       var _result = NSMutableDictionary(contentsOfFile: path)
+       if _result == nil {
+            return nil
+        }else{
+            return _result
+        }
     }
-    class func _savePlist(__name:String, __dict:NSMutableArray) {
+    class func _ifHasFile(__name:NSString)->Bool{
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
-        let documentsDirectory = paths.objectAtIndex(0) as! NSString
-        let path = documentsDirectory.stringByAppendingPathComponent(__name+".plist")
+        let documentsDirectory = paths[0] as! String
+        let path = documentsDirectory.stringByAppendingPathComponent(__name as String)
+        let fileManager = NSFileManager.defaultManager()
+        return fileManager.fileExistsAtPath(path)
+    }
+    class func _savePlist(__name:String, __dict:NSMutableDictionary) {
+        
+        let path = _fileFullPath(__name+".plist")
         
         let fileManager = NSFileManager.defaultManager()
         if(!fileManager.fileExistsAtPath(path)) {
@@ -34,7 +53,8 @@ class CoreAction: AnyObject {
         } else {
         
         }
-        __dict.writeToFile(path, atomically: false)
+
+        __dict.writeToFile(path, atomically: true)
     }
     
 

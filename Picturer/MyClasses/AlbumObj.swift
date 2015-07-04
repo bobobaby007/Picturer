@@ -8,7 +8,10 @@
 
 import Foundation
 
-class AlbumObj: AnyObject {
-    var thumbImage = NSString()
-    var title = NSString()
+class AlbumObj:AnyObject {
+    
+    var thumbImage = String()
+    var title = String()
+    var cover = String()
+    var images:NSMutableArray = NSMutableArray(array: [PicObj()])
 }

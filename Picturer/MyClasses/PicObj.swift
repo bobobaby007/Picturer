@@ -12,5 +12,6 @@ class PicObj: AnyObject {
     var _thumbImage:String=String()
     var _seleded:Bool=false
     var _originalImage:String=String()
-    
+    var _refreshed:Bool=false
+    var _id:Int=0
 }

@@ -24,6 +24,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     var _currentAction:String="normal"
     
     var _collectionArray:NSMutableArray = []
+    var _selectedArray:NSMutableArray = [PicObj.self]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,11 +90,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
         
         
-    }
-
-    
-    
-    
+    }   
     @IBAction func clickAction(_btn:UIButton)->Void{
         switch _btn{
         case _btn_back!:
@@ -103,6 +100,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             case _action_delete:
                 _currentAction=_action_normal
                 _btn_back?.setTitle("返回", forState: UIControlState.Normal)
+                _btn_edit?.setTitle("编辑", forState: UIControlState.Normal)
                 self._collectionView.reloadData()
             default:
                 println("")

@@ -52,9 +52,6 @@ class SocailHomeCell:UICollectionViewCell {
         
         
         
-        
-        
-        
         _title=UILabel()
         
         _title.textColor=UIColor.whiteColor()
