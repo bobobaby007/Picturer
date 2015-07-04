@@ -31,6 +31,8 @@
 		7A9C86C61B32D52D0051D067 /* 7.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A9C86BF1B32D52D0051D067 /* 7.png */; };
 		7A9C86C81B32DD490051D067 /* AlbumListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9C86C71B32DD490051D067 /* AlbumListCell.swift */; };
 		7A9C86CA1B3348700051D067 /* Manage_show.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9C86C91B3348700051D067 /* Manage_show.swift */; };
+		7AA0E1AE1B4669900070538F /* PicObj.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA0E1AD1B4669900070538F /* PicObj.swift */; };
+		7AA0E1B01B46779E0070538F /* CoreAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA0E1AF1B46779E0070538F /* CoreAction.swift */; };
 		7AA180A51B34034D005B42C0 /* CustomLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA180A41B34034D005B42C0 /* CustomLayout.swift */; };
 		7AA180A71B341006005B42C0 /* PicsShowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA180A61B341006005B42C0 /* PicsShowCell.swift */; };
 		7AA180A91B3413EB005B42C0 /* Manage_pic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA180A81B3413EB005B42C0 /* Manage_pic.swift */; };
@@ -86,6 +88,8 @@
 		7A9C86BF1B32D52D0051D067 /* 7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 7.png; sourceTree = "<group>"; };
 		7A9C86C71B32DD490051D067 /* AlbumListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumListCell.swift; sourceTree = "<group>"; };
 		7A9C86C91B3348700051D067 /* Manage_show.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_show.swift; sourceTree = "<group>"; };
+		7AA0E1AD1B4669900070538F /* PicObj.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicObj.swift; sourceTree = "<group>"; };
+		7AA0E1AF1B46779E0070538F /* CoreAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreAction.swift; sourceTree = "<group>"; };
 		7AA180A41B34034D005B42C0 /* CustomLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLayout.swift; sourceTree = "<group>"; };
 		7AA180A61B341006005B42C0 /* PicsShowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicsShowCell.swift; sourceTree = "<group>"; };
 		7AA180A81B3413EB005B42C0 /* Manage_pic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_pic.swift; sourceTree = "<group>"; };
@@ -148,12 +152,14 @@
 			isa = PBXGroup;
 			children = (
 				7A9C86B61B324F4D0051D067 /* AlbumObj.swift */,
+				7AA0E1AD1B4669900070538F /* PicObj.swift */,
 				7A9C86C71B32DD490051D067 /* AlbumListCell.swift */,
 				7AA180A41B34034D005B42C0 /* CustomLayout.swift */,
 				7AA180A61B341006005B42C0 /* PicsShowCell.swift */,
 				7AEC21291B3DA09600D19D22 /* SocialAlbumCell.swift */,
 				7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */,
 				7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */,
+				7AA0E1AF1B46779E0070538F /* CoreAction.swift */,
 			);
 			name = MyClasses;
 			path = ../Picturer/MyClasses;
@@ -378,6 +384,7 @@
 				7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */,
 				7AC55DB01B3E9C7D00FDC851 /* LayoutForSocailHome.swift in Sources */,
 				7AC783831B405B6A00A75214 /* MyHomepage.swift in Sources */,
+				7AA0E1AE1B4669900070538F /* PicObj.swift in Sources */,
 				7A9C86C81B32DD490051D067 /* AlbumListCell.swift in Sources */,
 				7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */,
 				7AEC21281B3D9CE800D19D22 /* Social_home.swift in Sources */,
@@ -385,6 +392,7 @@
 				7AEC212A1B3DA09600D19D22 /* SocialAlbumCell.swift in Sources */,
 				7A9C86CA1B3348700051D067 /* Manage_show.swift in Sources */,
 				7ADD500C1B2D402000E44F99 /* Picturers.xcdatamodeld in Sources */,
+				7AA0E1B01B46779E0070538F /* CoreAction.swift in Sources */,
 				7A9C86B71B324F4D0051D067 /* AlbumObj.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

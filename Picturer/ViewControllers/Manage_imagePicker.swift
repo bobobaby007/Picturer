@@ -166,12 +166,12 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 
                 if indexPath.item==0{
                     cell._setImage("camara.png")
-                    cell._setTagHidden(true)
+                    cell._hasTag=true
                 }else{
                     let _asset:DKAsset=_images[indexPath.item] as! DKAsset
                     let _image:UIImage=UIImage(CGImage:_asset.originalAsset.thumbnail().takeUnretainedValue())!
                     cell._setImageByImage(_image)
-                    cell._setSelected(false)
+                    cell._selected=false
                 }
                 return cell
         }

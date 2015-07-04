@@ -388,6 +388,9 @@
                                                 <include reference="Tyu-9e-r8q"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="clickAction:" destination="0Gz-Ea-fVR" eventType="touchUpInside" id="OEl-4k-hdw"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OTX-ca-OWs">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -614,6 +617,7 @@
                     </view>
                     <connections>
                         <outlet property="_btn_back" destination="OTX-ca-OWs" id="6f3-g7-z53"/>
+                        <outlet property="_btn_edit" destination="gA1-g9-JPQ" id="ZA4-Ps-DW7"/>
                         <outlet property="_collectionView" destination="mq6-ok-pGh" id="hJg-hr-vuq"/>
                     </connections>
                 </viewController>
@@ -1466,7 +1470,7 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="Picturer">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">

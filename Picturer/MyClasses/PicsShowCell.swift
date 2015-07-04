@@ -15,6 +15,25 @@ class PicsShowCell:UICollectionViewCell {
     
     var _imgView:UIImageView!
     var _tag_view:UIImageView!
+    var _hasTag:Bool=false{
+//        get{
+//            //return self._canSelect
+//            return true
+//        }
+        didSet{
+            _tag_view.hidden = !self._hasTag
+        }
+    }
+    
+    var _selected:Bool=false{
+        didSet{
+            if _selected{
+                _tag_view.image=UIImage(named: "pic_selected.png")
+            }else{
+                _tag_view.image=UIImage(named: "pic_unSelected.png")
+            }
+        }
+    }
     
     
     override init(frame: CGRect) {
@@ -45,24 +64,6 @@ class PicsShowCell:UICollectionViewCell {
         
     }
     
-    func _setTagHidden(__set:Bool)->Void{
-        if _tag_view==nil{
-            
-        }else{
-            _tag_view.hidden=__set
-        }
-       
-    }
-    func _setSelected(__set:Bool)->Void{
-        
-        if __set{
-            _tag_view.image=UIImage(named: "pic_selected.png")
-        }else{
-            _tag_view.image=UIImage(named: "pic_unSelected.png")
-        }
-        
-       
-    }
     
     
 }
