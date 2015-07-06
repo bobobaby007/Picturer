@@ -25,17 +25,17 @@ class AlbumListCell :  UITableViewCell{
         if _setuped {
             return
         }
-        _imageView=UIImageView(frame: CGRectMake(5, 5, self.bounds.height-10, self.bounds.height-10))
+        _imageView=UIImageView(frame: CGRectMake(10, 5, self.bounds.height-10, self.bounds.height-10))
         _imageView?.contentMode=UIViewContentMode.ScaleAspectFill
         _imageView?.layer.cornerRadius=13
         _imageView?.layer.masksToBounds=true
         self.addSubview(_imageView!)
         
-        _titleLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-20, self.bounds.width-26, 30))
+        _titleLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-22, self.bounds.width-26, 30))
         self.addSubview(_titleLable!)
         
         
-        _desLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2, self.bounds.width-26, 30))
+        _desLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-2, self.bounds.width-26, 30))
         _desLable?.textColor=UIColor(white: 0.5, alpha: 1)
         _desLable?.font=UIFont(name: "Helvetica", size: 12)
         self.addSubview(_desLable!)
@@ -46,6 +46,15 @@ class AlbumListCell :  UITableViewCell{
          self.addSubview(_timeLable!)
         
         _setuped=true
+    }
+    
+    func _changeToNew()->Void{
+        setThumbImage("newAlbum.png")
+        _titleLable?.text="开始，"
+        _desLable?.text="创建一个新图册"
+        _desLable?.textColor=UIColor(white: 0, alpha: 1)
+        _desLable?.font=UIFont(name: "Helvetica", size: 15)
+        
     }
     
     func setThumbImage(_image:NSString)->Void{

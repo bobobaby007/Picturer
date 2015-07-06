@@ -10,12 +10,27 @@ import Foundation
 
 class MainAction: AnyObject {
     static let _album_prefix = "Album_"
+    static let _ALBUM_LIST = "ALBUM_LIST"
+    static var _aList:NSMutableArray?
     
-    static var _albumList:NSMutableArray?
     
-    
-    class func _getAlbumList {
-        
+    static var _albumList:NSMutableArray!{
+        get{
+            if _aList==nil{
+                let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                var _list:NSMutableArray?=_ud.valueForKey(_ALBUM_LIST) as? NSMutableArray
+                println(_list)
+                if _list==nil{
+                    _list = NSMutableArray(array: [])
+                    _ud.setObject(_list, forKey: _ALBUM_LIST)
+                }
+                _aList = _list
+            }
+            return _aList
+        }
+        set{
+            _aList=newValue
+        }
     }
 }
 

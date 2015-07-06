@@ -106,7 +106,11 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(tableView:UITableView, numberOfRowsInSection section: Int) -> Int{
-        return _albumArray.count
+        if MainAction._albumList.count<1{
+            return 1
+        }
+        //return MainAction._albumList.count
+        return MainAction._albumList.count
     }
     
     
@@ -120,11 +124,19 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
         
         
         //cell.textLabel?.text=_albumArray[indexPath.row] as? String
-        cell.setTitle((_albumArray[indexPath.row] as? String)!)
-        cell.setTime("下午2:00")
-        cell.setDescription((_albumArray[indexPath.row] as? String)!+"张")
-        //cell.detailTextLabel?.text="ss"
-        cell.setThumbImage(_albumArray[indexPath.row] as! String)
+        
+        if MainAction._albumList.count<1{
+            cell._changeToNew()
+        }else{
+            cell.setTitle((_albumArray[indexPath.row] as? String)!)
+            cell.setTime("下午2:00")
+            cell.setDescription((_albumArray[indexPath.row] as? String)!+"张")
+            //cell.detailTextLabel?.text="ss"
+            cell.setThumbImage(_albumArray[indexPath.row] as! String)
+        }
+        
+        
+       
         //cell.imageView?.image=UIImage(named: _albumArray[indexPath.row] as! String)
         
         
@@ -220,23 +232,25 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     }
     override func viewDidLoad() {
         
-        var _album:AlbumObj=AlbumObj()
+//        var _album:AlbumObj=AlbumObj()
+//        var _images:NSMutableArray = [["sss":"44"]]
+//        
+//        for var i=0;i<3; ++i{
+//            var _pic:PicObj=PicObj()
+//            _pic.thumbImage = "33333" + String(i)
+//            _album.images.addObject(_pic)
+//        }
+//        println(_album._toDict())
+
+       // println(MainAction._albumList)
         
-        var _images:NSMutableArray = [["sss":"44"]]
         
-        for var i=0;i<3; ++i{
-            var _pic:PicObj=PicObj()
-            _pic.thumbImage = "33333" + String(i)
-            
-            _album.images.addObject(_pic)
-            
-            
-            //_images[i]=_pic
-        }
-       
-        println(_album._toDict())
         
         super.viewDidLoad()
+        
+       // _tableView.separatorColor=UIColor.clearColor()
+        _tableView.tableFooterView=UIView()
+        
         self.automaticallyAdjustsScrollViewInsets=false
         
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
