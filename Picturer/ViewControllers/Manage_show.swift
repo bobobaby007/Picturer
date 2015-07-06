@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
+class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PicsShowCellDelegate{
     
     @IBOutlet weak var _btn_back:UIButton?
     @IBOutlet weak var _collectionView:UICollectionView!
@@ -31,11 +31,11 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         let layout = CustomLayout()
         _collectionView.collectionViewLayout=layout
         _collectionView.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
+        _collectionView.userInteractionEnabled=true
     }
     func _setPicArray(__array:NSMutableArray){
         _collectionArray=__array
     }
-    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return _collectionArray.count;
     }
@@ -45,8 +45,10 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                 identify, forIndexPath: indexPath) as! PicsShowCell
            // let cell = PicsShowCell()
-            
+            cell._picNum = indexPath.item
             cell._setImage( _collectionArray[indexPath.item] as! String)
+            
+            cell._delegate = self
             
             switch _currentAction{
             case _action_normal:
@@ -56,14 +58,9 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             default:
                cell._hasTag=false
             }
-            
             cell._selected=false
-           
-           
-            
             return cell
     }
-    
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         // println(_show)
@@ -71,8 +68,8 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
        // _pic?._setImage(_collectionArray[indexPath.item])
         
-        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PicsShowCell
-        
+//        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PicsShowCell
+//        
         switch _currentAction{
         case _action_normal:
             var _pic:Manage_pic?
@@ -80,17 +77,19 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             self.navigationController?.pushViewController(_pic!, animated: true)
             _pic?._setImage(_collectionArray[indexPath.item] as! String)
         case _action_delete:
-            cell._selected = !cell._selected
-            
+           // println(_currentAction)
+            var _pic:Manage_pic?
+            _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
+            self.navigationController?.pushViewController(_pic!, animated: true)
+            _pic?._setImage(_collectionArray[indexPath.item] as! String)
         default:
             println("not set action")
         }
-        
-        
-        
-        
-        
-    }   
+    }
+    func PicDidSelected(pic: PicsShowCell) {
+        println(pic._picNum)
+        println(pic._selected)
+    }
     @IBAction func clickAction(_btn:UIButton)->Void{
         switch _btn{
         case _btn_back!:

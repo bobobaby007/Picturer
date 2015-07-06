@@ -97,14 +97,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
         var _show:Manage_show?
          _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
     
-        var _album = MainInterface._getAlbum("test")
-        
-        
-        if _album == nil{
-            MainInterface._creatAlbum("test")
-            _album = MainInterface._getAlbum("test")
-        }
-        //println(_album)
+       
     _show?._setPicArray(["1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","6.png","7.png"])
         
        // println(_show)
@@ -226,6 +219,22 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
         
     }
     override func viewDidLoad() {
+        
+        var _album:AlbumObj=AlbumObj()
+        
+        var _images:NSMutableArray = [["sss":"44"]]
+        
+        for var i=0;i<3; ++i{
+            var _pic:PicObj=PicObj()
+            _pic.thumbImage = "33333" + String(i)
+            
+            _album.images.addObject(_pic)
+            
+            
+            //_images[i]=_pic
+        }
+       
+        println(_album._toDict())
         
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets=false

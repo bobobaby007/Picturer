@@ -36,6 +36,7 @@ class CoreAction: AnyObject {
             return _result
         }
     }
+    //---文件是否存在
     class func _ifHasFile(__name:NSString)->Bool{
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
         let documentsDirectory = paths[0] as! String
@@ -43,6 +44,7 @@ class CoreAction: AnyObject {
         let fileManager = NSFileManager.defaultManager()
         return fileManager.fileExistsAtPath(path)
     }
+    //－－－－保存文件
     class func _savePlist(__name:String, __dict:NSMutableDictionary) {
         
         let path = _fileFullPath(__name+".plist")
