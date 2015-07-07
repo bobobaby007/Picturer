@@ -20,7 +20,7 @@ class PicsShowCell:UICollectionViewCell{
     
     var _imgView:UIImageView!
     var _tag_view:UIImageView!
-    var _picNum:Int!
+    var _indexPath:NSIndexPath?
     
     var _delegate:PicsShowCellDelegate?
     
@@ -35,7 +35,7 @@ class PicsShowCell:UICollectionViewCell{
         }
     }
     
-    var _callBack:((sender:PicsShowCell) -> Void)?
+   // var _callBack:((sender:PicsShowCell) -> Void)?
     
     var _selected:Bool=false{
         didSet{
@@ -55,12 +55,11 @@ class PicsShowCell:UICollectionViewCell{
         super.init(frame: frame)
         
         
-        
         _imgView=UIImageView(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
         _imgView.contentMode=UIViewContentMode.ScaleAspectFill
         _imgView.layer.masksToBounds=true
         
-        let _width=bounds.size.width/5
+        let _width=bounds.size.width/4
         _tag_view=UIImageView(frame: CGRect(x: bounds.size.width-_width-2, y:2, width: _width, height: _width))
         
         var _tapRoc=UITapGestureRecognizer(target: self, action: Selector("clickAction:"))
@@ -82,9 +81,7 @@ class PicsShowCell:UICollectionViewCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-    func _setCallBack(hander:(PicsShowCell)->Void){
-        _callBack=hander
-    }
+    
     
     func clickAction(sender:UITapGestureRecognizer){
         self._selected = !self._selected

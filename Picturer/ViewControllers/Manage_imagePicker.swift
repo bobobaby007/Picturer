@@ -24,6 +24,7 @@ class DKAssetGroup : NSObject {
 }
 // Asset Model
 class DKAsset: NSObject {
+    var _seleceted:Bool=false
     var thumbnailImage: UIImage?
     lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
@@ -44,8 +45,7 @@ class DKAsset: NSObject {
 
 
 
-
-class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate{
+class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, PicsShowCellDelegate{
         
         @IBOutlet weak var _btn_back:UIButton?
         @IBOutlet weak var _collectionView:UICollectionView!
@@ -163,21 +163,26 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 let identify:String = "PicsShowCell"
                 let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                     identify, forIndexPath: indexPath) as! PicsShowCell
+                cell._indexPath=indexPath
                 
                 if indexPath.item==0{
                     cell._setImage("camara.png")
-                    cell._hasTag=true
+                    cell._hasTag=false
+                    
                 }else{
                     let _asset:DKAsset=_images[indexPath.item] as! DKAsset
                     let _image:UIImage=UIImage(CGImage:_asset.originalAsset.thumbnail().takeUnretainedValue())!
+                    cell._delegate=self
+                    
                     cell._setImageByImage(_image)
-                    cell._selected=false
+                    cell._selected=_asset._seleceted
+                    cell._hasTag=true
                 }
                 return cell
         }
         func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
             
-            // println(_show)
+            
             //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
             
             if indexPath.item==0{
@@ -185,20 +190,30 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 _cameraPicker =  UIImagePickerController()
                 //_cameraPicker.delegate = self
                 _cameraPicker.sourceType = .Camera
+                //self.view.window!.rootViewController!.presentViewController(_cameraPicker, animated: true, completion: nil)
+                
                 presentViewController(_cameraPicker, animated: true, completion: nil)
-                
-                
             }else{
+                
                 let _asset:DKAsset=_images[indexPath.item] as! DKAsset
                 var _pic:Manage_pic?
                 _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
                 _pic?._setImageByImage(_asset.fullScreenImage!)
                 self.navigationController?.pushViewController(_pic!, animated: true)
+                //presentViewController(_pic!, animated: true, completion: nil)
             }
            
             
         }
     
+    
+    //-----图片单独选中☑️或取消
+    func PicDidSelected(pic: PicsShowCell) {
+        var _asset:DKAsset=_images[pic._indexPath!.item] as! DKAsset
+        _asset._seleceted=pic._selected
+        _images[pic._indexPath!.item]=_asset
+        //println(pic._selected)
+    }
     
     
     //-------弹出相册列表代理方法
@@ -230,7 +245,6 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
        // tableView.deselectRowAtIndexPath(indexPath, animated: true)
         self.dismissViewControllerAnimated(false, completion: nil)
         self._loadImagesAt(indexPath.row)
-        
     }
     
     
@@ -248,13 +262,14 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     @IBAction func clickAction(_btn:UIButton)->Void{
             if _btn == _btn_back{
                 self.navigationController?.popViewControllerAnimated(true)
+                //self.dismissViewControllerAnimated(true, completion: nil)
             }
             if _btn == _btn_title{
                 _groupPicker=groupPickerController()
                // _groupPicker._tableView?.dataSource=self
                // _groupPicker._tableView?.delegate=self
                 _groupPicker!._setDelegateAndSource(self, _s: self)
-                //self.navigationController?.presentViewController(_groupPicker, animated: true, completion: nil)
+                //self.navigationController?.presentViewController(_groupPicker!, animated: true, completion: nil)
                 self.presentViewController(_groupPicker!, animated: true, completion: nil)
             }
         }

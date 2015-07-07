@@ -25,8 +25,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     @IBAction func btnHander(btn:UIButton){
         switch btn{
         case _btn_new:
-            openNewActions()
-            
+            openNewActions()            
         default:
             println("")
         }
@@ -73,31 +72,28 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     }
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let _h:CGFloat=scrollView.contentOffset.y
-        
         if _offset>_h{
             _offset=_h
         }
     }
-    
     //---------tableview delegate
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
-    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
        return 1
     }
-
-    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return _tableView.bounds.size.height/5
     }
-    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if MainAction._albumList.count<1{
+            newAlbum(nil)
+            return
+        }
         var _show:Manage_show?
-         _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
-    
-       
+        _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
     _show?._setPicArray(["1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","6.png","7.png"])
         
        // println(_show)
@@ -145,29 +141,22 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     }
     //----左滑
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
     }
-    
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         var deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "删除", handler: actionHander)
         var shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "分享", handler: actionHander)
         var editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "编辑" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             
         })
-        
         //----设置颜色
-        
         deleteAction.backgroundColor=UIColor(red: 255/255, green: 62/255, blue: 53/255, alpha: 1)
         shareAction.backgroundColor=UIColor(red: 255/255, green: 222/255, blue: 23/255, alpha: 1)
         editAction.backgroundColor=UIColor(red: 200/255, green: 199/255, blue: 205/255, alpha: 1)
-        
         return [deleteAction,shareAction,editAction]
     }
-    
-    
-    
     //---左滑动作
     func actionHander(action:UITableViewRowAction!,index:NSIndexPath!)->Void{
-        
        // println(action, index.row)
         switch action.title{
             case "删除":
@@ -179,7 +168,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
             println(action.title)
         }
     }
-    
     //---打开分享
     func openShare()->Void{
         let rateMenu = UIAlertController(title: "分享", message: "分享这个相册", preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -192,13 +180,11 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     func deleteCell(index:NSIndexPath)->Void{
         _albumArray.removeAtIndex(index.row)
         _tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Left)
-        
     }
     //---新建
     func openNewActions()->Void{
         //let rateMenu = UIAlertController(title: "新建相册", message: "选择一种新建方式", preferredStyle: UIAlertControllerStyle.ActionSheet)
         let menu=UIAlertController()
-        
         let action1 = UIAlertAction(title: "创建新相册", style: UIAlertActionStyle.Default, handler: newAlbum)
         let action2 = UIAlertAction(title: "添加新照片", style: UIAlertActionStyle.Default, handler: newFromLocal)
         let action3 = UIAlertAction(title: "从网页提取", style: UIAlertActionStyle.Default, handler: newFromWeb)
@@ -207,24 +193,27 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
         menu.addAction(action2)
         menu.addAction(action3)
         menu.addAction(action4)
-        self.presentViewController(menu, animated: true, completion: nil)
+        
+        self.view.window!.rootViewController!.presentViewController(menu, animated: true, completion: nil)
+        //self.presentViewController(menu, animated: true, completion: nil)
     }
-    
-    
     //---创建新相册
     func newAlbum(action:UIAlertAction!) -> Void{
         var _controller:Manage_new?
-        _controller=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_new") as? Manage_new
+        _controller=Manage_new()
         // println(_show)
         //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
         self.navigationController?.pushViewController(_controller!, animated: true)
-
     }
     //---添加新照片
     func newFromLocal(action:UIAlertAction!) -> Void{
         var _controller:Manage_imagePicker?
         _controller=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_imagePicker") as? Manage_imagePicker
+        
+        //self.view.window?.rootViewController?.presentViewController(_controller!, animated: true, completion: nil)
+       // self.presentViewController(_controller!, animated: true, completion: nil)
         self.navigationController?.pushViewController(_controller!, animated: true)
+        
     }
     //---创建新相册
     func newFromWeb(action:UIAlertAction!) -> Void{
@@ -243,19 +232,13 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
 //        println(_album._toDict())
 
        // println(MainAction._albumList)
-        
-        
-        
         super.viewDidLoad()
-        
        // _tableView.separatorColor=UIColor.clearColor()
         _tableView.tableFooterView=UIView()
         
         self.automaticallyAdjustsScrollViewInsets=false
         
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
-        
-        
     }
     
     

@@ -45,7 +45,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                 identify, forIndexPath: indexPath) as! PicsShowCell
            // let cell = PicsShowCell()
-            cell._picNum = indexPath.item
+            cell._indexPath = indexPath
             cell._setImage( _collectionArray[indexPath.item] as! String)
             
             cell._delegate = self
@@ -87,7 +87,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         }
     }
     func PicDidSelected(pic: PicsShowCell) {
-        println(pic._picNum)
+        
         println(pic._selected)
     }
     @IBAction func clickAction(_btn:UIButton)->Void{
