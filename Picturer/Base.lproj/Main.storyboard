@@ -941,7 +941,7 @@
                                                 <variation key="widthClass=compact" constant="50"/>
                                             </constraint>
                                         </constraints>
-                                        <state key="normal" title="编辑">
+                                        <state key="normal" title="确定">
                                             <color key="titleColor" red="1" green="0.87058823529999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -955,6 +955,9 @@
                                                 <include reference="x9y-mV-Ecr"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="clickAction:" destination="RFK-fv-XPR" eventType="touchUpInside" id="JLW-hW-xfJ"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a5u-Yd-sYU">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -1178,6 +1181,7 @@
                     </view>
                     <connections>
                         <outlet property="_btn_back" destination="a5u-Yd-sYU" id="vZK-lX-G79"/>
+                        <outlet property="_btn_ok" destination="VQx-Eu-g4j" id="4Kr-YA-azA"/>
                         <outlet property="_btn_title" destination="o94-bX-5fM" id="ybz-oB-9se"/>
                         <outlet property="_collectionView" destination="CT1-pg-RIT" id="7dZ-OJ-cV5"/>
                         <outlet property="_img_arrow" destination="31U-7a-mNi" id="JyO-Ko-E8S"/>

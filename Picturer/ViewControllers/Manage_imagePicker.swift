@@ -14,6 +14,9 @@ import AssetsLibrary
 import AVFoundation
 
 
+protocol ImagePickerDeletegate:NSObjectProtocol{
+    func imagePickerDidSelected(images:NSArray)
+}
 
 
 // Group Model
@@ -25,7 +28,7 @@ class DKAssetGroup : NSObject {
 // Asset Model
 class DKAsset: NSObject {
     var _seleceted:Bool=false
-    var thumbnailImage: UIImage?
+    //var thumbnailImage: UIImage?
     lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
         }()
@@ -48,12 +51,14 @@ class DKAsset: NSObject {
 class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, PicsShowCellDelegate{
         
         @IBOutlet weak var _btn_back:UIButton?
+        @IBOutlet weak var _btn_ok:UIButton?
         @IBOutlet weak var _collectionView:UICollectionView!
         @IBOutlet weak var _btn_title:UIButton?
         @IBOutlet weak var _img_arrow:UIImageView?
     
         var _groupPicker:groupPickerController?
         var _cameraPicker: UIImagePickerController!
+        var _delegate:ImagePickerDeletegate?
     
         lazy private var library: ALAssetsLibrary = {
             return ALAssetsLibrary()
@@ -143,7 +148,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             if result != nil {
                 let asset = DKAsset()
                 //asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
-                //asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
+                asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
                 asset.originalAsset = result
                 self._images.insertObject(asset, atIndex: 1)
 //                self._collectionView!.reloadData()
@@ -260,19 +265,34 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     
     
     @IBAction func clickAction(_btn:UIButton)->Void{
-            if _btn == _btn_back{
-                self.navigationController?.popViewControllerAnimated(true)
-                //self.dismissViewControllerAnimated(true, completion: nil)
+        switch _btn{
+        case _btn_back!:
+            self.navigationController?.popViewControllerAnimated(true)
+        case _btn_title!:
+            _groupPicker=groupPickerController()
+            _groupPicker!._setDelegateAndSource(self, _s: self)
+            //self.navigationController?.presentViewController(_groupPicker!, animated: true, completion: nil)
+            self.presentViewController(_groupPicker!, animated: true, completion: nil)
+        case _btn_ok!:
+            var _imgs:NSMutableArray=NSMutableArray()
+            
+            let _c:Int = _images.count
+            
+            for var i=0; i<_c;++i{
+                let _ak:DKAsset = _images.objectAtIndex(i) as! DKAsset
+                if _ak._seleceted {
+                  //  println(_ak._seleceted)
+                  _imgs.addObject(_ak.originalAsset)
+                }
             }
-            if _btn == _btn_title{
-                _groupPicker=groupPickerController()
-               // _groupPicker._tableView?.dataSource=self
-               // _groupPicker._tableView?.delegate=self
-                _groupPicker!._setDelegateAndSource(self, _s: self)
-                //self.navigationController?.presentViewController(_groupPicker!, animated: true, completion: nil)
-                self.presentViewController(_groupPicker!, animated: true, completion: nil)
-            }
+            self.navigationController?.popViewControllerAnimated(true)
+            _delegate?.imagePickerDidSelected(_imgs)
+            
+            
+        default:
+            println("")
         }
+    }
 }
 
 
