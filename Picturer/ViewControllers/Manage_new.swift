@@ -10,9 +10,18 @@ import Foundation
 import UIKit
 import AssetsLibrary
 
-class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource {
-    let _gap:CGFloat=20
+class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource,UITextViewDelegate,UIScrollViewDelegate {
+    let _gap:CGFloat=15
+    let _space:CGFloat=5
+    let _titleViewH:CGFloat=40
+    let _desInputViewH:CGFloat=100
+    let _tableViewH:CGFloat=100
     var _setuped:Bool=false
+    let _maxNum:Int=140
+    let _buttonH:CGFloat=150
+    
+    let _titlePlaceHold:String="图册标题（必填）"
+    let _desPlaceHold:String="图册描述"
     
     var _topBar:UIView?
     var _btn_cancel:UIButton?
@@ -29,16 +38,20 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _collectionLayout:UICollectionViewFlowLayout?
     
     var _titleView:UIView?
-    var _titleInput:UIInputView?
+    var _titleInput:UITextField?
     
     var _desView:UIView?
+    var _desInput:UITextView?
+    var _desAlert:UILabel?
+    
+    
+    var _textsIsEditing:Bool=false
+    var _tapRec:UITapGestureRecognizer?
     
     override func viewDidLoad() {
         setup()
         refreshView()
     }
-    
-    
     func setup(){
         if _setuped{
             return
@@ -50,9 +63,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _imagesCollection!.userInteractionEnabled=true
         _imagesCollection?.delegate=self
         _imagesCollection?.dataSource=self
-        
-        
-        
+        _imagesCollection?.scrollEnabled=false
         
         _scrollView=UIScrollView()
         _scrollView?.bounces=false
@@ -63,6 +74,38 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+       
+        _titleInput=UITextField(frame: CGRect(x: _gap, y: 0, width: self.view.frame.width, height: _titleViewH))
+        _titleInput?.placeholder=_titlePlaceHold
+        //_titleInput.
+        
+        _titleView = UIView()
+        _titleView?.backgroundColor=UIColor.whiteColor()
+        _titleView?.addSubview(_titleInput!)
+        
+        
+        _desView=UIView()
+        
+        _desView?.backgroundColor=UIColor.whiteColor()
+        _desInput=UITextView(frame: CGRect(x: _gap, y: 0, width: self.view.frame.width-2*_gap, height: _desInputViewH-20))
+        _desInput?.text=_desPlaceHold
+        _desInput?.font=UIFont(name: "Helvetica", size: 15)
+        //_desInput?.keyboardAppearance=UIKeyboardAppearance.Dark
+        //_desInput?.returnKeyType=UIReturnKeyType.Done
+        _desInput?.delegate=self
+        
+        
+        _desAlert=UILabel(frame:CGRect(x: _gap, y: _desInputViewH-20, width: self.view.frame.width-2*_gap, height: 20) )
+        _desAlert?.text=String(0)+"/"+String(_maxNum)
+        _desAlert?.font=UIFont(name: "Helvetica", size: 12)
+        
+        _desAlert?.textColor=UIColor(white: 0.3, alpha: 1)
+        _desAlert?.textAlignment=NSTextAlignment.Right
+        
+        _desView?.addSubview(_desInput!)
+        _desView?.addSubview(_desAlert!)
         
         _tableView=UITableView()
         
@@ -81,18 +124,22 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _imagesBox?.addSubview(_imagesCollection!)
         _scrollView?.addSubview(_imagesBox!)
         _scrollView?.addSubview(_tableView!)
+        _scrollView?.addSubview(_titleView!)
+        _scrollView?.addSubview(_desView!)
         
-        _scrollView?.backgroundColor=UIColor.clearColor()
+        _scrollView?.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+        _scrollView?.delegate=self
+        _tapRec=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+        _scrollView?.addGestureRecognizer(_tapRec!)
         
         self.view.addSubview(_scrollView!)
         self.view.addSubview(_topBar!)
         _topBar?.addSubview(_btn_cancel!)
         
-        self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+        
         
         _setuped=true
-    }
-    //-----图片代理
+    }    //-----图片代理
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return _selectedImages.count
@@ -116,6 +163,58 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         return cell
     }
     
+    func tapHander(tap:UITapGestureRecognizer){
+        _titleInput?.resignFirstResponder()
+        _desInput?.resignFirstResponder()
+        
+        if _desInput?.text == ""{
+            _desInput?.text=_desPlaceHold
+        }
+        
+    }
+    
+    //----文字输入代理
+    
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        if _desInput?.text == _desPlaceHold{
+            _desInput?.text=""
+        }
+        
+        UIView.beginAnimations("ResizeForKeyboard", context: nil)
+        let _addH:CGFloat=self.view.frame.height-216-62-20-_desInputViewH
+        var _offset:CGFloat = _desView!.frame.origin.y
+        
+        _offset=_offset-_addH
+        //_scrollView?.frame=CGRect(x: 0, y: CGFloat(_offset!), width: self.view.frame.width, height: self.view.frame.height-62)
+        _scrollView?.contentOffset=CGPoint(x: 0, y: _offset)
+        UIView.commitAnimations()
+        return true
+    }
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        let _n:Int=_desInput!.text.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2
+        
+        if (_n+text.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2)>_maxNum{
+           return false
+        }
+       // println(text)
+        return true
+    }
+    func textViewDidChange(textView: UITextView) {
+        
+        if _desInput?.text == _desPlaceHold{
+            _desAlert?.text="0"+"/"+String(_maxNum)
+            return
+        }
+        
+        var _n:Int=_desInput!.text.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2
+        if _n>=_maxNum{
+            _n=_maxNum
+            let _str:NSString=_desInput!.text as NSString
+            _desInput!.text=_str.substringToIndex(_maxNum)
+            
+        }
+         _desAlert?.text=String(_n)+"/"+String(_maxNum)
+    }
     
     //-----选择相册代理
     func imagePickerDidSelected(images: NSArray) {
@@ -131,15 +230,16 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     func refreshView(){
         
-        let _space:CGFloat=10
+        
         let _imagesW:CGFloat=(self.view.frame.width-2*_gap-3*_space)/4
         let _imagesH:CGFloat=ceil(CGFloat(_selectedImages.count)/4)*(_imagesW+_space)
         
         _collectionLayout?.minimumInteritemSpacing=_space
+        _collectionLayout?.minimumLineSpacing=_space
         _collectionLayout!.itemSize=CGSize(width: _imagesW, height: _imagesW)
-        _imagesCollection?.frame=CGRect(x: _gap, y: 190, width: self.view.frame.width-2*_gap, height: _imagesH)
+        _imagesCollection?.frame=CGRect(x: _gap, y: _buttonH+2*_gap, width: self.view.frame.width-2*_gap, height: _imagesH)
        
-        let _buttonH:CGFloat=150
+       
         
         var _imageBoxH:CGFloat!
         if _selectedImages.count<1{
@@ -149,13 +249,21 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         }
         
         
-        let _scrollH=_imageBoxH+190
+        
         _addButton?.frame=CGRect(x: _gap, y: _gap, width: self.view.frame.width-2*_gap, height: _buttonH)
         
         _imagesBox?.frame=CGRect(x: 0, y: 0, width: self.view.frame.width, height:_imageBoxH)
-        _scrollView?.frame=CGRect(x: 0, y: 43, width: self.view.frame.width, height: self.view.frame.height-62)
+        
+        _titleView?.frame = CGRect(x: 0, y: _imageBoxH+_gap, width: self.view.frame.width, height: _titleViewH)
+        _desView?.frame = CGRect(x: 0, y: _imageBoxH+2*_gap+_titleViewH, width: self.view.frame.width, height: _desInputViewH)
+        
+        _tableView?.frame = CGRect(x: 0, y: _imageBoxH+3*_gap+_titleViewH+_desInputViewH, width: self.view.frame.width, height: _tableViewH)
+        
+        
+        let _scrollH=_imageBoxH+3*_gap+_titleViewH+_desInputViewH+_tableViewH
+        _scrollView?.frame=CGRect(x: 0, y: 43, width: self.view.frame.width, height: self.view.frame.height)
         _scrollView?.contentSize=CGSize(width: self.view.frame.width, height: _scrollH)
-        _tableView?.frame = CGRect(x: 0, y: _imageBoxH+2*_gap, width: self.view.frame.width, height: self.view.frame.height)
+        
     }
     
     func clickAction(sender:UIButton){

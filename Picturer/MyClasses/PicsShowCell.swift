@@ -60,7 +60,7 @@ class PicsShowCell:UICollectionViewCell{
         _imgView.layer.masksToBounds=true
         
         let _width=bounds.size.width/4
-        _tag_view=UIImageView(frame: CGRect(x: bounds.size.width-_width-2, y:2, width: _width, height: _width))
+        _tag_view=UIImageView(frame: CGRect(x: bounds.size.width-_width-4, y:4, width: _width, height: _width))
         
         var _tapRoc=UITapGestureRecognizer(target: self, action: Selector("clickAction:"))
         
