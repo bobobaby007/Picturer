@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 import AssetsLibrary
 
-class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource,UITextViewDelegate,UIScrollViewDelegate {
+class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource,UITextViewDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate, SettingDelegate{
     let _gap:CGFloat=15
     let _space:CGFloat=5
     let _titleViewH:CGFloat=40
     let _desInputViewH:CGFloat=100
-    let _tableViewH:CGFloat=100
+    let _tableViewH:CGFloat=200
     var _setuped:Bool=false
     let _maxNum:Int=140
     let _buttonH:CGFloat=150
@@ -27,8 +27,6 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _btn_cancel:UIButton?
     
     var _tableView:UITableView?
-    var _delegate:UITableViewDelegate?
-    var _source:UITableViewDataSource?
     
     var _scrollView:UIScrollView?
     var _imagesBox:UIView?
@@ -47,6 +45,13 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     var _textsIsEditing:Bool=false
     var _tapRec:UITapGestureRecognizer?
+    
+    var _settings:NSArray=[["title":"标签","des":""],["title":"图片显示顺序","des":"按创建时间倒序排列"],["title":"私密性","des":"所有人"],["title":"回复权限","des":"允许回复"]]
+    
+    
+//    enum Settings{
+//        var tt:String="hahah"
+//    }
     
     override func viewDidLoad() {
         setup()
@@ -79,6 +84,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
        
         _titleInput=UITextField(frame: CGRect(x: _gap, y: 0, width: self.view.frame.width, height: _titleViewH))
         _titleInput?.placeholder=_titlePlaceHold
+        _titleInput?.delegate=self
         //_titleInput.
         
         _titleView = UIView()
@@ -108,8 +114,11 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _desView?.addSubview(_desAlert!)
         
         _tableView=UITableView()
-        
-        
+        _tableView?.delegate=self
+        _tableView?.dataSource=self
+        _tableView?.registerClass(UITableViewCell.self, forCellReuseIdentifier: "table_cell")
+        _tableView?.scrollEnabled=false
+        //_tableView?.userInteractionEnabled=true
         
         _imagesBox=UIView()
         _imagesBox?.backgroundColor=UIColor.whiteColor()
@@ -130,7 +139,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _scrollView?.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         _scrollView?.delegate=self
         _tapRec=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
-        _scrollView?.addGestureRecognizer(_tapRec!)
+        
         
         self.view.addSubview(_scrollView!)
         self.view.addSubview(_topBar!)
@@ -139,7 +148,68 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         _setuped=true
-    }    //-----图片代理
+    }
+    
+    //设置栏代理
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
+        
+        var cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
+    
+        cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
+        
+        cell.textLabel?.text=_settings.objectAtIndex(indexPath.row).objectForKey("title") as? String
+        cell.detailTextLabel?.text=_settings.objectAtIndex(indexPath.row).objectForKey("des") as? String
+        
+//        var _view:UIView=UIView()
+//        _view.backgroundColor=UIColor.whiteColor()
+//        cell.selectedBackgroundView=_view
+        
+        return cell
+    }
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 4
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return _tableViewH/4+0.3
+    }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        switch indexPath.row{
+        case 0:
+            let _controller:Setting_tags=Setting_tags()
+            _controller._delegate=self
+            self.navigationController?.pushViewController(_controller, animated: true)
+        case 1:
+            let _controller:Setting_range=Setting_range()
+            _controller._delegate=self
+            self.navigationController?.pushViewController(_controller, animated: true)
+        case 2:
+            let _controller:Setting_power=Setting_power()
+            _controller._delegate=self
+            self.navigationController?.pushViewController(_controller, animated: true)
+        case 3:
+            let _controller:Setting_reply=Setting_reply()
+            _controller._delegate=self
+            self.navigationController?.pushViewController(_controller, animated: true)
+        default:
+            println("")
+        }
+    }
+   
+    //----设置代理
+    func settingSaved(sender: AnyObject, settings: NSDictionary) {
+        println(settings)
+        _tableView?.reloadData()
+    }
+    func settingCanceled() {
+        _tableView?.reloadData()
+    }
+    //-----图片代理
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return _selectedImages.count
@@ -170,12 +240,16 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         if _desInput?.text == ""{
             _desInput?.text=_desPlaceHold
         }
-        
+        _scrollView?.removeGestureRecognizer(_tapRec!)
     }
     
-    //----文字输入代理
     
-    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+    
+    //----文字输入代理
+    func textFieldDidBeginEditing(textField: UITextField) {
+        _scrollView?.addGestureRecognizer(_tapRec!)
+    }
+    func textViewDidBeginEditing(textView: UITextView) {
         if _desInput?.text == _desPlaceHold{
             _desInput?.text=""
         }
@@ -188,7 +262,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         //_scrollView?.frame=CGRect(x: 0, y: CGFloat(_offset!), width: self.view.frame.width, height: self.view.frame.height-62)
         _scrollView?.contentOffset=CGPoint(x: 0, y: _offset)
         UIView.commitAnimations()
-        return true
+        
+        _scrollView?.addGestureRecognizer(_tapRec!)
+        //return true
     }
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         let _n:Int=_desInput!.text.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2
@@ -261,7 +337,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         let _scrollH=_imageBoxH+3*_gap+_titleViewH+_desInputViewH+_tableViewH
-        _scrollView?.frame=CGRect(x: 0, y: 43, width: self.view.frame.width, height: self.view.frame.height)
+        _scrollView?.frame=CGRect(x: 0, y: 43, width: self.view.frame.width, height: self.view.frame.height-32)
         _scrollView?.contentSize=CGSize(width: self.view.frame.width, height: _scrollH)
         
     }
