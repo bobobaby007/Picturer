@@ -7,11 +7,20 @@
 //
 
 import Foundation
+import UIKit
+
+enum _Action_Type:Int{
+    case NewAlbum = 1
+    case PicsIn
+}
+
 
 class MainAction: AnyObject {
     static let _album_prefix = "Album_"
     static let _ALBUM_LIST = "ALBUM_LIST"
     static var _aList:NSMutableArray?
+    
+    
     
     
     static var _albumList:NSMutableArray!{

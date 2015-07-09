@@ -54,6 +54,7 @@
 		7AA6A8CB1B4777C200D9E604 /* MainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA6A8CA1B4777C200D9E604 /* MainInterface.swift */; };
 		7AA740A61B347D690064C9C9 /* Manage_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA740A51B347D690064C9C9 /* Manage_new.swift */; };
 		7AA887C51B3F963B006BC338 /* icon_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AA887C41B3F963B006BC338 /* icon_alert.png */; };
+		7ABF07141B4E29C200353083 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABF07131B4E29C200353083 /* Protocols.swift */; };
 		7AC247471B4A669F00A5187B /* AlbumList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7AC247461B4A669F00A5187B /* AlbumList.plist */; };
 		7AC55DAE1B3E97EE00FDC851 /* SocialHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */; };
 		7AC55DB01B3E9C7D00FDC851 /* LayoutForSocailHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */; };
@@ -121,6 +122,7 @@
 		7AA6A8CA1B4777C200D9E604 /* MainInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainInterface.swift; sourceTree = "<group>"; };
 		7AA740A51B347D690064C9C9 /* Manage_new.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_new.swift; sourceTree = "<group>"; };
 		7AA887C41B3F963B006BC338 /* icon_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_alert.png; sourceTree = "<group>"; };
+		7ABF07131B4E29C200353083 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		7AC247461B4A669F00A5187B /* AlbumList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AlbumList.plist; sourceTree = "<group>"; };
 		7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialHomeCell.swift; sourceTree = "<group>"; };
 		7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutForSocailHome.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				7AA26BAC1B4D9A15006CDC61 /* Setting_reply.swift */,
 				7AA26BAF1B4D9A34006CDC61 /* Setting_power.swift */,
 				7AA26BB21B4D9A57006CDC61 /* Setting_range.swift */,
+				7ABF07131B4E29C200353083 /* Protocols.swift */,
 			);
 			name = ViewControllers;
 			path = ../Picturer/ViewControllers;
@@ -437,6 +440,7 @@
 				7AA180A71B341006005B42C0 /* PicsShowCell.swift in Sources */,
 				7AFB23531B317849001C75C9 /* tableTest.swift in Sources */,
 				7ADD500E1B2D402000E44F99 /* ViewController.swift in Sources */,
+				7ABF07141B4E29C200353083 /* Protocols.swift in Sources */,
 				7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */,
 				7AC55DB01B3E9C7D00FDC851 /* LayoutForSocailHome.swift in Sources */,
 				7AC783831B405B6A00A75214 /* MyHomepage.swift in Sources */,

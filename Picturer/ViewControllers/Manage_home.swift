@@ -13,7 +13,7 @@ import UIKit
 
 
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource, ControllerDelegate{
    
     var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
@@ -201,6 +201,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
     func newAlbum(action:UIAlertAction!) -> Void{
         var _controller:Manage_new?
         _controller=Manage_new()
+        _controller?._delegate=self
         // println(_show)
         //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
         self.navigationController?.pushViewController(_controller!, animated: true)
@@ -214,6 +215,16 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource{
        // self.presentViewController(_controller!, animated: true, completion: nil)
         self.navigationController?.pushViewController(_controller!, animated: true)
         
+    }
+    
+    //----弹出代理
+    func controllerCanceled(controller: AnyObject, dict: NSMutableDictionary) {
+        println(controller)
+        println(dict)
+    }
+    func controllerSaved(controller: AnyObject, dict: NSMutableDictionary) {
+        println(controller)
+        println(dict)
     }
     //---创建新相册
     func newFromWeb(action:UIAlertAction!) -> Void{

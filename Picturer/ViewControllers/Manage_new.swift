@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import AssetsLibrary
 
+
 class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource,UITextViewDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate, SettingDelegate{
     let _gap:CGFloat=15
     let _space:CGFloat=5
@@ -25,6 +26,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     var _topBar:UIView?
     var _btn_cancel:UIButton?
+    var _btn_save:UIButton?
     
     var _tableView:UITableView?
     
@@ -48,11 +50,11 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     var _settings:NSArray=[["title":"标签","des":""],["title":"图片显示顺序","des":"按创建时间倒序排列"],["title":"私密性","des":"所有人"],["title":"回复权限","des":"允许回复"]]
     
-    
+    var _savingDict:NSMutableDictionary?
 //    enum Settings{
 //        var tt:String="hahah"
 //    }
-    
+    var _delegate:ControllerDelegate?
     override func viewDidLoad() {
         setup()
         refreshView()
@@ -80,6 +82,10 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
+        _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
+        _btn_save?.setTitle("完成", forState: UIControlState.Normal)
+        _btn_save?.setTitleColor(UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1), forState: UIControlState.Normal)
+        _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
        
         _titleInput=UITextField(frame: CGRect(x: _gap, y: 0, width: self.view.frame.width, height: _titleViewH))
@@ -144,6 +150,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         self.view.addSubview(_scrollView!)
         self.view.addSubview(_topBar!)
         _topBar?.addSubview(_btn_cancel!)
+        _topBar?.addSubview(_btn_save!)
         
         
         
@@ -345,6 +352,13 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
+            _delegate?.controllerCanceled(self, dict: NSMutableDictionary())
+            self.navigationController?.popViewControllerAnimated(true)
+        case _btn_save!:
+            if treckDict(){
+                
+            }
+            _delegate?.controllerSaved(self, dict: NSMutableDictionary())
             self.navigationController?.popViewControllerAnimated(true)
         case _addButton!:
             let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
@@ -359,6 +373,17 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             println(sender)
         }
         
+    }
+    
+    func treckDict()->Bool{
+        _savingDict=NSMutableDictionary()
+        
+        let a:_Action_Type=_Action_Type.PicsIn
+        println(a.rawValue)
+        println(_Action_Type(rawValue: 10)?.rawValue)
+        _savingDict?.setObject(a.rawValue, forKey: "actionType")
+        
+        return true
     }
 }
 
