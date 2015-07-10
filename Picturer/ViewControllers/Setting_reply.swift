@@ -9,7 +9,10 @@
 import Foundation
 import UIKit
 
-
+protocol Setting_replyDelegate:NSObjectProtocol{
+    func canceld()
+    func saved(dict:NSDictionary)
+}
 
 
 class Setting_reply: UIViewController, UITableViewDelegate,UITableViewDataSource {
@@ -19,7 +22,7 @@ class Setting_reply: UIViewController, UITableViewDelegate,UITableViewDataSource
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:SettingDelegate?
+    var _delegate:Setting_replyDelegate?
     //var _delegate:SettingChangeDelegate?
     
     var _tableView:UITableView?
@@ -122,10 +125,11 @@ class Setting_reply: UIViewController, UITableViewDelegate,UITableViewDataSource
         switch sender{
         case _btn_cancel!:
             self.navigationController?.popViewControllerAnimated(true)
-            _delegate?.settingCanceled()
+            _delegate?.canceld()
         case _btn_save!:
             var _dict:NSMutableDictionary=NSMutableDictionary()
-            _delegate?.settingSaved(self, settings: _dict)
+            _dict.setObject("reply", forKey: "Action_Type")
+            _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
             println(sender)

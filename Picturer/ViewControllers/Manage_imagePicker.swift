@@ -35,7 +35,7 @@ class DKAsset: NSObject {
     lazy var fullResolutionImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
         }()
-    var url: NSURL?
+    var url: String?
     
     private var originalAsset: ALAsset!
     
@@ -148,8 +148,10 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             if result != nil {
                 let asset = DKAsset()
                 //asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
-                asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
-                asset.originalAsset = result
+                var _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
+                asset.url=_nsurl.absoluteString
+                
+                //asset.originalAsset = result
                 self._images.insertObject(asset, atIndex: 1)
 //                self._collectionView!.reloadData()
             } else {
@@ -173,13 +175,18 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 if indexPath.item==0{
                     cell._setImage("camara.png")
                     cell._hasTag=false
-                    
                 }else{
                     let _asset:DKAsset=_images[indexPath.item] as! DKAsset
-                    let _image:UIImage=UIImage(CGImage:_asset.originalAsset.thumbnail().takeUnretainedValue())!
+                    
+                    let _al:ALAssetsLibrary=ALAssetsLibrary()
+                    _al.assetForURL(NSURL(string: _asset.url!)! , resultBlock: { (asset:ALAsset!) -> Void in
+                        cell._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                        }, failureBlock: { (error:NSError!) -> Void in
+                        
+                    })
+                    //let _image:UIImage=UIImage(CGImage:_asset.originalAsset.thumbnail().takeUnretainedValue())!
                     cell._delegate=self
                     
-                    cell._setImageByImage(_image)
                     cell._selected=_asset._seleceted
                     cell._hasTag=true
                 }
@@ -203,7 +210,10 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 let _asset:DKAsset=_images[indexPath.item] as! DKAsset
                 var _pic:Manage_pic?
                 _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
-                _pic?._setImageByImage(_asset.fullScreenImage!)
+                
+                let _dict:NSDictionary = NSDictionary(objects: [_asset.url as String!,"alasset"], forKeys: ["url","type"])
+                _pic?._setPic(_dict)
+                
                 self.navigationController?.pushViewController(_pic!, animated: true)
                 //presentViewController(_pic!, animated: true, completion: nil)
             }
@@ -282,7 +292,8 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 let _ak:DKAsset = _images.objectAtIndex(i) as! DKAsset
                 if _ak._seleceted {
                   //  println(_ak._seleceted)
-                  _imgs.addObject(_ak.originalAsset)
+                    let _img:NSDictionary=NSDictionary(objects: ["alasset",_ak.url!], forKeys: ["type","url"])
+                  _imgs.addObject(_img)
                 }
             }
             self.navigationController?.popViewControllerAnimated(true)

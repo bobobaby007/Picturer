@@ -10,8 +10,13 @@ import Foundation
 import UIKit
 import AssetsLibrary
 
+protocol Manage_newDelegate:NSObjectProtocol{
+    func canceld()
+    func saved(dict:NSDictionary)
+}
 
-class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource,UITextViewDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate, SettingDelegate{
+
+class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource,UITextViewDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate,Setting_rangeDelegate,Setting_powerDelegate,Setting_replyDelegate,Setting_sampleDelegate,Setting_tagsDelegate{
     let _gap:CGFloat=15
     let _space:CGFloat=5
     let _titleViewH:CGFloat=40
@@ -44,6 +49,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _desInput:UITextView?
     var _desAlert:UILabel?
     
+    var _delegate:Manage_newDelegate?
     
     var _textsIsEditing:Bool=false
     var _tapRec:UITapGestureRecognizer?
@@ -51,10 +57,13 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _settings:NSArray=[["title":"标签","des":""],["title":"图片显示顺序","des":"按创建时间倒序排列"],["title":"私密性","des":"所有人"],["title":"回复权限","des":"允许回复"]]
     
     var _savingDict:NSMutableDictionary?
-//    enum Settings{
-//        var tt:String="hahah"
-//    }
-    var _delegate:ControllerDelegate?
+
+    
+    //
+    var _Action_Type:String="new_album"
+    
+    var _albumIndex:Int?
+    
     override func viewDidLoad() {
         setup()
         refreshView()
@@ -154,6 +163,11 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         
+        if (_albumIndex != nil){
+            let _albumDict:NSDictionary = MainAction._albumList.objectAtIndex(_albumIndex!) as! NSDictionary
+            _titleInput?.text=_albumDict.objectForKey("title") as! String
+            
+        }
         _setuped=true
     }
     
@@ -209,11 +223,22 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     }
    
     //----设置代理
-    func settingSaved(sender: AnyObject, settings: NSDictionary) {
-        println(settings)
+    func saved(dict: NSDictionary) {
+        switch dict.objectForKey("Action_Type") as! String{
+        case "tags":
+            println("")
+        case "range":
+            println("")
+        case "reply":
+            println("")
+        case "power":
+            println("")
+        default:
+            println("")
+        }
         _tableView?.reloadData()
     }
-    func settingCanceled() {
+    func canceld() {
         _tableView?.reloadData()
     }
     //-----图片代理
@@ -233,9 +258,30 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         let cell = self._imagesCollection?.dequeueReusableCellWithReuseIdentifier(
             identify, forIndexPath: indexPath) as! PicsShowCell
         
-        let _al:ALAsset=_selectedImages.objectAtIndex(indexPath.item) as! ALAsset
         
-        cell._setImageByImage(UIImage(CGImage: _al.thumbnail().takeUnretainedValue())!)
+        
+        //let _al:ALAsset=_selectedImages.objectAtIndex(indexPath.item) as! ALAsset
+        
+        let _pic:NSDictionary = _selectedImages.objectAtIndex(indexPath.item) as! NSDictionary
+        
+        if _pic.objectForKey("type") as! String=="alasset"{//-----如果是来自本地相册
+            //let _url:NSURL=_pic.objectForKey("url") as! NSURL  //_al.defaultRepresentation().url()
+            let _asl:ALAssetsLibrary = ALAssetsLibrary()
+            _asl.assetForURL(NSURL(string: _pic.objectForKey("url") as! String)!, resultBlock: { (asset) -> Void in
+                
+                cell._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                
+                }) { (error) -> Void in
+                    
+            }
+        }else{
+            cell._setImage("1.png")
+        }
+        
+        // pringln(_al.defaultRepresentation().UTI())
+        
+        //cell._setImageByImage(UIImage(CGImage: _al.thumbnail().takeUnretainedValue())!)
+       // cell._setImage(UIImage(contentsOfFile: <#String#>))
         
         return cell
     }
@@ -352,14 +398,13 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
-            _delegate?.controllerCanceled(self, dict: NSMutableDictionary())
+            _delegate?.canceld()
             self.navigationController?.popViewControllerAnimated(true)
         case _btn_save!:
             if treckDict(){
-                
+               _delegate?.saved(_savingDict!)
+                self.navigationController?.popViewControllerAnimated(true)
             }
-            _delegate?.controllerSaved(self, dict: NSMutableDictionary())
-            self.navigationController?.popViewControllerAnimated(true)
         case _addButton!:
             let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
             
@@ -378,10 +423,25 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     func treckDict()->Bool{
         _savingDict=NSMutableDictionary()
         
-        let a:_Action_Type=_Action_Type.PicsIn
-        println(a.rawValue)
-        println(_Action_Type(rawValue: 10)?.rawValue)
-        _savingDict?.setObject(a.rawValue, forKey: "actionType")
+        if (_albumIndex != nil){
+            _savingDict?.setObject(_albumIndex!, forKey: "albumIndex")
+            _savingDict?.setObject("edite_album", forKey: "Action_Type")
+        }else{
+            _savingDict?.setObject("new_album", forKey: "Action_Type")
+        }
+        
+        //_savingDict?.setObject(_titleInput?.text!, forKey: "title")
+        //_savingDict?.setObject(_desInput?.text!, forKey: "des")
+        //_savingDict?.setObject(_selectedImages, forKey: "images")
+        let _t=_titleInput?.text!
+        _savingDict?.setObject(_t!, forKey: "title")
+        _savingDict?.setObject(_selectedImages, forKey: "images")
+        
+//        let a:_Action_Type=_Action_Type.PicsIn
+//        println(a.rawValue)
+//        println(_Action_Type(rawValue: 10)?.rawValue)
+//        _savingDict?.setObject(a.rawValue, forKey: "actionType")
+        
         
         return true
     }

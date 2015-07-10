@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-protocol SettingDelegate:NSObjectProtocol{
-    func settingSaved(sender:AnyObject,settings:NSDictionary)
-    func settingCanceled()
+protocol Setting_rangeDelegate:NSObjectProtocol{
+    func canceld()
+    func saved(dict:NSDictionary)
 }
 
 class Setting_range: UIViewController, UITableViewDelegate,UITableViewDataSource {
@@ -21,7 +21,7 @@ class Setting_range: UIViewController, UITableViewDelegate,UITableViewDataSource
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:SettingDelegate?
+    var _delegate:Setting_rangeDelegate?
     
     var _tableView:UITableView?
     let _tableCellH:CGFloat=40
@@ -124,10 +124,12 @@ class Setting_range: UIViewController, UITableViewDelegate,UITableViewDataSource
         switch sender{
         case _btn_cancel!:
             self.navigationController?.popViewControllerAnimated(true)
-            _delegate?.settingCanceled()
+            _delegate?.canceld()
         case _btn_save!:
             var _dict:NSMutableDictionary=NSMutableDictionary()
-            _delegate?.settingSaved(self, settings: _dict)
+            _dict.setObject("range", forKey: "Action_Type")
+            
+            _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
             println(sender)

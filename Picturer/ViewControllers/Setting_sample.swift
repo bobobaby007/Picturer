@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+protocol Setting_sampleDelegate:NSObjectProtocol{
+    func canceld()
+    func saved(dict:NSDictionary)
+}
+
 class Setting_sample: UIViewController, UITableViewDelegate,UITableViewDataSource {
     let _gap:CGFloat=15
     var _setuped:Bool=false
@@ -16,7 +21,7 @@ class Setting_sample: UIViewController, UITableViewDelegate,UITableViewDataSourc
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:SettingDelegate?
+    var _delegate:Setting_sampleDelegate?
     
     var _tableView:UITableView?
     let _tableCellH:CGFloat=40
@@ -119,10 +124,11 @@ class Setting_sample: UIViewController, UITableViewDelegate,UITableViewDataSourc
         switch sender{
         case _btn_cancel!:
             self.navigationController?.popViewControllerAnimated(true)
-            _delegate?.settingCanceled()
+            _delegate?.canceld()
         case _btn_save!:
             var _dict:NSMutableDictionary=NSMutableDictionary()
-            _delegate?.settingSaved(self, settings: _dict)
+            //_dict.setObject(_Action_Type.Setting_tags.rawValue, forKey: "Action_Type")
+            _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
             println(sender)

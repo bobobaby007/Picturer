@@ -13,7 +13,7 @@ import UIKit
 
 
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource, ControllerDelegate{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate{
    
     var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
@@ -124,7 +124,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource, C
         if MainAction._albumList.count<1{
             cell._changeToNew()
         }else{
-            cell.setTitle((_albumArray[indexPath.row] as? String)!)
+            cell.setTitle((MainAction._albumList[indexPath.row].objectForKey("title") as? String)!)
             cell.setTime("下午2:00")
             cell.setDescription((_albumArray[indexPath.row] as? String)!+"张")
             //cell.detailTextLabel?.text="ss"
@@ -143,17 +143,25 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource, C
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
     }
+    
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        if MainAction._albumList.count<1{
+            return []
+        }
+        
+        
         var deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "删除", handler: actionHander)
         var shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "分享", handler: actionHander)
-        var editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "编辑" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+       // var editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "编辑" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             
-        })
+        //})
+        var editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "编辑", handler: actionHander)
         //----设置颜色
         deleteAction.backgroundColor=UIColor(red: 255/255, green: 62/255, blue: 53/255, alpha: 1)
         shareAction.backgroundColor=UIColor(red: 255/255, green: 222/255, blue: 23/255, alpha: 1)
         editAction.backgroundColor=UIColor(red: 200/255, green: 199/255, blue: 205/255, alpha: 1)
         return [deleteAction,shareAction,editAction]
+        
     }
     //---左滑动作
     func actionHander(action:UITableViewRowAction!,index:NSIndexPath!)->Void{
@@ -164,6 +172,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource, C
             deleteCell(index)
             case "分享":
             openShare()
+            case "编辑":
+            editeAlbum(index.row)
+            
             default:
             println(action.title)
         }
@@ -177,9 +188,22 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource, C
         rateMenu.addAction(cancelAction)
         self.presentViewController(rateMenu, animated: true, completion: nil)
     }
+    //----删除相册
     func deleteCell(index:NSIndexPath)->Void{
-        _albumArray.removeAtIndex(index.row)
-        _tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Left)
+        //_albumArray.removeAtIndex(index.row)
+        //_tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Left)
+        MainAction._deleteAlbumAtIndex(index.row)
+        _tableView.reloadData()
+    }
+    //----编辑相册
+    func editeAlbum(index:Int) -> Void{
+        
+        var _controller:Manage_new?
+        _controller=Manage_new()
+        _controller?._albumIndex=index
+        _controller?._delegate=self
+        
+        self.navigationController?.pushViewController(_controller!, animated: true)
     }
     //---新建
     func openNewActions()->Void{
@@ -192,8 +216,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource, C
         menu.addAction(action1)
         menu.addAction(action2)
         menu.addAction(action3)
-        menu.addAction(action4)
-        
+        menu.addAction(action4)        
         self.view.window!.rootViewController!.presentViewController(menu, animated: true, completion: nil)
         //self.presentViewController(menu, animated: true, completion: nil)
     }
@@ -218,18 +241,28 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource, C
     }
     
     //----弹出代理
-    func controllerCanceled(controller: AnyObject, dict: NSMutableDictionary) {
-        println(controller)
-        println(dict)
+    func saved(dict: NSDictionary) {
+        switch dict.objectForKey("Action_Type") as! String{
+            case "new_album":
+            MainAction._insertAlbum(dict)
+            case "edite_album":
+            MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
+        default:
+            println("")
+        }
+        _tableView.reloadData()
     }
-    func controllerSaved(controller: AnyObject, dict: NSMutableDictionary) {
-        println(controller)
-        println(dict)
+    func canceld() {
+        _tableView.reloadData()
     }
     //---创建新相册
     func newFromWeb(action:UIAlertAction!) -> Void{
         
     }
+    
+    
+    
+    
     override func viewDidLoad() {
         
 //        var _album:AlbumObj=AlbumObj()

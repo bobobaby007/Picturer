@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+protocol Setting_tagsDelegate:NSObjectProtocol{
+    func canceld()
+    func saved(dict:NSDictionary)
+}
 
 class Setting_tags: UIViewController {
     let _gap:CGFloat=15
@@ -17,7 +21,7 @@ class Setting_tags: UIViewController {
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:SettingDelegate?
+    var _delegate:Setting_tagsDelegate?
     
     var _selectedId:Int=0
     
@@ -69,10 +73,11 @@ class Setting_tags: UIViewController {
         switch sender{
         case _btn_cancel!:
             self.navigationController?.popViewControllerAnimated(true)
-            _delegate?.settingCanceled()
+            _delegate?.canceld()
         case _btn_save!:
             var _dict:NSMutableDictionary=NSMutableDictionary()
-            _delegate?.settingSaved(self, settings: _dict)
+            _dict.setObject("tags", forKey: "Action_Type")
+            _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
             println(sender)

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AssetsLibrary
 
 class Manage_pic: UIViewController{
     
@@ -28,13 +29,28 @@ class Manage_pic: UIViewController{
         }
     }    
     
+    func _setPic(__pic:NSDictionary){
+        switch __pic.objectForKey("type") as! String{
+            case "alasset":
+                let _al:ALAssetsLibrary=ALAssetsLibrary()
+                _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
+                    
+                    self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                    self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+                    
+                    }, failureBlock: { (error:NSError!) -> Void in
+                        
+                })
+        default:
+            println()
+        }
+    }
+    
     func _setImage(_img:String){
         _imgPath=_img
         _imgView=UIImageView(frame: self.view.frame)
         _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
        _imgView!.image=UIImage(named: _imgPath!)
-        
-        
         self.view.addSubview(_imgView!)
     }
     func _setImageByImage(_img:UIImage){
