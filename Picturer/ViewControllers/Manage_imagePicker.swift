@@ -135,7 +135,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     
     func _loadImagesAt(_groupIndex:Int)->Void{
         let _group:DKAssetGroup=self._groups.objectAtIndex(_groupIndex) as! DKAssetGroup
-        self._images=[DKAsset()]
+        self._images=[]
         self._btn_title?.setTitle(_group.groupName, forState: UIControlState.Normal)
         
         //---三角位置
@@ -146,13 +146,16 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         
         _group.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
+                
+                
+                
                 let asset = DKAsset()
                 //asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
                 var _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
-                asset.url=_nsurl.absoluteString
-                
+                let _url:NSString=_nsurl.absoluteString!
+                let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
                 //asset.originalAsset = result
-                self._images.insertObject(asset, atIndex: 1)
+                self._images.insertObject(_dict, atIndex: 0)
 //                self._collectionView!.reloadData()
             } else {
                 self._collectionView!.reloadData()
@@ -163,31 +166,29 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     }
     
         func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return _images.count;
+            return _images.count+1;
         }
         func collectionView(collectionView: UICollectionView,
             cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
                 let identify:String = "PicsShowCell"
                 let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                     identify, forIndexPath: indexPath) as! PicsShowCell
-                cell._indexPath=indexPath
+                
                 
                 if indexPath.item==0{
                     cell._setImage("camara.png")
                     cell._hasTag=false
                 }else{
-                    let _asset:DKAsset=_images[indexPath.item] as! DKAsset
+                    cell._index=indexPath.row-1
+                    let _pic:NSDictionary=_images[indexPath.item-1] as! NSDictionary
+                    cell._setPic(_pic)
                     
-                    let _al:ALAssetsLibrary=ALAssetsLibrary()
-                    _al.assetForURL(NSURL(string: _asset.url!)! , resultBlock: { (asset:ALAsset!) -> Void in
-                        cell._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
-                        }, failureBlock: { (error:NSError!) -> Void in
-                        
-                    })
-                    //let _image:UIImage=UIImage(CGImage:_asset.originalAsset.thumbnail().takeUnretainedValue())!
                     cell._delegate=self
-                    
-                    cell._selected=_asset._seleceted
+                    if (_pic.objectForKey("seleceted") != nil) {
+                        cell._selected=true
+                    }else{
+                        cell._selected=false
+                    }
                     cell._hasTag=true
                 }
                 return cell
@@ -207,13 +208,13 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 presentViewController(_cameraPicker, animated: true, completion: nil)
             }else{
                 
-                let _asset:DKAsset=_images[indexPath.item] as! DKAsset
+                //let _asset:DKAsset=_images[indexPath.item] as! DKAsset
                 var _pic:Manage_pic?
                 _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
                 
-                let _dict:NSDictionary = NSDictionary(objects: [_asset.url as String!,"alasset"], forKeys: ["url","type"])
-                _pic?._setPic(_dict)
-                
+                //let _dict:NSDictionary = NSDictionary(objects: [_asset.url as String!,"alasset"], forKeys: ["url","type"])
+                //_pic?._setPic(_dict)
+                _pic?._showIndexAtPics(indexPath.item-1, __array: _images)
                 self.navigationController?.pushViewController(_pic!, animated: true)
                 //presentViewController(_pic!, animated: true, completion: nil)
             }
@@ -224,9 +225,9 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     
     //-----图片单独选中☑️或取消
     func PicDidSelected(pic: PicsShowCell) {
-        var _asset:DKAsset=_images[pic._indexPath!.item] as! DKAsset
-        _asset._seleceted=pic._selected
-        _images[pic._indexPath!.item]=_asset
+        var _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _images[pic._index!] as! NSDictionary)
+        _pic.setObject(true, forKey: "selected")
+        _images[pic._index!]=_pic
         //println(pic._selected)
     }
     
@@ -289,10 +290,10 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             let _c:Int = _images.count
             
             for var i=0; i<_c;++i{
-                let _ak:DKAsset = _images.objectAtIndex(i) as! DKAsset
-                if _ak._seleceted {
+                let _pic:NSDictionary = _images.objectAtIndex(i) as! NSDictionary
+                if (_pic.objectForKey("selected") != nil) {
                   //  println(_ak._seleceted)
-                    let _img:NSDictionary=NSDictionary(objects: ["alasset",_ak.url!], forKeys: ["type","url"])
+                    let _img:NSDictionary=NSDictionary(objects: ["alasset",_pic.objectForKey("url")!], forKeys: ["type","url"])
                   _imgs.addObject(_img)
                 }
             }

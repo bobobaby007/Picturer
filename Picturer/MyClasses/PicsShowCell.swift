@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AssetsLibrary
 
 protocol PicsShowCellDelegate:NSObjectProtocol{
     func PicDidSelected(pic:PicsShowCell)
@@ -20,7 +21,7 @@ class PicsShowCell:UICollectionViewCell{
     
     var _imgView:UIImageView!
     var _tag_view:UIImageView!
-    var _indexPath:NSIndexPath?
+    var _index:Int?
     
     var _delegate:PicsShowCellDelegate?
     
@@ -93,7 +94,26 @@ class PicsShowCell:UICollectionViewCell{
 //            self._selected = !self._selected
 //        }
     }
-    
+    func _setPic(__pic:NSDictionary){
+        switch __pic.objectForKey("type") as! String{
+        case "alasset":
+            let _al:ALAssetsLibrary=ALAssetsLibrary()
+            _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
+                
+                self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                //self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+                
+                }, failureBlock: { (error:NSError!) -> Void in
+                    
+            })
+        default:
+            println()
+        }
+    }
+    func _setCornerRadius(__set:CGFloat){
+        _imgView.layer.cornerRadius=__set
+        _imgView?.layer.masksToBounds=true
+    }
     func _setImage(_img:String)->Void{
         _imgView.image=UIImage(named: _img as String)
     }

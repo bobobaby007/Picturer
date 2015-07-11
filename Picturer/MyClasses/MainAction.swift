@@ -43,14 +43,20 @@ class MainAction: AnyObject {
     
     static func _getImagesOfAlbumId(__id:String)->NSArray?{
         var _images:NSArray=[]
-        let _albumPlist:NSDictionary? = CoreAction._loadPlist(__id)
-        if _albumPlist == nil{
-           return nil
-        }else{
-            let _album:NSDictionary = _albumPlist?.objectForKey("root") as! NSDictionary
-            return _images
-        }       
+//        let _albumPlist:NSDictionary? = CoreAction._loadPlist(__id)
+//        if _albumPlist == nil{
+//           return nil
+//        }else{
+//            let _album:NSDictionary = _albumPlist?.objectForKey("root") as! NSDictionary
+//            return _images
+//        }
+        return _images
     }
+    static func _getImagesOfAlbumIndex(__index:Int)->NSArray?{
+        let _album:NSDictionary = MainAction._getAlbumAtIndex(__index)!
+        return NSMutableArray(array: _album.objectForKey("images") as! NSArray)
+    }
+    
     static func _savePicToAlbumById(__pic:NSDictionary,__albumId:String){
         
     }

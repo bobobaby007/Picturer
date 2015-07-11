@@ -94,7 +94,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         }
         var _show:Manage_show?
         _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
-    _show?._setPicArray(["1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","6.png","7.png"])
+    
+        _show?._albumIndex=indexPath.row
+    //_show?._setPicArray(["1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","6.png","7.png"])
         
        // println(_show)
      //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
@@ -134,7 +136,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
                 cell._setPic(_album.objectForKey("cover") as! NSDictionary)
                 //cell.setThumbImage(_album.objectForKey("cover") as! String)
             }else{
-                
+                cell.setThumbImage("1.png")   
             }
             
         }

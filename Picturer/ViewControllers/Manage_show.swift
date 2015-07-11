@@ -25,9 +25,14 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     var _collectionArray:NSMutableArray = []
     var _selectedArray:NSMutableArray = [PicObj.self]
+    var _albumIndex:Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        _collectionArray = NSMutableArray(array:  MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
+        
+        
         let layout = CustomLayout()
         _collectionView.collectionViewLayout=layout
         _collectionView.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
@@ -45,8 +50,10 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                 identify, forIndexPath: indexPath) as! PicsShowCell
            // let cell = PicsShowCell()
-            cell._indexPath = indexPath
-            cell._setImage( _collectionArray[indexPath.item] as! String)
+            cell._index = indexPath.row
+            
+            cell._setPic(_collectionArray[indexPath.item] as! NSDictionary)
+           // cell._setImage( _collectionArray[indexPath.item] as! String)
             
             cell._delegate = self
             
@@ -62,29 +69,23 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             return cell
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
-        // println(_show)
-        //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
-        
-       // _pic?._setImage(_collectionArray[indexPath.item])
-        
-//        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PicsShowCell
-//        
+          
         switch _currentAction{
         case _action_normal:
-            var _pic:Manage_pic?
-            _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
-            self.navigationController?.pushViewController(_pic!, animated: true)
-            _pic?._setImage(_collectionArray[indexPath.item] as! String)
+            println("")
         case _action_delete:
-           // println(_currentAction)
-            var _pic:Manage_pic?
-            _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
-            self.navigationController?.pushViewController(_pic!, animated: true)
-            _pic?._setImage(_collectionArray[indexPath.item] as! String)
+           println("")
         default:
             println("not set action")
         }
+        
+        var _pic:Manage_pic?
+        _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
+        self.navigationController?.pushViewController(_pic!, animated: true)
+        
+        _pic?._showIndexAtPics(indexPath.item, __array: _collectionArray)
+       // _pic?._setPic(_collectionArray[indexPath.item] as! NSDictionary)
+        //_pic?._setImage(_collectionArray[indexPath.item] as! String)
     }
     func PicDidSelected(pic: PicsShowCell) {
         

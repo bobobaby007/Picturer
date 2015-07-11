@@ -167,7 +167,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         if (_albumIndex != nil){
             _album = MainAction._getAlbumAtIndex(_albumIndex!)!
             _titleInput?.text=_album!.objectForKey("title") as! String
-            _selectedImages = NSMutableArray(array: _album!.objectForKey("images") as! NSArray)
+            _selectedImages = NSMutableArray(array: MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
             
         }
         _setuped=true

@@ -634,7 +634,7 @@
                         <viewControllerLayoutGuide type="top" id="Fi0-00-ppR"/>
                         <viewControllerLayoutGuide type="bottom" id="Fxk-tG-NWZ"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="zKf-ZX-1MU">
+                    <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="zKf-ZX-1MU">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -652,7 +652,7 @@
                                             </constraint>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="萨公司的嘎嘎">
+                                        <state key="normal">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <variation key="default">
@@ -877,6 +877,8 @@
                     </view>
                     <connections>
                         <outlet property="_btn_back" destination="vk5-8z-ADT" id="eqE-ua-dxk"/>
+                        <outlet property="_title" destination="qa1-91-kxj" id="HBS-Ct-Sbe"/>
+                        <outlet property="_topView" destination="4Au-tS-Rso" id="cg1-iU-30S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eJH-Co-Qru" userLabel="First Responder" sceneMemberID="firstResponder"/>
