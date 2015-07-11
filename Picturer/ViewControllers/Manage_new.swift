@@ -63,6 +63,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _Action_Type:String="new_album"
     
     var _albumIndex:Int?
+    var _album:NSDictionary?
     
     override func viewDidLoad() {
         setup()
@@ -164,8 +165,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         if (_albumIndex != nil){
-            let _albumDict:NSDictionary = MainAction._albumList.objectAtIndex(_albumIndex!) as! NSDictionary
-            _titleInput?.text=_albumDict.objectForKey("title") as! String
+            _album = MainAction._getAlbumAtIndex(_albumIndex!)!
+            _titleInput?.text=_album!.objectForKey("title") as! String
+            _selectedImages = NSMutableArray(array: _album!.objectForKey("images") as! NSArray)
             
         }
         _setuped=true
@@ -426,8 +428,14 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         if (_albumIndex != nil){
             _savingDict?.setObject(_albumIndex!, forKey: "albumIndex")
             _savingDict?.setObject("edite_album", forKey: "Action_Type")
+            
+            
         }else{
             _savingDict?.setObject("new_album", forKey: "Action_Type")
+        }
+        
+        if _album?.objectForKey("cover") == nil && _selectedImages.count>0{
+            _savingDict?.setObject(_selectedImages.objectAtIndex(0), forKey: "cover")
         }
         
         //_savingDict?.setObject(_titleInput?.text!, forKey: "title")

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AssetsLibrary
 
 class AlbumListCell :  UITableViewCell{
     
@@ -56,7 +57,23 @@ class AlbumListCell :  UITableViewCell{
         _desLable?.font=UIFont(name: "Helvetica", size: 15)
         
     }
-    
+    func _setPic(__pic:NSDictionary){
+        switch __pic.objectForKey("type") as! String{
+        case "alasset":
+            let _al:ALAssetsLibrary=ALAssetsLibrary()
+            _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
+                
+                self.setThumbImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                //self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+                
+                }, failureBlock: { (error:NSError!) -> Void in
+                    
+            })
+        default:
+            println()
+        }
+    }
+
     func setThumbImage(_image:NSString)->Void{
         //setUp()
         _imageView?.image=UIImage(named: _image as String)

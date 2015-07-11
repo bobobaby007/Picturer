@@ -21,9 +21,8 @@ class MainAction: AnyObject {
         get{
             if _aList==nil{
                 var _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        
                 var _list:NSMutableArray?=_ud.valueForKey(_ALBUM_LIST) as? NSMutableArray
-                println(_list)
+                //println(_list)
                 if _list==nil{
                     _list = NSMutableArray(array: [])
                     _ud.setObject(_list, forKey: _ALBUM_LIST)
@@ -41,27 +40,81 @@ class MainAction: AnyObject {
         }
     }
     
-    static func _insertAlbum(album:NSDictionary){
+    
+    static func _getImagesOfAlbumId(__id:String)->NSArray?{
+        var _images:NSArray=[]
+        let _albumPlist:NSDictionary? = CoreAction._loadPlist(__id)
+        if _albumPlist == nil{
+           return nil
+        }else{
+            let _album:NSDictionary = _albumPlist?.objectForKey("root") as! NSDictionary
+            return _images
+        }       
+    }
+    static func _savePicToAlbumById(__pic:NSDictionary,__albumId:String){
+        
+    }
+    static func _insertAlbum(dict:NSDictionary)->String{
         var _list:NSMutableArray=NSMutableArray(array:_albumList )
-        _list.insertObject(album, atIndex: 0)
+        var _album:NSMutableDictionary = NSMutableDictionary(dictionary: dict)
+        
+        var _id:String="1234555"
+        _album.setObject(_id, forKey: "id")
+        _album.setObject(_id, forKey: "last_update_at")
+        _album.setObject(_id, forKey: "create_at")
+        _album.setObject(0, forKey: "uploaded")
+        _list.insertObject(_album, atIndex: 0)
         //_albumList?.addObject(album._toDict())
         _albumList=_list
        // println(_albumList)
+        return _id
     }
+    static func _getAlbumAtIndex(index:Int)->NSDictionary?{
+        let _albumDict:NSDictionary = MainAction._albumList.objectAtIndex(index) as! NSDictionary
+        return _albumDict
+    }
+    //----直接从列表里按照位置删除
     static func _deleteAlbumAtIndex(index:Int){
         var _list:NSMutableArray=NSMutableArray(array:_albumList )
         //println(index)
         _list.removeObjectAtIndex(index)
         _albumList=_list
     }
+    
     static func _changeAlbumAtIndex(index:Int,dict:NSDictionary){
         var _list:NSMutableArray=NSMutableArray(array:_albumList )
         var _album:NSMutableDictionary=_list[index] as! NSMutableDictionary
-        _album=NSMutableDictionary(dictionary: dict)
+        
+        //let keys:NSArray = dict.allKeys
+        
+        for (key,value) in dict{
+            println(key,value)
+            _album.setObject(value, forKey: key as! String)
+        }
+        
+        //_album=NSMutableDictionary(dictionary: dict)
+        
+        
+        //println(_album)
+        
         _list[index]=_album
         _albumList=_list
     }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////
+
 
 class CoverObj:AnyObject {
     var thumbImage:String=String()

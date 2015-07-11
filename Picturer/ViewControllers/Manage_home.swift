@@ -15,7 +15,7 @@ import UIKit
 
 class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate{
    
-    var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
+    //var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
     @IBOutlet weak var _tableView:UITableView!
     @IBOutlet weak var _btn_new:UIButton!
@@ -124,11 +124,19 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         if MainAction._albumList.count<1{
             cell._changeToNew()
         }else{
-            cell.setTitle((MainAction._albumList[indexPath.row].objectForKey("title") as? String)!)
+            let _album:NSDictionary=MainAction._albumList[indexPath.row] as! NSDictionary
+            cell.setTitle((_album.objectForKey("title") as? String)!)
             cell.setTime("下午2:00")
-            cell.setDescription((_albumArray[indexPath.row] as? String)!+"张")
+            //cell.setDescription((_albumArray[indexPath.row] as? String)!+"张")
             //cell.detailTextLabel?.text="ss"
-            cell.setThumbImage(_albumArray[indexPath.row] as! String)
+            
+            if _album.objectForKey("cover") != nil{
+                cell._setPic(_album.objectForKey("cover") as! NSDictionary)
+                //cell.setThumbImage(_album.objectForKey("cover") as! String)
+            }else{
+                
+            }
+            
         }
         
         
