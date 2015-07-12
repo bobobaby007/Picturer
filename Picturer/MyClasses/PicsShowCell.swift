@@ -32,8 +32,12 @@ class PicsShowCell:UICollectionViewCell{
 //            return true
 //        }
         didSet{
+           // println(_hasTag)
+            //_tag_view.image=UIImage(named: "pic_unSelected.png")
             _tag_view.hidden = !self._hasTag
+            
         }
+        
     }
     
    // var _callBack:((sender:PicsShowCell) -> Void)?
@@ -52,9 +56,8 @@ class PicsShowCell:UICollectionViewCell{
     
     
     override init(frame: CGRect) {
-        
+        //println("go")
         super.init(frame: frame)
-        
         
         _imgView=UIImageView(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
         _imgView.contentMode=UIViewContentMode.ScaleAspectFill

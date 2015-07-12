@@ -22,6 +22,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     
     var _offset:CGFloat=0
     
+    
     @IBAction func btnHander(btn:UIButton){
         switch btn{
         case _btn_new:
@@ -60,7 +61,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     //-----拖动方法
     
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        println("did end")
+        //println("did end")
     }
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
@@ -129,7 +130,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             let _album:NSDictionary=MainAction._albumList[indexPath.row] as! NSDictionary
             cell.setTitle((_album.objectForKey("title") as? String)!)
             cell.setTime("下午2:00")
-            //cell.setDescription((_albumArray[indexPath.row] as? String)!+"张")
+            
+            
+            cell.setDescription(String(stringInterpolationSegment: MainAction._getImagesOfAlbumIndex(indexPath.row)!.count)+"张")
             //cell.detailTextLabel?.text="ss"
             
             if _album.objectForKey("cover") != nil{
@@ -179,7 +182,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         switch action.title{
             case "删除":
             println("删除")
+            
             deleteCell(index)
+            
             case "分享":
             openShare()
             case "编辑":
@@ -203,7 +208,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         //_albumArray.removeAtIndex(index.row)
         //_tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Left)
         MainAction._deleteAlbumAtIndex(index.row)
-        _tableView.reloadData()
+        _tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Automatic)
+       // _tableView.reloadData()
     }
     //----编辑相册
     func editeAlbum(index:Int) -> Void{

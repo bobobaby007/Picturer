@@ -94,7 +94,7 @@ class MainAction: AnyObject {
         //let keys:NSArray = dict.allKeys
         
         for (key,value) in dict{
-            println(key,value)
+            //println(key,value)
             _album.setObject(value, forKey: key as! String)
         }
         

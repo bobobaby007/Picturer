@@ -28,22 +28,22 @@ class DKAssetGroup : NSObject {
 // Asset Model
 class DKAsset: NSObject {
     var _seleceted:Bool=false
-    //var thumbnailImage: UIImage?
-    lazy var fullScreenImage: UIImage? = {
-        return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
-        }()
-    lazy var fullResolutionImage: UIImage? = {
-        return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
-        }()
-    var url: String?
-    
-    private var originalAsset: ALAsset!
-    
-    // Compare two assets
-    override func isEqual(object: AnyObject?) -> Bool {
-        let other = object as! DKAsset!
-        return self.url!.isEqual(other.url!)
-    }
+//    //var thumbnailImage: UIImage?
+//    lazy var fullScreenImage: UIImage? = {
+//        return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
+//        }()
+//    lazy var fullResolutionImage: UIImage? = {
+//        return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
+//        }()
+//    var url: String?
+//    
+//    private var originalAsset: ALAsset!
+//    
+//    // Compare two assets
+//    override func isEqual(object: AnyObject?) -> Bool {
+//        let other = object as! DKAsset!
+//        return self.url!.isEqual(other.url!)
+//    }
 }
 
 
@@ -69,16 +69,15 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         }()
 
     
-        lazy private var _images:NSMutableArray={
-            return NSMutableArray()
-        }()
-    
+        var _images:NSMutableArray?=[]
+        var _imageItems:NSMutableArray?=[]
        var _firstLoaded:Bool=true
     
     
     
         
         override func viewDidLoad() {
+            println("viewDidLoad")
             super.viewDidLoad()
             
             let layout = CustomLayout()
@@ -136,6 +135,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     func _loadImagesAt(_groupIndex:Int)->Void{
         let _group:DKAssetGroup=self._groups.objectAtIndex(_groupIndex) as! DKAssetGroup
         self._images=[]
+        self._imageItems=[]
         self._btn_title?.setTitle(_group.groupName, forState: UIControlState.Normal)
         
         //---三角位置
@@ -150,12 +150,14 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 
                 
                 let asset = DKAsset()
+                
                 //asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
                 var _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
                 let _url:NSString=_nsurl.absoluteString!
                 let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
                 //asset.originalAsset = result
-                self._images.insertObject(_dict, atIndex: 0)
+                self._images!.insertObject(_dict, atIndex: 0)
+                self._imageItems?.insertObject(asset, atIndex: 0)
 //                self._collectionView!.reloadData()
             } else {
                 self._collectionView!.reloadData()
@@ -166,12 +168,12 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     }
     
         func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return _images.count+1;
+            return _images!.count+1;
         }
         func collectionView(collectionView: UICollectionView,
             cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
                 let identify:String = "PicsShowCell"
-                let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
+                var cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                     identify, forIndexPath: indexPath) as! PicsShowCell
                 
                 
@@ -179,21 +181,31 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                     cell._setImage("camara.png")
                     cell._hasTag=false
                 }else{
-                    cell._index=indexPath.row-1
-                    let _pic:NSDictionary=_images[indexPath.item-1] as! NSDictionary
-                    cell._setPic(_pic)
+                    cell._index=indexPath.item-1
+                    let _pic:NSDictionary=_images?.objectAtIndex(indexPath.item-1) as! NSDictionary
                     
+                    
+                    var _asset:DKAsset=_imageItems?.objectAtIndex(indexPath.item-1) as! DKAsset
+                    
+                    cell._selected = _asset._seleceted
+//                    
+//                    println(_pic.objectForKey("seleceted"))
+//                    if (_pic.objectForKey("seleceted") != nil) {
+//                        println(_pic)
+//                        let _s:Int=_pic.objectForKey("selected") as! Int
+//                        if _s == 1{
+//                            cell._selected=true
+//                        }
+//                    }else{
+//                        cell._selected=false
+//                    }
+                    cell._setPic(_pic)
                     cell._delegate=self
-                    if (_pic.objectForKey("seleceted") != nil) {
-                        cell._selected=true
-                    }else{
-                        cell._selected=false
-                    }
                     cell._hasTag=true
                 }
                 return cell
         }
-        func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
             
             
             //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
@@ -214,21 +226,30 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 
                 //let _dict:NSDictionary = NSDictionary(objects: [_asset.url as String!,"alasset"], forKeys: ["url","type"])
                 //_pic?._setPic(_dict)
-                _pic?._showIndexAtPics(indexPath.item-1, __array: _images)
+                _pic?._showIndexAtPics(indexPath.item-1, __array: _images!)
                 self.navigationController?.pushViewController(_pic!, animated: true)
                 //presentViewController(_pic!, animated: true, completion: nil)
             }
-           
             
         }
     
     
     //-----图片单独选中☑️或取消
     func PicDidSelected(pic: PicsShowCell) {
-        var _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _images[pic._index!] as! NSDictionary)
-        _pic.setObject(true, forKey: "selected")
-        _images[pic._index!]=_pic
-        //println(pic._selected)
+        
+        //var _ps:NSMutableArray=NSMutableArray(array: _images!)
+        
+        var _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _images?.objectAtIndex(pic._index!) as! NSDictionary)
+        _pic.setObject(pic._selected, forKey: "selected")
+        
+        
+        
+        _images![pic._index!]=_pic
+        
+        var _asset:DKAsset=_imageItems?.objectAtIndex(pic._index!) as! DKAsset
+        
+        _asset._seleceted=pic._selected
+       
     }
     
     
@@ -287,15 +308,27 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         case _btn_ok!:
             var _imgs:NSMutableArray=NSMutableArray()
             
-            let _c:Int = _images.count
+            let _c:Int = _images!.count
             
             for var i=0; i<_c;++i{
-                let _pic:NSDictionary = _images.objectAtIndex(i) as! NSDictionary
+                let _pic:NSDictionary = _images!.objectAtIndex(i) as! NSDictionary
+                
+                
+                
                 if (_pic.objectForKey("selected") != nil) {
                   //  println(_ak._seleceted)
-                    let _img:NSDictionary=NSDictionary(objects: ["alasset",_pic.objectForKey("url")!], forKeys: ["type","url"])
-                  _imgs.addObject(_img)
+                    let _s:Int=_pic.objectForKey("selected") as! Int
+                    
+                    if _s == 1{
+                        let _img:NSDictionary=NSDictionary(objects: ["alasset",_pic.objectForKey("url")!], forKeys: ["type","url"])
+                        _imgs.addObject(_img)
+                    }
+                    
+                    
+                }else{
+                    
                 }
+                
             }
             self.navigationController?.popViewControllerAnimated(true)
             _delegate?.imagePickerDidSelected(_imgs)
