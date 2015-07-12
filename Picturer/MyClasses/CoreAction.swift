@@ -59,5 +59,8 @@ class CoreAction: AnyObject {
         __dict.writeToFile(path, atomically: true)
     }
     
+    
+    
+    //------
 
 }

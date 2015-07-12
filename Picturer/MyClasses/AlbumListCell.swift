@@ -63,7 +63,13 @@ class AlbumListCell :  UITableViewCell{
             let _al:ALAssetsLibrary=ALAssetsLibrary()
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 
-                self.setThumbImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                if asset != nil {
+                    self.setThumbImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                }else{
+                    self.setThumbImage("entroLogo")//----用户删除时
+                }
+
+                //self.setThumbImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
                 //self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
                 
                 }, failureBlock: { (error:NSError!) -> Void in

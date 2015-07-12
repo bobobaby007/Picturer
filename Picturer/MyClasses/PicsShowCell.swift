@@ -103,11 +103,16 @@ class PicsShowCell:UICollectionViewCell{
             let _al:ALAssetsLibrary=ALAssetsLibrary()
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 
-                self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
-                //self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+                if asset != nil {
+                    self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                }else{
+                    self._setImage("entroLogo")//----用户删除时
+                }
+               //
+                //----self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
                 
                 }, failureBlock: { (error:NSError!) -> Void in
-                    
+                    println(error)
             })
         default:
             println()

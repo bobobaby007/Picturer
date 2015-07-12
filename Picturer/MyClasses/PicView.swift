@@ -29,9 +29,13 @@ class PicView: UIScrollView,UIScrollViewDelegate{
             let _al:ALAssetsLibrary=ALAssetsLibrary()
             
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
-                
+                if asset != nil {
+                    self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+                }else{
+                    self._setImage("entroLogo")//----用户删除时
+                }
                 //self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
-                self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+               // self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
                 
                 }, failureBlock: { (error:NSError!) -> Void in
                     

@@ -39,7 +39,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _imagesBox:UIView?
     var _addButton:UIButton?
     var _imagesCollection:UICollectionView?
-    var _selectedImages:NSMutableArray!=[]
+    var _imagesArray:NSMutableArray!=[]
     var _collectionLayout:UICollectionViewFlowLayout?
     
     var _titleView:UIView?
@@ -167,7 +167,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         if (_albumIndex != nil){
             _album = MainAction._getAlbumAtIndex(_albumIndex!)!
             _titleInput?.text=_album!.objectForKey("title") as! String
-            _selectedImages = NSMutableArray(array: MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
+            _imagesArray = NSMutableArray(array: MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
             
         }
         _setuped=true
@@ -246,13 +246,21 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     //-----图片代理
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return _selectedImages.count
+        return _imagesArray.count
         
         
         //return 30
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        println("")
+        var _pic:Manage_pic?
+        
+        let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
+        
+        _pic=storyboard.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
+        
+        self.navigationController?.pushViewController(_pic!, animated: true)
+        
+        _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
@@ -262,9 +270,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         
-        //let _al:ALAsset=_selectedImages.objectAtIndex(indexPath.item) as! ALAsset
+        //let _al:ALAsset=_imagesArray.objectAtIndex(indexPath.item) as! ALAsset
         
-        let _pic:NSDictionary = _selectedImages.objectAtIndex(indexPath.item) as! NSDictionary
+        let _pic:NSDictionary = _imagesArray.objectAtIndex(indexPath.item) as! NSDictionary
         
         if _pic.objectForKey("type") as! String=="alasset"{//-----如果是来自本地相册
             //let _url:NSURL=_pic.objectForKey("url") as! NSURL  //_al.defaultRepresentation().url()
@@ -349,8 +357,8 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     //-----选择相册代理
     func imagePickerDidSelected(images: NSArray) {
-        _selectedImages.addObjectsFromArray(images as [AnyObject])
-        //_selectedImages=NSMutableArray(array: images)
+        _imagesArray.addObjectsFromArray(images as [AnyObject])
+        //_imagesArray=NSMutableArray(array: images)
         _imagesCollection?.reloadData()
         refreshView()
         
@@ -363,7 +371,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         let _imagesW:CGFloat=(self.view.frame.width-2*_gap-3*_space)/4
-        let _imagesH:CGFloat=ceil(CGFloat(_selectedImages.count)/4)*(_imagesW+_space)
+        let _imagesH:CGFloat=ceil(CGFloat(_imagesArray.count)/4)*(_imagesW+_space)
         
         _collectionLayout?.minimumInteritemSpacing=_space
         _collectionLayout?.minimumLineSpacing=_space
@@ -373,7 +381,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
        
         
         var _imageBoxH:CGFloat!
-        if _selectedImages.count<1{
+        if _imagesArray.count<1{
             _imageBoxH=_imagesH+_buttonH+2*_gap
         }else{
             _imageBoxH=_imagesH+_buttonH+3*_gap-_space
@@ -391,8 +399,8 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _tableView?.frame = CGRect(x: 0, y: _imageBoxH+3*_gap+_titleViewH+_desInputViewH, width: self.view.frame.width, height: _tableViewH)
         
         
-        let _scrollH=_imageBoxH+3*_gap+_titleViewH+_desInputViewH+_tableViewH
-        _scrollView?.frame=CGRect(x: 0, y: 43, width: self.view.frame.width, height: self.view.frame.height-32)
+        let _scrollH=_imageBoxH+3*_gap+_titleViewH+_desInputViewH+_tableViewH+_gap
+        _scrollView?.frame=CGRect(x: 0, y: 44, width: self.view.frame.width, height: self.view.frame.height-40)
         _scrollView?.contentSize=CGSize(width: self.view.frame.width, height: _scrollH)
         
     }
@@ -409,9 +417,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             }
         case _addButton!:
             let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
-            
             var _controller:Manage_imagePicker?
-            
             _controller=storyboard.instantiateViewControllerWithIdentifier("Manage_imagePicker") as? Manage_imagePicker
             _controller?._delegate=self
             //self.view.window!.rootViewController!.presentViewController(_controller!, animated: true, completion: nil)
@@ -434,16 +440,16 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             _savingDict?.setObject("new_album", forKey: "Action_Type")
         }
         
-        if _album?.objectForKey("cover") == nil && _selectedImages.count>0{
-            _savingDict?.setObject(_selectedImages.objectAtIndex(0), forKey: "cover")
+        if _album?.objectForKey("cover") == nil && _imagesArray.count>0{
+            _savingDict?.setObject(_imagesArray.objectAtIndex(0), forKey: "cover")
         }
         
         //_savingDict?.setObject(_titleInput?.text!, forKey: "title")
         //_savingDict?.setObject(_desInput?.text!, forKey: "des")
-        //_savingDict?.setObject(_selectedImages, forKey: "images")
+        //_savingDict?.setObject(_imagesArray, forKey: "images")
         let _t=_titleInput?.text!
         _savingDict?.setObject(_t!, forKey: "title")
-        _savingDict?.setObject(_selectedImages, forKey: "images")
+        _savingDict?.setObject(_imagesArray, forKey: "images")
         
 //        let a:_Action_Type=_Action_Type.PicsIn
 //        println(a.rawValue)

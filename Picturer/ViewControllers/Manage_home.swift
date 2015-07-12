@@ -13,7 +13,7 @@ import UIKit
 
 
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate{
    
     //var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
@@ -87,6 +87,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return _tableView.bounds.size.height/5
     }
+    
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if MainAction._albumList.count<1{
@@ -97,10 +99,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
     
         _show?._albumIndex=indexPath.row
-    //_show?._setPicArray(["1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","6.png","7.png"])
-        
-       // println(_show)
-     //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
+        _show?._delegate=self
+
         self.navigationController?.pushViewController(_show!, animated: true)
     }
     
@@ -207,9 +207,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func deleteCell(index:NSIndexPath)->Void{
         //_albumArray.removeAtIndex(index.row)
         //_tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Left)
+        //_tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Automatic)
         MainAction._deleteAlbumAtIndex(index.row)
-        _tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Automatic)
-       // _tableView.reloadData()
+        
+        _tableView.reloadData()
     }
     //----编辑相册
     func editeAlbum(index:Int) -> Void{
@@ -256,7 +257,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
     }
     
-    //----弹出代理
+    //----弹出编辑代理
     func saved(dict: NSDictionary) {
         switch dict.objectForKey("Action_Type") as! String{
             case "new_album":
@@ -271,6 +272,21 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func canceld() {
         _tableView.reloadData()
     }
+    
+    //---弹出浏览图片代理
+    func didDeletedPics(dict: NSDictionary) {
+        
+        MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: NSDictionary(object: dict.objectForKey("restImages")!, forKey: "images"))
+        //----确定删除的图片：selectedImages
+        
+        _tableView.reloadData()
+    }
+    func didAddPics(dict: NSDictionary) {        
+        MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: NSDictionary(object: dict.objectForKey("allImages")!, forKey: "images"))
+        //----添加的图片：addedImages
+        _tableView.reloadData()
+    }
+    
     //---创建新相册
     func newFromWeb(action:UIAlertAction!) -> Void{
         

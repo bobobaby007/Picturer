@@ -11,10 +11,11 @@ import UIKit
 import AVFoundation
 
 protocol Manage_show_delegate:NSObjectProtocol{
-    
+    func didDeletedPics(__dict:NSDictionary)
+    func didAddPics(__dict:NSDictionary)
 }
 
-class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PicsShowCellDelegate,UIAlertViewDelegate{
+class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PicsShowCellDelegate,UIAlertViewDelegate,ImagePickerDeletegate{
     
     @IBOutlet weak var _btn_back:UIButton?
     @IBOutlet weak var _collectionView:UICollectionView!
@@ -29,7 +30,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     var _currentAction:String="normal"
     
-    var _collectionArray:NSMutableArray = []
+    var _imagesArray:NSMutableArray = []
     var _SelectedIndexs:NSMutableArray=[]
     
     var _albumIndex:Int?
@@ -39,7 +40,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         if _setuped{
             return
         }
-        _collectionArray = NSMutableArray(array:  MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
+        _imagesArray = NSMutableArray(array:  MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
         
         let layout = CustomLayout()
         _collectionView.collectionViewLayout=layout
@@ -56,17 +57,18 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return _collectionArray.count;
+        return _imagesArray.count;
     }
     func collectionView(collectionView: UICollectionView,
         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-            let identify:String = "PicsShowCell"
+           
             //println(indexPath)
             let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
-                identify, forIndexPath: indexPath) as! PicsShowCell
+                "PicsShowCell", forIndexPath: indexPath) as! PicsShowCell
             cell._index = indexPath.row
-            let _pic:NSDictionary = _collectionArray[indexPath.item] as! NSDictionary
+            let _pic:NSDictionary = _imagesArray[indexPath.item] as! NSDictionary
             cell._setPic(_pic)
+            
             cell._selected = _selectedAtIndex(indexPath.item)
             
             cell._delegate = self
@@ -97,17 +99,17 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
         self.navigationController?.pushViewController(_pic!, animated: true)
         
-        _pic?._showIndexAtPics(indexPath.item, __array: _collectionArray)
-       // _pic?._setPic(_collectionArray[indexPath.item] as! NSDictionary)
-        //_pic?._setImage(_collectionArray[indexPath.item] as! String)
+        _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
+       // _pic?._setPic(_imagesArray[indexPath.item] as! NSDictionary)
+        //_pic?._setImage(_imagesArray[indexPath.item] as! String)
     }
     
     //---图片选择代理
     
     func PicDidSelected(pic: PicsShowCell) {
-        var _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _collectionArray[pic._index!] as! NSDictionary)
+        var _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _imagesArray[pic._index!] as! NSDictionary)
         _pic.setObject(pic._selected, forKey: "selected")
-        _collectionArray[pic._index!]=_pic
+        _imagesArray[pic._index!]=_pic
         if(pic._selected){
             _SelectedIndexs.addObject(pic._index!)
         }else{
@@ -138,12 +140,8 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             switch _currentAction{
             case _action_normal:
                 self.navigationController?.popViewControllerAnimated(true)
-                
             case _action_delete:
-                _currentAction=_action_normal
-                _btn_back?.setTitle("返回", forState: UIControlState.Normal)
-                _btn_edit?.setTitle("编辑", forState: UIControlState.Normal)
-                self._collectionView.reloadData()
+                self._changeActionTo(_action_normal)
             default:
                 println("")
             }
@@ -173,7 +171,28 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         switch _currentAction{
             case _action_delete:
                 if buttonIndex==0{
-                    _getSelectedAndRestArray()
+                    var _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _getSelectedAndRestArray())
+                    
+                    _dict.setValue(_albumIndex, forKey: "albumIndex")
+                    
+                    
+                    _delegate?.didDeletedPics(_dict)
+                    
+                    var _indexs:NSMutableIndexSet = NSMutableIndexSet()
+                    
+                    var _itemsIndexs:NSMutableArray=[]
+                    
+                    for i in _SelectedIndexs{
+                     _indexs.addIndex(Int(i as! NSNumber))
+                        _itemsIndexs.addObject(NSIndexPath(forItem: Int(i as! NSNumber), inSection: 0))
+                    }
+                   // println(_itemsIndexs)
+                    
+                    //_SelectedIndexs=[]
+                    _changeActionTo(_action_normal)
+                    
+                    _imagesArray.removeObjectsAtIndexes(_indexs)
+                    _collectionView.deleteItemsAtIndexPaths(_itemsIndexs as [AnyObject])
                     
                 }
         default:
@@ -182,24 +201,61 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
     }
     
-    func _getSelectedAndRestArray()->NSDictionary{
-        var _selectedA:NSMutableArray=[]
-        var _restA:NSMutableArray=[]
-        var _n:Int = _collectionArray.count
-        for var i = 0;i<_n;++i{
-            var _pic:NSDictionary = _collectionArray.objectAtIndex(i) as! NSDictionary
+    func _changeActionTo(_action:String){
+        _currentAction=_action
+        
+        switch _currentAction{
+        case _action_normal:
+            _SelectedIndexs=[]
             
-            if _pic.objectForKey("selected") == nil{
-                
-            }else{
-                
+            //_collectionView.reloadData()
+            _btn_back?.setTitle("返回", forState: UIControlState.Normal)
+            _btn_edit?.setTitle("编辑", forState: UIControlState.Normal)
+            
+            _needToSelect(false)
+        
+        case _action_delete:
+            _SelectedIndexs=[]
+            _btn_edit?.setTitle("删除", forState: UIControlState.Normal)
+            _btn_back?.setTitle("取消", forState: UIControlState.Normal)
+            //self._collectionView.reloadData()
+            _needToSelect(true)
+        default:
+            return
+        }
+        
+    }
+    
+    func _needToSelect(__set:Bool){
+        var _n:Int = _collectionView.numberOfItemsInSection(0)
+        
+        for var i = 0; i < _n; ++i{
+            let cell:PicsShowCell? = _collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: i, inSection: 0)) as? PicsShowCell
+            if cell != nil{
+                cell?._hasTag=__set
             }
             
         }
-        var _dict:NSDictionary=NSDictionary(objects: [_selectedA,_restA], forKeys: ["selected","rest"])
+    }
+    
+    func _getSelectedAndRestArray()->NSDictionary{
+        var _selectedA:NSMutableArray=[]
+        var _restA:NSMutableArray=[]
+        var _n:Int = _imagesArray.count
+        for var i = 0;i<_n;++i{
+            var _pic:NSDictionary = _imagesArray.objectAtIndex(i) as! NSDictionary
+            
+            if _selectedAtIndex(i){
+                _selectedA.addObject(_pic)
+            }else{
+                _restA.addObject(_pic)
+            }
+        }
+        var _dict:NSDictionary=NSDictionary(objects: [_selectedA,_restA], forKeys: ["selectedImages","restImages"])
         return _dict
     }
-    //
+    
+    //-----弹出选择按钮
     func openActions()->Void{
         //let rateMenu = UIAlertController(title: "新建相册", message: "选择一种新建方式", preferredStyle: UIAlertControllerStyle.ActionSheet)
         let menu=UIAlertController()
@@ -215,19 +271,38 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         self.presentViewController(menu, animated: true, completion: nil)
     }
     
-    
+    //-----选择相册代理
+    func imagePickerDidSelected(images: NSArray) {
+        _imagesArray.addObjectsFromArray(images as [AnyObject])
+        
+        var _dict:NSMutableDictionary = NSMutableDictionary()
+        
+        _dict.setValue(_albumIndex, forKey: "albumIndex")
+        
+        _dict.setValue(images, forKey: "addedImages")
+        _dict.setValue(_imagesArray, forKey: "allImages")
+        
+        _delegate?.didAddPics(_dict)
+        
+        _collectionView.reloadData()
+        //_imagesArray=NSMutableArray(array: images)
+       // _imagesCollection?.reloadData()
+       // refreshView()
+        
+        //println(images)
+    }
+
     //---打开添加窗口
     func gotoAdd(action:UIAlertAction!) -> Void{
-        var _controller:Manage_new?
-        _controller=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_new") as? Manage_new
+        let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
+        var _controller:Manage_imagePicker?
+        _controller=storyboard.instantiateViewControllerWithIdentifier("Manage_imagePicker") as? Manage_imagePicker
+        _controller?._delegate=self
+        //self.view.window!.rootViewController!.presentViewController(_controller!, animated: true, completion: nil)
         self.navigationController?.pushViewController(_controller!, animated: true)
     }
     func gotoDelete(action:UIAlertAction!)->Void{
-        _currentAction=_action_delete
-        _btn_edit?.setTitle("删除", forState: UIControlState.Normal)
-        _btn_back?.setTitle("取消", forState: UIControlState.Normal)
-        self._collectionView.reloadData()
-        
+        _changeActionTo(_action_delete)
     }
     func gotoShare(action:UIAlertAction!)->Void{
         

@@ -107,6 +107,7 @@ class MainAction: AnyObject {
         _albumList=_list
     }
     
+    
 }
 
 
