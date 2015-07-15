@@ -98,6 +98,9 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         var _pic:Manage_pic?
         _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
         self.navigationController?.pushViewController(_pic!, animated: true)
+        if _albumIndex != nil{
+            _pic?._albumIndex = _albumIndex
+        }
         
         _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
        // _pic?._setPic(_imagesArray[indexPath.item] as! NSDictionary)

@@ -60,6 +60,7 @@ class MainAction: AnyObject {
     static func _savePicToAlbumById(__pic:NSDictionary,__albumId:String){
         
     }
+    
     static func _insertAlbum(dict:NSDictionary)->String{
         var _list:NSMutableArray=NSMutableArray(array:_albumList )
         var _album:NSMutableDictionary = NSMutableDictionary(dictionary: dict)
@@ -88,6 +89,10 @@ class MainAction: AnyObject {
     }
     
     static func _changeAlbumAtIndex(index:Int,dict:NSDictionary){
+        
+        
+        
+        
         var _list:NSMutableArray=NSMutableArray(array:_albumList )
         var _album:NSMutableDictionary=_list[index] as! NSMutableDictionary
         
@@ -107,7 +112,23 @@ class MainAction: AnyObject {
         _albumList=_list
     }
     
-    
+    static func _changePicAtAlbum(index:Int,albumIndex:Int,dict:NSDictionary){
+        
+        var _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!
+        var _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
+        
+        var _img:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(index) as! NSDictionary)
+        
+        for (key,value) in dict{
+            //println(key,value)
+            _img.setObject(value, forKey: key as! String)
+        }
+        
+        _images[index] = _img
+        
+        _changeAlbumAtIndex(albumIndex, dict: NSDictionary(object: _images, forKey: "images"))
+        
+    }
 }
 
 

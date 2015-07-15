@@ -52,14 +52,23 @@ class PicView: UIScrollView,UIScrollViewDelegate{
        // _imgView?.center=self.center
     }
     func _setImage(_img:String){
-        _imgView=UIImageView(frame: self.bounds)
-        _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
+        if _imgView != nil {
+            
+        }else{
+            _imgView=UIImageView(frame: self.bounds)
+            _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
+        }
+        
         _imgView!.image=UIImage(named: _img)
         self.addSubview(_imgView!)
     }
     func _setImageByImage(_img:UIImage){
-        _imgView=UIImageView(frame:self.bounds)
-        _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
+        if _imgView != nil {
+            
+        }else{
+            _imgView=UIImageView(frame: self.bounds)
+            _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
+        }
         _imgView?.image=_img
         self.addSubview(_imgView!)
     }
