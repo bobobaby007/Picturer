@@ -31,7 +31,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     var _currentIndex:Int?
     
     var _picsArray:NSMutableArray?
-    var _pic:NSDictionary?
+    var _pic:NSMutableDictionary?
     
     var _delegate:Manage_pic_delegate?
     var _scrollView:UIScrollView!
@@ -44,8 +44,8 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     var _action:String?
     
     var _desView:UIView?
-    var _desLabel:UILabel?
-    
+    var _desText:UITextView?
+    var _desH:CGFloat=100//-----描述面板高度
     
     var _showingBar:Bool=true{
         didSet{
@@ -53,10 +53,11 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             UIView.setAnimationDuration(0.2)
             if (_showingBar == true){
                 _topView?.frame=CGRect(x: 0, y: 0, width: _topView!.frame.width, height: _topView!.frame.height)
-                
+                _desView?.frame=CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH)
                 UIApplication.sharedApplication().statusBarHidden=false
             }else{
                 _topView?.frame=CGRect(x: 0, y: -62, width: _topView!.frame.width, height: _topView!.frame.height)
+                _desView?.frame=CGRect(x: 0, y: self.view.frame.height+0, width: self.view.frame.width, height: _desH)
                 UIApplication.sharedApplication().statusBarHidden=true
             }
             
@@ -69,6 +70,16 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        _desView = UIView(frame: CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH))
+        _desView?.backgroundColor=UIColor(white: 0, alpha: 0.8)
+        
+        _desText=UITextView(frame: CGRect(x: 5, y: 5, width: self.view.frame.width-10, height: 0))
+        _desText?.backgroundColor=UIColor.clearColor()
+        _desText?.textColor=UIColor.whiteColor()
+        
+        _desView?.addSubview(_desText!)
+        
+        self.view.addSubview(_desView!)
       // _scrollView=UIScrollView(frame: self.view.frame)
         //self.view.insertSubview(_scrollView!, atIndex: 0)
     }
@@ -142,20 +153,23 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         
     }
     func saved(dict: NSDictionary) {
+        
         var _array:NSMutableArray = NSMutableArray(array: _picsArray!)
-        var _pic:NSMutableDictionary = _array.objectAtIndex(_currentIndex!) as! NSMutableDictionary
+        var _picDict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(_currentIndex!) as! NSDictionary)
         
         if _albumIndex != nil{
             MainAction._changePicAtAlbum(_currentIndex!, albumIndex: _albumIndex!, dict: dict)
-            _pic.setValue(dict.objectForKey("description"), forKey: "description")
+            _picDict.setValue(dict.objectForKey("description"), forKey: "description")
         }
         
        // _array.removeObject(_pic)
-        //_clear()
-        //_showIndexAtPics(_currentIndex!,__array: _array)
-        _array[_currentIndex!] = _pic
+        
+        _array[_currentIndex!] = _picDict
         
         _picsArray = _array
+        
+        _clear()
+        _showIndexAtPics(_currentIndex!,__array: _array)
     }
     
     
@@ -168,7 +182,9 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         if _currentIndex < 0{
             _currentIndex = 0
         }
-        _pic = _picsArray?.objectAtIndex(_currentIndex!) as? NSDictionary
+        
+        
+        
         
         
         //_scrollView?.removeFromSuperview()
@@ -219,22 +235,27 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         if (_currentIndex!>_picsArray!.count-1){
             _currentIndex=_picsArray!.count-1
         }
+        
+        _pic = NSMutableDictionary(dictionary: (_picsArray?.objectAtIndex(_currentIndex!) as? NSDictionary)!)
+        
         _viewInAtIndex(__index)
     
         _setTitle(String(_currentIndex!+1)+"/"+String(_picsArray!.count))
         
         
         
-    }
-    //----显示描述
-    func _setDes(__str:String){
-        if _albumIndex != nil{
+        
             if _pic!.objectForKey("description") != nil{
-                
+                //println(_pic)
+                _setDes((_pic!.objectForKey("description") as! String))
+            }else{
+                _setDes("")
             }
-        }
-
+        
+        
+        
     }
+    
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
@@ -273,7 +294,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             _picV=_scrollView?.viewWithTag(100+__index) as! PicView
             //println(_picV.superview?.isEqual(self.view))
         }else{
-            println("init")
+            
             _picV=PicView(frame: CGRect(x: CGFloat(__index)*_scrollView!.frame.width, y: 0, width: _scrollView!.frame.width, height: _scrollView!.frame.height))
             _picV.tag=100+__index
             
@@ -287,6 +308,26 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     func _setTitle(__str:String){
         _title?.setTitle(__str, forState: UIControlState.Normal)
     }
-    
+    //----显示描述
+    func _setDes(__str:String){
+        
+            _desText?.text=__str
+            if __str.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)<=0{
+                _desH = 0
+                _desText?.frame = CGRect(x: 5, y: 5, width: self.view.frame.width-10, height: 0)
+            }else{
+                
+                _desH = _desText!.contentSize.height+10
+                _desText?.frame=CGRect(x: 5, y: 5, width: self.view.frame.width-10, height: _desText!.contentSize.height)
+                
+            }
+        
+            let _shows:Bool=self._showingBar
+            self._showingBar=_shows
+            //_desView?.frame = CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH)
+        
+            //println(_desH)
+        
+    }
     
 }

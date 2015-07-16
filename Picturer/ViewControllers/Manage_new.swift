@@ -229,6 +229,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         switch dict.objectForKey("Action_Type") as! String{
         case "tags":
             println("")
+            
         case "range":
             println("")
         case "reply":
@@ -274,25 +275,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         let _pic:NSDictionary = _imagesArray.objectAtIndex(indexPath.item) as! NSDictionary
         
-        if _pic.objectForKey("type") as! String=="alasset"{//-----如果是来自本地相册
-            //let _url:NSURL=_pic.objectForKey("url") as! NSURL  //_al.defaultRepresentation().url()
-            let _asl:ALAssetsLibrary = ALAssetsLibrary()
-            _asl.assetForURL(NSURL(string: _pic.objectForKey("url") as! String)!, resultBlock: { (asset) -> Void in
-                
-                cell._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
-                
-                }) { (error) -> Void in
-                    
-            }
-        }else{
-            cell._setImage("1.png")
-        }
-        
-        // pringln(_al.defaultRepresentation().UTI())
-        
-        //cell._setImageByImage(UIImage(CGImage: _al.thumbnail().takeUnretainedValue())!)
-       // cell._setImage(UIImage(contentsOfFile: <#String#>))
-        
+        cell._setPic(_pic)
         return cell
     }
     
