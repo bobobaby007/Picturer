@@ -54,7 +54,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _textsIsEditing:Bool=false
     var _tapRec:UITapGestureRecognizer?
     
-    var _settings:NSArray=[["title":"标签","des":""],["title":"图片显示顺序","des":"按创建时间倒序排列"],["title":"私密性","des":"所有人"],["title":"回复权限","des":"允许回复"]]
+    var _settings:NSMutableArray=[["title":"标签","des":""],["title":"图片显示顺序","des":"按创建时间倒序排列"],["title":"私密性","des":"所有人"],["title":"回复权限","des":"允许回复"]]
     
     var _savingDict:NSMutableDictionary?
 
@@ -63,7 +63,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _Action_Type:String="new_album"
     
     var _albumIndex:Int?
-    var _album:NSDictionary?
+    var _album:NSMutableDictionary?
     
     override func viewDidLoad() {
         setup()
@@ -165,13 +165,26 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         if (_albumIndex != nil){
-            _album = MainAction._getAlbumAtIndex(_albumIndex!)!
-            _titleInput?.text=_album!.objectForKey("title") as! String
-            _imagesArray = NSMutableArray(array: MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
+            _album = NSMutableDictionary(dictionary: MainAction._getAlbumAtIndex(_albumIndex!)!)
             
+            //----图片单独提取，异步于相册其他信息
+            _imagesArray = NSMutableArray(array: MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
+        }else{
+            _album = NSMutableDictionary()
+            MainAction._setDefault(_album!)
+            _imagesArray = []
         }
+        
+        _titleInput?.text=_album!.objectForKey("title") as! String
+        
+        if _album!.objectForKey("description") != nil{
+            _desInput?.text=_album!.objectForKey("description") as! String
+        }
+        
+        
         _setuped=true
     }
+    
     
     //设置栏代理
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -181,8 +194,54 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
         cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         
-        cell.textLabel?.text=_settings.objectAtIndex(indexPath.row).objectForKey("title") as? String
-        cell.detailTextLabel?.text=_settings.objectAtIndex(indexPath.row).objectForKey("des") as? String
+        
+        switch indexPath.row{
+        case 0:
+            cell.textLabel?.text="标签"
+            cell.detailTextLabel?.text=""
+        case 1:
+            cell.textLabel?.text="图片显示顺序"
+            
+            switch _album!.objectForKey("range") as! Int{
+            case  0:
+                cell.detailTextLabel?.text="按创建时间倒序排列"
+            case 1:
+                cell.detailTextLabel?.text="按创建时间顺序排列"
+            default:
+                println()
+            }
+            
+        case 2:
+            cell.textLabel?.text="私密性"
+            switch _album!.objectForKey("powerType") as! Int{
+            case  0:
+                cell.detailTextLabel?.text="所有人可见"
+            case 1:
+                cell.detailTextLabel?.text="仅自己可见"
+            case 2:
+                cell.detailTextLabel?.text="所有朋友可见"
+            case 3:
+                cell.detailTextLabel?.text="选中朋友可见"
+            case 4:
+                cell.detailTextLabel?.text="选中朋友不可见"
+            default:
+                println()
+            }
+        case 3:
+            cell.textLabel?.text="回复权限"
+            
+            switch _album!.objectForKey("reply") as! Int{
+            case  0:
+                cell.detailTextLabel?.text="允许回复"
+            case 1:
+                cell.detailTextLabel?.text="不允许回复"
+            default:
+                println()
+            }
+
+        default:
+            println("")
+        }
         
 //        var _view:UIView=UIView()
 //        _view.backgroundColor=UIColor.whiteColor()
@@ -210,14 +269,17 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         case 1:
             let _controller:Setting_range=Setting_range()
             _controller._delegate=self
+            _controller._selectedId = _album?.objectForKey("range") as! Int
             self.navigationController?.pushViewController(_controller, animated: true)
         case 2:
             let _controller:Setting_power=Setting_power()
             _controller._delegate=self
+            _controller._selectedId = _album?.objectForKey("powerType") as! Int
             self.navigationController?.pushViewController(_controller, animated: true)
         case 3:
             let _controller:Setting_reply=Setting_reply()
             _controller._delegate=self
+            _controller._selectedId = _album?.objectForKey("reply") as! Int
             self.navigationController?.pushViewController(_controller, animated: true)
         default:
             println("")
@@ -231,11 +293,13 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             println("")
             
         case "range":
-            println("")
+            _album?.setObject(dict.objectForKey("selectedId")!, forKey:"range")
+            _imagesCollection?.reloadData()
+            
         case "reply":
-            println("")
+            _album?.setObject(dict.objectForKey("selectedId")!, forKey:"reply")
         case "power":
-            println("")
+            _album?.setObject(dict.objectForKey("selectedId")!, forKey:"powerType")
         default:
             println("")
         }
@@ -273,7 +337,15 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         //let _al:ALAsset=_imagesArray.objectAtIndex(indexPath.item) as! ALAsset
         
-        let _pic:NSDictionary = _imagesArray.objectAtIndex(indexPath.item) as! NSDictionary
+        
+        let _pic:NSDictionary
+        if _album?.objectForKey("range")! as! Int == 1{
+            
+            _pic = _imagesArray.objectAtIndex(_imagesArray.count - indexPath.item - 1) as! NSDictionary
+        }else{
+            _pic = _imagesArray.objectAtIndex(indexPath.item) as! NSDictionary
+        }
+        
         
         cell._setPic(_pic)
         return cell
@@ -382,7 +454,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _tableView?.frame = CGRect(x: 0, y: _imageBoxH+3*_gap+_titleViewH+_desInputViewH, width: self.view.frame.width, height: _tableViewH)
         
         
-        let _scrollH=_imageBoxH+3*_gap+_titleViewH+_desInputViewH+_tableViewH+_gap
+        let _scrollH=_imageBoxH+3*_gap+_titleViewH+_desInputViewH+_tableViewH+60
         _scrollView?.frame=CGRect(x: 0, y: 44, width: self.view.frame.width, height: self.view.frame.height-40)
         _scrollView?.contentSize=CGSize(width: self.view.frame.width, height: _scrollH)
         
@@ -412,13 +484,11 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     }
     
     func treckDict()->Bool{
-        _savingDict=NSMutableDictionary()
+        _savingDict=NSMutableDictionary(dictionary: _album!)
         
         if (_albumIndex != nil){
             _savingDict?.setObject(_albumIndex!, forKey: "albumIndex")
             _savingDict?.setObject("edite_album", forKey: "Action_Type")
-            
-            
         }else{
             _savingDict?.setObject("new_album", forKey: "Action_Type")
         }
@@ -432,6 +502,10 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         //_savingDict?.setObject(_imagesArray, forKey: "images")
         let _t=_titleInput?.text!
         _savingDict?.setObject(_t!, forKey: "title")
+        
+        _savingDict!.setObject(_desInput!.text, forKey: "description")
+        
+        
         _savingDict?.setObject(_imagesArray, forKey: "images")
         
 //        let a:_Action_Type=_Action_Type.PicsIn

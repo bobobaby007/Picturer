@@ -16,7 +16,7 @@ class MainAction: AnyObject {
     static let _album_prefix = "Album_"
     static let _ALBUM_LIST = "ALBUM_LIST"
     static var _aList:NSMutableArray?
-    
+    static var _tempAlbum:NSMutableDictionary?
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{
@@ -70,16 +70,51 @@ class MainAction: AnyObject {
         _album.setObject(_id, forKey: "last_update_at")
         _album.setObject(_id, forKey: "create_at")
         _album.setObject(0, forKey: "uploaded")
+        
+        
+        
         _list.insertObject(_album, atIndex: 0)
         //_albumList?.addObject(album._toDict())
         _albumList=_list
        // println(_albumList)
         return _id
     }
+    static func _saveTempAlbum(dict:NSDictionary){
+        _tempAlbum = NSMutableDictionary(dictionary: dict)
+    }
     static func _getAlbumAtIndex(index:Int)->NSDictionary?{
-        let _albumDict:NSDictionary = MainAction._albumList.objectAtIndex(index) as! NSDictionary
+        var _albumDict:NSMutableDictionary = NSMutableDictionary(dictionary: MainAction._albumList.objectAtIndex(index) as! NSDictionary)
+        _setDefault(_albumDict)
         return _albumDict
     }
+    
+    
+    //-----设置相册默认值
+    static func _setDefault(_album:NSMutableDictionary){
+        if _album.objectForKey("title") == nil{
+            _album.setObject("", forKey: "title")
+        }
+        if _album.objectForKey("description") == nil{
+            _album.setObject("", forKey: "description")
+        }
+        if _album.objectForKey("labels") == nil{
+            _album.setObject([], forKey: "labels")
+        }
+        if _album.objectForKey("range") == nil{
+            _album.setObject(0, forKey: "range")
+        }
+        if _album.objectForKey("powerType") == nil{
+            _album.setObject(0, forKey: "powerType")
+        }
+        if _album.objectForKey("powerList") == nil{
+            _album.setObject([], forKey: "powerList")
+        }
+        if _album.objectForKey("reply") == nil{
+            _album.setObject(0, forKey: "reply")
+        }
+        
+    }
+
     //----直接从列表里按照位置删除
     static func _deleteAlbumAtIndex(index:Int){
         var _list:NSMutableArray=NSMutableArray(array:_albumList )
@@ -115,6 +150,9 @@ class MainAction: AnyObject {
     static func _changePicAtAlbum(index:Int,albumIndex:Int,dict:NSDictionary){
         
         var _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!
+        
+        
+        
         var _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
         
         var _img:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(index) as! NSDictionary)

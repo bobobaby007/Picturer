@@ -45,7 +45,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     
     var _desView:UIView?
     var _desText:UITextView?
-    var _desH:CGFloat=100//-----描述面板高度
+    var _desH:CGFloat=0//-----描述面板高度
     
     var _showingBar:Bool=true{
         didSet{
@@ -252,7 +252,8 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
                 _setDes("")
             }
         
-        
+        let _shows:Bool=self._showingBar
+        self._showingBar=_shows
         
     }
     
@@ -273,6 +274,8 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         }else{
             _viewInAtIndex(_p-1)
         }
+        
+        
     }
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
@@ -284,6 +287,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         }
         
         _moveToPicByIndex(_p)
+        
         
         
     }
@@ -322,8 +326,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
                 
             }
         
-            let _shows:Bool=self._showingBar
-            self._showingBar=_shows
+        
             //_desView?.frame = CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH)
         
             //println(_desH)

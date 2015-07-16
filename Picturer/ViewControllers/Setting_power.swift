@@ -130,6 +130,7 @@ class Setting_power: UIViewController, UITableViewDelegate,UITableViewDataSource
         case _btn_save!:
             var _dict:NSMutableDictionary=NSMutableDictionary()
             _dict.setObject("power", forKey: "Action_Type")
+            _dict.setObject(_selectedId, forKey: "selectedId")
             _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
