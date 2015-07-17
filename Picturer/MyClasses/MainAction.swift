@@ -97,8 +97,8 @@ class MainAction: AnyObject {
         if _album.objectForKey("description") == nil{
             _album.setObject("", forKey: "description")
         }
-        if _album.objectForKey("labels") == nil{
-            _album.setObject([], forKey: "labels")
+        if _album.objectForKey("tags") == nil{
+            _album.setObject([], forKey: "tags")
         }
         if _album.objectForKey("range") == nil{
             _album.setObject(0, forKey: "range")

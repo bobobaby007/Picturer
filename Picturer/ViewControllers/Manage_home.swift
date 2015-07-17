@@ -13,7 +13,7 @@ import UIKit
 
 
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate{
    
     //var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
@@ -250,20 +250,28 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func newFromLocal(action:UIAlertAction!) -> Void{
         var _controller:Manage_imagePicker?
         _controller=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_imagePicker") as? Manage_imagePicker
-        
+        _controller?._delegate=self
         //self.view.window?.rootViewController?.presentViewController(_controller!, animated: true, completion: nil)
        // self.presentViewController(_controller!, animated: true, completion: nil)
         self.navigationController?.pushViewController(_controller!, animated: true)
         
     }
     
-    //----弹出编辑代理
+    //----弹出编辑\新建\图片到相册 代理
     func saved(dict: NSDictionary) {
         switch dict.objectForKey("Action_Type") as! String{
             case "new_album":
             MainAction._insertAlbum(dict)
             case "edite_album":
             MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
+            case "pic_to_album"://选择图片到指定相册
+                println(dict.objectForKey("images"))
+            case "pics_to_album_new"://选择图片到新建立相册
+                var _controller:Manage_new?
+                _controller=Manage_new()
+                _controller?._delegate=self
+                _controller?._imagesArray=NSMutableArray(array: dict.objectForKey("images") as! NSArray)
+                self.navigationController?.pushViewController(_controller!, animated: true)
         default:
             println("")
         }
@@ -292,7 +300,18 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
     }
     
+    //-----弹出新建相册选择图片代理
     
+    func imagePickerDidSelected(images: NSArray) {
+        println(images)
+        var _controller:Manage_PicsToAlbum?
+        _controller=Manage_PicsToAlbum()
+        _controller?._delegate=self
+        _controller?._imagesArray=NSMutableArray(array: images)
+        // println(_show)
+        //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
+        self.navigationController?.pushViewController(_controller!, animated: true)
+    }
     
     
     override func viewDidLoad() {

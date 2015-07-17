@@ -172,7 +172,8 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         }else{
             _album = NSMutableDictionary()
             MainAction._setDefault(_album!)
-            _imagesArray = []
+            
+                        
         }
         
         _titleInput?.text=_album!.objectForKey("title") as! String
@@ -265,6 +266,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         case 0:
             let _controller:Setting_tags=Setting_tags()
             _controller._delegate=self
+            _controller._tags = NSMutableArray(array: _album?.objectForKey("tags") as! NSArray)
             self.navigationController?.pushViewController(_controller, animated: true)
         case 1:
             let _controller:Setting_range=Setting_range()
@@ -290,8 +292,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     func saved(dict: NSDictionary) {
         switch dict.objectForKey("Action_Type") as! String{
         case "tags":
-            println("")
-            
+            _album?.setObject(dict.objectForKey("tags")!, forKey:"tags")
         case "range":
             _album?.setObject(dict.objectForKey("selectedId")!, forKey:"range")
             _imagesCollection?.reloadData()

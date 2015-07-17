@@ -77,7 +77,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     
         
         override func viewDidLoad() {
-            println("viewDidLoad")
+           
             super.viewDidLoad()
             
             let layout = CustomLayout()
