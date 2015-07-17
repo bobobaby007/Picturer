@@ -289,11 +289,26 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         _cameraPicker.dismissViewControllerAnimated(true, completion: nil)
-        _loadImagesAt(0)
+       
         
+        //_loadImagesAt(0)
+        
+        
+        UIImageWriteToSavedPhotosAlbum(info[UIImagePickerControllerOriginalImage] as? UIImage, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
         //_cameraPicker.image = info[UIImagePickerControllerOriginalImage] as? UIImage
     }
     
+    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+        if error == nil {
+            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .Alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            presentViewController(ac, animated: true, completion: nil)
+        } else {
+            let ac = UIAlertController(title: "Save error", message: error?.localizedDescription, preferredStyle: .Alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            presentViewController(ac, animated: true, completion: nil)
+        }
+    }
     
     
     @IBAction func clickAction(_btn:UIButton)->Void{

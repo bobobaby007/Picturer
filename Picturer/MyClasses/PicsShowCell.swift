@@ -34,12 +34,16 @@ class PicsShowCell:UICollectionViewCell{
         didSet{
            // println(_hasTag)
             //_tag_view.image=UIImage(named: "pic_unSelected.png")
-            _tag_view.hidden = !self._hasTag
-            
+            _tag_view.hidden = !self._hasTag            
+            _tag_view.userInteractionEnabled=self._hasTag
         }
         
     }
-    
+    var _canSelectInside:Bool=false{
+        didSet{
+            _tag_view.userInteractionEnabled=self._canSelectInside
+        }
+    }
    // var _callBack:((sender:PicsShowCell) -> Void)?
     
     var _selected:Bool=false{
@@ -53,6 +57,11 @@ class PicsShowCell:UICollectionViewCell{
         }
     }
     
+    
+    func _setCorner(__set:CGFloat){
+        _imgView?.layer.cornerRadius=__set
+        _imgView?.layer.masksToBounds=true
+    }
     
     
     override init(frame: CGRect) {
@@ -70,7 +79,7 @@ class PicsShowCell:UICollectionViewCell{
         
         //self.userInteractionEnabled=true
         //_imgView.userInteractionEnabled=true
-        _tag_view.userInteractionEnabled=true
+        
         
         _tag_view.addGestureRecognizer(_tapRoc)
        // _imgView.addGestureRecognizer(_tapRoc)

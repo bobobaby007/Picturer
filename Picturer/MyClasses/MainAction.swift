@@ -56,9 +56,11 @@ class MainAction: AnyObject {
         let _album:NSDictionary = MainAction._getAlbumAtIndex(__index)!
         return NSMutableArray(array: _album.objectForKey("images") as! NSArray)
     }
-    
-    static func _savePicToAlbumById(__pic:NSDictionary,__albumId:String){
-        
+    //----添加图片到相册
+    static func _insertPicsToAlbumById(__pics:NSArray,__albumIndex:Int){
+        var _images:NSMutableArray = NSMutableArray(array: _getImagesOfAlbumIndex(__albumIndex)!)
+        _images.addObjectsFromArray(__pics as [AnyObject])        
+        _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
     }
     
     static func _insertAlbum(dict:NSDictionary)->String{
@@ -146,7 +148,7 @@ class MainAction: AnyObject {
         _list[index]=_album
         _albumList=_list
     }
-    
+    //------修改相册里的某张图片
     static func _changePicAtAlbum(index:Int,albumIndex:Int,dict:NSDictionary){
         
         var _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!

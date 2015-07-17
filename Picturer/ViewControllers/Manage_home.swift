@@ -264,8 +264,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             MainAction._insertAlbum(dict)
             case "edite_album":
             MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
-            case "pic_to_album"://选择图片到指定相册
-                println(dict.objectForKey("images"))
+            case "pics_to_album"://选择图片到指定相册
+                MainAction._insertPicsToAlbumById( dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+            
             case "pics_to_album_new"://选择图片到新建立相册
                 var _controller:Manage_new?
                 _controller=Manage_new()
@@ -303,7 +304,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     //-----弹出新建相册选择图片代理
     
     func imagePickerDidSelected(images: NSArray) {
-        println(images)
+        //println(images)
         var _controller:Manage_PicsToAlbum?
         _controller=Manage_PicsToAlbum()
         _controller?._delegate=self

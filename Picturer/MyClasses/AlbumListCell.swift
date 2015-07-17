@@ -57,6 +57,7 @@ class AlbumListCell :  UITableViewCell{
         _desLable?.font=UIFont(name: "Helvetica", size: 15)
         
     }
+    
     func _setPic(__pic:NSDictionary){
         switch __pic.objectForKey("type") as! String{
         case "alasset":

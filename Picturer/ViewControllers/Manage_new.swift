@@ -340,15 +340,19 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         let _pic:NSDictionary
+        
+        
         if _album?.objectForKey("range")! as! Int == 1{
             
             _pic = _imagesArray.objectAtIndex(_imagesArray.count - indexPath.item - 1) as! NSDictionary
         }else{
             _pic = _imagesArray.objectAtIndex(indexPath.item) as! NSDictionary
         }
-        
-        
         cell._setPic(_pic)
+        
+        
+        
+        
         return cell
     }
     
