@@ -48,7 +48,7 @@ class DKAsset: NSObject {
 
 
 
-class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, PicsShowCellDelegate{
+class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, PicsShowCellDelegate,UINavigationControllerDelegate{
         
         @IBOutlet weak var _btn_back:UIButton?
         @IBOutlet weak var _btn_ok:UIButton?
@@ -213,7 +213,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             if indexPath.item==0{
                 
                 _cameraPicker =  UIImagePickerController()
-                //_cameraPicker.delegate = self
+                _cameraPicker.delegate = self
                 _cameraPicker.sourceType = .Camera
                 //self.view.window!.rootViewController!.presentViewController(_cameraPicker, animated: true, completion: nil)
                 
@@ -293,24 +293,51 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         
         //_loadImagesAt(0)
         
+        var _alassetsl:ALAssetsLibrary = ALAssetsLibrary()
+        println(info)
+        
+        let image:UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
+        
+        
+        
+        
+        //_alassetsl.writeImageToSavedPhotosAlbum(image.CGImage, orientation: image.imageOrientation, completionBlock: cameraSaveOk)
+        
+        
+        //_alassetsl.writeImageToSavedPhotosAlbum(image.CGImage,orientation: image.imageOrientation,completionBlock:{ (path:NSURL!, error:NSError!) -> Void in    println("\(path)")  })
+        
+       // _alassetsl.writeImageToSavedPhotosAlbum(image.CGImage, orientation: image.imageOrientation, completionBlock: Selector("cameraSaveOk:"))
+        
+       
         
         UIImageWriteToSavedPhotosAlbum(info[UIImagePickerControllerOriginalImage] as? UIImage, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
         //_cameraPicker.image = info[UIImagePickerControllerOriginalImage] as? UIImage
     }
+    func cameraSaveOk(URL:NSURL, Error:NSError)->Void{
+        let _url:NSString=URL.absoluteString!
+        let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
+        //asset.originalAsset = result
+        self._images!.insertObject(_dict, atIndex: 0)
+    }
     
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
         if error == nil {
-            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .Alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-            presentViewController(ac, animated: true, completion: nil)
+            //println(contextInfo)
+            _loadImagesAt(0)
+           // println(self._images)
+            self.navigationController?.popViewControllerAnimated(true)
+            _delegate?.imagePickerDidSelected([self._images!.objectAtIndex(0)])
+//            let ac = UIAlertController(title: "保存成功", message: "", preferredStyle: .Alert)
+//            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+//            presentViewController(ac, animated: true, completion: nil)
+            
+            
         } else {
-            let ac = UIAlertController(title: "Save error", message: error?.localizedDescription, preferredStyle: .Alert)
+            let ac = UIAlertController(title: "保存失败", message: error?.localizedDescription, preferredStyle: .Alert)
             ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
             presentViewController(ac, animated: true, completion: nil)
         }
     }
-    
-    
     @IBAction func clickAction(_btn:UIButton)->Void{
         switch _btn{
         case _btn_back!:
