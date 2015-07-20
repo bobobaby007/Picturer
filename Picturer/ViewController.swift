@@ -17,11 +17,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
-        
-        
-        showManageHome()
         //showManageHome()
+        showSocialHome()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -58,5 +55,18 @@ class ViewController: UIViewController {
         //self.view.addSubview(manage_home!.view)
         
         }
+    func showSocialHome(){
+        
+        var controll:Social_home = (self.storyboard?.instantiateViewControllerWithIdentifier("Social_home") as? Social_home)!
+        _navgationController.pushViewController(controll, animated: true)
+        
+        // self.navigationController?.presentViewController(manage_home!, animated: true, completion: { () -> Void in
+        //   println("22")
+        //})
+        
+        //self.view.addSubview(manage_home!.view)
+        
+    }
+
 }
 

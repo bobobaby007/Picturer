@@ -137,13 +137,17 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets=false
         
-        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.Default
+        
         
         let layout = LayoutForSocailHome()
         _collectionView.collectionViewLayout=layout
         _collectionView.registerClass(SocailHomeCell.self, forCellWithReuseIdentifier: "SocailHomeCell")
         
     }
+    override func viewWillAppear(animated: Bool) {
+        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.Default
+    }
+    
     
     
     

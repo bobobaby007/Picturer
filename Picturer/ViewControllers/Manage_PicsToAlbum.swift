@@ -140,6 +140,8 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if collectionView.isEqual(_albumCollection){
+        
+           // return 2
             return MainAction._albumList.count+1
         }else{
             return _imagesArray.count
@@ -180,20 +182,21 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
         
         //let _al:ALAsset=_imagesArray.objectAtIndex(indexPath.item) as! ALAsset
         let _pic:NSDictionary
+        println(collectionView)
         if collectionView.isEqual(_albumCollection){
+            
             if indexPath.item == MainAction._albumList.count{
                 cell._setImage("newAlbum")
                 cell._hasTag=false
                 cell._setCorner(5)
             }else{
-                _pic = (MainAction._albumList.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("cover") as! NSDictionary
+                _pic = MainAction._getCoverFromAlbumAtIndex(indexPath.item)!
                 cell._hasTag=true
                 cell._selected=false
                 cell._canSelectInside=false
                 cell._setCorner(5)
                 cell._setPic(_pic)
-            } 
-            
+            }
         }else{
             _pic = _imagesArray.objectAtIndex(indexPath.item) as! NSDictionary
             cell._setPic(_pic)

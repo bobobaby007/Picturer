@@ -13,6 +13,7 @@ import AVFoundation
 protocol Manage_show_delegate:NSObjectProtocol{
     func didDeletedPics(__dict:NSDictionary)
     func didAddPics(__dict:NSDictionary)
+    func canceld()
 }
 
 class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PicsShowCellDelegate,UIAlertViewDelegate,ImagePickerDeletegate{
@@ -36,6 +37,9 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     var _albumIndex:Int?
     
     var _setuped:Bool=false
+    
+    var _range:Int = 0
+    
     func setup(){
         if _setuped{
             return
@@ -66,7 +70,12 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                 "PicsShowCell", forIndexPath: indexPath) as! PicsShowCell
             cell._index = indexPath.row
-            let _pic:NSDictionary = _imagesArray[indexPath.item] as! NSDictionary
+            let _pic:NSDictionary
+            if _range == 0{
+              _pic  = _imagesArray.objectAtIndex(indexPath.item) as! NSDictionary
+            }else{
+                _pic  = _imagesArray.objectAtIndex(_imagesArray.count-indexPath.item-1) as! NSDictionary
+            }
             cell._setPic(_pic)
             
             cell._selected = _selectedAtIndex(indexPath.item)
@@ -101,7 +110,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         if _albumIndex != nil{
             _pic?._albumIndex = _albumIndex
         }
-        
+        _pic?._range = _range
         _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
        // _pic?._setPic(_imagesArray[indexPath.item] as! NSDictionary)
         //_pic?._setImage(_imagesArray[indexPath.item] as! String)
@@ -143,6 +152,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             switch _currentAction{
             case _action_normal:
                 self.navigationController?.popViewControllerAnimated(true)
+                _delegate?.canceld()
             case _action_delete:
                 self._changeActionTo(_action_normal)
             default:
@@ -246,7 +256,14 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         var _restA:NSMutableArray=[]
         var _n:Int = _imagesArray.count
         for var i = 0;i<_n;++i{
-            var _pic:NSDictionary = _imagesArray.objectAtIndex(i) as! NSDictionary
+            var _pic:NSDictionary
+            
+            if _range == 0{
+               _pic  = _imagesArray.objectAtIndex(i) as! NSDictionary
+            }else{
+                _pic  = _imagesArray.objectAtIndex(_imagesArray.count-i-1) as! NSDictionary
+            }
+           
             
             if _selectedAtIndex(i){
                 _selectedA.addObject(_pic)
@@ -281,7 +298,6 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         var _dict:NSMutableDictionary = NSMutableDictionary()
         
         _dict.setValue(_albumIndex, forKey: "albumIndex")
-        
         _dict.setValue(images, forKey: "addedImages")
         _dict.setValue(_imagesArray, forKey: "allImages")
         

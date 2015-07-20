@@ -13,6 +13,8 @@ import AssetsLibrary
 class PicView: UIScrollView,UIScrollViewDelegate{
     var _imgView:UIImageView?
     
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.maximumZoomScale = 2.5
@@ -21,8 +23,11 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         self.scrollEnabled=true
         self.showsHorizontalScrollIndicator=false
         self.showsVerticalScrollIndicator=false
+        _imgView=UIImageView(frame: self.bounds)
+        _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
         self.delegate=self
     }
+    
     func _setPic(__pic:NSDictionary){
         switch __pic.objectForKey("type") as! String{
         case "alasset":
@@ -40,6 +45,9 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                 }, failureBlock: { (error:NSError!) -> Void in
                     
             })
+            
+        case "file":
+            self._setImage(__pic.objectForKey("url") as! String)
         default:
             println()
         }
@@ -52,23 +60,12 @@ class PicView: UIScrollView,UIScrollViewDelegate{
        // _imgView?.center=self.center
     }
     func _setImage(_img:String){
-        if _imgView != nil {
-            
-        }else{
-            _imgView=UIImageView(frame: self.bounds)
-            _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
-        }
         
         _imgView!.image=UIImage(named: _img)
         self.addSubview(_imgView!)
     }
     func _setImageByImage(_img:UIImage){
-        if _imgView != nil {
-            
-        }else{
-            _imgView=UIImageView(frame: self.bounds)
-            _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
-        }
+        
         _imgView?.image=_img
         self.addSubview(_imgView!)
     }

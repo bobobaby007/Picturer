@@ -13,7 +13,7 @@ import UIKit
 
 
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate{
    
     //var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
@@ -21,7 +21,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     @IBOutlet weak var _btn_new:UIButton!
     
     var _offset:CGFloat=0
-    
+    var _currentIndex:NSIndexPath?
     
     @IBAction func btnHander(btn:UIButton){
         switch btn{
@@ -95,10 +95,17 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             newAlbum(nil)
             return
         }
+        
+        let _album:NSDictionary = MainAction._getAlbumAtIndex(indexPath.row)!
+        
+        
         var _show:Manage_show?
         _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
     
         _show?._albumIndex=indexPath.row
+        _show?._range = _album.objectForKey("range") as! Int
+        
+        
         _show?._delegate=self
 
         self.navigationController?.pushViewController(_show!, animated: true)
@@ -111,8 +118,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         //return MainAction._albumList.count
         return MainAction._albumList.count
     }
-    
-    
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath:NSIndexPath) -> UITableViewCell{
         
@@ -135,11 +140,12 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             cell.setDescription(String(stringInterpolationSegment: MainAction._getImagesOfAlbumIndex(indexPath.row)!.count)+"张")
             //cell.detailTextLabel?.text="ss"
             
-            if _album.objectForKey("cover") != nil{
-                cell._setPic(_album.objectForKey("cover") as! NSDictionary)
-                //cell.setThumbImage(_album.objectForKey("cover") as! String)
+            let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(indexPath.row)
+            
+            if _pic != nil{
+                cell._setPic(_pic)
             }else{
-                cell.setThumbImage("1.png")   
+                cell.setThumbImage("1.png")
             }
             
         }
@@ -181,9 +187,13 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
        // println(action, index.row)
         switch action.title{
             case "删除":
-            println("删除")
-            
-            deleteCell(index)
+                _currentIndex = index
+                var _alert:UIAlertView = UIAlertView()
+                _alert.delegate=self
+                _alert.title="确定删除相册？"
+                _alert.addButtonWithTitle("确定")
+                _alert.addButtonWithTitle("取消")
+                _alert.show()
             
             case "分享":
             openShare()
@@ -192,6 +202,12 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             
             default:
             println(action.title)
+        }
+    }
+    //-----提示按钮代理
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex==0{
+            deleteCell(_currentIndex!)
         }
     }
     //---打开分享
@@ -292,7 +308,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     func didAddPics(dict: NSDictionary) {        
         MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: NSDictionary(object: dict.objectForKey("allImages")!, forKey: "images"))
+        
         //----添加的图片：addedImages
+        
         _tableView.reloadData()
     }
     
@@ -313,7 +331,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
         self.navigationController?.pushViewController(_controller!, animated: true)
     }
-    
     
     override func viewDidLoad() {
         

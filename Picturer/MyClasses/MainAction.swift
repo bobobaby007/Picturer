@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftHTTP
 
 
 
@@ -37,6 +37,11 @@ class MainAction: AnyObject {
             var _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
             _ud.setObject(_aList, forKey: _ALBUM_LIST)
              //println(_ud.dictionaryRepresentation())
+        }
+    }
+    static var _userId:String!{
+        get{
+            return "000000"
         }
     }
     
@@ -91,10 +96,17 @@ class MainAction: AnyObject {
     }
     
     
+    
+    
+    
     //-----设置相册默认值
     static func _setDefault(_album:NSMutableDictionary){
+        
         if _album.objectForKey("title") == nil{
             _album.setObject("", forKey: "title")
+        }
+        if _album.objectForKey("cover") == nil{
+            _album.setObject(NSDictionary(), forKey: "cover")
         }
         if _album.objectForKey("description") == nil{
             _album.setObject("", forKey: "description")
@@ -124,14 +136,54 @@ class MainAction: AnyObject {
         _list.removeObjectAtIndex(index)
         _albumList=_list
     }
-    
+    static func _getCoverFromAlbumAtIndex(index:Int)->NSDictionary?{
+        var _album:NSMutableDictionary = NSMutableDictionary(dictionary: _getAlbumAtIndex(index)!)        
+        _setDefault(_album)
+        var _images:NSArray = _album.objectForKey("images") as! NSArray
+        if _images.count<1{
+            return nil
+        }
+        
+        //println(_album.objectForKey("cover"))
+        
+        var _cover:NSDictionary = _album.objectForKey("cover") as! NSDictionary
+        
+        
+        
+        if _albumHasPic(index,__pic: _cover){
+            return _cover
+        }
+        
+        if _album.objectForKey("range") != nil && _album.objectForKey("range") as! Int == 0{
+            return _images.objectAtIndex(0) as? NSDictionary
+        }else{
+            return _images.objectAtIndex(_images.count-1) as? NSDictionary
+        }
+        
+    }
+    //----检测相册里是否有某张照片
+    static func _albumHasPic(__albumIndex:Int,__pic:NSDictionary)->Bool{
+        var _album:NSDictionary = _getAlbumAtIndex(__albumIndex)!
+        if __pic.objectForKey("url") != nil{
+            
+        }else{
+            return false
+        }
+        var _images:NSArray = _album.objectForKey("images") as! NSArray
+        for var i:Int = 0 ; i<_images.count ;++i{
+            if (_images.objectAtIndex(i) as! NSDictionary).objectForKey("url") as! String == __pic.objectForKey("url") as! String{
+                return true
+            }
+        }
+        return false
+    }
     static func _changeAlbumAtIndex(index:Int,dict:NSDictionary){
         
         
         
         
         var _list:NSMutableArray=NSMutableArray(array:_albumList )
-        var _album:NSMutableDictionary=_list[index] as! NSMutableDictionary
+        var _album:NSMutableDictionary=NSMutableDictionary(dictionary: _list.objectAtIndex(index) as! NSDictionary)
         
         //let keys:NSArray = dict.allKeys
         
@@ -169,6 +221,43 @@ class MainAction: AnyObject {
         _changeAlbumAtIndex(albumIndex, dict: NSDictionary(object: _images, forKey: "images"))
         
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    //=========================
+    
+    //---------社交部分
+    static func _getUserProfileAtId(userId:String,block:(NSDictionary)->Void){
+        var _dict:NSMutableDictionary = NSMutableDictionary()
+        var _pic:NSDictionary =  NSDictionary(objects: ["file","1.png"], forKeys: ["type","url"])
+        
+        _dict.setObject(_pic, forKey: "profileImg")
+        _dict.setObject(_pic, forKey: "userId")
+        _dict.setObject("我就是我", forKey: "userName")
+        _dict.setObject(12, forKey: "followedNumber")
+        _dict.setObject(30, forKey: "followingNumber")
+        _dict.setObject("速度的山高水低是德国大使馆收到根深蒂固三等功时代根深蒂固的是山高水低公司的收到根深蒂固山东省共商国是的根深蒂固", forKey: "sign")
+        
+        block(_dict)
+    }
+    
+    
+    
+    static func _getAlbumListAtUser(block:(NSArray)->Void){
+        var request = HTTPTask()
+        
+        request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
+            block(self._albumList)
+        })
+        
+    }
+    
+    
 }
 
 
@@ -182,39 +271,20 @@ class MainAction: AnyObject {
 
 
 ////////////////////////////
+/*
+
+UserProfileDict:
+
+profileImg<PicDict>  userId userName followedNumber followingNumber sign
+
+PicDict:
+type(alasset\fromWeb\file)  url
 
 
-class CoverObj:AnyObject {
-    var thumbImage:String=String()
-    func _toDict()->NSDictionary{
-       return NSDictionary(objects: [thumbImage], forKeys: ["thumbImage"])
-    }
-}
 
-class AlbumObj: AnyObject {
-    var id:String=String()
-    var cover:CoverObj=CoverObj()
-    var title:String=String()
-    var thumbImage:String=String()
-    var images:NSMutableArray=[]
-    var reply:String=String()
-    var des:String=String()
-    
-    func _toDict()->NSDictionary{
-        var _dict:NSMutableDictionary=NSMutableDictionary(objects: [thumbImage,title,id,des,reply], forKeys: ["thumbImage","title","id","des","reply"])
-        
-        _dict.setObject(cover._toDict(), forKey: "cover")
-        
-//        var _imagesArray:NSMutableArray=[]
-//        var _count:Int = images.count
-//        for var i = 0; i<_count; ++i{
-//            _imagesArray[i]=(images[i] as! PicObj)._toDict()
-//        }
-//        _dict.setObject(_imagesArray, forKey: "images")
-        
-        return _dict
-    }
-}
+*/
+////
+
 
 class PicObj:AnyObject {
     var type:String=String()
@@ -224,8 +294,8 @@ class PicObj:AnyObject {
     var pid:String=String()
     var url:String=String()
     
-    
-    
+    //  type: alasset fromWeb file
+    // url
     
     func _toDict()->NSDictionary{
         return NSDictionary(objects: [thumbImage,originalImage,refreshed,pid,url], forKeys: ["thumbImage","originalImage","refreshed","pid","url"])

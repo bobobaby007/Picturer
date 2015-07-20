@@ -73,6 +73,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         if _setuped{
             return
         }
+        
         _collectionLayout=UICollectionViewFlowLayout()
        _imagesCollection=UICollectionView(frame: CGRect(x: _gap, y: 200, width: self.view.frame.width-2*_gap, height: 362), collectionViewLayout: _collectionLayout!)
         _imagesCollection?.backgroundColor=UIColor.clearColor()
@@ -162,17 +163,15 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _topBar?.addSubview(_btn_cancel!)
         _topBar?.addSubview(_btn_save!)
         
-        
+       
         
         if (_albumIndex != nil){
             _album = NSMutableDictionary(dictionary: MainAction._getAlbumAtIndex(_albumIndex!)!)
-            
             //----图片单独提取，异步于相册其他信息
             _imagesArray = NSMutableArray(array: MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
         }else{
             _album = NSMutableDictionary()
             MainAction._setDefault(_album!)
-            
                         
         }
         
@@ -498,9 +497,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             _savingDict?.setObject("new_album", forKey: "Action_Type")
         }
         
-        if _album?.objectForKey("cover") == nil && _imagesArray.count>0{
-            _savingDict?.setObject(_imagesArray.objectAtIndex(0), forKey: "cover")
-        }
+//        if _album?.objectForKey("cover") == nil && _imagesArray.count>0{
+//            _savingDict?.setObject(_imagesArray.objectAtIndex(0), forKey: "cover")
+//        }
         
         //_savingDict?.setObject(_titleInput?.text!, forKey: "title")
         //_savingDict?.setObject(_desInput?.text!, forKey: "des")

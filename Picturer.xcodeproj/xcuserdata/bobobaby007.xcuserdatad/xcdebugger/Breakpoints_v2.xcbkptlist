@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Picturer/ViewControllers/Manage_pic.swift"
-            timestampString = "458739054.759553"
+            timestampString = "458905096.234552"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
             landmarkName = "_clear()"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Picturer/ViewControllers/Manage_pic.swift"
-            timestampString = "458739054.759553"
+            timestampString = "458905096.234552"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
             landmarkName = "_clear()"
             landmarkType = "5">
          </BreakpointContent>

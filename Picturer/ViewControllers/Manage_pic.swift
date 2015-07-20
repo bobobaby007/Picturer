@@ -26,7 +26,9 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     
     @IBOutlet weak var _topView:UIView?
     
+    var _bottomView:UIView?
     
+    var _tapG:UITapGestureRecognizer?
     
     var _currentIndex:Int?
     
@@ -46,6 +48,10 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     var _desView:UIView?
     var _desText:UITextView?
     var _desH:CGFloat=0//-----描述面板高度
+    
+    var _isScrolling:Bool = false
+    
+    var _range:Int = 0
     
     var _showingBar:Bool=true{
         didSet{
@@ -114,7 +120,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         
         
         let action1 = UIAlertAction(title: "图片描述", style: UIAlertActionStyle.Default, handler: changeDes)
-        let action2 = UIAlertAction(title: "设为封面", style: UIAlertActionStyle.Default, handler: actionHander)
+        let action2 = UIAlertAction(title: "设为封面", style: UIAlertActionStyle.Default, handler: setToCover)
         let action3 = UIAlertAction(title: "保存图片", style: UIAlertActionStyle.Default, handler: actionHander)
         let action4 = UIAlertAction(title: "删除", style: UIAlertActionStyle.Default, handler: actionHander)
         let action5 = UIAlertAction(title: "分享", style: UIAlertActionStyle.Default, handler: actionHander)
@@ -131,9 +137,16 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     
 
     func actionHander(action:UIAlertAction!){
-        println(action)
+        
     }
-    //---打开
+    //-----设为封面
+    func setToCover(action:UIAlertAction!){
+        var _dict:NSDictionary = NSDictionary(object: _getPicAtIndex(_currentIndex!), forKey: "cover") as NSDictionary
+        MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
+        var _alert:UIAlertView = UIAlertView(title: "设置封面成功", message: nil, delegate: nil, cancelButtonTitle: "确认")
+        _alert.show()
+    }
+    //---打开描述编辑
     func changeDes(action:UIAlertAction!){
         var _controller:Manage_description=Manage_description()
         
@@ -147,6 +160,18 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _controller._delegate=self
         self.navigationController?.pushViewController(_controller, animated: true)
         
+    }
+    
+    //-----根据排列顺序调出图片
+    func _getPicAtIndex(__index:Int)->NSDictionary{
+        var _dict:NSDictionary
+        
+        if _range == 0{
+            _dict = _picsArray?.objectAtIndex(__index) as! NSDictionary
+        }else{
+            _dict = _picsArray?.objectAtIndex(_picsArray!.count-__index-1) as! NSDictionary
+        }
+        return _dict
     }
     //---设置描述代理
     func canceld() {
@@ -206,8 +231,8 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _scrollView?.contentOffset.x = CGFloat(_currentIndex!)*_scrollView!.frame.width
         
         
-        var _tapG:UITapGestureRecognizer=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
-        _scrollView?.addGestureRecognizer(_tapG)
+        _tapG=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+        _scrollView?.addGestureRecognizer(_tapG!)
         
         
         _moveToPicByIndex(_currentIndex!)
@@ -236,9 +261,11 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             _currentIndex=_picsArray!.count-1
         }
         
-        _pic = NSMutableDictionary(dictionary: (_picsArray?.objectAtIndex(_currentIndex!) as? NSDictionary)!)
+        _pic = NSMutableDictionary(dictionary: (_getPicAtIndex(_currentIndex!)))
         
         _viewInAtIndex(__index)
+        _viewInAtIndex(__index+1)
+        _viewInAtIndex(__index-1)
     
         _setTitle(String(_currentIndex!+1)+"/"+String(_picsArray!.count))
         
@@ -252,47 +279,37 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
                 _setDes("")
             }
         
-        let _shows:Bool=self._showingBar
-        self._showingBar=_shows
+//        let _shows:Bool=self._showingBar
+//        self._showingBar=_shows
         
     }
     
-    
+    //---正在挪动的时候
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
-        
-        
-        if _p>_picsArray!.count-2{
-            return
-        }else{
-            _viewInAtIndex(_p+1)
+        _showingBar = false
+        if _tapG != nil{
+            _scrollView?.removeGestureRecognizer(_tapG!)
         }
-        
-        
-        if _p<=0{
-            return
-        }else{
-            _viewInAtIndex(_p-1)
-        }
-        
         
     }
+    //---停止挪动
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+         _isScrolling=false
+        
         var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
-        if _p>_picsArray!.count-1{
-            return
-        }
-        if _p<0{
-            return
-        }
         
         _moveToPicByIndex(_p)
-        
-        
+        _scrollView?.addGestureRecognizer(_tapG!)
         
     }
     func _viewInAtIndex(__index:Int){
         var _picV:PicView!
+        if __index<0{
+            return
+        }
+        if __index>_picsArray!.count-1{
+            return
+        }
         if (_scrollView?.viewWithTag(100+__index) != nil){
             
             _picV=_scrollView?.viewWithTag(100+__index) as! PicView
@@ -303,10 +320,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             _picV.tag=100+__index
             
         }
-        var _dict:NSDictionary = _picsArray?.objectAtIndex(__index) as! NSDictionary
-        
-        
-        _picV._setPic(_dict)
+        _picV._setPic(_getPicAtIndex(__index))
         _scrollView!.addSubview(_picV)
     }
     func _setTitle(__str:String){
