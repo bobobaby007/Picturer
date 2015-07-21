@@ -351,9 +351,12 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         self.automaticallyAdjustsScrollViewInsets=false
         
-        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        
     }
-    
+    override func viewWillAppear(animated: Bool) {
+        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        UIApplication.sharedApplication().statusBarHidden=false
+    }
     
     
     

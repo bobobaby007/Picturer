@@ -320,7 +320,10 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             _picV.tag=100+__index
             
         }
-        _picV._setPic(_getPicAtIndex(__index))
+        _picV._setPic(_getPicAtIndex(__index),__block: { (__dict) -> Void in
+            
+        })
+
         _scrollView!.addSubview(_picV)
     }
     func _setTitle(__str:String){

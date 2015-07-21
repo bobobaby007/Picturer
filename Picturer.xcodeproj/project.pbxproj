@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		7A04ED521B3E720100E884FD /* entroLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A04ED511B3E720100E884FD /* entroLogo.png */; };
+		7A0A15D91B5E2D0B00A8C6F6 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15D51B5E2D0B00A8C6F6 /* .gitignore */; };
+		7A0A15DA1B5E2D0B00A8C6F6 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */; };
+		7A0A15DB1B5E2D0B00A8C6F6 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15D71B5E2D0B00A8C6F6 /* LICENSE */; };
+		7A0A15DC1B5E2D0B00A8C6F6 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 7A0A15D81B5E2D0B00A8C6F6 /* README.md */; };
+		7A0A15E11B5E998F00A8C6F6 /* noPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15E01B5E998F00A8C6F6 /* noPic.png */; };
+		7A0A15E21B5E998F00A8C6F6 /* noPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15E01B5E998F00A8C6F6 /* noPic.png */; };
 		7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */; };
 		7A1FF2441B4AA1E600CEFDAF /* MainAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1FF2431B4AA1E600CEFDAF /* MainAction.swift */; };
 		7A1FF2461B4AE48300CEFDAF /* newAlbum.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1FF2451B4AE48300CEFDAF /* newAlbum.png */; };
@@ -37,12 +43,9 @@
 		7A2FCA531B5D57BC00033925 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA391B5D57BB00033925 /* Info.plist */; };
 		7A2FCA541B5D57BC00033925 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3A1B5D57BB00033925 /* LICENSE */; };
 		7A2FCA551B5D57BC00033925 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3A1B5D57BB00033925 /* LICENSE */; };
-		7A2FCA561B5D57BC00033925 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3B1B5D57BB00033925 /* README.md */; };
-		7A2FCA571B5D57BC00033925 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3B1B5D57BB00033925 /* README.md */; };
 		7A2FCA581B5D57BC00033925 /* SwiftHTTP.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3D1B5D57BB00033925 /* SwiftHTTP.podspec */; };
 		7A2FCA591B5D57BC00033925 /* SwiftHTTP.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3D1B5D57BB00033925 /* SwiftHTTP.podspec */; };
 		7A2FCA6A1B5D57E000033925 /* SwiftHTTP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2FCA631B5D57BC00033925 /* SwiftHTTP.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		7A2FCA6B1B5D57F300033925 /* SwiftHTTP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2FCA631B5D57BC00033925 /* SwiftHTTP.framework */; };
 		7A2FCA6C1B5D596E00033925 /* SwiftHTTP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2FCA631B5D57BC00033925 /* SwiftHTTP.framework */; };
 		7A2FCA6D1B5D596E00033925 /* SwiftHTTP.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2FCA631B5D57BC00033925 /* SwiftHTTP.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7A45766D1B5CA11500DDE09A /* PicAlbumMessageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A45766C1B5CA11500DDE09A /* PicAlbumMessageItem.swift */; };
@@ -159,6 +162,11 @@
 
 /* Begin PBXFileReference section */
 		7A04ED511B3E720100E884FD /* entroLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = entroLogo.png; sourceTree = "<group>"; };
+		7A0A15D51B5E2D0B00A8C6F6 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		7A0A15D71B5E2D0B00A8C6F6 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		7A0A15D81B5E2D0B00A8C6F6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		7A0A15E01B5E998F00A8C6F6 /* noPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noPic.png; sourceTree = "<group>"; };
 		7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_home.swift; sourceTree = "<group>"; };
 		7A1FF2431B4AA1E600CEFDAF /* MainAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainAction.swift; sourceTree = "<group>"; };
 		7A1FF2451B4AE48300CEFDAF /* newAlbum.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newAlbum.png; sourceTree = "<group>"; };
@@ -179,7 +187,6 @@
 		7A2FCA381B5D57BB00033925 /* HTTPUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPUpload.swift; sourceTree = "<group>"; };
 		7A2FCA391B5D57BB00033925 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7A2FCA3A1B5D57BB00033925 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		7A2FCA3B1B5D57BB00033925 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7A2FCA3C1B5D57BB00033925 /* SwiftHTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftHTTP.h; sourceTree = "<group>"; };
 		7A2FCA3D1B5D57BB00033925 /* SwiftHTTP.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SwiftHTTP.podspec; sourceTree = "<group>"; };
 		7A2FCA3E1B5D57BB00033925 /* SwiftHTTP.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SwiftHTTP.xcodeproj; sourceTree = "<group>"; };
@@ -240,7 +247,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A2FCA6C1B5D596E00033925 /* SwiftHTTP.framework in Frameworks */,
-				7A2FCA6B1B5D57F300033925 /* SwiftHTTP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,23 +261,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7A0A15D41B5E2D0B00A8C6F6 /* SwiftImageLoader-master */ = {
+			isa = PBXGroup;
+			children = (
+				7A0A15D51B5E2D0B00A8C6F6 /* .gitignore */,
+				7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */,
+				7A0A15D71B5E2D0B00A8C6F6 /* LICENSE */,
+				7A0A15D81B5E2D0B00A8C6F6 /* README.md */,
+			);
+			path = "SwiftImageLoader-master";
+			sourceTree = "<group>";
+		};
 		7A0C1DBD1B307A9200C52A5D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				7AADB5CB1B5E016100E059B6 /* Manage */,
 				7A45766A1B5CA01700DDE09A /* Social */,
-				7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */,
-				7AFB23521B317849001C75C9 /* tableTest.swift */,
-				7A9C86C91B3348700051D067 /* Manage_show.swift */,
-				7AA180A81B3413EB005B42C0 /* Manage_pic.swift */,
-				7AA740A51B347D690064C9C9 /* Manage_new.swift */,
-				7A49DC961B3544A7004FAF14 /* Manage_imagePicker.swift */,
-				7AA26BA21B4D6DC0006CDC61 /* Setting_tags.swift */,
-				7AA26BA41B4D7052006CDC61 /* Setting_sample.swift */,
-				7AA26BAC1B4D9A15006CDC61 /* Setting_reply.swift */,
-				7AA26BAF1B4D9A34006CDC61 /* Setting_power.swift */,
-				7AA26BB21B4D9A57006CDC61 /* Setting_range.swift */,
-				7AEBE2CC1B54C76A00FC6E9D /* Manage_description.swift */,
-				7ACFB3841B591A21007F9AB8 /* Manage_PicsToAlbum.swift */,
 			);
 			name = ViewControllers;
 			path = ../Picturer/ViewControllers;
@@ -288,7 +293,6 @@
 				7A2FCA381B5D57BB00033925 /* HTTPUpload.swift */,
 				7A2FCA391B5D57BB00033925 /* Info.plist */,
 				7A2FCA3A1B5D57BB00033925 /* LICENSE */,
-				7A2FCA3B1B5D57BB00033925 /* README.md */,
 				7A2FCA3C1B5D57BB00033925 /* SwiftHTTP.h */,
 				7A2FCA3D1B5D57BB00033925 /* SwiftHTTP.podspec */,
 				7A2FCA3E1B5D57BB00033925 /* SwiftHTTP.xcodeproj */,
@@ -328,6 +332,7 @@
 		7A45766E1B5CA7E900DDE09A /* components */ = {
 			isa = PBXGroup;
 			children = (
+				7A0A15D41B5E2D0B00A8C6F6 /* SwiftImageLoader-master */,
 				7A2FCA311B5D57BB00033925 /* SwiftHTTP-master */,
 			);
 			path = components;
@@ -354,6 +359,7 @@
 		7A9C86B81B32D52D0051D067 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				7A0A15E01B5E998F00A8C6F6 /* noPic.png */,
 				7A23A95E1B3E7913009B2E53 /* icon_1.png */,
 				7A1FF2451B4AE48300CEFDAF /* newAlbum.png */,
 				7A8E3E031B4B9A7200243FA5 /* addIcon.png */,
@@ -381,6 +387,26 @@
 			);
 			name = pics;
 			path = ../Picturer/pics;
+			sourceTree = "<group>";
+		};
+		7AADB5CB1B5E016100E059B6 /* Manage */ = {
+			isa = PBXGroup;
+			children = (
+				7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */,
+				7AFB23521B317849001C75C9 /* tableTest.swift */,
+				7A9C86C91B3348700051D067 /* Manage_show.swift */,
+				7AA180A81B3413EB005B42C0 /* Manage_pic.swift */,
+				7AA740A51B347D690064C9C9 /* Manage_new.swift */,
+				7A49DC961B3544A7004FAF14 /* Manage_imagePicker.swift */,
+				7AA26BA21B4D6DC0006CDC61 /* Setting_tags.swift */,
+				7AA26BA41B4D7052006CDC61 /* Setting_sample.swift */,
+				7AA26BAC1B4D9A15006CDC61 /* Setting_reply.swift */,
+				7AA26BAF1B4D9A34006CDC61 /* Setting_power.swift */,
+				7AA26BB21B4D9A57006CDC61 /* Setting_range.swift */,
+				7AEBE2CC1B54C76A00FC6E9D /* Manage_description.swift */,
+				7ACFB3841B591A21007F9AB8 /* Manage_PicsToAlbum.swift */,
+			);
+			name = Manage;
 			sourceTree = "<group>";
 		};
 		7AC247451B4A669000A5187B /* resource */ = {
@@ -573,8 +599,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A0A15D91B5E2D0B00A8C6F6 /* .gitignore in Resources */,
 				7A8E3E041B4B9A7200243FA5 /* addIcon.png in Resources */,
 				7A04ED521B3E720100E884FD /* entroLogo.png in Resources */,
+				7A0A15E11B5E998F00A8C6F6 /* noPic.png in Resources */,
 				7ADD50111B2D402000E44F99 /* Main.storyboard in Resources */,
 				7A23A96A1B3E7913009B2E53 /* icon_6.png in Resources */,
 				7AA26BAA1B4D8E69006CDC61 /* icon_unchoose.png in Resources */,
@@ -599,6 +627,7 @@
 				7A49DC9B1B354DB4004FAF14 /* pic_unSelected.png in Resources */,
 				7A23A9671B3E7913009B2E53 /* icon_3.png in Resources */,
 				7A2FCA581B5D57BC00033925 /* SwiftHTTP.podspec in Resources */,
+				7A0A15DB1B5E2D0B00A8C6F6 /* LICENSE in Resources */,
 				7A9C86C61B32D52D0051D067 /* 7.png in Resources */,
 				7AA887C51B3F963B006BC338 /* icon_alert.png in Resources */,
 				7AA26BA71B4D8C56006CDC61 /* icon_choose.png in Resources */,
@@ -616,6 +645,7 @@
 				7A2FCA531B5D57BC00033925 /* Info.plist in Resources */,
 				7A2FCA551B5D57BC00033925 /* LICENSE in Resources */,
 				7AA26BA81B4D8C56006CDC61 /* icon_choose.png in Resources */,
+				7A0A15E21B5E998F00A8C6F6 /* noPic.png in Resources */,
 				7A8E3E051B4B9A7200243FA5 /* addIcon.png in Resources */,
 				7A1FF2471B4AE48300CEFDAF /* newAlbum.png in Resources */,
 			);
@@ -634,7 +664,6 @@
 				7AA740A61B347D690064C9C9 /* Manage_new.swift in Sources */,
 				7AA180A91B3413EB005B42C0 /* Manage_pic.swift in Sources */,
 				7AC55DAE1B3E97EE00FDC851 /* SocialHomeCell.swift in Sources */,
-				7A2FCA561B5D57BC00033925 /* README.md in Sources */,
 				7A2FCA4A1B5D57BC00033925 /* HTTPSecurity.swift in Sources */,
 				7A1FF2441B4AA1E600CEFDAF /* MainAction.swift in Sources */,
 				7AA180A71B341006005B42C0 /* PicsShowCell.swift in Sources */,
@@ -643,6 +672,7 @@
 				7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */,
 				7AC55DB01B3E9C7D00FDC851 /* LayoutForSocailHome.swift in Sources */,
 				7AC783831B405B6A00A75214 /* MyHomepage.swift in Sources */,
+				7A0A15DA1B5E2D0B00A8C6F6 /* ImageLoader.swift in Sources */,
 				7A9C86C81B32DD490051D067 /* AlbumListCell.swift in Sources */,
 				7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */,
 				7A2FCA501B5D57BC00033925 /* HTTPUpload.swift in Sources */,
@@ -657,6 +687,7 @@
 				7ADD500C1B2D402000E44F99 /* Picturers.xcdatamodeld in Sources */,
 				7AEBE2CD1B54C76A00FC6E9D /* Manage_description.swift in Sources */,
 				7AA9ACB31B5133C0006B41FE /* PicView.swift in Sources */,
+				7A0A15DC1B5E2D0B00A8C6F6 /* README.md in Sources */,
 				7AA0E1B01B46779E0070538F /* CoreAction.swift in Sources */,
 				7A45766D1B5CA11500DDE09A /* PicAlbumMessageItem.swift in Sources */,
 				7AA6A8CB1B4777C200D9E604 /* MainInterface.swift in Sources */,
@@ -680,7 +711,6 @@
 				7A2FCA511B5D57BC00033925 /* HTTPUpload.swift in Sources */,
 				7ADD50221B2D402000E44F99 /* PicturersTests.swift in Sources */,
 				7A2FCA4D1B5D57BC00033925 /* HTTPStatusCode.swift in Sources */,
-				7A2FCA571B5D57BC00033925 /* README.md in Sources */,
 				7AA26BAE1B4D9A15006CDC61 /* Setting_reply.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -25,10 +25,14 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         self.showsVerticalScrollIndicator=false
         _imgView=UIImageView(frame: self.bounds)
         _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
+        self.addSubview(_imgView!)
         self.delegate=self
     }
+    func _refreshView(){
+        _imgView?.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
+    }
     
-    func _setPic(__pic:NSDictionary){
+    func _setPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
         switch __pic.objectForKey("type") as! String{
         case "alasset":
             let _al:ALAssetsLibrary=ALAssetsLibrary()
@@ -48,12 +52,28 @@ class PicView: UIScrollView,UIScrollViewDelegate{
             
         case "file":
             self._setImage(__pic.objectForKey("url") as! String)
+            
+        case "fromWeb":
+            ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
+               // _setImage(image)
+                //println("")
+                if self._imgView != nil{
+                    //self._setImageByImage(image!)
+                    self._imgView?.image=image
+                    __block(NSDictionary())
+                    
+                }else{
+                    println("out")
+                }
+                
+            })
         default:
             println()
         }
     }
     
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+        
         return _imgView
     }
     func scrollViewDidZoom(scrollView: UIScrollView) {
@@ -62,12 +82,12 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     func _setImage(_img:String){
         
         _imgView!.image=UIImage(named: _img)
-        self.addSubview(_imgView!)
+        //self.addSubview(_imgView!)
     }
     func _setImageByImage(_img:UIImage){
         
         _imgView?.image=_img
-        self.addSubview(_imgView!)
+        
     }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
