@@ -12,6 +12,8 @@ import UIKit
 protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
     func _resized(__indexId:Int,__height:CGFloat)
     func _moreComment(__indexId:Int)
+    func _viewUser(__userId:String)
+    func _moreLike(__indexId:Int)
 }
 
 
@@ -30,11 +32,13 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _updateTime_label:UILabel?
     var _albumTitle_labelV:UIView?
     var _albumTitle_label:UILabel?
-    var _albumScription:UILabel?
+    var _description:UITextView?
     
     var _toolsPanel:UIView?
+    var _likeTextView:UITextView?
     var _toolsButtonPanel:UIView?
     var _toolsOpenButton:UIButton?
+    
     var _btn_like:UIButton?
     var _btn_comment:UIButton?
     var _btn_share:UIButton?
@@ -52,8 +56,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     var _attributeStr:NSMutableAttributedString?
     
-    
-    
+
     override func willMoveToSuperview(newSuperview: UIView?) {
         //setup()
     }
@@ -100,32 +103,51 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _albumTitle_label?.textColor = UIColor.whiteColor()
         
         
+        _description = UITextView()
+        
+        
+        
+        _likeTextView = UITextView()
+        _likeTextView?.backgroundColor = UIColor.clearColor()
+        _likeTextView?.delegate=self
+        _likeTextView?.editable=false
+        _likeTextView?.tintColor = UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)
+        
+        
+        _btn_like = UIButton(frame: CGRect(x: 10, y: 10, width: 0.6*28, height: 0.6*24))
+        _btn_like?.setImage(UIImage(named: "like"), forState: UIControlState.Normal)
+        _btn_like?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        _toolsOpenButton = UIButton(frame: CGRect(x: _defaultSize!.width-0.6*57-10, y: 5, width: 0.6*57, height: 0.6*31))
+        _toolsOpenButton?.setImage(UIImage(named: "toolsBtn"), forState: UIControlState.Normal)
+        _toolsOpenButton?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
         _toolsPanel = UIView(frame: CGRect(x: 0, y: 50+_picV!.frame.height, width: _defaultSize!.width, height: 36))
+        _toolsPanel?.addSubview(_likeTextView!)
+        _toolsPanel?.addSubview(_btn_like!)
+        _toolsPanel?.addSubview(_toolsOpenButton!)
+        
+        
+        
         
         
         _commentsPanel = UIView(frame: CGRect(x: 0, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width, height: 36))
         _commentsPanel?.backgroundColor = UIColor(white: 0.95, alpha: 1)
         
-        
-        _commentText = UITextView()
-        _moreCommentText = UITextView()
-        
-        _commentText?.backgroundColor =  UIColor.clearColor()
-        _moreCommentText?.backgroundColor =  UIColor.clearColor()
-        _moreCommentText?.tintColor = UIColor.darkGrayColor()
-        
         _attributeStr = NSMutableAttributedString()
         
-
+        _commentText = UITextView()
         _commentText!.attributedText = _attributeStr!
-        
+        _commentText?.backgroundColor =  UIColor.clearColor()
         _commentText!.delegate=self
         _commentText!.attributedText = _attributeStr!
         _commentText!.selectable=true
         _commentText!.editable=false
         _commentText?.userInteractionEnabled=true
         
-        
+        _moreCommentText = UITextView()
+        _moreCommentText?.backgroundColor =  UIColor.clearColor()
+        _moreCommentText?.tintColor = UIColor.darkGrayColor()
         _moreCommentText?.delegate = self
         _moreCommentText!.selectable=true
         _moreCommentText!.editable=false
@@ -146,6 +168,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         self.addSubview(_albumTitle_labelV!)
         self.addSubview(_toolsPanel!)
         self.addSubview(_commentsPanel!)
+        self.addSubview(_description!)
         
         _albumTitle_labelV?.addSubview(_albumTitle_label!)
         
@@ -168,9 +191,23 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _picV?._refreshView()
         
         _albumTitle_labelV?.frame = CGRect(x: 0, y: 50+_h-36, width: self.frame.width, height: 36)
-        _toolsPanel!.frame = CGRect(x: 0, y: 50+_picV!.frame.height, width: _defaultSize!.width, height: 36)
         
         
+        var _desH:CGFloat = 0
+        if _description!.text == ""{
+            
+        }else{
+            _desH = _description!.contentSize.height
+        }
+        
+        _description?.frame = CGRect(x: 10, y: 10+_picV!.frame.height, width: _defaultSize!.width, height: _desH)
+        
+        
+        
+        _likeTextView?.frame = CGRect(x: 10, y: 0, width: _defaultSize!.width-10-28, height: _likeTextView!.contentSize.height)
+        
+        
+        _toolsPanel!.frame = CGRect(x: 0, y: 50+_picV!.frame.height+_desH, width: _defaultSize!.width, height: _likeTextView!.contentSize.height)
         
          _commentText?.frame = CGRect(x: 5, y: 5, width: _defaultSize!.width-30, height: _commentText!.contentSize.height)
         
@@ -180,7 +217,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         if _moreCommentText?.text == ""{
         
         }else{
-            _moreComentH = 22
+            _moreComentH = _moreCommentText!.contentSize.height
         }
         _moreCommentText?.frame = CGRect(x: 5, y: _commentText!.contentSize.height-8+5, width: _defaultSize!.width-30, height: _moreComentH)
         
@@ -220,13 +257,12 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
-        
         _attributeStr?.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, _attributeStr!.length))
         
         _commentText!.attributedText = _attributeStr!
        
         if _n>3{
-            _moreCommentText?.attributedText = moreCommentString("查看全部"+String(_n)+"条评论",withURLString:"gogo")
+            _moreCommentText?.attributedText = linkString("查看全部"+String(_n)+"条评论",withURLString:"moreComment:")
         }else{
             _moreCommentText?.text = ""
         }
@@ -241,7 +277,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
          //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
         let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor()]
         
-        var attrString: NSAttributedString = userHighlightString(_commentDict.objectForKey("from_userName") as! String,withURLString: _commentDict.objectForKey("from_userId") as! String)
+        var attrString: NSAttributedString = linkString(_commentDict.objectForKey("from_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("from_userId") as! String))
         
         var astr:NSMutableAttributedString = NSMutableAttributedString()
         astr.appendAttributedString(attrString)
@@ -251,7 +287,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         }else{
             attrString = NSAttributedString(string: "回复", attributes:normalAttr)
             astr.appendAttributedString(attrString)
-            astr.appendAttributedString(userHighlightString(_commentDict.objectForKey("to_userName") as! String,withURLString: _commentDict.objectForKey("to_userId") as! String))
+            astr.appendAttributedString(linkString(_commentDict.objectForKey("to_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("to_userId") as! String)))
         }
         
         
@@ -262,46 +298,33 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         return astr
     }
     
-    func userHighlightString(string:String, withURLString:String) -> NSAttributedString {
+    func linkString(string:String, withURLString:String) -> NSAttributedString {
         var attrString = NSMutableAttributedString(string: string )
         // the entire string
         var range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
-        attrString.addAttribute(NSLinkAttributeName, value:"user:"+withURLString, range:range)
+        attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
         attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor.blueColor(), range:range)
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
         attrString.endEditing()
         return attrString
     }
     
-    func moreCommentString(string:String, withURLString:String) -> NSAttributedString {
-         let normalAttr = [NSForegroundColorAttributeName : UIColor.brownColor()]
-       var attrString = NSMutableAttributedString(string: string, attributes:normalAttr)
-        
-       // var attrString = NSMutableAttributedString(string: string)
-        // the entire string
-        var range:NSRange = NSMakeRange(0, attrString.length)
-       // attrString.beginEditing()
-        attrString.addAttribute(NSLinkAttributeName, value:"moreComment:"+withURLString, range:range)
-        attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor.brownColor(), range:range)
-        attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
-        //attrString.endEditing()
-        return attrString
-    }
-    
-    //-----评论代理
+    //-----文字链接代理
     
     func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
         var _action:String = URL.scheme!
-        
+        println(_action)
         switch _action{
         case "user":
             let _str:String = URL.absoluteString!
             let _userId:NSString =  (_str as NSString).substringFromIndex(5)
-            // URL.relativeString
-            println(_userId)
+            _delegate?._viewUser(_userId as String)
         case "moreComment":
+            println("hahahah")
             _delegate?._moreComment(_indexId)
+        case "moreLike":
+            _delegate?._moreLike(_indexId)
         default:
             println("")
         }
@@ -323,14 +346,69 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     //---------工具条------------------------
     
+    //-------点赞
+    func _setLikes(__likes:NSArray,__allNum:Int){
+        var _attrStr:NSMutableAttributedString = NSMutableAttributedString(string: "")
+        if __allNum > 10{
+            _attrStr = NSMutableAttributedString(attributedString: linkString(String(__allNum)+"个赞", withURLString:"moreLike:"))
+        }else{
+            var _lineLength:Int=0
+            let _maxNum:Int = Int(_defaultSize!.width/5)
+            //println(_maxNum)
+            
+            for var i:Int = 0; i < __likes.count ; ++i{
+                if i>0 {
+                    _attrStr.appendAttributedString(NSAttributedString(string: ", "))
+                }
+                
+                let _likeDict = __likes.objectAtIndex(i) as! NSDictionary
+                
+                let _addingStr:String = _likeDict.objectForKey("userName") as! String
+                
+                let _addingLength:Int = _addingStr.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)
+                
+                if (_addingLength+_lineLength)>_maxNum{
+                    //_attrStr.appendAttributedString(NSMutableAttributedString(string: "\n"))
+                    _lineLength = _addingLength
+                }else{
+                    _lineLength = _lineLength + _addingLength
+                }
+                
+                var attrString: NSAttributedString = linkString(_addingStr,withURLString: "user:"+(_likeDict.objectForKey("userId") as! String))
+                _attrStr.appendAttributedString(attrString)
+            }
+            
+        }
+        var paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 8
+       // paragraphStyle.headIndent = 50
+        paragraphStyle.firstLineHeadIndent = 20
+        _attrStr.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, _attrStr.length))
+        _likeTextView!.attributedText = _attrStr
+        //_likeTextView?.contentInset = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
+    }
     
     
     
+    //-----按钮侦听
     
     
+    func buttonAction(__button:UIButton){
+        switch __button{
+        case _btn_like!:
+            println("addoneLike")
+        default:
+            println("")
+        }
+    }
+    
+    //------------------
     
     
-    
+    func _setDescription(__str:String){
+        _description?.text=__str
+        
+    }
     func _setAlbumTitle(__str:String){
      _albumTitle_label?.text=__str
     }

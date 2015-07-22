@@ -49,6 +49,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _heighArray:NSMutableArray?
     var _commentsArray:NSMutableArray?
+    var _likeArray:NSMutableArray?
     
     
     
@@ -181,15 +182,16 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _heighArray=NSMutableArray()
         
         _commentsArray=NSMutableArray()
-        
+        _likeArray = NSMutableArray()
         for var i:Int=0; i<_dataArray.count;++i{
             _heighArray?.addObject(_defaultH)
-            
             
             MainAction._getCommentsOfAlubm(String(i), block: { (array) -> Void in
                 self._commentsArray?.addObject(array)
             })
-            
+            MainAction._getLikesOfAlubm(String(i), block: { (array) -> Void in
+                self._likeArray?.addObject(array)
+            })
             
         }
         
@@ -341,7 +343,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         //cell!.tag = 100+indexPath.row
         let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
         cell!._setComments(_array, __allNum: _array.count)
-
+        
+        let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
+        cell!._setLikes(_likeA,__allNum: _likeA.count)
         
         
         cell!._indexId = indexPath.row
@@ -381,7 +385,12 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _moreComment(__indexId: Int) {
         println(__indexId)
     }
-    
+    func _moreLike(__indexId: Int) {
+        println(__indexId)
+    }
+    func _viewUser(__userId: String) {
+        println(__userId)
+    }
     //-------------
     
     func btnHander(sender:UIButton){

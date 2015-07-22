@@ -17,6 +17,10 @@
 		7A1FF2471B4AE48300CEFDAF /* newAlbum.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1FF2451B4AE48300CEFDAF /* newAlbum.png */; };
 		7A2021D31B3C41CF0048AD7C /* camara.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A2021D21B3C41CF0048AD7C /* camara.png */; };
 		7A2021D51B3C41DC0048AD7C /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A2021D41B3C41DC0048AD7C /* arrow.png */; };
+		7A21C44E1B5FF5E700AC99DB /* like.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A21C44D1B5FF5E700AC99DB /* like.png */; };
+		7A21C44F1B5FF5E700AC99DB /* like.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A21C44D1B5FF5E700AC99DB /* like.png */; };
+		7A21C4541B5FF62E00AC99DB /* toolsBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A21C4531B5FF62E00AC99DB /* toolsBtn.png */; };
+		7A21C4551B5FF62E00AC99DB /* toolsBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A21C4531B5FF62E00AC99DB /* toolsBtn.png */; };
 		7A23A9651B3E7913009B2E53 /* icon_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A23A95E1B3E7913009B2E53 /* icon_1.png */; };
 		7A23A9661B3E7913009B2E53 /* icon_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A23A95F1B3E7913009B2E53 /* icon_2.png */; };
 		7A23A9671B3E7913009B2E53 /* icon_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A23A9601B3E7913009B2E53 /* icon_3.png */; };
@@ -164,6 +168,8 @@
 		7A1FF2451B4AE48300CEFDAF /* newAlbum.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newAlbum.png; sourceTree = "<group>"; };
 		7A2021D21B3C41CF0048AD7C /* camara.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camara.png; sourceTree = "<group>"; };
 		7A2021D41B3C41DC0048AD7C /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
+		7A21C44D1B5FF5E700AC99DB /* like.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = like.png; sourceTree = "<group>"; };
+		7A21C4531B5FF62E00AC99DB /* toolsBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toolsBtn.png; sourceTree = "<group>"; };
 		7A23A95E1B3E7913009B2E53 /* icon_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_1.png; sourceTree = "<group>"; };
 		7A23A95F1B3E7913009B2E53 /* icon_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_2.png; sourceTree = "<group>"; };
 		7A23A9601B3E7913009B2E53 /* icon_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_3.png; sourceTree = "<group>"; };
@@ -346,6 +352,8 @@
 		7A9C86B81B32D52D0051D067 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				7A21C4531B5FF62E00AC99DB /* toolsBtn.png */,
+				7A21C44D1B5FF5E700AC99DB /* like.png */,
 				7A0A15E01B5E998F00A8C6F6 /* noPic.png */,
 				7A23A95E1B3E7913009B2E53 /* icon_1.png */,
 				7A1FF2451B4AE48300CEFDAF /* newAlbum.png */,
@@ -586,6 +594,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A21C44E1B5FF5E700AC99DB /* like.png in Resources */,
 				7A8E3E041B4B9A7200243FA5 /* addIcon.png in Resources */,
 				7A04ED521B3E720100E884FD /* entroLogo.png in Resources */,
 				7A0A15E11B5E998F00A8C6F6 /* noPic.png in Resources */,
@@ -599,6 +608,7 @@
 				7A9C86C51B32D52D0051D067 /* 6.png in Resources */,
 				7A23A9651B3E7913009B2E53 /* icon_1.png in Resources */,
 				7A2021D51B3C41DC0048AD7C /* arrow.png in Resources */,
+				7A21C4541B5FF62E00AC99DB /* toolsBtn.png in Resources */,
 				7A1FF2461B4AE48300CEFDAF /* newAlbum.png in Resources */,
 				7A9C86C11B32D52D0051D067 /* 2.png in Resources */,
 				7A23A96B1B3E7913009B2E53 /* icon_7.png in Resources */,
@@ -624,10 +634,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A21C44F1B5FF5E700AC99DB /* like.png in Resources */,
 				7AA26BAB1B4D8E69006CDC61 /* icon_unchoose.png in Resources */,
 				7A2FCA591B5D57BC00033925 /* SwiftHTTP.podspec in Resources */,
 				7A2FCA531B5D57BC00033925 /* Info.plist in Resources */,
 				7AA26BA81B4D8C56006CDC61 /* icon_choose.png in Resources */,
+				7A21C4551B5FF62E00AC99DB /* toolsBtn.png in Resources */,
 				7A0A15E21B5E998F00A8C6F6 /* noPic.png in Resources */,
 				7A8E3E051B4B9A7200243FA5 /* addIcon.png in Resources */,
 				7A1FF2471B4AE48300CEFDAF /* newAlbum.png in Resources */,

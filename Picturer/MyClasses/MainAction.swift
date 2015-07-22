@@ -248,10 +248,7 @@ class MainAction: AnyObject {
     }
     
     static func _getCommentsOfAlubm(__albumId:String?,block:(NSArray)->Void){
-        
-        
         var _array:NSMutableArray = NSMutableArray()
-        
         var _n:Int = __albumId!.toInt()!
         if _n < 1{
             _n = 1
@@ -268,17 +265,29 @@ class MainAction: AnyObject {
             _array.addObject(_commentDict)
             
         }
-        
-        //var _p:HTTPResponse = response
         // println(response.text)
         block(_array)
-        
-        
-//        var request = HTTPTask()
-//        request.GET("http://www.baidu.com/", parameters: nil, completionHandler: { (response) -> Void in
-//            
-//        })
-        
+    }
+    static func _getLikesOfAlubm(__albumId:String?,block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = __albumId!.toInt()!
+        if _n < 1{
+            _n = 1
+        }
+        for var i:Int = 0; i<2*_n;++i{
+            
+            
+            var _dict:NSMutableDictionary
+            if i==1||i==5||i==6{
+                _dict = NSMutableDictionary(objects: ["t("+String(i)+")","111111"], forKeys: ["userName","userId"])
+            }else{
+                _dict = NSMutableDictionary(objects: ["ta号是*&("+String(i)+")","111111"], forKeys: ["userName","userId"])
+            }
+           
+            _array.addObject(_dict)
+        }
+        // println(response.text)
+        block(_array)
     }
     
     
