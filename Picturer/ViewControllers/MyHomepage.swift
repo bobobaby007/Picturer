@@ -24,7 +24,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _tableView:UITableView?
     
-    var _dataArray:NSArray=["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
+    var _dataArray:NSArray=["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
     var _setuped:Bool = false
     
     var _profileDict:NSDictionary?
@@ -48,6 +48,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _scrollView:UIScrollView?
     
     var _heighArray:NSMutableArray?
+    var _commentsArray:NSMutableArray?
+    
+    
+    
     var _defaultH:CGFloat = 400
     
     var _scrollTopH:CGFloat = 30 //达到这个高度时向上移动
@@ -172,11 +176,25 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _following_label?.text="0"
         
         
+        
+        
         _heighArray=NSMutableArray()
+        
+        _commentsArray=NSMutableArray()
         
         for var i:Int=0; i<_dataArray.count;++i{
             _heighArray?.addObject(_defaultH)
+            
+            
+            MainAction._getCommentsOfAlubm(String(i), block: { (array) -> Void in
+                self._commentsArray?.addObject(array)
+            })
+            
+            
         }
+        
+        
+        
         
         _tableView=UITableView()
         
@@ -292,7 +310,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
        // println(scrollView.contentOffset)
         
     }
-    
+    func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return _dataArray.count
     }
@@ -319,10 +339,16 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
         //cell!.tag = 100+indexPath.row
+        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
+        cell!._setComments(_array, __allNum: _array.count)
+
+        
+        
         cell!._indexId = indexPath.row
         cell!._delegate=self
         cell!._setPic(NSDictionary(objects: [_dataArray.objectAtIndex(indexPath.row),"fromWeb"], forKeys: ["url","type"]))
         cell!._setUserImge(NSDictionary(objects: [_dataArray.objectAtIndex(indexPath.row),"fromWeb"], forKeys: ["url","type"]))
+        cell!._setAlbumTitle("撒旦过呢个作品")
         
         
         
@@ -333,6 +359,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         return cell!
         
     }
+    
+    
+    //------相册代理
     
     func _resized(__indexId: Int, __height: CGFloat) {
         //println("changeH")
@@ -349,7 +378,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
        // println(_heighArray)
         
     }
-    
+    func _moreComment(__indexId: Int) {
+        println(__indexId)
+    }
     
     //-------------
     

@@ -8,10 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7A04ED521B3E720100E884FD /* entroLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A04ED511B3E720100E884FD /* entroLogo.png */; };
-		7A0A15D91B5E2D0B00A8C6F6 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15D51B5E2D0B00A8C6F6 /* .gitignore */; };
 		7A0A15DA1B5E2D0B00A8C6F6 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */; };
-		7A0A15DB1B5E2D0B00A8C6F6 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15D71B5E2D0B00A8C6F6 /* LICENSE */; };
-		7A0A15DC1B5E2D0B00A8C6F6 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 7A0A15D81B5E2D0B00A8C6F6 /* README.md */; };
 		7A0A15E11B5E998F00A8C6F6 /* noPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15E01B5E998F00A8C6F6 /* noPic.png */; };
 		7A0A15E21B5E998F00A8C6F6 /* noPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15E01B5E998F00A8C6F6 /* noPic.png */; };
 		7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */; };
@@ -41,8 +38,6 @@
 		7A2FCA511B5D57BC00033925 /* HTTPUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2FCA381B5D57BB00033925 /* HTTPUpload.swift */; };
 		7A2FCA521B5D57BC00033925 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA391B5D57BB00033925 /* Info.plist */; };
 		7A2FCA531B5D57BC00033925 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA391B5D57BB00033925 /* Info.plist */; };
-		7A2FCA541B5D57BC00033925 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3A1B5D57BB00033925 /* LICENSE */; };
-		7A2FCA551B5D57BC00033925 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3A1B5D57BB00033925 /* LICENSE */; };
 		7A2FCA581B5D57BC00033925 /* SwiftHTTP.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3D1B5D57BB00033925 /* SwiftHTTP.podspec */; };
 		7A2FCA591B5D57BC00033925 /* SwiftHTTP.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 7A2FCA3D1B5D57BB00033925 /* SwiftHTTP.podspec */; };
 		7A2FCA6A1B5D57E000033925 /* SwiftHTTP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2FCA631B5D57BC00033925 /* SwiftHTTP.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -162,10 +157,7 @@
 
 /* Begin PBXFileReference section */
 		7A04ED511B3E720100E884FD /* entroLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = entroLogo.png; sourceTree = "<group>"; };
-		7A0A15D51B5E2D0B00A8C6F6 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
-		7A0A15D71B5E2D0B00A8C6F6 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		7A0A15D81B5E2D0B00A8C6F6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7A0A15E01B5E998F00A8C6F6 /* noPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noPic.png; sourceTree = "<group>"; };
 		7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_home.swift; sourceTree = "<group>"; };
 		7A1FF2431B4AA1E600CEFDAF /* MainAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainAction.swift; sourceTree = "<group>"; };
@@ -186,7 +178,6 @@
 		7A2FCA371B5D57BB00033925 /* HTTPTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPTask.swift; sourceTree = "<group>"; };
 		7A2FCA381B5D57BB00033925 /* HTTPUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPUpload.swift; sourceTree = "<group>"; };
 		7A2FCA391B5D57BB00033925 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A2FCA3A1B5D57BB00033925 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		7A2FCA3C1B5D57BB00033925 /* SwiftHTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftHTTP.h; sourceTree = "<group>"; };
 		7A2FCA3D1B5D57BB00033925 /* SwiftHTTP.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SwiftHTTP.podspec; sourceTree = "<group>"; };
 		7A2FCA3E1B5D57BB00033925 /* SwiftHTTP.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SwiftHTTP.xcodeproj; sourceTree = "<group>"; };
@@ -264,10 +255,7 @@
 		7A0A15D41B5E2D0B00A8C6F6 /* SwiftImageLoader-master */ = {
 			isa = PBXGroup;
 			children = (
-				7A0A15D51B5E2D0B00A8C6F6 /* .gitignore */,
 				7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */,
-				7A0A15D71B5E2D0B00A8C6F6 /* LICENSE */,
-				7A0A15D81B5E2D0B00A8C6F6 /* README.md */,
 			);
 			path = "SwiftImageLoader-master";
 			sourceTree = "<group>";
@@ -292,7 +280,6 @@
 				7A2FCA371B5D57BB00033925 /* HTTPTask.swift */,
 				7A2FCA381B5D57BB00033925 /* HTTPUpload.swift */,
 				7A2FCA391B5D57BB00033925 /* Info.plist */,
-				7A2FCA3A1B5D57BB00033925 /* LICENSE */,
 				7A2FCA3C1B5D57BB00033925 /* SwiftHTTP.h */,
 				7A2FCA3D1B5D57BB00033925 /* SwiftHTTP.podspec */,
 				7A2FCA3E1B5D57BB00033925 /* SwiftHTTP.xcodeproj */,
@@ -599,7 +586,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A0A15D91B5E2D0B00A8C6F6 /* .gitignore in Resources */,
 				7A8E3E041B4B9A7200243FA5 /* addIcon.png in Resources */,
 				7A04ED521B3E720100E884FD /* entroLogo.png in Resources */,
 				7A0A15E11B5E998F00A8C6F6 /* noPic.png in Resources */,
@@ -609,7 +595,6 @@
 				7A9C86C31B32D52D0051D067 /* 4.png in Resources */,
 				7A9C86C01B32D52D0051D067 /* 1.png in Resources */,
 				7A2FCA521B5D57BC00033925 /* Info.plist in Resources */,
-				7A2FCA541B5D57BC00033925 /* LICENSE in Resources */,
 				7A2021D31B3C41CF0048AD7C /* camara.png in Resources */,
 				7A9C86C51B32D52D0051D067 /* 6.png in Resources */,
 				7A23A9651B3E7913009B2E53 /* icon_1.png in Resources */,
@@ -627,7 +612,6 @@
 				7A49DC9B1B354DB4004FAF14 /* pic_unSelected.png in Resources */,
 				7A23A9671B3E7913009B2E53 /* icon_3.png in Resources */,
 				7A2FCA581B5D57BC00033925 /* SwiftHTTP.podspec in Resources */,
-				7A0A15DB1B5E2D0B00A8C6F6 /* LICENSE in Resources */,
 				7A9C86C61B32D52D0051D067 /* 7.png in Resources */,
 				7AA887C51B3F963B006BC338 /* icon_alert.png in Resources */,
 				7AA26BA71B4D8C56006CDC61 /* icon_choose.png in Resources */,
@@ -643,7 +627,6 @@
 				7AA26BAB1B4D8E69006CDC61 /* icon_unchoose.png in Resources */,
 				7A2FCA591B5D57BC00033925 /* SwiftHTTP.podspec in Resources */,
 				7A2FCA531B5D57BC00033925 /* Info.plist in Resources */,
-				7A2FCA551B5D57BC00033925 /* LICENSE in Resources */,
 				7AA26BA81B4D8C56006CDC61 /* icon_choose.png in Resources */,
 				7A0A15E21B5E998F00A8C6F6 /* noPic.png in Resources */,
 				7A8E3E051B4B9A7200243FA5 /* addIcon.png in Resources */,
@@ -687,7 +670,6 @@
 				7ADD500C1B2D402000E44F99 /* Picturers.xcdatamodeld in Sources */,
 				7AEBE2CD1B54C76A00FC6E9D /* Manage_description.swift in Sources */,
 				7AA9ACB31B5133C0006B41FE /* PicView.swift in Sources */,
-				7A0A15DC1B5E2D0B00A8C6F6 /* README.md in Sources */,
 				7AA0E1B01B46779E0070538F /* CoreAction.swift in Sources */,
 				7A45766D1B5CA11500DDE09A /* PicAlbumMessageItem.swift in Sources */,
 				7AA6A8CB1B4777C200D9E604 /* MainInterface.swift in Sources */,

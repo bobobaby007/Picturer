@@ -236,8 +236,9 @@ class MainAction: AnyObject {
         var _dict:NSMutableDictionary = NSMutableDictionary()
         var _pic:NSDictionary =  NSDictionary(objects: ["file","1.png"], forKeys: ["type","url"])
         
+        
         _dict.setObject(_pic, forKey: "profileImg")
-        _dict.setObject(_pic, forKey: "userId")
+        _dict.setObject("123456", forKey: "userId")
         _dict.setObject("我就是我", forKey: "userName")
         _dict.setObject(12, forKey: "followedNumber")
         _dict.setObject(30, forKey: "followingNumber")
@@ -246,12 +247,46 @@ class MainAction: AnyObject {
         block(_dict)
     }
     
+    static func _getCommentsOfAlubm(__albumId:String?,block:(NSArray)->Void){
+        
+        
+        var _array:NSMutableArray = NSMutableArray()
+        
+        var _n:Int = __albumId!.toInt()!
+        if _n < 1{
+            _n = 1
+        }
+        for var i:Int = 0; i<_n;++i{
+            var _comment:String = "受到各国大使馆的是"
+            var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: ["某某<"+__albumId!+">","<来"+__albumId!+"来>","111111","123456",_comment], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment"])
+            
+            if i==0{
+                _commentDict.setValue("受到各国的是德国大使馆多少广东省各地说过多少多少多少给多", forKey: "comment")
+                _commentDict.setValue("", forKey: "to_userName")
+            }
+            
+            _array.addObject(_commentDict)
+            
+        }
+        
+        //var _p:HTTPResponse = response
+        // println(response.text)
+        block(_array)
+        
+        
+//        var request = HTTPTask()
+//        request.GET("http://www.baidu.com/", parameters: nil, completionHandler: { (response) -> Void in
+//            
+//        })
+        
+    }
     
     
     static func _getAlbumListAtUser(block:(NSArray)->Void){
         var request = HTTPTask()
         
         request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
+            
             block(self._albumList)
         })
         
