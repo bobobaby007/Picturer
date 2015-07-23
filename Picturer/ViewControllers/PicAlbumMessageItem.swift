@@ -14,6 +14,7 @@ protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
     func _moreComment(__indexId:Int)
     func _viewUser(__userId:String)
     func _moreLike(__indexId:Int)
+    func _buttonAction(__action:String,__dict:NSDictionary)
 }
 
 
@@ -22,7 +23,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _indexId:Int = 0
     var _indexString:String?
     
-    var _type:NSString = "album" // pic
+    var _type:String = "album" // pics
+    
     var _user:NSDictionary?
     var _setuped:Bool = false
     var _picV:PicView?
@@ -37,7 +39,12 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _toolsPanel:UIView?
     var _likeTextView:UITextView?
     var _toolsButtonPanel:UIView?
+    var _toolsButtonPanel_container:UIView?
+    var _toolsBtnToX:CGFloat?
+    var _toolsBtnToW:CGFloat?
     var _toolsOpenButton:UIButton?
+    
+    var _likeIcon:UIImageView?
     
     var _btn_like:UIButton?
     var _btn_comment:UIButton?
@@ -57,6 +64,12 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _attributeStr:NSMutableAttributedString?
     
 
+    var _tapC:UITapGestureRecognizer?
+    
+    
+    var _toolsBarIsOpened:Bool=false
+    
+    
     override func willMoveToSuperview(newSuperview: UIView?) {
         //setup()
     }
@@ -104,6 +117,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         
         _description = UITextView()
+        _description?.editable=false
+        
         
         
         
@@ -114,18 +129,87 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _likeTextView?.tintColor = UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)
         
         
-        _btn_like = UIButton(frame: CGRect(x: 10, y: 10, width: 0.6*28, height: 0.6*24))
-        _btn_like?.setImage(UIImage(named: "like"), forState: UIControlState.Normal)
-        _btn_like?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _likeIcon = UIImageView(frame: CGRect(x: 12, y: 15, width: 0.6*28, height: 0.6*24))
+        _likeIcon?.image = UIImage(named: "like")
         
-        _toolsOpenButton = UIButton(frame: CGRect(x: _defaultSize!.width-0.6*57-10, y: 5, width: 0.6*57, height: 0.6*31))
+        
+        
+        
+        
+        
+        
+        
+        _toolsOpenButton = UIButton(frame: CGRect(x: _defaultSize!.width-0.6*57-10, y: 10, width: 0.6*57, height: 0.6*31))
         _toolsOpenButton?.setImage(UIImage(named: "toolsBtn"), forState: UIControlState.Normal)
         _toolsOpenButton?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
+        
+        //----工具条
+        let _toolsGap:CGFloat = (_defaultSize!.width-80)/4
+        switch _type{
+            case "album":
+                _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 40))
+                _btn_like?.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                _btn_like?.titleLabel?.textAlignment = NSTextAlignment.Center
+                _btn_like?.setTitle("赞", forState: UIControlState.Normal)
+                _btn_like?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+                
+                
+                
+                _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 40))
+                _btn_comment?.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                _btn_comment?.titleLabel?.textAlignment = NSTextAlignment.Center
+                _btn_comment?.setTitle("评论", forState: UIControlState.Normal)
+                _btn_comment?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+                
+                _btn_share = UIButton(frame: CGRect(x: 2*_toolsGap, y: 0, width: _toolsGap, height: 40))
+                _btn_share?.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                _btn_share?.titleLabel?.textAlignment = NSTextAlignment.Center
+                _btn_share?.setTitle("分享", forState: UIControlState.Normal)
+                _btn_share?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+                
+                _btn_collect = UIButton(frame: CGRect(x: 3*_toolsGap, y: 0, width: _toolsGap, height: 40))
+                _btn_collect?.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                _btn_collect?.titleLabel?.textAlignment = NSTextAlignment.Center
+                _btn_collect?.setTitle("收藏", forState: UIControlState.Normal)
+                _btn_collect?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+                
+                
+                _toolsBtnToX = _defaultSize!.width-4*_toolsGap-45
+                _toolsBtnToW = 4*_toolsGap
+                
+                _toolsButtonPanel_container = UIView(frame: CGRect(x: _defaultSize!.width-45, y: 0, width:0, height: 40))
+                _toolsButtonPanel_container?.backgroundColor = UIColor.clearColor()
+                _toolsButtonPanel_container?.clipsToBounds=true
+                
+                
+                _toolsButtonPanel = UIView(frame: CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 40))
+                _toolsButtonPanel?.layer.masksToBounds=true
+                _toolsButtonPanel?.layer.cornerRadius = 5
+                _toolsButtonPanel?.clipsToBounds=true
+                
+                _toolsButtonPanel?.backgroundColor = UIColor.darkGrayColor()
+                _toolsButtonPanel?.addSubview(_btn_like!)
+                _toolsButtonPanel?.addSubview(_btn_comment!)
+                _toolsButtonPanel?.addSubview(_btn_share!)
+                _toolsButtonPanel?.addSubview(_btn_collect!)
+            
+            
+                _toolsButtonPanel_container?.addSubview(_toolsButtonPanel!)
+            
+            
+        default:
+            println("")
+        }
+        
+        _tapC = UITapGestureRecognizer(target: self, action: Selector("_tapHander:"))
+        
+        
         _toolsPanel = UIView(frame: CGRect(x: 0, y: 50+_picV!.frame.height, width: _defaultSize!.width, height: 36))
         _toolsPanel?.addSubview(_likeTextView!)
-        _toolsPanel?.addSubview(_btn_like!)
+        _toolsPanel?.addSubview(_likeIcon!)
         _toolsPanel?.addSubview(_toolsOpenButton!)
+        _toolsPanel?.addSubview(_toolsButtonPanel_container!)
         
         
         
@@ -166,18 +250,18 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         self.addSubview(_userName_label!)
         self.addSubview(_updateTime_label!)
         self.addSubview(_albumTitle_labelV!)
+        self.addSubview(_description!)
         self.addSubview(_toolsPanel!)
         self.addSubview(_commentsPanel!)
-        self.addSubview(_description!)
+        
         
         _albumTitle_labelV?.addSubview(_albumTitle_label!)
-        
-        
         
         
         _setuped=true
     }
     
+    //-------------------------调整布局-----------------
     
     func _refreshView(){
         var _imgH:CGFloat! = _picV?._imgView?.image?.size.height
@@ -200,14 +284,14 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             _desH = _description!.contentSize.height
         }
         
-        _description?.frame = CGRect(x: 10, y: 10+_picV!.frame.height, width: _defaultSize!.width, height: _desH)
+        _description?.frame = CGRect(x: 10, y: 50+_picV!.frame.height+10, width: _defaultSize!.width-20, height: _desH)
         
         
         
-        _likeTextView?.frame = CGRect(x: 10, y: 0, width: _defaultSize!.width-10-28, height: _likeTextView!.contentSize.height)
+        _likeTextView?.frame = CGRect(x: 10, y: 5, width: _defaultSize!.width-10-28, height: _likeTextView!.contentSize.height)
         
         
-        _toolsPanel!.frame = CGRect(x: 0, y: 50+_picV!.frame.height+_desH, width: _defaultSize!.width, height: _likeTextView!.contentSize.height)
+        _toolsPanel!.frame = CGRect(x: 0, y: 50+_picV!.frame.height+_desH+5, width: _defaultSize!.width, height: _likeTextView!.contentSize.height+15)
         
          _commentText?.frame = CGRect(x: 5, y: 5, width: _defaultSize!.width-30, height: _commentText!.contentSize.height)
         
@@ -344,9 +428,33 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     
     
-    //---------工具条------------------------
+    //---------------------------------工具条------------------------
     
-    //-------点赞
+    func _openPanel(__set:Bool){
+        _toolsBarIsOpened=__set
+         UIView.beginAnimations("toolsOpen", context: nil)
+            if __set{
+                _toolsButtonPanel_container?.frame = CGRect(x: _toolsBtnToX!, y: 0, width:_toolsBtnToW!, height: 40)
+                
+            }else{
+                _toolsButtonPanel_container?.frame = CGRect(x: _defaultSize!.width-45, y: 0, width:0, height: 40)
+            }
+            UIView.commitAnimations()
+    }
+    
+    func _tapHander(__tap:UITapGestureRecognizer){
+        
+        _openPanel(false)
+        self.superview?.removeGestureRecognizer(_tapC!)
+        //self.window?.removeGestureRecognizer(_tapC!)
+        //self.removeGestureRecognizer(_tapC!)
+    }
+    
+    override func removeFromSuperview() {
+        print("out")
+        self.window?.removeGestureRecognizer(_tapC!)
+    }
+    //-------点赞人
     func _setLikes(__likes:NSArray,__allNum:Int){
         var _attrStr:NSMutableAttributedString = NSMutableAttributedString(string: "")
         if __allNum > 10{
@@ -388,15 +496,29 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         //_likeTextView?.contentInset = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
     }
     
-    
-    
-    //-----按钮侦听
+    //-----－－－－－－－－－－－按钮侦听
     
     
     func buttonAction(__button:UIButton){
         switch __button{
         case _btn_like!:
-            println("addoneLike")
+            _delegate?._buttonAction("like", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
+        case _btn_comment!:
+            _delegate?._buttonAction("comment", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
+        case _btn_share!:
+            _delegate?._buttonAction("share", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
+        case _btn_collect!:
+            _delegate?._buttonAction("collect", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
+        case _toolsOpenButton!:
+            if _toolsBarIsOpened{
+                
+                _openPanel(false)
+            }else{
+                
+                _openPanel(true)
+                self.superview?.addGestureRecognizer(_tapC!)
+            }
+            
         default:
             println("")
         }
@@ -407,7 +529,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     func _setDescription(__str:String){
         _description?.text=__str
-        
     }
     func _setAlbumTitle(__str:String){
      _albumTitle_label?.text=__str

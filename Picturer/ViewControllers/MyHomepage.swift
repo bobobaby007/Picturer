@@ -57,7 +57,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _scrollTopH:CGFloat = 30 //达到这个高度时向上移动
     
-    
+    var _inputer:Inputer?
     func setup(){
         if _setuped {
             return
@@ -233,6 +233,19 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _profilePanel?.addSubview(_label_album!)
         _profilePanel?.addSubview(_label_followed!)
         _profilePanel?.addSubview(_label_following!)
+        
+        
+        
+        
+        //-----评论输入框
+        _inputer = Inputer(frame: self.view.frame)
+        _inputer?.setup()
+       // _inputer?.hidden=true
+        
+       
+       
+        
+        
 
         _topBar?.addSubview(_btn_cancel!)
 //
@@ -337,6 +350,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         cell!.setup(CGSize(width: self.view.frame.width, height: _defaultH))
+        cell!._openPanel(false)
+        
         cell!.separatorInset = UIEdgeInsetsZero
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
@@ -354,7 +369,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         cell!._setUserImge(NSDictionary(objects: [_dataArray.objectAtIndex(indexPath.row),"fromWeb"], forKeys: ["url","type"]))
         cell!._setAlbumTitle("撒旦过呢个作品")
         
-        
+        cell!._setDescription("阿湿婆大神那个大使馆的是三等功的身份时代的时光大使馆收到广东省根深蒂固")
         
         cell!._setUpdateTime("下午 2:00 更新")
         cell!._setUserName("小小白")
@@ -390,6 +405,29 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     }
     func _viewUser(__userId: String) {
         println(__userId)
+    }
+    func _buttonAction(__action: String, __dict: NSDictionary) {
+        switch __action{
+            case  "like":
+                
+            break
+            case "comment":
+                var _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
+                
+                //println(_cell.frame.origin.y)
+               // UIView.beginAnimations("offset", context: nil)
+                _tableView?.setContentOffset(CGPoint(x: 0, y: _cell.frame.origin.y+_cell.frame.height-(self.view.frame.height-258)), animated: true)
+                
+                //UIView.commitAnimations()
+                
+                self.view.addSubview(_inputer!)
+                _inputer?._open()
+            break
+            
+        default:
+            break
+        }
+        
     }
     //-------------
     

@@ -17,6 +17,7 @@ class MainAction: AnyObject {
     static let _ALBUM_LIST = "ALBUM_LIST"
     static var _aList:NSMutableArray?
     static var _tempAlbum:NSMutableDictionary?
+    
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{
@@ -44,7 +45,11 @@ class MainAction: AnyObject {
             return "000000"
         }
     }
-    
+    static var _currentUser:NSDictionary{
+        get{
+            return NSDictionary(objects: ["000000","我是我自己"], forKeys: ["userId","userName"])
+        }
+    }
     
     static func _getImagesOfAlbumId(__id:String)->NSArray?{
         var _images:NSArray=[]
