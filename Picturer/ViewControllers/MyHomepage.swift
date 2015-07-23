@@ -415,8 +415,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 var _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
                 
                 //println(_cell.frame.origin.y)
-               // UIView.beginAnimations("offset", context: nil)
-                _tableView?.setContentOffset(CGPoint(x: 0, y: _cell.frame.origin.y+_cell.frame.height-(self.view.frame.height-258)), animated: true)
+                //UIView.beginAnimations("offset", context: nil)
+                var _offY:CGFloat=_cell.frame.origin.y+_cell.frame.height-(self.view.frame.height-258)
+                if _offY<0.8*(62+_profileH+10){
+                    _offY = 0.8*(62+_profileH+10)
+                }
+                
+                _tableView?.setContentOffset(CGPoint(x: 0, y: _offY), animated: true)
                 
                 //UIView.commitAnimations()
                 
