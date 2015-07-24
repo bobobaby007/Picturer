@@ -64,10 +64,30 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.item{
-        case 0:
+        case 0://主页
             let _contr:MyHomepage=MyHomepage()
-            self.navigationController?.pushViewController(_contr, animated: true)
+            let _dict:NSDictionary = MainAction._getUserProfileAtId("000001")
+            _contr.setup(self.view.frame)
+            _contr._profileDict = _dict
+            _contr._setSign(_dict.objectForKey("sign") as! String)
+            _contr._setIconImg(_dict.objectForKey("profileImg") as! NSDictionary)
+            //_contr._refreshView()
+           // _contr._getDatas()
             
+            self.navigationController?.pushViewController(_contr, animated: true)
+        case 1://朋友
+            return
+        case 2://妙人
+            return
+        case 3://发现
+            let _contr:Discover_home=Discover_home()
+            self.navigationController?.pushViewController(_contr, animated: true)
+        case 4://收藏
+            return
+        case 5://通讯录
+            return
+        case 6://设置
+            return
         default:
             println("22")
         }

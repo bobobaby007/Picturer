@@ -40,6 +40,9 @@ class MainAction: AnyObject {
              //println(_ud.dictionaryRepresentation())
         }
     }
+    
+    //--------登陆用户信息
+    
     static var _userId:String!{
         get{
             return "000000"
@@ -234,10 +237,10 @@ class MainAction: AnyObject {
     
     
     
-    //=========================
+    //=========================社交部分
     
-    //---------社交部分
-    static func _getUserProfileAtId(userId:String,block:(NSDictionary)->Void){
+    //---------提取用户信息
+    static func _getUserProfileAtId(userId:String) -> NSDictionary{
         var _dict:NSMutableDictionary = NSMutableDictionary()
         var _pic:NSDictionary =  NSDictionary(objects: ["file","1.png"], forKeys: ["type","url"])
         
@@ -249,9 +252,9 @@ class MainAction: AnyObject {
         _dict.setObject(30, forKey: "followingNumber")
         _dict.setObject("速度的山高水低是德国大使馆收到根深蒂固三等功时代根深蒂固的是山高水低公司的收到根深蒂固山东省共商国是的根深蒂固", forKey: "sign")
         
-        block(_dict)
+        return _dict
     }
-    
+    //-----提取某个相册评论－－－－－－//－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－过渡方法
     static func _getCommentsOfAlubm(__albumId:String?,block:(NSArray)->Void){
         var _array:NSMutableArray = NSMutableArray()
         var _n:Int = __albumId!.toInt()!
@@ -294,6 +297,14 @@ class MainAction: AnyObject {
         // println(response.text)
         block(_array)
     }
+    //----提交赞
+    static func _postLike(__dict:NSDictionary){
+        
+    }
+    
+    
+    
+    
     
     
     static func _getAlbumListAtUser(block:(NSArray)->Void){
@@ -319,7 +330,7 @@ class MainAction: AnyObject {
 
 
 
-////////////////////////////
+////////////////////////////－－－－－－－字典变量保存
 /*
 
 UserProfileDict:

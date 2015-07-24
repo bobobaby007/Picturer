@@ -45,14 +45,14 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                 }
                 //self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
                // self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
-                
+                __block(NSDictionary())
                 }, failureBlock: { (error:NSError!) -> Void in
                     
             })
             
         case "file":
             self._setImage(__pic.objectForKey("url") as! String)
-            
+            __block(NSDictionary())
         case "fromWeb":
             ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
                // _setImage(image)

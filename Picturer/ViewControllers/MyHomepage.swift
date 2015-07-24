@@ -9,10 +9,11 @@
 import Foundation
 import UIKit
 
-class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
-    
+class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,Inputer_delegate{
+    var _myFrame:CGRect?
     var _userId:String = "000001"
     
+    var _signH:CGFloat?
     
     var _frameW:CGFloat?
     var _gap:CGFloat?
@@ -38,6 +39,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _albumNum_label:UILabel?
     var _followed_label:UILabel?//被关注
     var _following_label:UILabel?//关注
+    var _sign_text:UITextView?
     
     var _label_followed:UILabel?
      var _label_following:UILabel?
@@ -58,12 +60,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _scrollTopH:CGFloat = 30 //达到这个高度时向上移动
     
     var _inputer:Inputer?
-    func setup(){
+    
+    func setup(__frame:CGRect){
         if _setuped {
             return
         }
-        
-        _frameW = self.view.frame.width
+        _myFrame = __frame
+        _frameW = _myFrame!.width
         _gap = 0.04*_frameW!
         _gapY = 0.06*_frameW!
         _imgW = 0.22*_frameW!
@@ -71,7 +74,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: 62))
         
         _topBar?.backgroundColor=UIColor.blackColor()
         
@@ -80,7 +83,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _profilePanel = UIView(frame: CGRect(x: 0, y: 62, width: self.view.frame.width, height: _profileH))
+        
+         //----用户信息面板
+        
+        _profilePanel = UIView(frame: CGRect(x: 0, y: 62, width: _myFrame!.width, height: _profileH))
         _profilePanel?.backgroundColor = UIColor.whiteColor()
         
         
@@ -178,6 +184,30 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         
+        _sign_text = UITextView(frame: CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: 12))
+        _sign_text?.editable=false
+        _sign_text?.alpha = 0
+        
+        
+        
+        _profilePanel?.addSubview(_profile_icon_img!)
+        _profilePanel?.addSubview(_btn_edite!)
+        _profilePanel?.addSubview(_btn_share!)
+        _profilePanel?.addSubview(_btn_follow!)
+        _profilePanel?.addSubview(_btn_message!)
+        
+        _profilePanel?.addSubview(_followed_label!)
+        _profilePanel?.addSubview(_following_label!)
+        _profilePanel?.addSubview(_albumNum_label!)
+        _profilePanel?.addSubview(_label_album!)
+        _profilePanel?.addSubview(_label_followed!)
+        _profilePanel?.addSubview(_label_following!)
+        
+        _profilePanel?.addSubview(_sign_text!)
+        //----
+        
+        
+        //-----初始化数据
         
         _heighArray=NSMutableArray()
         
@@ -203,14 +233,14 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _tableView?.backgroundColor=UIColor.whiteColor()
         _tableView?.delegate=self
         _tableView?.dataSource=self
-        _tableView?.frame = CGRect(x: 0, y: 62+_profileH+10, width: self.view.frame.width, height: self.view.frame.height-62-_profileH-10)
+        _tableView?.frame = CGRect(x: 0, y: 62+_profileH+10, width: _myFrame!.width, height: _myFrame!.height-62-_profileH-10)
         _tableView?.registerClass(PicAlbumMessageItem.self, forCellReuseIdentifier: "PicAlbumMessageItem")
         _tableView?.backgroundColor = UIColor.clearColor()
         //_tableView?.separatorColor=UIColor.clearColor()
         //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -400, bottom: 0, right: 0)
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
-        //_scrollView = UIScrollView(frame: CGRect(x: 0, y: 62, width: self.view.frame.width, height: self.view.frame.height-62))
+        //_scrollView = UIScrollView(frame: CGRect(x: 0, y: 62, width: _myFrame!.width, height: _myFrame!.height-62))
         
         self.view.backgroundColor = UIColor(white: 0.5, alpha: 1)
         self.view!.addSubview(_tableView!)
@@ -220,25 +250,15 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
 
         
         
-        self.view.addSubview(_profilePanel!)
-        _profilePanel?.addSubview(_profile_icon_img!)
-        _profilePanel?.addSubview(_btn_edite!)
-        _profilePanel?.addSubview(_btn_share!)
-        _profilePanel?.addSubview(_btn_follow!)
-        _profilePanel?.addSubview(_btn_message!)
         
-        _profilePanel?.addSubview(_followed_label!)
-        _profilePanel?.addSubview(_following_label!)
-        _profilePanel?.addSubview(_albumNum_label!)
-        _profilePanel?.addSubview(_label_album!)
-        _profilePanel?.addSubview(_label_followed!)
-        _profilePanel?.addSubview(_label_following!)
+        self.view.addSubview(_profilePanel!)
+        
         
         
         
         
         //-----评论输入框
-        _inputer = Inputer(frame: self.view.frame)
+        _inputer = Inputer(frame: _myFrame!)
         _inputer?.setup()
        // _inputer?.hidden=true
         
@@ -249,28 +269,39 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
 
         _topBar?.addSubview(_btn_cancel!)
 //
-        _getDatas()
+        
 //
 //        
         _setuped=true
     }
     
-    func _getDatas(){
-        MainAction._getUserProfileAtId(_userId, block: {(__dict) -> Void in
-            self._getProfileHander(__dict)}
-        )
-    }
-
     
-    func _getProfileHander(__dict:NSDictionary){
-        _profileDict=__dict
-        _refreshView()
+    
+    
+    func _getDatas(){
+      // _profileDict = MainAction._getUserProfileAtId(_userId)
+        
+        
+        
+        
     }
+    func _setSign(__str:String){
+        _sign_text?.text=__str
+        //_sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: _sign_text!.contentSize.height)
+    }
+    func _setIconImg(__pic:NSDictionary){
+        _profile_icon_img?._setPic(__pic,__block: { (__dict) -> Void in
+            
+           // self._refreshView()
+        })
+    }
+    
     func _getListHander(__list:NSArray){
         
     }
-    
+    //----------------刷新布局
     func _refreshView(){
+        
         if _userId == MainAction._userId{
             _btn_share?.hidden=false
             _btn_edite?.hidden=false
@@ -283,18 +314,33 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             _btn_message?.hidden=false
         }
         
-        _profile_icon_img?._setPic(_profileDict?.objectForKey("profileImg") as! NSDictionary,__block: { (__dict) -> Void in
+        
+       // _sign_text?.text=
+        
+        if _sign_text!.text == ""{
             
-        })
+        }else{
+            _signH = _sign_text!.contentSize.height
+        }
         
-       _profilePanel?.frame=CGRect(x: 0, y: 62, width: self.view.frame.width, height: _profileH)
+        UIView.beginAnimations("go", context: nil)
         
+        _sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: _signH!)
+        _sign_text?.alpha=1
         
+        _profileH = _sign_text!.frame.origin.y + _sign_text!.frame.height + _gap!
+       _profilePanel?.frame=CGRect(x: 0, y: 62, width: _myFrame!.width, height: _profileH)
+
+        _tableView?.frame = CGRect(x: 0, y: 62+_profileH+10, width: _myFrame!.width, height: _myFrame!.height-62-_profileH-10)
+
+        UIView.commitAnimations()
     }
     
     //----table 代理
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+       
+        
        // println(scrollView.contentOffset.y)
         var _offsetY:CGFloat = 0
         var _frameOff:CGFloat = 10
@@ -312,15 +358,18 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         }
         
         if scrollView.contentOffset.y>0{
-            _tableView?.frame = CGRect(x: 0, y: 62+_profileH-_offsetY+_frameOff, width: self.view.frame.width, height: self.view.frame.height-62-_profileH+_offsetY-_frameOff)
+            _tableView?.frame = CGRect(x: 0, y: 62+_profileH-_offsetY+_frameOff, width: _myFrame!.width, height: _myFrame!.height-62-_profileH+_offsetY-_frameOff)
         }else{
             
         }
-        _profilePanel?.frame=CGRect(x: 0, y: 62-_offsetY, width: self.view.frame.width, height: _profileH)
+        _profilePanel?.frame=CGRect(x: 0, y: 62-_offsetY, width: _myFrame!.width, height: _profileH)
         
-        _topBar?.frame=CGRect(x: 0, y:0-_offsetY, width: self.view.frame.width, height: 62)
+        _topBar?.frame=CGRect(x: 0, y:0-_offsetY, width: _myFrame!.width, height: 62)
         
     }
+    
+    
+    
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
        // println(scrollView.contentOffset)
         
@@ -409,7 +458,19 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _buttonAction(__action: String, __dict: NSDictionary) {
         switch __action{
             case  "like":
+                if _hasUserInLikesAtIndex(__dict.objectForKey("indexId") as! Int, __userId: MainAction._currentUser.objectForKey("userId") as! String){
+                    return
+                }
+                var _arr:NSMutableArray = NSMutableArray(array: self._likeArray!)
+                var _dict:NSMutableArray = NSMutableArray(array:_arr.objectAtIndex(__dict.objectForKey("indexId") as! Int) as! NSArray)
+                let _user:NSDictionary = MainAction._currentUser as NSDictionary
+                _dict.addObject(NSDictionary(objects: [_user.objectForKey("userName") as! String,_user.objectForKey("userId") as! String], forKeys: ["userName","userId"]))
+                _arr[__dict.objectForKey("indexId") as! Int] = _dict
+                self._likeArray = _arr
+                MainAction._postLike(NSDictionary())
                 
+                _tableView?.reloadData() //--------使用在线接口时全部请求信息后侦听里面再重新加载
+            
             break
             case "comment":
                 var _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
@@ -424,15 +485,43 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 _tableView?.setContentOffset(CGPoint(x: 0, y: _offY), animated: true)
                 
                 //UIView.commitAnimations()
+                _inputer =  Inputer(frame: self.view.frame)
+                _inputer?.setup()
                 
                 self.view.addSubview(_inputer!)
+                _inputer?._delegate = self
                 _inputer?._open()
             break
-            
         default:
             break
         }
         
+    }
+    
+    func _hasUserInLikesAtIndex(__indexId:Int,__userId:String)->Bool{
+        let _arr:NSArray = self._likeArray?.objectAtIndex(__indexId) as! NSArray
+        let _n:Int = _arr.count
+        
+        for var i:Int = 0 ; i<_n ;++i{
+            if (_arr[i] as! NSDictionary).objectForKey("userId") as! String == __userId {
+                return true
+            }
+        }
+        
+        
+        return false
+    }
+    
+    
+    
+    //-----输入框代理
+    
+    func _inputer_send(__dict:NSDictionary) {
+        println(__dict.objectForKey("text"))
+        _inputer?._close()
+    }
+    func _inputer_changed(__dict: NSDictionary) {
+        println(__dict.objectForKey("text"))
     }
     //-------------
     
@@ -446,11 +535,20 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     }
     
     override func viewDidLoad() {
-       setup()
         self.automaticallyAdjustsScrollViewInsets=false
        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
     }
-    
+    override func didMoveToParentViewController(parent: UIViewController?) {
+        //setup(<#__frame: CGRect#>)
+        
+        
+        //_setSign(_profileDict!.objectForKey("sign") as! String)
+        //_setIconImg(_profileDict!.objectForKey("profileImg") as! NSDictionary)
+        
+        
+        _refreshView()
+        
+    }
     func clickAction(sender:UIButton){
         
         self.navigationController?.popViewControllerAnimated(true)

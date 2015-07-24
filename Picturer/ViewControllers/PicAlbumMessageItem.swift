@@ -524,7 +524,11 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         }
     }
     
+    
+    
+    
     //------------------
+    
     
     
     func _setDescription(__str:String){

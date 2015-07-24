@@ -51,6 +51,10 @@
 		7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A49DC961B3544A7004FAF14 /* Manage_imagePicker.swift */; };
 		7A49DC9A1B354DB4004FAF14 /* pic_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A49DC981B354DB4004FAF14 /* pic_selected.png */; };
 		7A49DC9B1B354DB4004FAF14 /* pic_unSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A49DC991B354DB4004FAF14 /* pic_unSelected.png */; };
+		7A6F8A871B62AC29007F949A /* Discover_home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6F8A861B62AC29007F949A /* Discover_home.swift */; };
+		7A6F8A8C1B62AF14007F949A /* Discover_reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6F8A8B1B62AF14007F949A /* Discover_reference.swift */; };
+		7A6F8A8E1B62AFAF007F949A /* Discover_search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6F8A8D1B62AFAF007F949A /* Discover_search.swift */; };
+		7A6F8A901B62C1C4007F949A /* CustomPresentationAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6F8A8F1B62C1C4007F949A /* CustomPresentationAnimationController.swift */; };
 		7A8E3E041B4B9A7200243FA5 /* addIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A8E3E031B4B9A7200243FA5 /* addIcon.png */; };
 		7A8E3E051B4B9A7200243FA5 /* addIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A8E3E031B4B9A7200243FA5 /* addIcon.png */; };
 		7A9C86C01B32D52D0051D067 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A9C86B91B32D52D0051D067 /* 1.png */; };
@@ -192,6 +196,10 @@
 		7A49DC961B3544A7004FAF14 /* Manage_imagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_imagePicker.swift; sourceTree = "<group>"; };
 		7A49DC981B354DB4004FAF14 /* pic_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic_selected.png; sourceTree = "<group>"; };
 		7A49DC991B354DB4004FAF14 /* pic_unSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic_unSelected.png; sourceTree = "<group>"; };
+		7A6F8A861B62AC29007F949A /* Discover_home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Discover_home.swift; sourceTree = "<group>"; };
+		7A6F8A8B1B62AF14007F949A /* Discover_reference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Discover_reference.swift; sourceTree = "<group>"; };
+		7A6F8A8D1B62AFAF007F949A /* Discover_search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Discover_search.swift; sourceTree = "<group>"; };
+		7A6F8A8F1B62C1C4007F949A /* CustomPresentationAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPresentationAnimationController.swift; sourceTree = "<group>"; };
 		7A8E3E031B4B9A7200243FA5 /* addIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addIcon.png; sourceTree = "<group>"; };
 		7A9C86B91B32D52D0051D067 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		7A9C86BA1B32D52D0051D067 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
@@ -312,6 +320,9 @@
 				7A45766B1B5CA09D00DDE09A /* classes */,
 				7AC783821B405B6A00A75214 /* MyHomepage.swift */,
 				7AEC21271B3D9CE800D19D22 /* Social_home.swift */,
+				7A6F8A861B62AC29007F949A /* Discover_home.swift */,
+				7A6F8A8B1B62AF14007F949A /* Discover_reference.swift */,
+				7A6F8A8D1B62AFAF007F949A /* Discover_search.swift */,
 			);
 			name = Social;
 			sourceTree = "<group>";
@@ -321,6 +332,7 @@
 			children = (
 				7A45766C1B5CA11500DDE09A /* PicAlbumMessageItem.swift */,
 				7AAA54E51B60B41100B304EE /* Inputer.swift */,
+				7A6F8A8F1B62C1C4007F949A /* CustomPresentationAnimationController.swift */,
 			);
 			name = classes;
 			sourceTree = "<group>";
@@ -666,13 +678,16 @@
 				7A1FF2441B4AA1E600CEFDAF /* MainAction.swift in Sources */,
 				7AA180A71B341006005B42C0 /* PicsShowCell.swift in Sources */,
 				7AFB23531B317849001C75C9 /* tableTest.swift in Sources */,
+				7A6F8A901B62C1C4007F949A /* CustomPresentationAnimationController.swift in Sources */,
 				7ADD500E1B2D402000E44F99 /* ViewController.swift in Sources */,
 				7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */,
 				7AC55DB01B3E9C7D00FDC851 /* LayoutForSocailHome.swift in Sources */,
 				7AC783831B405B6A00A75214 /* MyHomepage.swift in Sources */,
 				7A0A15DA1B5E2D0B00A8C6F6 /* ImageLoader.swift in Sources */,
+				7A6F8A871B62AC29007F949A /* Discover_home.swift in Sources */,
 				7A9C86C81B32DD490051D067 /* AlbumListCell.swift in Sources */,
 				7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */,
+				7A6F8A8C1B62AF14007F949A /* Discover_reference.swift in Sources */,
 				7A2FCA501B5D57BC00033925 /* HTTPUpload.swift in Sources */,
 				7ACFB3851B591A21007F9AB8 /* Manage_PicsToAlbum.swift in Sources */,
 				7AEC21281B3D9CE800D19D22 /* Social_home.swift in Sources */,
@@ -690,6 +705,7 @@
 				7A45766D1B5CA11500DDE09A /* PicAlbumMessageItem.swift in Sources */,
 				7AA6A8CB1B4777C200D9E604 /* MainInterface.swift in Sources */,
 				7A2FCA461B5D57BC00033925 /* HTTPRequestSerializer.swift in Sources */,
+				7A6F8A8E1B62AFAF007F949A /* Discover_search.swift in Sources */,
 				7A2FCA4C1B5D57BC00033925 /* HTTPStatusCode.swift in Sources */,
 				7AA26BB31B4D9A57006CDC61 /* Setting_range.swift in Sources */,
 				7AA26BA31B4D6DC0006CDC61 /* Setting_tags.swift in Sources */,
