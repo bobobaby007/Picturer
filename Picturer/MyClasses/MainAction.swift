@@ -270,6 +270,9 @@ class MainAction: AnyObject {
                 _commentDict.setValue("", forKey: "to_userName")
             }
             
+            let _pic:NSDictionary = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
+            _commentDict.setValue(_pic, forKey: "userImg")
+            
             _array.addObject(_commentDict)
             
         }

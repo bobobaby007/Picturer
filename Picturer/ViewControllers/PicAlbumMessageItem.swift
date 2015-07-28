@@ -85,7 +85,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         }
         _defaultSize=__size
         //println(_defaultSize!.width)
-        _picV = PicView(frame: CGRect(x: 0, y: 50, width: _defaultSize!.width, height: 340))
+        _picV = PicView(frame: CGRect(x: 0, y: 50, width: _defaultSize!.width, height: _defaultSize!.width))
         _picV?._setImage("noPic.png")
         _picV?.scrollEnabled=false
         _picV?.maximumZoomScale = 1
@@ -271,10 +271,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         if _imgH != nil{
          _h = _imgH*(self.frame.width/_imgW)
         }
-        _picV?.frame = CGRect(x: 0, y: 50, width: self.frame.width, height: _h)
-        _picV?._refreshView()
+        //_picV?.frame = CGRect(x: 0, y: 50, width: self.frame.width, height: _h)
+        //_picV?._refreshView()
         
-        _albumTitle_labelV?.frame = CGRect(x: 0, y: 50+_h-36, width: self.frame.width, height: 36)
+        _albumTitle_labelV?.frame = CGRect(x: 0, y: 50+_picV!.frame.height-36, width: self.frame.width, height: 36)
         
         
         var _desH:CGFloat = 0
@@ -381,7 +381,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         astr.appendAttributedString(attrString)
         return astr
     }
-    
     func linkString(string:String, withURLString:String) -> NSAttributedString {
         var attrString = NSMutableAttributedString(string: string )
         // the entire string

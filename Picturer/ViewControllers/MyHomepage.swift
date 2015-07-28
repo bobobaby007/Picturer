@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,Inputer_delegate{
+class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
     var _myFrame:CGRect?
     var _userId:String = "000001"
     
@@ -60,6 +60,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _scrollTopH:CGFloat = 30 //达到这个高度时向上移动
     
     var _inputer:Inputer?
+    
+    var _viewIned:Bool? = false
     
     func setup(__frame:CGRect){
         if _setuped {
@@ -242,19 +244,19 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _tableView?.tableHeaderView = UIView()
         //_scrollView = UIScrollView(frame: CGRect(x: 0, y: 62, width: _myFrame!.width, height: _myFrame!.height-62))
         
-        self.view.backgroundColor = UIColor(white: 0.5, alpha: 1)
+        self.view.backgroundColor = UIColor(white: 0.9, alpha: 1)
         self.view!.addSubview(_tableView!)
         //self.view.addSubview(_scrollView!)
 
-        self.view.addSubview(_topBar!)
-
+       
         
         
         
         self.view.addSubview(_profilePanel!)
         
         
-        
+        self.view.addSubview(_topBar!)
+
         
         
         //-----评论输入框
@@ -364,7 +366,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         }
         _profilePanel?.frame=CGRect(x: 0, y: 62-_offsetY, width: _myFrame!.width, height: _profileH)
         
-        _topBar?.frame=CGRect(x: 0, y:0-_offsetY, width: _myFrame!.width, height: 62)
+        //_topBar?.frame=CGRect(x: 0, y:0-_offsetY, width: _myFrame!.width, height: 62)
         
     }
     
@@ -474,9 +476,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             break
             case "comment":
                 var _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
-                
                 //println(_cell.frame.origin.y)
                 //UIView.beginAnimations("offset", context: nil)
+                /*
                 var _offY:CGFloat=_cell.frame.origin.y+_cell.frame.height-(self.view.frame.height-258)
                 if _offY<0.8*(62+_profileH+10){
                     _offY = 0.8*(62+_profileH+10)
@@ -484,13 +486,22 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 
                 _tableView?.setContentOffset(CGPoint(x: 0, y: _offY), animated: true)
                 
-                //UIView.commitAnimations()
+                UIView.commitAnimations()
                 _inputer =  Inputer(frame: self.view.frame)
                 _inputer?.setup()
                 
                 self.view.addSubview(_inputer!)
                 _inputer?._delegate = self
                 _inputer?._open()
+                */
+                
+              
+                var _controller:CommentList = CommentList()
+                println(__dict)
+                _controller._dataArray = _commentsArray!.objectAtIndex(_cell._indexId) as? NSArray
+                
+                self.navigationController?.pushViewController(_controller, animated: true)
+                
             break
         default:
             break
@@ -537,6 +548,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        
     }
     override func didMoveToParentViewController(parent: UIViewController?) {
         //setup(<#__frame: CGRect#>)
@@ -544,9 +556,14 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         //_setSign(_profileDict!.objectForKey("sign") as! String)
         //_setIconImg(_profileDict!.objectForKey("profileImg") as! NSDictionary)
-        
-        
-        _refreshView()
+    }
+    override func viewDidAppear(animated: Bool) {
+        if _viewIned!{
+            
+        }else{
+            _refreshView()
+            _viewIned=true
+        }
         
     }
     func clickAction(sender:UIButton){
