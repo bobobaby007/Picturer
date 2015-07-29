@@ -12,9 +12,10 @@ import UIKit
 class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
     var _myFrame:CGRect?
     var _userId:String = "000001"
+    var _userName:String?
     
     var _signH:CGFloat?
-    
+    var _title_label:UILabel?
     var _frameW:CGFloat?
     var _gap:CGFloat?
     var _gapY:CGFloat?
@@ -77,13 +78,18 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: 62))
-        
         _topBar?.backgroundColor=UIColor.blackColor()
         
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 30, height: 62))
         _btn_cancel?.setTitle("<", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
+        _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
+        _title_label?.textColor=UIColor.whiteColor()
+        _title_label?.textAlignment=NSTextAlignment.Center
+        
+        
+        _topBar?.addSubview(_title_label!)
         
         
          //----用户信息面板
@@ -169,20 +175,23 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
        
         _albumNum_label?.textColor = UIColor.blackColor()
         _albumNum_label?.textAlignment = NSTextAlignment.Center
-        _albumNum_label?.text = "0"
+        
+        
         
         
         
         _followed_label = UILabel(frame: CGRect(x: _albumNum_label!.frame.origin.x+_albumNum_label!.frame.width,y: _albumNum_label!.frame.origin.y,width: _albumNum_label!.frame.width,height: _albumNum_label!.frame.height))
         _followed_label?.textColor = UIColor.blackColor()
         _followed_label?.textAlignment = NSTextAlignment.Center
-        _followed_label?.text="0"
+        
+        
         
         
         _following_label = UILabel(frame: CGRect(x: _btn_share!.frame.origin.x,y: _albumNum_label!.frame.origin.y,width: _btn_share!.frame.width,height: _albumNum_label!.frame.height))
         _following_label?.textColor = UIColor.blackColor()
         _following_label?.textAlignment = NSTextAlignment.Center
-        _following_label?.text="0"
+        
+        
         
         
         
@@ -227,7 +236,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             
         }
         
-        
+        //
         
         
         _tableView=UITableView()
@@ -283,9 +292,16 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _getDatas(){
       // _profileDict = MainAction._getUserProfileAtId(_userId)
         
-        
-        
-        
+    }
+    //----更新数据
+    
+    func _refreshDatas(){
+        _title_label?.text=_profileDict?.objectForKey("userName") as? String
+        _albumNum_label?.text = String(_profileDict?.objectForKey("albumNumber") as! Int)
+        _followed_label?.text=String(_profileDict?.objectForKey("followNumber") as! Int)
+        _following_label?.text=String(_profileDict?.objectForKey("followingNumber") as! Int)
+        _setSign(_profileDict?.objectForKey("sign") as! String)
+        _setIconImg(_profileDict?.objectForKey("profileImg") as! NSDictionary)
     }
     func _setSign(__str:String){
         _sign_text?.text=__str
@@ -412,16 +428,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
         cell!._setLikes(_likeA,__allNum: _likeA.count)
-        
-        
+        cell!._userId = _userId
         cell!._indexId = indexPath.row
         cell!._delegate=self
         cell!._setPic(NSDictionary(objects: [_dataArray.objectAtIndex(indexPath.row),"fromWeb"], forKeys: ["url","type"]))
         cell!._setUserImge(NSDictionary(objects: [_dataArray.objectAtIndex(indexPath.row),"fromWeb"], forKeys: ["url","type"]))
         cell!._setAlbumTitle("撒旦过呢个作品")
-        
         cell!._setDescription("阿湿婆大神那个大使馆的是三等功的身份时代的时光大使馆收到广东省根深蒂固")
-        
         cell!._setUpdateTime("下午 2:00 更新")
         cell!._setUserName("小小白")
         
@@ -431,7 +444,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     }
     
     
-    //------相册代理
+    //------相册单元代理
     
     func _resized(__indexId: Int, __height: CGFloat) {
         //println("changeH")
@@ -444,18 +457,22 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         if _lastH != __height{
             _tableView?.reloadData()
         }
-        
        // println(_heighArray)
-        
     }
     func _moreComment(__indexId: Int) {
-        println(__indexId)
+        var _controller:CommentList = CommentList()
+        //println(__dict)
+        _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(__indexId) as? NSArray)!)
+        self.navigationController?.pushViewController(_controller, animated: true)
     }
     func _moreLike(__indexId: Int) {
         println(__indexId)
     }
     func _viewUser(__userId: String) {
-        println(__userId)
+        //println(__userId)
+        let _contr:MyHomepage=MyHomepage()
+        _contr._userId = __userId
+        self.navigationController?.pushViewController(_contr, animated: true)        
     }
     func _buttonAction(__action: String, __dict: NSDictionary) {
         switch __action{
@@ -478,7 +495,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 var _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
                 //println(_cell.frame.origin.y)
                 //UIView.beginAnimations("offset", context: nil)
-                /*
+                /*-----在当前页打开输入框
                 var _offY:CGFloat=_cell.frame.origin.y+_cell.frame.height-(self.view.frame.height-258)
                 if _offY<0.8*(62+_profileH+10){
                     _offY = 0.8*(62+_profileH+10)
@@ -494,11 +511,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 _inputer?._delegate = self
                 _inputer?._open()
                 */
-                
               
                 var _controller:CommentList = CommentList()
-                println(__dict)
-                _controller._dataArray = _commentsArray!.objectAtIndex(_cell._indexId) as? NSArray
+                //println(__dict)
+                _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(_cell._indexId) as? NSArray)!)
                 
                 self.navigationController?.pushViewController(_controller, animated: true)
                 
@@ -548,6 +564,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        
+        let _dict:NSDictionary = MainAction._getUserProfileAtId(_userId)
+        _profileDict = _dict
+        
+        setup(self.view.frame)
+        _refreshDatas()
+        
         
     }
     override func didMoveToParentViewController(parent: UIViewController?) {

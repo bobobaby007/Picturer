@@ -42,7 +42,7 @@ class CommentList_Cell :  UITableViewCell,UITextViewDelegate{
         
         
         _desT=UITextView(frame: CGRectMake(60, 22, _defaultWidth!-100, 30))
-        _desT?.textColor=UIColor(white: 0.5, alpha: 1)
+        //_desT?.textColor=UIColor(white: 0.5, alpha: 1)
         _desT?.font=UIFont(name: "Helvetica", size: 12)
         _desT?.editable=false
         self.addSubview(_desT!)
@@ -63,6 +63,7 @@ class CommentList_Cell :  UITableViewCell,UITextViewDelegate{
         _titleT!.attributedText = linkString((__dict.objectForKey("from_userName") as! String) , withURLString: "user:" + (__dict.objectForKey("from_userId") as! String))
         
         _desT?.attributedText = commentString(__dict)
+        
         let _size:CGSize = _desT!.sizeThatFits(CGSize(width: _desT!.frame.width,height: CGFloat.max))
         _desT!.frame = CGRect(x: _desT!.frame.origin.x, y: _desT!.frame.origin.y, width: _desT!.frame.width, height: _size.height)
     }
@@ -77,24 +78,29 @@ class CommentList_Cell :  UITableViewCell,UITextViewDelegate{
         var astr:NSMutableAttributedString = NSMutableAttributedString()
         
         
-        var attrString: NSAttributedString
+        
+        var attrString: NSAttributedString = NSAttributedString()
         
         if _commentDict.objectForKey("to_userName") == nil || _commentDict.objectForKey("to_userName") as! String == "" {
             
         }else{
-            attrString = linkString(_commentDict.objectForKey("from_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("from_userId") as! String))
-            var astr:NSMutableAttributedString = NSMutableAttributedString()
-            astr.appendAttributedString(attrString)
+            
+            //attrString = linkString(_commentDict.objectForKey("from_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("from_userId") as! String))
+            //var astr:NSMutableAttributedString = NSMutableAttributedString()
+            //astr.appendAttributedString(attrString)
             
             attrString = NSAttributedString(string: "回复", attributes:normalAttr)
             astr.appendAttributedString(attrString)
             astr.appendAttributedString(linkString(_commentDict.objectForKey("to_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("to_userId") as! String)))
             attrString = NSAttributedString(string: ": ", attributes:normalAttr)
             astr.appendAttributedString(attrString)
+            
         }
         
+       // println(attrString)
         attrString = NSAttributedString(string: _commentDict.objectForKey("comment") as! String, attributes:normalAttr)
         astr.appendAttributedString(attrString)
+        
         return astr
     }
     func linkString(string:String, withURLString:String) -> NSAttributedString {
@@ -116,6 +122,9 @@ class CommentList_Cell :  UITableViewCell,UITextViewDelegate{
         case "user":
             let _str:String = URL.absoluteString!
             let _userId:NSString =  (_str as NSString).substringFromIndex(5)
+            
+            
+            
         case "reply":
             println("hahahah")
         default:

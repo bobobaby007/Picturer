@@ -26,6 +26,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _type:String = "album" // pics
     
     var _user:NSDictionary?
+    var _userId:String?
     var _setuped:Bool = false
     var _picV:PicView?
     var _pic:UIImageView?
@@ -66,6 +67,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
 
     var _tapC:UITapGestureRecognizer?
     
+    var _buttonTap:UITapGestureRecognizer?
+    
     
     var _toolsBarIsOpened:Bool=false
     
@@ -84,6 +87,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             return
         }
         _defaultSize=__size
+        
+        _tapC = UITapGestureRecognizer(target: self, action: Selector("_tapHander:"))
+        _buttonTap = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
         //println(_defaultSize!.width)
         _picV = PicView(frame: CGRect(x: 0, y: 50, width: _defaultSize!.width, height: _defaultSize!.width))
         _picV?._setImage("noPic.png")
@@ -99,6 +105,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _userImg?.minimumZoomScale = 1
         _userImg?.layer.masksToBounds=true
         _userImg?.layer.cornerRadius = 18
+        
+        _userImg?.addGestureRecognizer(_buttonTap!)
+        
         
         _userName_label = UILabel(frame: CGRect(x: 70, y: 15, width: 200, height: 20))
         _userName_label?.font = UIFont.systemFontOfSize(12)
@@ -202,7 +211,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             println("")
         }
         
-        _tapC = UITapGestureRecognizer(target: self, action: Selector("_tapHander:"))
         
         
         _toolsPanel = UIView(frame: CGRect(x: 0, y: 50+_picV!.frame.height, width: _defaultSize!.width, height: 36))
@@ -331,7 +339,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             if i>0 {
                 _attributeStr?.appendAttributedString(NSAttributedString(string: "\n"))
             }
-            let _commentDict:NSDictionary = __comments.objectAtIndex(i) as! NSDictionary
+            let _commentDict:NSDictionary = __comments.objectAtIndex(__comments.count - 1 - i) as! NSDictionary
             _attributeStr?.appendAttributedString(commentString(_commentDict))
             if i>1 {
                 break
@@ -401,10 +409,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         switch _action{
         case "user":
             let _str:String = URL.absoluteString!
-            let _userId:NSString =  (_str as NSString).substringFromIndex(5)
+            let _userId:NSString =  (_str as NSString).substringFromIndex(5)            
             _delegate?._viewUser(_userId as String)
         case "moreComment":
-            println("hahahah")
+            //println("hahahah")
             _delegate?._moreComment(_indexId)
         case "moreLike":
             _delegate?._moreLike(_indexId)
@@ -441,6 +449,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             UIView.commitAnimations()
     }
     
+    
+    //----点击动作
     func _tapHander(__tap:UITapGestureRecognizer){
         
         _openPanel(false)
@@ -449,9 +459,18 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         //self.removeGestureRecognizer(_tapC!)
     }
     
+    func _buttonTapHander(__tap:UITapGestureRecognizer){
+        switch __tap.view!{
+        case _userImg!:
+            _delegate?._viewUser(_userId!)
+            return
+        default:
+            return
+        }
+    }
     override func removeFromSuperview() {
         print("out")
-        self.window?.removeGestureRecognizer(_tapC!)
+        self.superview?.removeGestureRecognizer(_tapC!)
     }
     //-------点赞人
     func _setLikes(__likes:NSArray,__allNum:Int){
@@ -547,6 +566,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             
         })
     }
+    
     func _setPic(__pic:NSDictionary){
         //println(__pic)
        //  _pic?.image = UIImage(named: __pic.objectForKey("url") as! String)

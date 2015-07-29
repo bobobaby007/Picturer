@@ -41,18 +41,6 @@ class MainAction: AnyObject {
         }
     }
     
-    //--------登陆用户信息
-    
-    static var _userId:String!{
-        get{
-            return "000000"
-        }
-    }
-    static var _currentUser:NSDictionary{
-        get{
-            return NSDictionary(objects: ["000000","我是我自己"], forKeys: ["userId","userName"])
-        }
-    }
     
     static func _getImagesOfAlbumId(__id:String)->NSArray?{
         var _images:NSArray=[]
@@ -239,18 +227,59 @@ class MainAction: AnyObject {
     
     //=========================社交部分
     
+    //--------登陆用户信息
+    
+    static var _userId:String!{
+        get{
+            return "000000"
+        }
+    }
+    static var _currentUser:NSDictionary{
+        get{
+            
+            
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            var _pic:NSDictionary =  NSDictionary(objects: ["file","1.png"], forKeys: ["type","url"])
+            
+            
+            _dict.setObject(_pic, forKey: "profileImg")
+            
+            
+            _dict.setObject("000000", forKey: "userId")
+            _dict.setObject("我自己的名字", forKey: "userName")
+            
+            _dict.setObject(66, forKey: "albumNumber")
+            _dict.setObject(12, forKey: "followNumber")
+            _dict.setObject(30, forKey: "followingNumber")
+            _dict.setObject("文革那份多少粉丝三等功", forKey: "sign")
+            
+            
+            return _dict
+        }
+    }
+    
+    //----------
+    
     //---------提取用户信息
     static func _getUserProfileAtId(userId:String) -> NSDictionary{
+        if userId == _userId{
+            return _currentUser
+        }
         var _dict:NSMutableDictionary = NSMutableDictionary()
         var _pic:NSDictionary =  NSDictionary(objects: ["file","1.png"], forKeys: ["type","url"])
         
         
         _dict.setObject(_pic, forKey: "profileImg")
+        
+        
         _dict.setObject("123456", forKey: "userId")
-        _dict.setObject("我就是我", forKey: "userName")
-        _dict.setObject(12, forKey: "followedNumber")
-        _dict.setObject(30, forKey: "followingNumber")
-        _dict.setObject("速度的山高水低是德国大使馆收到根深蒂固三等功时代根深蒂固的是山高水低公司的收到根深蒂固山东省共商国是的根深蒂固", forKey: "sign")
+        _dict.setObject("其他用户", forKey: "userName")
+        
+        _dict.setObject(13, forKey: "albumNumber")
+        
+        _dict.setObject(2, forKey: "followNumber")
+        _dict.setObject(5, forKey: "followingNumber")
+        _dict.setObject("速度的山高水低是德国大使馆收到根深蒂固三等功时代根深蒂固的的根深蒂固", forKey: "sign")
         
         return _dict
     }
@@ -268,6 +297,7 @@ class MainAction: AnyObject {
             if i==0{
                 _commentDict.setValue("受到各国的是德国大使馆多少广东省各地说过多少多少多少给多", forKey: "comment")
                 _commentDict.setValue("", forKey: "to_userName")
+                _commentDict.setValue("", forKey: "to_userId")
             }
             
             let _pic:NSDictionary = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
@@ -311,14 +341,13 @@ class MainAction: AnyObject {
     
     
     static func _getAlbumListAtUser(block:(NSArray)->Void){
-        var request = HTTPTask()
-        
-        request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
-            
-            block(self._albumList)
-        })
+//        var request = HTTPTask()
+//        request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
+//            block(self._albumList)
+//        })
         
     }
+    
     
     
 }
@@ -338,7 +367,7 @@ class MainAction: AnyObject {
 
 UserProfileDict:
 
-profileImg<PicDict>  userId userName followedNumber followingNumber sign
+profileImg<PicDict>  userId userName followNumber followingNumber sign
 
 PicDict:
 type(alasset\fromWeb\file)  url

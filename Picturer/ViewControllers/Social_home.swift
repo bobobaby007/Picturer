@@ -66,14 +66,8 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         switch indexPath.item{
         case 0://主页
             let _contr:MyHomepage=MyHomepage()
-            let _dict:NSDictionary = MainAction._getUserProfileAtId("000001")
-            _contr.setup(self.view.frame)
-            _contr._profileDict = _dict
-            _contr._setSign(_dict.objectForKey("sign") as! String)
-            _contr._setIconImg(_dict.objectForKey("profileImg") as! NSDictionary)
-            //_contr._refreshView()
-           // _contr._getDatas()
-            
+            _contr._userId =  MainAction._userId
+            _contr._userName = MainAction._currentUser.objectForKey("userName") as? String
             self.navigationController?.pushViewController(_contr, animated: true)
         case 1://朋友
             return
