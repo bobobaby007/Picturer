@@ -13,8 +13,6 @@ import UIKit
 class Discover_reference: UIViewController {
     var _topBar:UIView?
     var _btn_cancel:UIButton?
-    
-    
     var _setuped:Bool=false
     override func viewDidLoad() {
         setup()

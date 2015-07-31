@@ -372,8 +372,28 @@ class MainAction: AnyObject {
     }
     
     //-----提取相册里的所有图片
-    static func _getPicsListAtAlbumId(__albumId:String){
+    static func _getPicsListAtAlbumId(__albumId:String?,block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 28
         
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            
+            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%8) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "pic")
+            _dict.setObject(i, forKey: "likeNumber")
+            _dict.setObject(i*3, forKey: "commentNumber")
+            
+            if i%5==0{
+                _dict.setObject("跟我鞥上的恐怕个品位女士订购扫和光缆的那个啊山东省的那个三等功上度过呢哦你感动啊就是大户个阿萨德个", forKey: "description")
+            }else{
+                _dict.setObject("旦各国那份的歌噶蛋糕给我挥洒地方", forKey: "description")
+            }
+            
+            _array.addObject(_dict)
+        }
+        // println(response.text)
+        block(_array)
     }
     static func _getLikesOfPicId(__picId:String){
         
@@ -400,7 +420,7 @@ class MainAction: AnyObject {
 
 
 
-
+var _testPics:NSArray? = ["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
 
 
 
@@ -422,6 +442,10 @@ type(like\comment\collect)
 
 PicDict:
 type(alasset\fromWeb\file)  url
+
+PicOfAlbum 相册里的图片
+
+pic<PicDict> likeNumber commentNumber description
 
 
 

@@ -13,8 +13,6 @@ import AssetsLibrary
 class PicView: UIScrollView,UIScrollViewDelegate{
     var _imgView:UIImageView?
     
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.maximumZoomScale = 2.5

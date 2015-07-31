@@ -44,8 +44,9 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
         _topBar?.backgroundColor=UIColor.blackColor()
-        _btn_cancel=UIButton(frame:CGRect(x: 10, y: 30, width: 13, height: 22))
+        _btn_cancel=UIButton(frame:CGRect(x: 6, y: 30, width: 40, height: 22))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
+        _btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_deleteAll=UIButton(frame:CGRect(x: self.view.frame.width - 60, y: 30, width: 60, height: 22))

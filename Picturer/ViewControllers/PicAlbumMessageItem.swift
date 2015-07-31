@@ -13,6 +13,7 @@ protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
     func _resized(__indexId:Int,__height:CGFloat)
     func _moreComment(__indexId:Int)
     func _viewUser(__userId:String)
+    func _viewAlbum(__albumId:String)
     func _moreLike(__indexId:Int)
     func _buttonAction(__action:String,__dict:NSDictionary)
 }
@@ -98,6 +99,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _picV?.minimumZoomScale = 1
         _picV?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         _picV?.layer.masksToBounds = true
+        
+        let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
+        _picV?.addGestureRecognizer(_tapPic)
+        
         
         _userImg = PicView(frame: CGRect(x: 15, y: 7, width: 36, height: 36))
         _userImg?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
@@ -464,6 +469,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         case _userImg!:
             _delegate?._viewUser(_userId!)
             return
+        case _picV!:
+            _delegate?._viewAlbum("testAlbumId")
+            
         default:
             return
         }

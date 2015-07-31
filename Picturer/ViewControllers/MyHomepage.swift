@@ -94,20 +94,15 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: 62))
         _topBar?.backgroundColor=UIColor.blackColor()
         
-        _btn_cancel=UIButton(frame:CGRect(x: 10, y: 30, width: 13, height: 22))
+        _btn_cancel=UIButton(frame:CGRect(x: 6, y: 30, width: 40, height: 22))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
+        _btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _btn_moreAction = UIButton(frame:CGRect(x: _myFrame!.width - 35, y: 20, width: 21, height: 40))
-        //_btn_moreAction = UIButton.buttonWithType(UIButtonType.Custom) as? UIButton
-        //_btn_moreAction?.frame = CGRect(x: _myFrame!.width - 35, y: 20, width: 21, height: 35)
-        //_btn_moreAction?.imageView
+        _btn_moreAction = UIButton(frame:CGRect(x: _myFrame!.width - 35, y: 10, width: 21, height: 57))
         _btn_moreAction?.setImage(UIImage(named: "moreAction_icon.png"), forState: UIControlState.Normal)
-        
-        //_btn_moreAction!.imageView?.image = UIImage(named: "moreAction_icon.png")
         _btn_moreAction!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
-        //_btn_moreAction?.setBackgroundImage(UIImage(named: "moreAction_icon.png"), forState: UIControlState.Normal)
         _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
 
         
@@ -584,6 +579,21 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
        // println(_heighArray)
     }
+    func _viewAlbum(__albumId: String) {
+        
+        
+        
+        MainAction._getPicsListAtAlbumId("00003", block: { (array) -> Void in
+            var _controller:Social_pic = Social_pic()
+            
+            _controller._showIndexAtPics(0, __array: array)
+             self.navigationController?.pushViewController(_controller, animated: true)
+            
+        })
+        
+       
+        
+    }
     func _moreComment(__indexId: Int) {
         var _controller:CommentList = CommentList()
         //println(__dict)
@@ -723,6 +733,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             var _alertController:UIAlertController = UIAlertController()
             
             var _action:UIAlertAction = UIAlertAction(title: "消息列表", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                self._hasNewMessage = false
+                self._refreshView()
                 self._openMessageList()
             })
             
@@ -743,6 +755,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     //---打开消息列表
     func _openMessageList(){
+        
         var _controller:MessageList = MessageList()
         self.navigationController?.pushViewController(_controller, animated: true)
     }

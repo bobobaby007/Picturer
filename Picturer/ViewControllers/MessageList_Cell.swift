@@ -87,7 +87,9 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         
         _tapG = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
         _imageView!.addGestureRecognizer(_tapG!)
-        //_alumPicV!.addGestureRecognizer(_tapG!)
+        
+        var _tap2 = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+        _alumPicV!.addGestureRecognizer(_tap2)
         //println(_defaultWidth)
         _setuped=true
     }
