@@ -585,7 +585,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         MainAction._getPicsListAtAlbumId("00003", block: { (array) -> Void in
             var _controller:Social_pic = Social_pic()
-            
             _controller._showIndexAtPics(0, __array: array)
              self.navigationController?.pushViewController(_controller, animated: true)
             

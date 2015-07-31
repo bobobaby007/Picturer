@@ -232,7 +232,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         
         
         _tapG=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
-        _scrollView?.addGestureRecognizer(_tapG!)
+        
         
         
         _moveToPicByIndex(_currentIndex!)
@@ -288,7 +288,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     func scrollViewDidScroll(scrollView: UIScrollView) {
         _showingBar = false
         if _tapG != nil{
-            _scrollView?.removeGestureRecognizer(_tapG!)
+           // _scrollView?.removeGestureRecognizer(_tapG!)
         }
         
     }
@@ -299,7 +299,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
         
         _moveToPicByIndex(_p)
-        _scrollView?.addGestureRecognizer(_tapG!)
+       // _scrollView?.addGestureRecognizer(_tapG!)
         
     }
     func _viewInAtIndex(__index:Int){
@@ -323,6 +323,10 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _picV._setPic(_getPicAtIndex(__index),__block: { (__dict) -> Void in
             
         })
+        
+        if __index == _currentIndex{
+            _picV.addGestureRecognizer(_tapG!)
+        }
 
         _scrollView!.addSubview(_picV)
     }

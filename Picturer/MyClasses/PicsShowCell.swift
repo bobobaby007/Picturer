@@ -123,6 +123,24 @@ class PicsShowCell:UICollectionViewCell{
                 }, failureBlock: { (error:NSError!) -> Void in
                     println(error)
             })
+            
+        case "file":
+            self._setImage(__pic.objectForKey("url") as! String)
+            
+        case "fromWeb":
+            ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
+                // _setImage(image)
+                //println("")
+                if self._imgView != nil{
+                    //self._setImageByImage(image!)
+                    self._imgView?.image=image
+                   
+                    
+                }else{
+                    println("out")
+                }
+                
+            })
         default:
             println()
         }

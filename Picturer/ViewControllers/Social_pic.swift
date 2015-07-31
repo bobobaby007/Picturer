@@ -18,14 +18,15 @@ protocol Social_pic_delegate:NSObjectProtocol{
     
 }
 
-class Social_pic: UIViewController,UIScrollViewDelegate{
+class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate{
     let _gap:CGFloat=15
+    let _space:CGFloat=5
     
     var _setuped:Bool=false
     var _topBar:UIView?
     var _btn_cancel:UIButton?
     var _btn_moreAction:UIButton?
-    var _title_label:UILabel?
+    var _titleT:UITextView?
     
     var _dataArray:NSMutableArray?=NSMutableArray()
     
@@ -49,8 +50,19 @@ class Social_pic: UIViewController,UIScrollViewDelegate{
     
     var _range:Int = 0
     
+    var _collectionLayout:UICollectionViewFlowLayout?
+    var _imagesCollection:UICollectionView?
+    
+    var _showType:String = "pic" // collection
+    
+    
+    var _like_iconT:UILabel = UILabel()
+    var _comment_iconT:UILabel = UILabel()
+    var _like_numT:UILabel = UILabel()
+    var _comment_numT:UILabel = UILabel()
     
     var _showingBar:Bool=true{
+        
         didSet{
             UIView.beginAnimations("topA", context: nil)
             UIView.setAnimationDuration(0.2)
@@ -68,19 +80,20 @@ class Social_pic: UIViewController,UIScrollViewDelegate{
         }
     }
     
+    var _bottomBar:UIView?
     override func viewDidLoad() {
         setup()
         _getDatas()
     }
     
     func setup(){
+        super.viewDidLoad()
         if _setuped{
             return
         }
-        
         self.view.backgroundColor=UIColor.blackColor()
         
-        super.viewDidLoad()
+        
         _desView = UIView(frame: CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH))
         _desView?.backgroundColor=UIColor(white: 0, alpha: 0.8)
         
@@ -99,20 +112,63 @@ class Social_pic: UIViewController,UIScrollViewDelegate{
         _btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        _btn_moreAction=UIButton(frame:CGRect(x: 10, y: 30, width: 13, height: 22))
+        _btn_moreAction=UIButton(frame:CGRect(x: self.view.frame.width-30, y: 30, width: 18, height: 18))
         _btn_moreAction?.setImage(UIImage(named: "changeToCollect_icon.png"), forState: UIControlState.Normal)
         _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _topBar?.addSubview(_btn_moreAction!)
         
         
-        _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
-        _title_label?.textColor=UIColor.whiteColor()
-        _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.text="6月2日\n2/28"
+        
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        _topBar?.backgroundColor=UIColor.blackColor()
+        
+        _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 56))
+        _titleT?.font = UIFont.boldSystemFontOfSize(16)
+        _titleT?.backgroundColor = UIColor.clearColor()
+        _titleT?.textColor=UIColor.whiteColor()
+        _titleT?.scrollEnabled = false
+        _titleT?.textAlignment=NSTextAlignment.Center
+        _titleT?.text="6月2日\n2/28"
+        
+        
+        _bottomBar=UIView(frame:CGRect(x: 0, y: self.view.frame.height-58, width: self.view.frame.width, height: 58))
+        _bottomBar?.backgroundColor=UIColor(white: 0.2, alpha: 0.6)
+        
+        
+        
+        
+       // _like_iconT.frame = CGRect(x: self.view.frame.width-20, y: <#CGFloat#>, width: <#CGFloat#>, height: <#CGFloat#>)
+        
+        
+        
+        _collectionLayout=UICollectionViewFlowLayout()
+        let _imagesW:CGFloat=(self.view.frame.width-2*_space)/3
+        let _imagesH:CGFloat=ceil(CGFloat(_picsArray!.count)/4)*(_imagesW+_space)
+        
+        
+        _collectionLayout?.minimumInteritemSpacing=_space
+        _collectionLayout?.minimumLineSpacing=_space
+        _collectionLayout!.itemSize=CGSize(width: _imagesW, height: _imagesW)
+        
+        _imagesCollection=UICollectionView(frame: CGRect(x: 0, y: 62, width: self.view.frame.width, height: self.view.frame.height-62), collectionViewLayout: _collectionLayout!)
+        
+        //_imagesCollection?.frame=CGRect(x: _gap, y: _buttonH+2*_gap, width: self.view.frame.width-2*_gap, height: _imagesH)
+        
+        
+        _imagesCollection?.backgroundColor=UIColor.clearColor()
+        _imagesCollection!.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
+        
+        _imagesCollection?.delegate=self
+        _imagesCollection?.dataSource=self
+        
+        
+       // self.view.addSubview(_imagesCollection!)
         
         self.view.addSubview(_topBar!)
+        self.view.addSubview(_bottomBar!)
         
         _topBar?.addSubview(_btn_cancel!)
-        _topBar?.addSubview(_title_label!)
+        _topBar?.addSubview(_titleT!)
         
         
         _setuped=true
@@ -147,12 +203,12 @@ class Social_pic: UIViewController,UIScrollViewDelegate{
         
         _scrollView!.delegate=self
         
-        _scrollView!.contentSize=CGSize(width: CGFloat(_picsArray!.count)*self.view.frame.width, height: self.view.frame.height-60)
+        _scrollView!.contentSize=CGSize(width: CGFloat(_picsArray!.count)*self.view.frame.width, height: self.view.frame.height)
         _scrollView?.contentOffset.x = CGFloat(_currentIndex!)*_scrollView!.frame.width
         
         
         _tapG=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
-        _scrollView?.addGestureRecognizer(_tapG!)
+        //_scrollView?.addGestureRecognizer(_tapG!)
         
         _moveToPicByIndex(_currentIndex!)
         
@@ -179,30 +235,45 @@ class Social_pic: UIViewController,UIScrollViewDelegate{
             _currentIndex=_picsArray!.count-1
         }
         
+        _titleT?.text = "5月12日 12:33 \n"+String(_currentIndex!+1)+"/"+String(_picsArray!.count)
+        
         _pic = NSMutableDictionary(dictionary: (_getPicAtIndex(_currentIndex!)))
         
         _viewInAtIndex(__index)
+        
         _viewInAtIndex(__index+1)
         _viewInAtIndex(__index-1)
+        
         
     }
     
     //---正在挪动的时候
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        _showingBar = false
-        if _tapG != nil{
-            _scrollView?.removeGestureRecognizer(_tapG!)
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        if scrollView == _scrollView{
+            _showingBar = false
+            
+            if _tapG != nil{
+                //_scrollView?.removeGestureRecognizer(_tapG!)
+            }
+            return
         }
+    }
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
         
     }
     //---停止挪动
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        _isScrolling=false
-        
-        var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
-        
-        _moveToPicByIndex(_p)
-        _scrollView?.addGestureRecognizer(_tapG!)
+        if scrollView == _scrollView{
+            _isScrolling=false
+            
+            var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
+            
+            _moveToPicByIndex(_p)
+            //_scrollView?.addGestureRecognizer(_tapG!)
+            return
+        }
         
     }
     
@@ -227,8 +298,29 @@ class Social_pic: UIViewController,UIScrollViewDelegate{
         _picV._setPic(_getPicAtIndex(__index),__block: { (__dict) -> Void in
             
         })
-        
+        if __index == _currentIndex{
+            _picV.addGestureRecognizer(_tapG!)
+        }
         _scrollView!.addSubview(_picV)
+    }
+    //-----瀑布流代理
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return _picsArray!.count
+    }
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        _currentIndex = indexPath.item
+        _changeTo("pic")
+    }
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let identify:String = "PicsShowCell"
+        let cell = self._imagesCollection?.dequeueReusableCellWithReuseIdentifier(
+            identify, forIndexPath: indexPath) as! PicsShowCell
+        
+        let _pic:NSDictionary
+        _pic = _getPicAtIndex(indexPath.item)
+        cell._setPic(_pic)
+        return cell
     }
     
     func _getDatas(){
@@ -240,11 +332,54 @@ class Social_pic: UIViewController,UIScrollViewDelegate{
         case _btn_cancel!:
             self.navigationController?.popViewControllerAnimated(true)
         case _btn_moreAction!:
-            return
+            
+            switch _showType{
+            case "pic":
+                _changeTo("collection")
+                return
+            case "collection":
+                _changeTo("pic")
+                return
+            default:
+                return
+                
+            }
         default:
             println(sender)
         }
         
+    }
+    
+    func _changeTo(__type:String){
+        
+        _showType = __type
+        switch _showType{
+        case "pic":
+            _imagesCollection?.removeFromSuperview()
+            self.view.insertSubview(_scrollView, atIndex: 0)
+            
+            _bottomBar?.hidden=false
+            _titleT?.hidden=false
+            _moveToPicByIndex(_currentIndex!)
+            _scrollView.setContentOffset(CGPoint(x: CGFloat(_currentIndex!)*self.view.frame.width, y: 0), animated: false)
+            
+            _btn_moreAction?.setImage(UIImage(named: "changeToCollect_icon.png"), forState: UIControlState.Normal)
+            
+            return
+        case "collection":
+            _scrollView.removeFromSuperview()
+            _bottomBar?.hidden=true
+            _titleT?.hidden=true
+            self.view.insertSubview(_imagesCollection!, atIndex: 0)
+            //_imagesCollection?.reloadData()
+            _imagesCollection?.scrollToItemAtIndexPath(NSIndexPath(forItem: _currentIndex!, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Left, animated: true)
+            _btn_moreAction?.setImage(UIImage(named: "changeToPic.png"), forState: UIControlState.Normal)
+            //_showingBar = true
+            return
+        default:
+            return
+            
+        }
     }
 }
 
