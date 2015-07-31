@@ -174,10 +174,6 @@ class MainAction: AnyObject {
         return false
     }
     static func _changeAlbumAtIndex(index:Int,dict:NSDictionary){
-        
-        
-        
-        
         var _list:NSMutableArray=NSMutableArray(array:_albumList )
         var _album:NSMutableDictionary=NSMutableDictionary(dictionary: _list.objectAtIndex(index) as! NSDictionary)
         
@@ -258,7 +254,9 @@ class MainAction: AnyObject {
         }
     }
     
-    //----------
+    //----------相册图片列表
+    
+    
     
     //---------提取用户信息
     static func _getUserProfileAtId(userId:String) -> NSDictionary{
@@ -283,6 +281,44 @@ class MainAction: AnyObject {
         
         return _dict
     }
+    //-------
+    
+    //------消息列表
+    static func _getMessages(block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 30
+        for var i:Int = 0; i<_n;++i{
+            var _comment:String = "受到各国大使馆的是"
+            var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: ["某某<"+String(i)+">","<来"+String(i)+"来>","111111","123456",_comment,"下午1:00","comment","333333"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time","type","albumId"])
+            
+            if i==0||i==5||i==6{
+                _commentDict.setValue("受到各国的是德国大使馆多少广东省各地说过多少多少多少给多", forKey: "comment")
+                _commentDict.setValue("", forKey: "to_userName")
+                _commentDict.setValue("", forKey: "to_userId")
+            }
+            
+            if i==3||i==10||i==29||i==20{
+                _commentDict.setValue("like", forKey: "type")
+            }
+            if i==12{
+                _commentDict.setValue("collect", forKey: "type")
+            }
+            
+            let _pic:NSDictionary = NSDictionary(objects: [String(i%5+2)+".png","file"], forKeys: ["url","type"])
+            _commentDict.setValue(_pic, forKey: "userImg")
+            
+            let _albumPic:NSDictionary = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
+            _commentDict.setValue(_albumPic, forKey: "albumImg")
+            
+            
+            
+            _array.addObject(_commentDict)
+            
+        }
+        // println(response.text)
+        block(_array)
+    }
+    
     //-----提取某个相册评论－－－－－－//－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－过渡方法
     static func _getCommentsOfAlubm(__albumId:String?,block:(NSArray)->Void){
         var _array:NSMutableArray = NSMutableArray()
@@ -292,7 +328,7 @@ class MainAction: AnyObject {
         }
         for var i:Int = 0; i<_n;++i{
             var _comment:String = "受到各国大使馆的是"
-            var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: ["某某<"+__albumId!+">","<来"+__albumId!+"来>","111111","123456",_comment], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment"])
+            var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: ["某某<"+__albumId!+">","<来"+__albumId!+"来>","111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
             
             if i==0{
                 _commentDict.setValue("受到各国的是德国大使馆多少广东省各地说过多少多少多少给多", forKey: "comment")
@@ -335,8 +371,16 @@ class MainAction: AnyObject {
         
     }
     
-    
-    
+    //-----提取相册里的所有图片
+    static func _getPicsListAtAlbumId(__albumId:String){
+        
+    }
+    static func _getLikesOfPicId(__picId:String){
+        
+    }
+    static func _getCommentsOfPicId(__picId:String){
+        
+    }
     
     
     
@@ -369,6 +413,13 @@ UserProfileDict:
 
 profileImg<PicDict>  userId userName followNumber followingNumber sign
 
+
+Message
+
+"from_userName","to_userName","from_userId","to_userId","comment","type","userImg","albumImg"
+
+type(like\comment\collect)
+
 PicDict:
 type(alasset\fromWeb\file)  url
 
@@ -377,19 +428,3 @@ type(alasset\fromWeb\file)  url
 */
 ////
 
-
-class PicObj:AnyObject {
-    var type:String=String()
-    var thumbImage:String=String()
-    var originalImage:String=String()
-    var refreshed:Bool=false
-    var pid:String=String()
-    var url:String=String()
-    
-    //  type: alasset fromWeb file
-    // url
-    
-    func _toDict()->NSDictionary{
-        return NSDictionary(objects: [thumbImage,originalImage,refreshed,pid,url], forKeys: ["thumbImage","originalImage","refreshed","pid","url"])
-    }
-}

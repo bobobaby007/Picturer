@@ -11,11 +11,12 @@ import UIKit
 
 
 
-class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,Inputer_delegate,CommentList_Cell_delegate{
+class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,MessageList_Cell_delegate {
     let _gap:CGFloat=15
     var _setuped:Bool=false
     var _topBar:UIView?
     var _btn_cancel:UIButton?
+    var _btn_deleteAll:UIButton?
     var _title_label:UILabel?
     
     var _tableView:UITableView?
@@ -24,26 +25,21 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     
     
     
-    var _dataArray:NSMutableArray?
-    
-    var _inputer:Inputer?
+    var _dataArray:NSMutableArray?=NSMutableArray()
     
     
     override func viewDidLoad() {
         setup()
         refreshView()
+        _getDatas()
     }
+    
     func setup(){
         if _setuped{
             return
         }
-       
-        self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
-        _inputer = Inputer(frame: self.view.frame)
-        _inputer?._delegate=self
-        _inputer!._placeHold = "添加评论..."
-        _inputer?.setup()
+        self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
@@ -52,15 +48,22 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
+        _btn_deleteAll=UIButton(frame:CGRect(x: self.view.frame.width - 60, y: 30, width: 60, height: 22))
+        _btn_deleteAll?.setTitle("清空", forState: UIControlState.Normal)
+        _btn_deleteAll?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _topBar?.addSubview(_btn_deleteAll!)
+        
+        
+        
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.text="评论"
+        _title_label?.text="消息列表"
         
         _tableView=UITableView()
         _tableView?.delegate=self
         _tableView?.dataSource=self
-        _tableView?.registerClass(CommentList_Cell.self, forCellReuseIdentifier: "CommentList_Cell")
+        _tableView?.registerClass(MessageList_Cell.self, forCellReuseIdentifier: "MessageList_Cell")
         //_tableView?.scrollEnabled=false
         _tableView?.separatorColor = UIColor.clearColor()
         _tableView?.tableFooterView = UIView()
@@ -72,16 +75,15 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         _topBar?.addSubview(_title_label!)
         
         self.view.addSubview(_tableView!)
-        self.view.addSubview(_inputer!)
         
         _setuped=true
     }
     
-   
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
-        var cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell", forIndexPath: indexPath) as! CommentList_Cell
+        var cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell", forIndexPath: indexPath) as! MessageList_Cell
         cell.setUp(self.view.frame.width)
         cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
         cell._delegate = self
@@ -97,10 +99,10 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-       // var cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell", forIndexPath: indexPath) as! CommentList_Cell
+        // var cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell", forIndexPath: indexPath) as! MessageList_Cell
         
         
-        var cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell") as! CommentList_Cell
+        var cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell") as! MessageList_Cell
         cell.setUp(self.view.frame.width)
         cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
         
@@ -110,23 +112,12 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         //return CGFloat(((_dataArray!.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("comment") as! String).lengthOfBytesUsingEncoding(NSUnicodeStringEncoding))
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-       
         
-        var cell:CommentList_Cell = _tableView!.cellForRowAtIndexPath(indexPath) as! CommentList_Cell
-        cell.selected = false
         
-        //_tableView?.reloadData()
-        let _dict:NSDictionary = _dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary
-        let _userId:String = _dict.objectForKey("from_userName") as! String
-        if _userId != MainAction._currentUser.objectForKey("userId") as! String{
-             _selectedId=indexPath.row
-            _inputer!._placeHold = "回复"+(_dict.objectForKey("from_userName") as! String)
-        }else{
-            _selectedId = -1
-            _inputer!._placeHold = "添加评论..."
-        }
+        var cell:MessageList_Cell = _tableView!.cellForRowAtIndexPath(indexPath) as! MessageList_Cell
+       // cell.selected = false
+        
     }
-    //----cell 代理
     
     func _viewUser(__userId: String) {
         var _controller:MyHomepage = MyHomepage()
@@ -134,50 +125,30 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         self.navigationController?.pushViewController(_controller, animated: true)
         
     }
-    //----输入框代理
-    
-    func _inputer_changed(__dict: NSDictionary) {
+    func _viewAlbum(__albumId: String) {
         
     }
     
-    func _inputer_closed() {
-        
-    }
-    func _inputer_opened() {
-        
-    }
-    func _inputer_send(__dict: NSDictionary) {
-        
-        var _to_userName:String = ""
-        var _to_userId:String = ""
-        
-        if _selectedId >= 0{
-            var _dict:NSMutableDictionary
-            _dict = NSMutableDictionary(dictionary: _dataArray!.objectAtIndex(_dataArray!.count - 1 - _selectedId) as! NSDictionary)
-            _to_userName = (_dict.objectForKey("from_userName") as? String)!
-            _to_userId = (_dict.objectForKey("from_userId") as? String)!
-        }else{
-            
-        }
-       
-        
-        var _d:NSDictionary = NSDictionary(objects: [MainAction._currentUser.objectForKey("userName") as! String,_to_userName,MainAction._currentUser.objectForKey("userId") as! String,_to_userId,__dict.objectForKey("text") as! String,MainAction._currentUser.objectForKey("profileImg") as! NSDictionary], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg"])
-        
-        
-        
-        _dataArray?.addObject(_d)
-        
-        _tableView?.reloadData()
-    }
     //----设置位置
     func refreshView(){
-        _tableView?.frame = CGRect(x: 0, y: 62, width: self.view.frame.width, height: self.view.frame.height-62-40)
+        _tableView?.frame = CGRect(x: 0, y: 62, width: self.view.frame.width, height: self.view.frame.height-62)
+    }
+    
+    
+    func _getDatas(){
+        MainAction._getMessages { (array) -> Void in
+            self._dataArray = NSMutableArray(array: array)
+            self._tableView?.reloadData()
+        }
     }
     
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
             self.navigationController?.popViewControllerAnimated(true)
+        case _btn_deleteAll!:
+            _dataArray = []
+            _tableView?.reloadData()
         default:
             println(sender)
         }

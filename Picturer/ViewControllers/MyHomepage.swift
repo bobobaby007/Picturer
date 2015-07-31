@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
+    
     var _myFrame:CGRect?
     var _userId:String = "000001"
     var _userName:String?
@@ -23,6 +24,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _topBar:UIView?
     var _btn_cancel:UIButton?
+    var _btn_moreAction:UIButton?
     
     var _tableView:UITableView?
     
@@ -46,7 +48,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
      var _label_following:UILabel?
      var _label_album:UILabel?
     
-    var _profileH:CGFloat = 130
+    var _profileH:CGFloat = 171.5
     
     var _scrollView:UIScrollView?
     
@@ -58,11 +60,23 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _defaultH:CGFloat = 400
     
-    var _scrollTopH:CGFloat = 30 //达到这个高度时向上移动
+    var _scrollTopH:CGFloat = 0 //达到这个高度时向上移动
     
     var _inputer:Inputer?
     
     var _viewIned:Bool? = false
+    
+    var _messageAlertView:UIView?
+    var _messageImg:PicView?
+    var _messageText:UILabel?
+    var _messageIcon:UIImageView?
+    var _messageH:CGFloat = 0
+    var _messageTap:UITapGestureRecognizer?
+    
+    var _hasNewMessage:Bool = false
+    var _messageArray:NSArray?
+    
+    
     
     func setup(__frame:CGRect){
         if _setuped {
@@ -80,9 +94,23 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: 62))
         _topBar?.backgroundColor=UIColor.blackColor()
         
-        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 30, height: 62))
-        _btn_cancel?.setTitle("<", forState: UIControlState.Normal)
+        _btn_cancel=UIButton(frame:CGRect(x: 10, y: 30, width: 13, height: 22))
+        _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+        _btn_moreAction = UIButton(frame:CGRect(x: _myFrame!.width - 35, y: 20, width: 21, height: 40))
+        //_btn_moreAction = UIButton.buttonWithType(UIButtonType.Custom) as? UIButton
+        //_btn_moreAction?.frame = CGRect(x: _myFrame!.width - 35, y: 20, width: 21, height: 35)
+        //_btn_moreAction?.imageView
+        _btn_moreAction?.setImage(UIImage(named: "moreAction_icon.png"), forState: UIControlState.Normal)
+        
+        //_btn_moreAction!.imageView?.image = UIImage(named: "moreAction_icon.png")
+        _btn_moreAction!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
+        //_btn_moreAction?.setBackgroundImage(UIImage(named: "moreAction_icon.png"), forState: UIControlState.Normal)
+        _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+
+        
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.textColor=UIColor.whiteColor()
@@ -90,11 +118,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         _topBar?.addSubview(_title_label!)
-        
+        _topBar?.addSubview(_btn_moreAction!)
         
          //----用户信息面板
         
-        _profilePanel = UIView(frame: CGRect(x: 0, y: 62, width: _myFrame!.width, height: _profileH))
+        _profilePanel = UIView(frame: CGRect(x: 0, y: 0, width: _myFrame!.width, height: _profileH))
         _profilePanel?.backgroundColor = UIColor.whiteColor()
         
         
@@ -218,6 +246,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         //----
         
         
+        
+        
+        
+        
         //-----初始化数据
         
         _heighArray=NSMutableArray()
@@ -236,8 +268,41 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             
         }
         
-        //
+        //---消息提醒----
         
+        
+        
+        _messageAlertView = UIView(frame: CGRect(x: 0, y: _profileH+10, width: _myFrame!.width, height: 40))
+        _messageAlertView?.layer.masksToBounds=true
+        _messageAlertView?.layer.cornerRadius = 10
+        _messageAlertView?.backgroundColor = UIColor.darkGrayColor()
+        
+        _messageIcon = UIImageView(frame: CGRect(x: 180, y: 15, width: 6, height: 10))
+        _messageIcon?.image = UIImage(named: "message_arrow.png")
+        _messageAlertView?.addSubview(_messageIcon!)
+        
+        _messageText = UILabel(frame: CGRect(x: 60, y: 10, width: 80, height: 20))
+        _messageText?.textAlignment = NSTextAlignment.Center
+        _messageText?.textColor = UIColor.whiteColor()
+        _messageText?.text = "3条新消息"
+        _messageAlertView?.addSubview(_messageText!)
+        
+        _messageTap = UITapGestureRecognizer(target: self, action: Selector("messageTapHander:"))
+        _messageAlertView?.addGestureRecognizer(_messageTap!)
+        
+        
+        _messageImg = PicView(frame: CGRect(x: 5, y: 5, width: 30, height: 30))
+        _messageImg?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
+        
+        _messageImg?._imgView?.layer.masksToBounds = true
+        _messageImg?._imgView?.layer.cornerRadius = 15
+        
+        _messageAlertView?.addSubview(_messageImg!)
+        
+        
+        _messageAlertView?.hidden=true
+        
+        //----
         
         _tableView=UITableView()
         
@@ -251,19 +316,18 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -400, bottom: 0, right: 0)
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
-        //_scrollView = UIScrollView(frame: CGRect(x: 0, y: 62, width: _myFrame!.width, height: _myFrame!.height-62))
+        _scrollView = UIScrollView(frame: CGRect(x: 0, y: 62, width: _myFrame!.width, height: _myFrame!.height-62))
+        
         
         self.view.backgroundColor = UIColor(white: 0.9, alpha: 1)
-        self.view!.addSubview(_tableView!)
-        //self.view.addSubview(_scrollView!)
-
-       
+        _scrollView!.addSubview(_tableView!)
+        //_scrollView?.scrollEnabled=true
         
+        _scrollView!.addSubview(_profilePanel!)
         
+        _scrollView!.addSubview(_messageAlertView!)
         
-        self.view.addSubview(_profilePanel!)
-        
-        
+        self.view.addSubview(_scrollView!)
         self.view.addSubview(_topBar!)
 
         
@@ -288,11 +352,36 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     
     
+    //提取数据
+    func _getMessage(){
+        MainAction._getMessages { (array) -> Void in
+            self._hasNewMessage = true            
+            self._messageArray = array
+            
+            self._messageImg!._setPic((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as! NSDictionary, __block: { (__dict) -> Void in
+                
+            })
+            self._messageText!.text = String(array.count)+"条新消息"
+            self._refreshView()
+        }
+    }
+    //----消息按钮侦听
+    
+    func messageTapHander(__sender:UITapGestureRecognizer){
+        _hasNewMessage = false
+        _refreshView()
+        _openMessageList()
+    }
+    
+    
     
     func _getDatas(){
       // _profileDict = MainAction._getUserProfileAtId(_userId)
         
     }
+    
+    
+    
     //----更新数据
     
     func _refreshDatas(){
@@ -302,9 +391,15 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _following_label?.text=String(_profileDict?.objectForKey("followingNumber") as! Int)
         _setSign(_profileDict?.objectForKey("sign") as! String)
         _setIconImg(_profileDict?.objectForKey("profileImg") as! NSDictionary)
+        
     }
     func _setSign(__str:String){
         _sign_text?.text=__str
+        
+        let _size:CGSize = _sign_text!.sizeThatFits(CGSize(width: _sign_text!.frame.width, height: CGFloat.max))
+        
+        _sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height:_size.height)
+        
         //_sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: _sign_text!.contentSize.height)
     }
     func _setIconImg(__pic:NSDictionary){
@@ -325,43 +420,69 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             _btn_edite?.hidden=false
             _btn_follow?.hidden=true
             _btn_message?.hidden=true
+            _btn_moreAction?.hidden=false
+            
         }else{
             _btn_share?.hidden=true
             _btn_edite?.hidden=true
             _btn_follow?.hidden=false
             _btn_message?.hidden=false
+            _btn_moreAction?.hidden=true
+            
+            _hasNewMessage = false
         }
         
         
        // _sign_text?.text=
         
         if _sign_text!.text == ""{
-            
+            _signH = 0
         }else{
-            _signH = _sign_text!.contentSize.height
+            _signH = _sign_text!.frame.height
         }
         
-        UIView.beginAnimations("go", context: nil)
         
+        
+        UIView.beginAnimations("go", context: nil)
         _sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: _signH!)
         _sign_text?.alpha=1
         
         _profileH = _sign_text!.frame.origin.y + _sign_text!.frame.height + _gap!
-       _profilePanel?.frame=CGRect(x: 0, y: 62, width: _myFrame!.width, height: _profileH)
-
-        _tableView?.frame = CGRect(x: 0, y: 62+_profileH+10, width: _myFrame!.width, height: _myFrame!.height-62-_profileH-10)
-
+       
+        
+        
+        _profilePanel?.frame = CGRect(x: 0, y: 0, width: _myFrame!.width, height: _profileH)
+        
+        if _hasNewMessage{
+            _messageAlertView!.frame = CGRect(x: _myFrame!.width/2 - 100, y: _profileH+5, width: 200, height: 40)
+           
+            _messageAlertView?.hidden=false
+            _messageH = 40
+        }else{
+            _messageAlertView?.hidden=true
+            _messageH = 0
+        }
+        _tableView?.frame = CGRect(x: 0, y: _profileH+10+_messageH, width:  _myFrame!.width, height: _tableView!.contentSize.height)
+        _tableView?.scrollEnabled = false
+        _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
         UIView.commitAnimations()
     }
     
     //----table 代理
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-       
+        /*
         
        // println(scrollView.contentOffset.y)
         var _offsetY:CGFloat = 0
         var _frameOff:CGFloat = 10
+        var _tableToY:CGFloat = _tableView!.frame.origin.y
+        
+        
+       
+        
+        
+        
         if scrollView.contentOffset.y > _scrollTopH{
             _offsetY = scrollView.contentOffset.y-_scrollTopH
             UIApplication.sharedApplication().statusBarHidden=true
@@ -376,13 +497,15 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         }
         
         if scrollView.contentOffset.y>0{
-            _tableView?.frame = CGRect(x: 0, y: 62+_profileH-_offsetY+_frameOff, width: _myFrame!.width, height: _myFrame!.height-62-_profileH+_offsetY-_frameOff)
+            _tableView?.frame = CGRect(x: 0, y: 62+_profileH+_messageH-_offsetY+_frameOff, width: _myFrame!.width, height: _myFrame!.height-62-_profileH-_messageH+_offsetY-_frameOff)
         }else{
             
         }
-        _profilePanel?.frame=CGRect(x: 0, y: 62-_offsetY, width: _myFrame!.width, height: _profileH)
         
+        _messageAlertView?.frame = CGRect(x: _messageAlertView!.frame.origin.x, y:62+_profileH+_gap!-_offsetY, width: _messageAlertView!.frame.width, height: _messageAlertView!.frame.height)
         //_topBar?.frame=CGRect(x: 0, y:0-_offsetY, width: _myFrame!.width, height: 62)
+
+*/
         
     }
     
@@ -456,7 +579,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _heighArray![__indexId] = __height
         if _lastH != __height{
             _tableView?.reloadData()
+            _refreshView()
         }
+        
        // println(_heighArray)
     }
     func _moreComment(__indexId: Int) {
@@ -571,7 +696,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         setup(self.view.frame)
         _refreshDatas()
         
-        
+        _getMessage()
     }
     override func didMoveToParentViewController(parent: UIViewController?) {
         //setup(<#__frame: CGRect#>)
@@ -590,8 +715,38 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
     }
     func clickAction(sender:UIButton){
-        
-        self.navigationController?.popViewControllerAnimated(true)
+        switch sender{
+        case _btn_cancel!:
+            self.navigationController?.popViewControllerAnimated(true)
+            return
+        case _btn_moreAction!:
+            var _alertController:UIAlertController = UIAlertController()
+            
+            var _action:UIAlertAction = UIAlertAction(title: "消息列表", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                self._openMessageList()
+            })
+            
+            var _actionCancel:UIAlertAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil)
+            _alertController.addAction(_action)
+            _alertController.addAction(_actionCancel)
+            
+//            var _v:UIView = _alertController.view.subviews.first as! UIView
+//            var _v1:UIView = _v.subviews.first as! UIView
+//            _v1.backgroundColor = UIColor.redColor()
+            
+            self.navigationController?.presentViewController(_alertController, animated: true, completion: nil)
+            return
+        default:
+            return
+        }
     }
+    
+    //---打开消息列表
+    func _openMessageList(){
+        var _controller:MessageList = MessageList()
+        self.navigationController?.pushViewController(_controller, animated: true)
+    }
+    
+    
 }
 
