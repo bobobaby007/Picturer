@@ -11,9 +11,13 @@ import UIKit
 
 
 class Discover_search: UIViewController {
+    let _gap:CGFloat = 5
+    var _barH:CGFloat = 64
     var _topBar:UIView?
     var _btn_cancel:UIButton?
-    var _sliderShower:UIPageControl?
+    var _sliderShower:SliderShower?
+    
+    
     
     var _setuped:Bool=false
     override func viewDidLoad() {
@@ -39,18 +43,22 @@ class Discover_search: UIViewController {
         _topBar?.addSubview(_btn_cancel!)
         
         
-        _sliderShower = UIPageControl(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        _sliderShower = SliderShower(frame:CGRect(x: 0, y: 62, width: self.view.frame.width, height: 168))
+        
+        self.view.addSubview(_sliderShower!)
         
         
-        var _image:UIImageView = UIImageView(image: UIImage(named: "2.png"))
         
-        _image.frame = CGRect(x: 30, y: 120, width: 500, height: 500)
-        
-        self.view.addSubview(_image)
+        _getDatas()
         
         _setuped=true
     }
     
+    func _getDatas(){
+        MainAction._getAdvertisiongs { (array) -> Void in
+            _sliderShower?._setup(array)
+        }
+    }
     
     func clickAction(sender:UIButton){
         switch sender{

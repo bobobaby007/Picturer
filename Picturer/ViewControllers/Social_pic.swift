@@ -19,6 +19,7 @@ protocol Social_pic_delegate:NSObjectProtocol{
 }
 
 class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate{
+    let _barH:CGFloat = 64
     let _gap:CGFloat=15
     let _space:CGFloat=5
     
@@ -32,7 +33,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     
     var _tapG:UITapGestureRecognizer?
     
-    var _currentIndex:Int?
+    var _currentIndex:Int? = 0
     
     var _picsArray:NSMutableArray?
     var _pic:NSMutableDictionary?
@@ -61,6 +62,10 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     var _like_numT:UILabel = UILabel()
     var _comment_numT:UILabel = UILabel()
     
+    var _currentPic:PicView?
+    
+    var _frameH:CGFloat?
+    
     var _showingBar:Bool=true{
         
         didSet{
@@ -71,7 +76,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
                 _desView?.frame=CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH)
                 UIApplication.sharedApplication().statusBarHidden=false
             }else{
-                _topBar?.frame=CGRect(x: 0, y: -62, width: _topBar!.frame.width, height: _topBar!.frame.height)
+                _topBar?.frame=CGRect(x: 0, y: -_barH, width: _topBar!.frame.width, height: _topBar!.frame.height)
                 _desView?.frame=CGRect(x: 0, y: self.view.frame.height+0, width: self.view.frame.width, height: _desH)
                 UIApplication.sharedApplication().statusBarHidden=true
             }
@@ -81,18 +86,19 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     }
     
     var _bottomBar:UIView?
+    
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
         setup()
         _getDatas()
     }
     
     func setup(){
-        super.viewDidLoad()
         if _setuped{
             return
         }
         self.view.backgroundColor=UIColor.blackColor()
-        
         
         _desView = UIView(frame: CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH))
         _desView?.backgroundColor=UIColor(white: 0, alpha: 0.8)
@@ -105,7 +111,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         self.view.addSubview(_desView!)
         
         
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
         _btn_cancel=UIButton(frame:CGRect(x: 6, y: 30, width: 40, height: 22))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
@@ -119,7 +125,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         
         
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
         
         _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 56))
@@ -150,7 +156,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _collectionLayout?.minimumLineSpacing=_space
         _collectionLayout!.itemSize=CGSize(width: _imagesW, height: _imagesW)
         
-        _imagesCollection=UICollectionView(frame: CGRect(x: 0, y: 62, width: self.view.frame.width, height: self.view.frame.height-62), collectionViewLayout: _collectionLayout!)
+        _imagesCollection=UICollectionView(frame: CGRect(x: 0, y: _barH, width: self.view.frame.width, height: self.view.frame.height-_barH), collectionViewLayout: _collectionLayout!)
         
         //_imagesCollection?.frame=CGRect(x: _gap, y: _buttonH+2*_gap, width: self.view.frame.width-2*_gap, height: _imagesH)
         
@@ -171,6 +177,36 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _topBar?.addSubview(_titleT!)
         
         
+        
+        _scrollView=UIScrollView()
+        _scrollView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        
+        self.view.insertSubview(_scrollView!, atIndex: 0)
+        _scrollView!.bounces=false
+        //_scrollView!.bouncesZoom=true
+        _scrollView!.maximumZoomScale=1
+        _scrollView!.minimumZoomScale = 1
+        _scrollView!.showsVerticalScrollIndicator=false
+        _scrollView!.showsHorizontalScrollIndicator=false
+        _scrollView!.pagingEnabled=true
+        
+        _scrollView!.delegate=self
+        
+        _frameH = self.view.bounds.height - 60
+        
+        //println(_frameH!)
+        
+        _scrollView!.contentSize=CGSize(width: CGFloat(_picsArray!.count)*self.view.frame.width, height:_frameH! )
+        _scrollView?.contentOffset.x = CGFloat(_currentIndex!)*_scrollView!.frame.width
+        
+        
+        _tapG=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+        //_scrollView?.addGestureRecognizer(_tapG!)
+        
+        _moveToPicByIndex(_currentIndex!)
+        
+        
+        
         _setuped=true
     }
     
@@ -181,6 +217,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         return _dict.objectForKey("pic") as! NSDictionary
     }
+    //外部调用直接到达指定图片
     func _showIndexAtPics(__index:Int,__array:NSArray){
         _picsArray=NSMutableArray(array: __array)
         _currentIndex=__index
@@ -191,27 +228,6 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         if _currentIndex < 0{
             _currentIndex = 0
         }
-        //_scrollView?.removeFromSuperview()
-        _scrollView=UIScrollView(frame: self.view.frame)
-        self.view.insertSubview(_scrollView!, atIndex: 0)
-        _scrollView!.bounces=false
-        //_scrollView!.bouncesZoom=true
-        //_scrollView!.maximumZoomScale=2.0
-        _scrollView!.showsVerticalScrollIndicator=false
-        _scrollView!.showsHorizontalScrollIndicator=false
-        _scrollView!.pagingEnabled=true
-        
-        _scrollView!.delegate=self
-        
-        _scrollView!.contentSize=CGSize(width: CGFloat(_picsArray!.count)*self.view.frame.width, height: self.view.frame.height)
-        _scrollView?.contentOffset.x = CGFloat(_currentIndex!)*_scrollView!.frame.width
-        
-        
-        _tapG=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
-        //_scrollView?.addGestureRecognizer(_tapG!)
-        
-        _moveToPicByIndex(_currentIndex!)
-        
     }
     
     func _clear(){
@@ -252,15 +268,10 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         if scrollView == _scrollView{
             _showingBar = false
-            
-            if _tapG != nil{
-                //_scrollView?.removeGestureRecognizer(_tapG!)
-            }
             return
         }
     }
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        
         
     }
     //---停止挪动
@@ -268,9 +279,11 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         if scrollView == _scrollView{
             _isScrolling=false
             
+            
             var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
             
             _moveToPicByIndex(_p)
+            
             //_scrollView?.addGestureRecognizer(_tapG!)
             return
         }
@@ -278,6 +291,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     }
     
     func _viewInAtIndex(__index:Int){
+        
         var _picV:PicView!
         if __index<0{
             return
@@ -291,7 +305,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
             //println(_picV.superview?.isEqual(self.view))
         }else{
             
-            _picV=PicView(frame: CGRect(x: CGFloat(__index)*_scrollView!.frame.width, y: 0, width: _scrollView!.frame.width, height: _scrollView!.frame.height))
+            _picV=PicView(frame: CGRect(x: CGFloat(__index)*_scrollView!.frame.width, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
             _picV.tag=100+__index
             
         }
@@ -300,6 +314,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         })
         if __index == _currentIndex{
             _picV.addGestureRecognizer(_tapG!)
+            _currentPic = _picV
         }
         _scrollView!.addSubview(_picV)
     }
@@ -381,5 +396,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
             
         }
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        //_currentPic?.removeGestureRecognizer(_tapG!)
+    }
 }
-

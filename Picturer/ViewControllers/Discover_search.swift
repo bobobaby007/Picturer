@@ -11,6 +11,7 @@ import UIKit
 
 
 class Discover_reference: UIViewController {
+    let _barH:CGFloat = 64
     var _topBar:UIView?
     var _btn_cancel:UIButton?
     var _setuped:Bool=false
@@ -23,9 +24,9 @@ class Discover_reference: UIViewController {
         }
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
-        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
+        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: _barH))
         _btn_cancel?.setTitle("返回", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -39,7 +40,7 @@ class Discover_reference: UIViewController {
         
         var _image:UIImageView = UIImageView(image: UIImage(named: "1.png"))
         
-        _image.frame = CGRect(x: 30, y: 120, width: 500, height: 500)
+        _image.frame = CGRect(x: 30, y: 120, width: 500, height: 700)
         
         self.view.addSubview(_image)
         

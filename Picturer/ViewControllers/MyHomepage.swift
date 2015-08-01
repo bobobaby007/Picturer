@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
-    
+    var _barH:CGFloat = 64
     var _myFrame:CGRect?
     var _userId:String = "000001"
     var _userName:String?
@@ -89,9 +89,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _imgW = 0.22*_frameW!
         _profileH = _imgW! + 2*_gapY!
         
+        println(_myFrame!.width)
         
-        
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: 62))
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
         
         _btn_cancel=UIButton(frame:CGRect(x: 6, y: 30, width: 40, height: 22))
@@ -107,10 +107,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
 
         
         
-        _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
+        _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
-        
+        _title_label?.font = UIFont.boldSystemFontOfSize(17)
         
         _topBar?.addSubview(_title_label!)
         _topBar?.addSubview(_btn_moreAction!)
@@ -304,14 +304,14 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _tableView?.backgroundColor=UIColor.whiteColor()
         _tableView?.delegate=self
         _tableView?.dataSource=self
-        _tableView?.frame = CGRect(x: 0, y: 62+_profileH+10, width: _myFrame!.width, height: _myFrame!.height-62-_profileH-10)
+        _tableView?.frame = CGRect(x: 0, y: _barH+_profileH+10, width: _myFrame!.width, height: _myFrame!.height-_barH-_profileH-10)
         _tableView?.registerClass(PicAlbumMessageItem.self, forCellReuseIdentifier: "PicAlbumMessageItem")
         _tableView?.backgroundColor = UIColor.clearColor()
         //_tableView?.separatorColor=UIColor.clearColor()
         //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -400, bottom: 0, right: 0)
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
-        _scrollView = UIScrollView(frame: CGRect(x: 0, y: 62, width: _myFrame!.width, height: _myFrame!.height-62))
+        _scrollView = UIScrollView(frame: CGRect(x: 0, y: _barH, width: _myFrame!.width, height: _myFrame!.height-_barH))
         
         
         self.view.backgroundColor = UIColor(white: 0.9, alpha: 1)
@@ -485,20 +485,20 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         }else{
             UIApplication.sharedApplication().statusBarHidden=false
         }
-        if _offsetY>_profileH+62+_frameOff{
-           _offsetY = _profileH+62+_frameOff
+        if _offsetY>_profileH+_barH+_frameOff{
+           _offsetY = _profileH+_barH+_frameOff
         }else{
             
         }
         
         if scrollView.contentOffset.y>0{
-            _tableView?.frame = CGRect(x: 0, y: 62+_profileH+_messageH-_offsetY+_frameOff, width: _myFrame!.width, height: _myFrame!.height-62-_profileH-_messageH+_offsetY-_frameOff)
+            _tableView?.frame = CGRect(x: 0, y: _barH+_profileH+_messageH-_offsetY+_frameOff, width: _myFrame!.width, height: _myFrame!.height-_barH-_profileH-_messageH+_offsetY-_frameOff)
         }else{
             
         }
         
-        _messageAlertView?.frame = CGRect(x: _messageAlertView!.frame.origin.x, y:62+_profileH+_gap!-_offsetY, width: _messageAlertView!.frame.width, height: _messageAlertView!.frame.height)
-        //_topBar?.frame=CGRect(x: 0, y:0-_offsetY, width: _myFrame!.width, height: 62)
+        _messageAlertView?.frame = CGRect(x: _messageAlertView!.frame.origin.x, y:_barH+_profileH+_gap!-_offsetY, width: _messageAlertView!.frame.width, height: _messageAlertView!.frame.height)
+        //_topBar?.frame=CGRect(x: 0, y:0-_offsetY, width: _myFrame!.width, height: _barH)
 
 */
         
@@ -631,8 +631,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 //UIView.beginAnimations("offset", context: nil)
                 /*-----在当前页打开输入框
                 var _offY:CGFloat=_cell.frame.origin.y+_cell.frame.height-(self.view.frame.height-258)
-                if _offY<0.8*(62+_profileH+10){
-                    _offY = 0.8*(62+_profileH+10)
+                if _offY<0.8*(_barH+_profileH+10){
+                    _offY = 0.8*(_barH+_profileH+10)
                 }
                 
                 _tableView?.setContentOffset(CGPoint(x: 0, y: _offY), animated: true)

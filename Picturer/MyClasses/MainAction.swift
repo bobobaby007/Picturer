@@ -242,7 +242,7 @@ class MainAction: AnyObject {
             
             
             _dict.setObject("000000", forKey: "userId")
-            _dict.setObject("我自己的名字", forKey: "userName")
+            _dict.setObject("小小白", forKey: "userName")
             
             _dict.setObject(66, forKey: "albumNumber")
             _dict.setObject(12, forKey: "followNumber")
@@ -412,13 +412,30 @@ class MainAction: AnyObject {
         
     }
     
+    static func _getAdvertisiongs(block:(NSArray)->Void){
+    
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 4
+        
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            
+            let _pic:NSDictionary = NSDictionary(objects: [_advertisingPics?.objectAtIndex(i%4) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "pic")
+            _dict.setObject("http://baidu.com", forKey: "link")
+           
+            _array.addObject(_dict)
+        }
+        // println(response.text)
+        block(_array)
+    }
     
     
 }
 
 
 
-
+var _advertisingPics:NSArray? = ["http://b.hiphotos.baidu.com/image/pic/item/0bd162d9f2d3572c1826b51d8813632763d0c32e.jpg","http://f.hiphotos.baidu.com/image/pic/item/ae51f3deb48f8c5471a15c2e38292df5e0fe7f45.jpg","http://e.hiphotos.baidu.com/image/pic/item/a08b87d6277f9e2fab4441021d30e924b899f343.jpg","http://f.hiphotos.baidu.com/image/pic/item/6159252dd42a2834f964801d58b5c9ea14cebfe2.jpg"]
 
 var _testPics:NSArray? = ["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
 

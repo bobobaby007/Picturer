@@ -11,6 +11,7 @@ import UIKit
 
 
 class Discover_home: UIViewController,UITabBarControllerDelegate {
+    let _barH:CGFloat = 64
     var _topBar:UIView?
     var _btn_cancel:UIButton?
     
@@ -36,9 +37,9 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
         }
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
-        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
+        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: _barH))
         _btn_cancel?.setTitle("<", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -49,9 +50,13 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
         
         _tab_controller = MyTabBarController()
         
-        _tab_controller!.viewControllers = [_referenceController!,_searchController!]
+        
+        
+        _tab_controller!.viewControllers = [_searchController!,_referenceController!]
         
         _tab_controller!.delegate = self
+        _tab_controller?.tabBar.hidden = true
+        
         
         self.view.addSubview(_tab_controller!.view)
         
@@ -77,6 +82,7 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
         _tabBtnView?.addSubview(_tab_search!)
         
         
+        
         _topBar?.addSubview(_tabBtnView!)
         self.view.addSubview(_topBar!)
         
@@ -95,18 +101,15 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
             _tab_reference?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
             _tab_search?.backgroundColor = UIColor.blackColor()
             _tab_search?.setTitleColor(UIColor(red: 242/255, green: 206/255, blue: 53/255, alpha: 1), forState: UIControlState.Normal)
-            
             _tab_controller?.selectedIndex = 0
-            
             return
         case 2:
+            
             _tab_search?.backgroundColor=UIColor(red: 242/255, green: 206/255, blue: 53/255, alpha: 1)
             _tab_search?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
             _tab_reference?.backgroundColor = UIColor.blackColor()
             _tab_reference?.setTitleColor(UIColor(red: 242/255, green: 206/255, blue: 53/255, alpha: 1), forState: UIControlState.Normal)
-            
             _tab_controller?.selectedIndex = 1
-            
             return
         default:
             return
@@ -114,14 +117,12 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
     }
     
     func tabBarController(tabBarController: UITabBarController, animationControllerForTransitionFromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        println("ss3")
+        
         let _tran:TransitioningObject = TransitioningObject()
-        
-        
         if fromVC == _referenceController{
-            _tran._isLeftToRight=false
-        }else{
             _tran._isLeftToRight=true
+        }else{
+            _tran._isLeftToRight=false
         }
         
         return _tran

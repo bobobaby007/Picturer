@@ -12,6 +12,7 @@ import UIKit
 
 
 class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,Inputer_delegate,CommentList_Cell_delegate{
+    let _barH:CGFloat = 64
     let _gap:CGFloat=15
     var _setuped:Bool=false
     var _topBar:UIView?
@@ -46,13 +47,13 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         _inputer?.setup()
         
         
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
         _btn_cancel=UIButton(frame:CGRect(x: 10, y: 30, width: 13, height: 22))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
+        _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: _barH))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.text="评论"
@@ -171,7 +172,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     }
     //----设置位置
     func refreshView(){
-        _tableView?.frame = CGRect(x: 0, y: 62, width: self.view.frame.width, height: self.view.frame.height-62-40)
+        _tableView?.frame = CGRect(x: 0, y: _barH, width: self.view.frame.width, height: self.view.frame.height-_barH-40)
     }
     
     func clickAction(sender:UIButton){
