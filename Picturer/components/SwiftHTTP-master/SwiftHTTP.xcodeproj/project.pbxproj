@@ -230,6 +230,7 @@
 		6BFD900D19C8D8B500DD99B6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = Vluxe;
 				TargetAttributes = {
