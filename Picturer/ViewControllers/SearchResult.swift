@@ -20,14 +20,15 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
     
     
     var _userArray:NSArray = NSArray()
-    var _albumArray:NSArray = ["","","","","","","","","",""]
-    var _userTableView:UITableView = UITableView()
+    var _albumArray:NSArray = []
+    var _userTableView:UITableView?
     var _albumCollectionView:UICollectionView?
     var _collectionLayout:UICollectionViewFlowLayout?
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = UIColor.whiteColor()
         
         _tab_reference = UIButton()
         _tab_reference.setTitle("图册", forState: UIControlState.Normal)
@@ -60,9 +61,16 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
         
         
         _albumCollectionView = UICollectionView(frame: CGRect(x: 0, y: 40, width: frame.width, height: frame.height-40), collectionViewLayout: _collectionLayout!)
+        _albumCollectionView?.backgroundColor = UIColor.whiteColor()
         _albumCollectionView?.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "collectionCell")
         _albumCollectionView?.dataSource = self
         _albumCollectionView?.delegate = self
+        
+        
+        
+        _userTableView = UITableView(frame: CGRect(x: 0, y: 40, width: frame.width, height: frame.height-40))
+        _userTableView?.dataSource = self
+        _userTableView?.delegate = self
         
         
         _switchTo(0)
@@ -71,8 +79,14 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
     }
     
     func _searchForStr(__str:String)->Void{
+        
+        _albumArray = []
+        _albumCollectionView?.reloadData()
+        
         MainAction._getResultOfAlbum(__str, block: { (array) -> Void in
             
+            self._albumArray = array
+            self._albumCollectionView?.reloadData()
         })
         MainAction._getResultOfUser(__str, block: { (array) -> Void in
             
@@ -86,7 +100,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
             _tab_search.setTitleColor(UIColor(white: 0.8, alpha: 1), forState: UIControlState.Normal)
             
             
-            //addSubview(_albumCollectionView!)
+            addSubview(_albumCollectionView!)
             
             return
         case 1:
@@ -130,7 +144,16 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         var cell:UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("collectionCell", forIndexPath: indexPath) as! UICollectionViewCell
         
-        cell.backgroundColor = UIColor.blueColor()
+        var _picV:PicView = PicView(frame:CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height))
+        _picV._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
+        _picV.maximumZoomScale = 1
+        _picV.minimumZoomScale = 1
+        
+        _picV._setPic(((_albumArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("pic") as! NSDictionary), __block: { (_dict) -> Void in
+            
+            })
+        cell.addSubview(_picV)
+        //cell.backgroundColor = UIColor.blueColor()
         
         return cell
     }

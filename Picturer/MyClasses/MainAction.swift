@@ -469,7 +469,7 @@ class MainAction: AnyObject {
     //-----搜索结果－－－相册
     static func _getResultOfAlbum(__searchingStr:String, block:(NSArray)->Void){
        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 10
+        var _n:Int = 40
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
             let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
@@ -482,7 +482,7 @@ class MainAction: AnyObject {
     //搜索结果－－－－用户
     static func _getResultOfUser(__searchingStr:String, block:(NSArray)->Void){
         var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 10
+        var _n:Int = 40
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
             var _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%5+3) as! String,"fromWeb"], forKeys: ["url","type"])

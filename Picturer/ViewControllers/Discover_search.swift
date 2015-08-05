@@ -22,6 +22,7 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
     var _gap:CGFloat = 10
     
     var _referenceTable:UITableView = UITableView()
+    var _referenceTableH:CGFloat=0
     
     var _referenceArray:NSArray = NSArray()
     var _recentArray:NSArray = NSArray()
@@ -77,29 +78,31 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         
         self.view.addSubview(_searchBar)
         //self.view.addSubview(_topBar!)
-        
-        _referenceTable.frame = CGRect(x: 0, y: _barH+_searchBarH, width: self.view.frame.width, height: self.view.frame.height-_barH-_searchBarH)
+        _referenceTableH = self.view.frame.height-_barH-_searchBarH
+        _referenceTable.frame = CGRect(x: 0, y: _barH+_searchBarH, width: self.view.frame.width, height: _referenceTableH)
         _referenceTable.delegate=self
         _referenceTable.dataSource = self
         _referenceTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "table_cell")
        
         _searchResult = SearchResult(frame: CGRect(x: 0, y: _barH+_searchBarH, width: self.view.frame.width, height: self.view.frame.height-_barH-_searchBarH))
         
-        //_showSearchReference()
-        _showSearchResult()
+        _showSearchReference()
+        //_showSearchResult("")
         
         _getDatas()
         
         _setuped=true
     }
     func _showSearchReference(){
+        
         _searchResult!.removeFromSuperview()
         self.view.addSubview(_referenceTable)
     }
     func _showSearchResult(__str:String){
-        
-        
-        
+        _searchT.text=""
+        _searchT.resignFirstResponder()
+        _searchingStr = __str
+        _searchResult?._searchForStr(__str)
         _referenceTable.removeFromSuperview()
         self.view.addSubview(_searchResult!)
     }
@@ -117,13 +120,14 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
     
     //---
     func textFieldDidBeginEditing(textField: UITextField) {
+        _referenceTable.frame = CGRect(x: 0, y: _barH+_searchBarH, width: _referenceTable.frame.width, height:_referenceTableH-256)
         _showSearchReference()
     }
     func textFieldDidEndEditing(textField: UITextField) {
         println(_searchT.text)
     }
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        _showSearchResult(textField.text)
         
         return true
     }
@@ -142,7 +146,6 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
             break
         case 1:
             _label.text="热门标签"
-            
             break
         default:
             _label.text="热门标签"
@@ -195,15 +198,18 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.section{
         case 0:
-            
+            _showSearchResult(_recentArray.objectAtIndex(indexPath.row) as! String)
             break
         case 1:
-           
+            _showSearchResult(_referenceArray.objectAtIndex(indexPath.row) as! String)
             break
         default:
             
             break
         }
+    
+        var cell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        cell.selected=false
     }
     func clickAction(sender:UIButton){
         switch sender{
