@@ -89,8 +89,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _imgW = 0.22*_frameW!
         _profileH = _imgW! + 2*_gapY!
         
-        println(_myFrame!.width)
-        
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
         

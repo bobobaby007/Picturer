@@ -402,8 +402,102 @@ class MainAction: AnyObject {
         
     }
     
+    //-----提取热门图册
+    static func _getHotAlbums(block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 10
+        
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%6+2) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "pic")
+            _dict.setObject("000001", forKey: "albumId")
+            
+            _array.addObject(_dict)
+        }
+        // println(response.text)
+        block(_array)
+    }
     
+    //------提取热门用户
+    static func _getHotUsers(block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 10
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            
+            var _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%5+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "pic")
+            _pic = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "userImg")
+            _dict.setObject("000001", forKey: "userId")
+            _dict.setObject(_testUserNames?.objectAtIndex(i%12) as! String, forKey: "userName")
+            
+            _array.addObject(_dict)
+        }
+        // println(response.text)
+        block(_array)
+    }
+    //-----提取推荐相册
+    static func _getReferenceAlbums(block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 10
+        
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            
+            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "pic")
+            _dict.setObject("000001", forKey: "albumId")
+            
+            _array.addObject(_dict)
+        }
+        // println(response.text)
+        block(_array)
+    }
     
+    //----最近搜索标签
+    
+    static func _getRecentSearchTags()->NSArray{
+        return ["紫砂","跑步","香格里拉","今年流行款"]
+    }
+    //-----推荐搜索标签
+    static func _getReferenceTags(block:(NSArray)->Void){
+        var _array:NSArray = ["旅行","健身","艺术","摄影","电影","美食","成长","设计","时尚","魔兽","春天","行为艺术"]
+        block(_array)
+    }
+    //-----搜索结果－－－相册
+    static func _getResultOfAlbum(__searchingStr:String, block:(NSArray)->Void){
+       var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 10
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "pic")
+            _dict.setObject("000001", forKey: "albumId")
+            _array.addObject(_dict)
+        }
+        block(_array)
+    }
+    //搜索结果－－－－用户
+    static func _getResultOfUser(__searchingStr:String, block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 10
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            var _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%5+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "pic")
+            _pic = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "userImg")
+            _dict.setObject("000001", forKey: "userId")
+            _dict.setObject(_testUserNames?.objectAtIndex(i%12) as! String, forKey: "userName")
+            
+            _array.addObject(_dict)
+        }
+        // println(response.text)
+        block(_array)
+    }
+    //-
     static func _getAlbumListAtUser(block:(NSArray)->Void){
 //        var request = HTTPTask()
 //        request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
@@ -440,7 +534,7 @@ var _advertisingPics:NSArray? = ["http://b.hiphotos.baidu.com/image/pic/item/0bd
 var _testPics:NSArray? = ["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
 
 
-
+var _testUserNames:NSArray? = ["撒嘎嘎","wong","三等功ww","4ysng----sdgng@as","sdg","跟你说过的","阿里给你的","里那个护送","oeoogaeg","sySYNG2345©˙©∆˚ß","3","fg","人家感到十分娃娃","后排没有拍","94肩负起哦昂","大概","杜省公会"]
 
 
 ////////////////////////////－－－－－－－字典变量保存
