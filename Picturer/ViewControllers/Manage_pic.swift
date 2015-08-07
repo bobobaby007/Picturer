@@ -13,8 +13,8 @@ import AVFoundation
 
 protocol Manage_pic_delegate:NSObjectProtocol{
     func canceled()
-    func delete(picIndex:Int)
-    func setCover(picIndex:Int)
+    func _deletePic(picIndex:Int)
+    func _setCover(picIndex:Int)
     
 }
 
@@ -300,13 +300,13 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
+            _delegate?.canceled()
             self.navigationController?.popViewControllerAnimated(true)
         case _btn_moreAction!:
             switch _viewType{
             case "view":
                 openActions()
             case "select":
-                
                 openActions()
             case "edit":
                 openActions()
@@ -346,8 +346,11 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     }
     //-----设为封面
     func setToCover(action:UIAlertAction!){
-        var _dict:NSDictionary = NSDictionary(object: _getPicAtIndex(_currentIndex!), forKey: "cover") as NSDictionary
-        MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
+        _delegate?._setCover(_realIndex(_currentIndex!))
+//        
+//        var _dict:NSDictionary = NSDictionary(object: _getPicAtIndex(_currentIndex!), forKey: "cover") as NSDictionary
+//        MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
+        
         var _alert:UIAlertView = UIAlertView(title: "设置封面成功", message: nil, delegate: nil, cancelButtonTitle: "确认")
         _alert.show()
     }
@@ -377,6 +380,13 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             _dict = _picsArray?.objectAtIndex(_picsArray!.count-__index-1) as! NSDictionary
         }
         return _dict
+    }
+    func _realIndex(__index:Int)->Int{
+        if _range == 0{
+            return __index
+        }else{
+            return _picsArray!.count-__index-1
+        }
     }
     //---设置描述代理
     func canceld() {

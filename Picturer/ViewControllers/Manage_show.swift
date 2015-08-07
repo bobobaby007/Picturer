@@ -16,7 +16,7 @@ protocol Manage_show_delegate:NSObjectProtocol{
     func canceld()
 }
 
-class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PicsShowCellDelegate,UIAlertViewDelegate,ImagePickerDeletegate{
+class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PicsShowCellDelegate,UIAlertViewDelegate,ImagePickerDeletegate,Manage_pic_delegate{
     
     @IBOutlet weak var _btn_back:UIButton?
     @IBOutlet weak var _collectionView:UICollectionView!
@@ -123,12 +123,28 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _controller._albumIndex = _albumIndex
         }
         _controller._range = _range
+        _controller._delegate=self
+        
         self.navigationController?.pushViewController(_controller, animated: true)
        // _pic?._setPic(_imagesArray[indexPath.item] as! NSDictionary)
         //_pic?._setImage(_imagesArray[indexPath.item] as! String)
     }
     
-    //---图片选择代理
+    //------图片单张展示代理
+    func canceled() {
+        _collectionView.reloadData()
+    }
+    func _deletePic(picIndex: Int) {
+        _SelectedIndexs.addObject(picIndex)
+        _deleteSelectedPics()
+    }
+    func _setCover(picIndex: Int) {
+        var _dict:NSDictionary = NSDictionary(object: _imagesArray.objectAtIndex(picIndex), forKey: "cover") as NSDictionary
+        MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
+    }
+    
+    
+    //---瀑布流时图片cell选择代理
     
     func PicDidSelected(pic: PicsShowCell) {
         var _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _imagesArray[pic._index!] as! NSDictionary)
@@ -207,36 +223,34 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         switch _currentAction{
             case _action_delete:
                 if buttonIndex==0{
-                    var _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _getSelectedAndRestArray())
-                    
-                    _dict.setValue(_albumIndex, forKey: "albumIndex")
-                    
-                    
-                    _delegate?.didDeletedPics(_dict)
-                    
-                    var _indexs:NSMutableIndexSet = NSMutableIndexSet()
-                    
-                    var _itemsIndexs:NSMutableArray=[]
-                    
-                    for i in _SelectedIndexs{
-                     _indexs.addIndex(Int(i as! NSNumber))
-                        _itemsIndexs.addObject(NSIndexPath(forItem: Int(i as! NSNumber), inSection: 0))
-                    }
-                   // println(_itemsIndexs)
-                    
-                    //_SelectedIndexs=[]
-                    _changeActionTo(_action_normal)
-                    
-                    _imagesArray.removeObjectsAtIndexes(_indexs)
-                    _collectionView.deleteItemsAtIndexPaths(_itemsIndexs as [AnyObject])
-                    
+                    _deleteSelectedPics()
                 }
         default:
             println("")
         }
         
     }
-    
+    //-----删除当前选中的图片
+    func _deleteSelectedPics(){
+        var _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _getSelectedAndRestArray())
+        _dict.setValue(_albumIndex, forKey: "albumIndex")
+        _delegate?.didDeletedPics(_dict)
+        var _indexs:NSMutableIndexSet = NSMutableIndexSet()
+        var _itemsIndexs:NSMutableArray=[]
+        for i in _SelectedIndexs{
+            _indexs.addIndex(Int(i as! NSNumber))
+            _itemsIndexs.addObject(NSIndexPath(forItem: Int(i as! NSNumber), inSection: 0))
+        }
+        // println(_itemsIndexs)
+        
+        
+        _changeActionTo(_action_normal)
+        
+        _imagesArray.removeObjectsAtIndexes(_indexs)
+        _collectionView.deleteItemsAtIndexPaths(_itemsIndexs as [AnyObject])
+
+        _SelectedIndexs=[]
+    }
     func _changeActionTo(_action:String){
         _currentAction=_action
         

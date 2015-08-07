@@ -16,7 +16,7 @@ protocol Manage_newDelegate:NSObjectProtocol{
 }
 
 
-class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource,UITextViewDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate,Setting_rangeDelegate,Setting_powerDelegate,Setting_replyDelegate,Setting_sampleDelegate,Setting_tagsDelegate{
+class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDelegate, UICollectionViewDataSource,UITextViewDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate,Setting_rangeDelegate,Setting_powerDelegate,Setting_replyDelegate,Setting_sampleDelegate,Setting_tagsDelegate,Manage_pic_delegate{
     let _gap:CGFloat=15
     let _barH:CGFloat = 64
     let _space:CGFloat=5
@@ -372,6 +372,18 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     func canceld() {
         _tableView?.reloadData()
     }
+    //---图片单张查看代理
+    
+    func _setCover(picIndex: Int) {
+        _album?.setObject(_imagesArray.objectAtIndex(picIndex), forKey: "cover")
+    }
+    func _deletePic(picIndex: Int) {
+        _imagesArray.removeObjectAtIndex(picIndex)
+        
+    }
+    func canceled(){
+        _tableView?.reloadData()
+    }
     //-----图片代理
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -384,8 +396,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         var _pic:Manage_pic? = Manage_pic()
         //let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
         //_pic=storyboard.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
+        _pic?._delegate=self
+        _pic?._range = _album?.objectForKey("range") as! Int
         _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
-        
         self.navigationController?.pushViewController(_pic!, animated: true)
         
     }
@@ -582,9 +595,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             _savingDict?.setObject("new_album", forKey: "Action_Type")
         }
         
-//        if _album?.objectForKey("cover") == nil && _imagesArray.count>0{
-//            _savingDict?.setObject(_imagesArray.objectAtIndex(0), forKey: "cover")
-//        }
+        if _album?.objectForKey("cover") == nil && _imagesArray.count>0{
+            _savingDict?.setObject(_imagesArray.objectAtIndex(0), forKey: "cover")
+        }
         
         //_savingDict?.setObject(_titleInput?.text!, forKey: "title")
         //_savingDict?.setObject(_desInput?.text!, forKey: "des")
