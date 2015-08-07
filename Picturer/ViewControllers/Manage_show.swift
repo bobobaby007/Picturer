@@ -20,9 +20,11 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     @IBOutlet weak var _btn_back:UIButton?
     @IBOutlet weak var _collectionView:UICollectionView!
-    
+    @IBOutlet weak var _titleButton:UIButton?
     @IBOutlet weak var _btn_edit:UIButton?
     
+    
+    let _barH:CGFloat = 64
     var _delegate:Manage_show_delegate?
     
     let _action_normal:String="normal"
@@ -35,7 +37,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     var _SelectedIndexs:NSMutableArray=[]
     
     var _albumIndex:Int?
-    
+    var _title:String?
     var _setuped:Bool=false
     
     var _range:Int = 0
@@ -44,6 +46,9 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         if _setuped{
             return
         }
+        _btn_back?.titleLabel?.font = UIFont.systemFontOfSize(16)
+        _btn_edit?.titleLabel?.font = UIFont.systemFontOfSize(16)
+        
         _imagesArray = NSMutableArray(array:  MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
         
         let layout = CustomLayout()
@@ -51,6 +56,14 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         _collectionView.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
         _collectionView.userInteractionEnabled=true
         _setuped=true
+        
+        if _title == ""{
+            _titleButton?.setTitle("未命名相册", forState: UIControlState.Normal)
+
+        }else{
+            _titleButton?.setTitle(_title, forState: UIControlState.Normal)
+
+        }
     }
     
     override func viewDidLoad() {
@@ -104,14 +117,13 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             println("not set action")
         }
         
-        var _pic:Manage_pic?
-        _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
-        self.navigationController?.pushViewController(_pic!, animated: true)
+        var _controller:Manage_pic = Manage_pic()
+        _controller._showIndexAtPics(indexPath.item, __array: _imagesArray)
         if _albumIndex != nil{
-            _pic?._albumIndex = _albumIndex
+            _controller._albumIndex = _albumIndex
         }
-        _pic?._range = _range
-        _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
+        _controller._range = _range
+        self.navigationController?.pushViewController(_controller, animated: true)
        // _pic?._setPic(_imagesArray[indexPath.item] as! NSDictionary)
         //_pic?._setImage(_imagesArray[indexPath.item] as! String)
     }
@@ -126,7 +138,15 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _SelectedIndexs.addObject(pic._index!)
         }else{
             _SelectedIndexs.removeObject(pic._index!)
+            
+            
         }
+        if _SelectedIndexs.count>0{
+            _btn_edit?.setTitleColor(UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1), forState: UIControlState.Normal)
+        }else{
+            _btn_edit?.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: UIControlState.Normal)
+        }
+        
         
         
     }
@@ -143,7 +163,6 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
         return _has
     }
-    
     
     
     @IBAction func clickAction(_btn:UIButton)->Void{
@@ -164,6 +183,10 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             case _action_normal:
                 self.openActions()
             case _action_delete:
+                if _SelectedIndexs.count<=0{
+                    return
+                }
+                
                 var _alert:UIAlertView = UIAlertView()
                 _alert.delegate=self
                 _alert.title="确定删除图片？"
@@ -222,13 +245,22 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _SelectedIndexs=[]
             
             //_collectionView.reloadData()
-            _btn_back?.setTitle("返回", forState: UIControlState.Normal)
-            _btn_edit?.setTitle("编辑", forState: UIControlState.Normal)
+            _btn_back?.setTitle("", forState: UIControlState.Normal)
+            _btn_edit?.setTitle("", forState: UIControlState.Normal)
+            _btn_back?.setBackgroundImage(UIImage(named: "back.png"), forState: UIControlState.Normal)
+            _btn_edit?.setBackgroundImage(UIImage(named: "edit.png"), forState: UIControlState.Normal)
+            _btn_back?.frame=CGRect(x: 11, y: _barH-21-11, width: 51, height: 21)
+            _btn_edit?.frame=CGRect(x: self.view.frame.width-50, y: _barH-44, width: 50, height: 44)
             
             _needToSelect(false)
         
         case _action_delete:
             _SelectedIndexs=[]
+            _btn_back?.setBackgroundImage(UIImage(), forState: UIControlState.Normal)
+            _btn_edit?.setBackgroundImage(UIImage(), forState: UIControlState.Normal)
+            _btn_back?.frame=CGRect(x: self.view.frame.width-50, y: _barH-44, width: 50, height: 44)
+            _btn_edit?.frame=CGRect(x: self.view.frame.width-40-15+3, y: 20, width: 40, height: _barH-20)
+            _btn_edit?.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: UIControlState.Normal)
             _btn_edit?.setTitle("删除", forState: UIControlState.Normal)
             _btn_back?.setTitle("取消", forState: UIControlState.Normal)
             //self._collectionView.reloadData()
@@ -328,7 +360,10 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
     }
     
-    
+    override func viewWillAppear(animated: Bool) {
+        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        UIApplication.sharedApplication().statusBarHidden=false
+    }
     
     
 

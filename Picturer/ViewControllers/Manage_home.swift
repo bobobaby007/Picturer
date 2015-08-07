@@ -10,23 +10,32 @@
 
 import Foundation
 import UIKit
+import AssetsLibrary
+import AVFoundation
 
 
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
    
+    var _cameraPicker:UIImagePickerController!
     //var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     
     @IBOutlet weak var _tableView:UITableView!
     @IBOutlet weak var _btn_new:UIButton!
+    @IBOutlet weak var _btn_camera:UIButton!
     
     var _offset:CGFloat=0
     var _currentIndex:NSIndexPath?
     
+    var _cameraImage:NSDictionary?
+    
     @IBAction func btnHander(btn:UIButton){
         switch btn{
         case _btn_new:
-            openNewActions()            
+            openNewActions()
+        case _btn_camera:
+            _openCamera()
+            return
         default:
             println("")
         }
@@ -85,7 +94,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
        return 1
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return _tableView.bounds.size.height/5
+        //return _tableView.bounds.size.height/5
+        
+        return 91
     }
     
     
@@ -103,6 +114,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
     
         _show?._albumIndex=indexPath.row
+        _show?._title = _album.objectForKey("title") as? String
+        //_show?._setTitle(_album.objectForKey("title") as! String)
         _show?._range = _album.objectForKey("range") as! Int
         
         
@@ -123,8 +136,11 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         
         
-        let cell:AlbumListCell=_tableView.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
+        var cell:AlbumListCell=_tableView.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
         
+        //cell.separatorInset = UIEdgeInsets(top: 0, left: -1, bottom: 0, right: 0)
+        cell.preservesSuperviewLayoutMargins = false
+        cell.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         
         
         //cell.textLabel?.text=_albumArray[indexPath.row] as? String
@@ -145,7 +161,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             if _pic != nil{
                 cell._setPic(_pic)
             }else{
-                cell.setThumbImage("1.png")
+                cell.setThumbImage("blank.png")
             }
             
         }
@@ -282,7 +298,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
             case "pics_to_album"://选择图片到指定相册
                 MainAction._insertPicsToAlbumById( dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
-            
             case "pics_to_album_new"://选择图片到新建立相册
                 var _controller:Manage_new?
                 _controller=Manage_new()
@@ -329,7 +344,90 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _controller?._imagesArray=NSMutableArray(array: images)
         // println(_show)
         //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
+       // self.navigationController?.popViewControllerAnimated(false)
         self.navigationController?.pushViewController(_controller!, animated: true)
+    }
+    
+    
+    //---------相机
+    
+    func _openCamera(){
+        _cameraPicker =  UIImagePickerController()
+        _cameraPicker.delegate = self
+        _cameraPicker.sourceType = .Camera
+        //self.view.window!.rootViewController!.presentViewController(_cameraPicker, animated: true, completion: nil)
+        
+        presentViewController(_cameraPicker!, animated: true, completion: nil)
+        
+        println("9999")
+    }
+    //----相机代理方法
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        _cameraPicker.dismissViewControllerAnimated(true, completion: nil)
+        
+        
+        //_loadImagesAt(0)
+        
+        var _alassetsl:ALAssetsLibrary = ALAssetsLibrary()
+        //println(info)
+        
+        let image:UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
+        
+        
+        
+        
+        //_alassetsl.writeImageToSavedPhotosAlbum(image.CGImage, orientation: image.imageOrientation, completionBlock: cameraSaveOk)
+        
+        
+        //_alassetsl.writeImageToSavedPhotosAlbum(image.CGImage,orientation: image.imageOrientation,completionBlock:{ (path:NSURL!, error:NSError!) -> Void in    println("\(path)")  })
+        
+        // _alassetsl.writeImageToSavedPhotosAlbum(image.CGImage, orientation: image.imageOrientation, completionBlock: Selector("cameraSaveOk:"))
+        
+        
+        
+       UIImageWriteToSavedPhotosAlbum(info[UIImagePickerControllerOriginalImage] as? UIImage, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
+        //_cameraPicker.image = info[UIImagePickerControllerOriginalImage] as? UIImage
+    }
+    func cameraSaveOk(URL:NSURL, Error:NSError)->Void{
+        let _url:NSString=URL.absoluteString!
+        let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
+        //asset.originalAsset = result
+        //self._images!.insertObject(_dict, atIndex: 0)
+    }
+    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+        if error == nil {
+            
+            var library:ALAssetsLibrary = ALAssetsLibrary()
+            library.enumerateGroupsWithTypes(ALAssetsGroupSavedPhotos, usingBlock: {(group: ALAssetsGroup! , outStop: UnsafeMutablePointer<ObjCBool>) in
+                if group != nil {
+                    group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+                        if result != nil {
+                                let asset = DKAsset()
+                                var _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
+                                let _url:NSString=_nsurl.absoluteString!
+                                let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
+                                self._cameraImage = _dict
+                            // println(self._cameraImage)
+                        } else {
+                            self.imagePickerDidSelected([self._cameraImage!])
+                        }}
+                }else {
+                    
+                }
+                
+                }, failureBlock: {(error: NSError!) in
+                    //---没有相册
+            })
+            
+            
+        } else {
+            let ac = UIAlertController(title: "保存失败", message: error?.localizedDescription, preferredStyle: .Alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            presentViewController(ac, animated: true, completion: nil)
+        }
+        
+        
     }
     
     override func viewDidLoad() {

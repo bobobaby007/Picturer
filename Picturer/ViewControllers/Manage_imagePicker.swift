@@ -219,16 +219,10 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 
                 presentViewController(_cameraPicker, animated: true, completion: nil)
             }else{
-                
-                //let _asset:DKAsset=_images[indexPath.item] as! DKAsset
-                var _pic:Manage_pic?
-                _pic=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
-                
-                //let _dict:NSDictionary = NSDictionary(objects: [_asset.url as String!,"alasset"], forKeys: ["url","type"])
-                //_pic?._setPic(_dict)
-                _pic?._showIndexAtPics(indexPath.item-1, __array: _images!)
-                self.navigationController?.pushViewController(_pic!, animated: true)
-                //presentViewController(_pic!, animated: true, completion: nil)
+                var _controller:Manage_pic = Manage_pic()
+                _controller._showIndexAtPics(indexPath.item-1, __array: _images!)
+               
+                self.navigationController?.pushViewController(_controller, animated: true)
             }
             
         }
@@ -294,7 +288,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         //_loadImagesAt(0)
         
         var _alassetsl:ALAssetsLibrary = ALAssetsLibrary()
-        println(info)
+        //println(info)
         
         let image:UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
         
@@ -325,7 +319,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             //println(contextInfo)
             _loadImagesAt(0)
            // println(self._images)
-            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popViewControllerAnimated(false)
             _delegate?.imagePickerDidSelected([self._images!.objectAtIndex(0)])
 //            let ac = UIAlertController(title: "保存成功", message: "", preferredStyle: .Alert)
 //            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
@@ -372,13 +366,18 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 }
                 
             }
-            self.navigationController?.popViewControllerAnimated(true)
+            
+            self.navigationController?.popViewControllerAnimated(false)
             _delegate?.imagePickerDidSelected(_imgs)
             
             
         default:
             println("")
         }
+    }
+    override func viewWillAppear(animated: Bool) {
+        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        UIApplication.sharedApplication().statusBarHidden=false
     }
 }
 
@@ -423,6 +422,7 @@ class groupPickerController: UIViewController {
         
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
 }
 
 

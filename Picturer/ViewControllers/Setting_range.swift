@@ -25,7 +25,7 @@ class Setting_range: UIViewController, UITableViewDelegate,UITableViewDataSource
     
     var _tableView:UITableView?
     let _tableCellH:CGFloat=40
-    var _settings:NSArray=[["title":"按创建时间倒序排列","des":""],["title":"按创建时间顺序排列","des":""]]
+    var _settings:NSArray=[["title":"按创建时间顺序排列","des":""],["title":"按创建时间倒序排列","des":""]]
     
     var _selectedId:Int=0
     

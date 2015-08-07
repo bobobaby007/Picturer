@@ -95,7 +95,9 @@ class MainAction: AnyObject {
     
     
     
-    //-----设置相册默认值
+    //-----设置相册默认值-----
+    
+    
     static func _setDefault(_album:NSMutableDictionary){
         
         if _album.objectForKey("title") == nil{
@@ -111,7 +113,7 @@ class MainAction: AnyObject {
             _album.setObject([], forKey: "tags")
         }
         if _album.objectForKey("range") == nil{
-            _album.setObject(0, forKey: "range")
+            _album.setObject(1, forKey: "range")
         }
         if _album.objectForKey("powerType") == nil{
             _album.setObject(0, forKey: "powerType")
@@ -486,10 +488,17 @@ class MainAction: AnyObject {
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
             var _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%5+3) as! String,"fromWeb"], forKeys: ["url","type"])
-            _dict.setObject(_pic, forKey: "pic")
-            _pic = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
+            //_dict.setObject(_pic, forKey: "pic")
+            //_pic = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "userImg")
             _dict.setObject("000001", forKey: "userId")
+            
+            if i==1||i==3||i==5{
+                _dict.setObject("", forKey: "sign")
+            }else{
+                _dict.setObject("我鞥三sg收到各位更冷冻过的时光树大根深等功", forKey: "sign")
+            }
+            
             _dict.setObject(_testUserNames?.objectAtIndex(i%12) as! String, forKey: "userName")
             
             _array.addObject(_dict)

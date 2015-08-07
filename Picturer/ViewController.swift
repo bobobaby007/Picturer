@@ -13,12 +13,12 @@ class ViewController: UIViewController {
    
     var manage_home:Manage_home?
     var _navgationController = UINavigationController()
-    
+    var _setuped:Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        //showManageHome()
-        showSocialHome()
+        showManageHome()
+        //showSocialHome()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -30,6 +30,9 @@ class ViewController: UIViewController {
     
     
     func setup()->Void{
+        if _setuped{
+            return
+        }
         self.view.addSubview(_navgationController.view)
         if (manage_home != nil){
             //println("有")
@@ -38,6 +41,9 @@ class ViewController: UIViewController {
             manage_home=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_home") as? Manage_home
         }
         _navgationController.navigationBarHidden=true
+        
+        
+        _setuped=true
         
        // _navgationController.addChildViewController(manage_home!)
     }

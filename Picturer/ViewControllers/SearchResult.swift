@@ -11,7 +11,7 @@ import UIKit
 
 
 class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate {
-    
+    var _gap:CGFloat = 10
     var _setuped:Bool=false
     
     var _tabBtnView:UIView = UIView()
@@ -69,6 +69,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
         
         
         _userTableView = UITableView(frame: CGRect(x: 0, y: 40, width: frame.width, height: frame.height-40))
+        _userTableView?.registerClass(UITableViewCell.self, forCellReuseIdentifier: "tableCell")
         _userTableView?.dataSource = self
         _userTableView?.delegate = self
         
@@ -89,7 +90,8 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
             self._albumCollectionView?.reloadData()
         })
         MainAction._getResultOfUser(__str, block: { (array) -> Void in
-            
+            self._userArray = array
+            self._userTableView?.reloadData()
         })
     }
     
@@ -99,7 +101,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
             _tab_reference.setTitleColor(UIColor(white: 0.1, alpha: 1), forState: UIControlState.Normal)
             _tab_search.setTitleColor(UIColor(white: 0.8, alpha: 1), forState: UIControlState.Normal)
             
-            
+            _userTableView?.removeFromSuperview()
             addSubview(_albumCollectionView!)
             
             return
@@ -109,6 +111,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
             
             _albumCollectionView!.removeFromSuperview()
             
+            addSubview(_userTableView!)
             
             return
         default:
@@ -127,8 +130,43 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
         return 55
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:UITableViewCell = tableView.dequeueReusableCellWithIdentifier("collectionCell", forIndexPath: indexPath) as! UITableViewCell
-        return cell
+        var cell:UITableViewCell? = tableView.viewWithTag(100+indexPath.row) as? UITableViewCell
+        
+        if cell == nil{
+            cell = tableView.dequeueReusableCellWithIdentifier("tableCell", forIndexPath: indexPath) as? UITableViewCell
+            cell?.tag = 100+indexPath.row
+            var _picV:PicView = PicView(frame:CGRect(x: _gap, y: 7.5, width: 40, height: 40))
+            _picV._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
+            _picV.maximumZoomScale = 1
+            _picV.minimumZoomScale = 1
+            
+            _picV._imgView?.layer.cornerRadius = 20
+            _picV._imgView?.layer.masksToBounds = true
+            
+            _picV._setPic(((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("userImg") as! NSDictionary), __block: { (_dict) -> Void in
+                
+            })
+            
+            cell!.addSubview(_picV)
+            
+            var _label:UILabel
+            if ((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("sign") as! String) != ""{
+                _label = UILabel(frame: CGRect(x: 40+2*_gap, y: 10, width: cell!.frame.width-40-2*_gap, height: 15))
+                var _labelDes:UILabel = UILabel(frame: CGRect(x: 40+2*_gap, y: 30, width: cell!.frame.width-40-2*_gap, height: 15))
+                _labelDes.font = UIFont.systemFontOfSize(13)
+                _labelDes.text=(_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("sign") as? String
+                _labelDes.textColor = UIColor(white: 0.8, alpha: 1)
+                cell!.addSubview(_labelDes)
+            }else{
+                _label = UILabel(frame: CGRect(x: 40+2*_gap, y: 20, width: cell!.frame.width-40-2*_gap, height: 15))
+            }
+            _label.font = UIFont.systemFontOfSize(14)
+            _label.text=(_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("userName") as? String
+            cell!.addSubview(_label)
+        }else{
+            
+        }
+        return cell!
     }
     
     
@@ -177,5 +215,8 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
+
+
 

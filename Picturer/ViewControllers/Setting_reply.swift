@@ -27,7 +27,7 @@ class Setting_reply: UIViewController, UITableViewDelegate,UITableViewDataSource
     
     var _tableView:UITableView?
     let _tableCellH:CGFloat=40
-    var _settings:NSArray=[["title":"允许回复","des":""],["title":"不允许回复","des":""]]
+    var _settings:NSArray=[["title":"允许评论","des":""],["title":"不允许评论","des":""]]
     
     var _selectedId:Int=0
     
@@ -55,7 +55,7 @@ class Setting_reply: UIViewController, UITableViewDelegate,UITableViewDataSource
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.text="回复权限"
+        _title_label?.text="评论权限"
         
         _tableView=UITableView()
         _tableView?.delegate=self

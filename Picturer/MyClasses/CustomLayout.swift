@@ -11,7 +11,7 @@ import UIKit
 * 这个类只简单定义了一个section的布局
 */
 class CustomLayout : UICollectionViewLayout {
-    let lineSpacing:CGFloat = 2
+    let lineSpacing:CGFloat = 1
     
     let rowNumber:Int = 4
     // 内容区域总大小，不是可见区域

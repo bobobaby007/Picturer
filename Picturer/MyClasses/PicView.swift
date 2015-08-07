@@ -71,7 +71,6 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     }
     
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
-        
         return _imgView
     }
     func scrollViewDidZoom(scrollView: UIScrollView) {
