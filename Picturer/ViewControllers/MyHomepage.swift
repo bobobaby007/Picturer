@@ -28,10 +28,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _tableView:UITableView?
     
-    var _dataArray:NSArray=["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
+    var _dataArray:NSArray=[]
     var _setuped:Bool = false
     
-    var _profileDict:NSDictionary?
+    var _profileDict:NSDictionary?=NSDictionary()
     
     var _profilePanel:UIView?
     var _profile_icon_img:PicView?
@@ -76,7 +76,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
     
+    override func viewDidLoad() {
+        self.automaticallyAdjustsScrollViewInsets=false
+        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
     
+        setup(self.view.frame)
+        _getDatas()
+    }
     
     func setup(__frame:CGRect){
         if _setuped {
@@ -243,23 +249,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         
-        //-----初始化数据
         
-        _heighArray=NSMutableArray()
-        
-        _commentsArray=NSMutableArray()
-        _likeArray = NSMutableArray()
-        for var i:Int=0; i<_dataArray.count;++i{
-            _heighArray?.addObject(_defaultH)
-            
-            MainAction._getCommentsOfAlubm(String(i), block: { (array) -> Void in
-                self._commentsArray?.addObject(array)
-            })
-            MainAction._getLikesOfAlubm(String(i), block: { (array) -> Void in
-                self._likeArray?.addObject(array)
-            })
-            
-        }
         
         //---消息提醒----
         
@@ -369,8 +359,19 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     
     func _getDatas(){
-      // _profileDict = MainAction._getUserProfileAtId(_userId)
+        let _dict:NSDictionary = MainAction._getUserProfileAtId(_userId)
+        _profileDict = _dict
         
+        
+        
+        MainAction._getAlbumListAtUser(_userId, block: { (array) -> Void in
+            
+            self._dataArray = array
+            self._refreshDatas()
+            self._getMessage()
+        })
+        
+       
     }
     
     
@@ -384,6 +385,24 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _following_label?.text=String(_profileDict?.objectForKey("followingNumber") as! Int)
         _setSign(_profileDict?.objectForKey("sign") as! String)
         _setIconImg(_profileDict?.objectForKey("profileImg") as! NSDictionary)
+        
+        
+        
+        //-----初始化数据
+        
+        _heighArray=NSMutableArray()
+        _commentsArray=NSMutableArray()
+        _likeArray = NSMutableArray()
+        for var i:Int=0; i<_dataArray.count;++i{
+            _heighArray?.addObject(_defaultH)
+            MainAction._getCommentsOfAlubm(String(i), block: { (array) -> Void in
+                self._commentsArray?.addObject(array)
+            })
+            MainAction._getLikesOfAlubm(String(i), block: { (array) -> Void in
+                self._likeArray?.addObject(array)
+            })
+        }
+        _tableView?.reloadData()
         
     }
     func _setSign(__str:String){
@@ -547,21 +566,21 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         cell!._userId = _userId
         cell!._indexId = indexPath.row
         cell!._delegate=self
-        cell!._setPic(NSDictionary(objects: [_dataArray.objectAtIndex(indexPath.row),"fromWeb"], forKeys: ["url","type"]))
-        cell!._setUserImge(NSDictionary(objects: [_dataArray.objectAtIndex(indexPath.row),"fromWeb"], forKeys: ["url","type"]))
-        cell!._setAlbumTitle("撒旦过呢个作品")
-        cell!._setDescription("阿湿婆大神那个大使馆的是三等功的身份时代的时光大使馆收到广东省根深蒂固")
-        cell!._setUpdateTime("下午 2:00 更新")
-        cell!._setUserName("小小白")
         
+        
+        
+    
+        cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
+        cell!._setUserImge(_profileDict?.objectForKey("profileImg") as! NSDictionary)
+        cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String)
+        
+        cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
+        cell!._setUpdateTime("下午 2:00 更新")
+        cell!._setUserName(_profileDict!.objectForKey("userName") as! String)
         //cell!._refreshView()
         return cell!
-        
     }
-    
-    
     //------相册单元代理
-    
     func _resized(__indexId: Int, __height: CGFloat) {
         //println("changeH")
         
@@ -577,8 +596,18 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
        // println(_heighArray)
     }
-    func _viewAlbum(__albumId: String) {
+    func _viewAlbum(__albumIdex:Int) {
         
+        
+        if _userId == MainAction._userId{
+            MainAction._getPicsListAt(__albumIdex, block: { (array) -> Void in
+                var _controller:Social_pic = Social_pic()
+                _controller._showIndexAtPics(0, __array: array)
+                self.navigationController?.pushViewController(_controller, animated: true)
+
+            })
+            return
+        }
         
         
         MainAction._getPicsListAtAlbumId("00003", block: { (array) -> Void in
@@ -693,18 +722,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         }
     }
     
-    override func viewDidLoad() {
-        self.automaticallyAdjustsScrollViewInsets=false
-       UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
-        
-        let _dict:NSDictionary = MainAction._getUserProfileAtId(_userId)
-        _profileDict = _dict
-        
-        setup(self.view.frame)
-        _refreshDatas()
-        
-        _getMessage()
-    }
+    
     override func didMoveToParentViewController(parent: UIViewController?) {
         //setup(<#__frame: CGRect#>)
         

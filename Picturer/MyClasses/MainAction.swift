@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import SwiftHTTP
+//import SwiftHTTP
 
 
 
@@ -112,7 +112,7 @@ class MainAction: AnyObject {
         if _album.objectForKey("tags") == nil{
             _album.setObject([], forKey: "tags")
         }
-        if _album.objectForKey("range") == nil{
+        if _album.objectForKey("range") == nil{//-------默认1，倒序
             _album.setObject(1, forKey: "range")
         }
         if _album.objectForKey("powerType") == nil{
@@ -397,6 +397,41 @@ class MainAction: AnyObject {
         // println(response.text)
         block(_array)
     }
+    //-----获取相册里的所有图片＊＊＊＊暂时用本地信息替代在线信息
+    static func _getPicsListAt(albumIndex:Int,block:(NSArray)->Void){
+        
+        var _theA:NSArray = MainAction._getImagesOfAlbumIndex(albumIndex)!
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = _theA.count
+        var _range:Int = (_albumList.objectAtIndex(albumIndex) as! NSDictionary).objectForKey("range") as! Int
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            
+            let _pic:NSDictionary = _theA.objectAtIndex(i) as! NSDictionary
+            _dict.setObject(_pic, forKey: "pic")
+            _dict.setObject(i, forKey: "likeNumber")
+            _dict.setObject(i*3, forKey: "commentNumber")
+            
+            if ((_theA.objectAtIndex(i) as! NSDictionary).objectForKey("description") != nil){
+                _dict.setObject((_theA.objectAtIndex(i) as! NSDictionary).objectForKey("description") as! String, forKey: "description")
+            }else{
+                _dict.setObject("跟我和光缆的那个啊山东省的那个三等功上度过呢哦你感动啊就是大户个阿萨德个", forKey: "description")
+            }
+            
+            if  _range == 0{
+                _array.addObject(_dict)
+            }else{
+                _array.insertObject(_dict, atIndex: 0)
+            }
+            
+            
+        }
+         
+        block(_array)
+    }
+    
+    
+    
     static func _getLikesOfPicId(__picId:String){
         
     }
@@ -507,11 +542,38 @@ class MainAction: AnyObject {
         block(_array)
     }
     //-
-    static func _getAlbumListAtUser(block:(NSArray)->Void){
+    static func _getAlbumListAtUser(__userId:String,block:(NSArray)->Void){
 //        var request = HTTPTask()
 //        request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
 //            block(self._albumList)
 //        })
+        
+        if __userId == _userId{
+            var _array:NSMutableArray = NSMutableArray(array: _albumList)
+            var _n:Int = _array.count
+            for var i:Int = 0; i<_n;++i{
+                var _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(i) as! NSDictionary)
+                
+                let _pic:NSDictionary = _getCoverFromAlbumAtIndex(i)!
+                _dict.setObject(_pic, forKey: "cover")
+                _array[i] = _dict
+            }
+            block(_array)
+            return
+        }else{
+            var _array:NSMutableArray = NSMutableArray()
+            var _n:Int = 10
+            for var i:Int = 0; i<_n;++i{
+                var _dict:NSMutableDictionary = NSMutableDictionary()
+                let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+                _dict.setObject(_pic, forKey: "cover")
+                _dict.setObject("天边一朵云", forKey: "title")
+                _dict.setObject("个人欣赏", forKey: "description")
+                _array.addObject(_dict)
+            }
+            block(_array)
+            
+        }
         
     }
     

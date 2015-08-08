@@ -209,8 +209,12 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         _titleInput?.text=_album!.objectForKey("title") as! String
         
-        if _album!.objectForKey("description") != nil{
-            _desInput?.text=_album!.objectForKey("description") as! String
+        if (_album!.objectForKey("description") != nil){
+            if _album!.objectForKey("description") as! String != ""{
+                _desInput?.text=_album!.objectForKey("description") as! String
+                _desPlaceHoldLabel?.hidden=true
+            }
+            
         }
         
         

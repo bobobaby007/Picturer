@@ -13,7 +13,7 @@ protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
     func _resized(__indexId:Int,__height:CGFloat)
     func _moreComment(__indexId:Int)
     func _viewUser(__userId:String)
-    func _viewAlbum(__albumId:String)
+    func _viewAlbum(__albumIndex:Int)
     func _moreLike(__indexId:Int)
     func _buttonAction(__action:String,__dict:NSDictionary)
 }
@@ -470,7 +470,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             _delegate?._viewUser(_userId!)
             return
         case _picV!:
-            _delegate?._viewAlbum("testAlbumId")
+            _delegate?._viewAlbum(_indexId)
             
         default:
             return
