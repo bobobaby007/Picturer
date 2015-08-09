@@ -182,11 +182,11 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
         
         //let _al:ALAsset=_imagesArray.objectAtIndex(indexPath.item) as! ALAsset
         let _pic:NSDictionary
-        println(collectionView)
+        //println(collectionView)
         if collectionView.isEqual(_albumCollection){
             
             if indexPath.item == MainAction._albumList.count{
-                cell._setImage("newAlbum")
+                cell._setImage("newAlbum.png")
                 cell._hasTag=false
                 cell._setCorner(5)
             }else{
@@ -288,7 +288,7 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
             self.navigationController?.popViewControllerAnimated(true)
         case _btn_save!:
             if treckDict(){
-                self.navigationController?.popViewControllerAnimated(true)
+                self.navigationController?.popViewControllerAnimated(false)
                 _delegate?.saved(_savingDict!)
                 
             }

@@ -70,6 +70,8 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _contr._userName = MainAction._currentUser.objectForKey("userName") as? String
             self.navigationController?.pushViewController(_contr, animated: true)
         case 1://朋友
+            let _contr:Friends_Home=Friends_Home()
+            self.navigationController?.pushViewController(_contr, animated: true)
             return
         case 2://妙人
             return

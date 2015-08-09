@@ -43,6 +43,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _followed_label:UILabel?//被关注
     var _following_label:UILabel?//关注
     var _sign_text:UITextView?
+    var _line_profile:UIView?
+    
     
     var _label_followed:UILabel?
      var _label_following:UILabel?
@@ -92,23 +94,20 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _frameW = _myFrame!.width
         _gap = 0.04*_frameW!
         _gapY = 0.06*_frameW!
-        _imgW = 0.22*_frameW!
+        _imgW = 0.20*_frameW!
         _profileH = _imgW! + 2*_gapY!
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
-        _topBar?.backgroundColor=UIColor.blackColor()
+        _topBar?.backgroundColor=UIColor(white: 0.1, alpha: 0.98)
         
-        _btn_cancel=UIButton(frame:CGRect(x: 6, y: 30, width: 40, height: 22))
+        _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
-        _btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _btn_moreAction = UIButton(frame:CGRect(x: _myFrame!.width - 35, y: 10, width: 21, height: 57))
-        _btn_moreAction?.setImage(UIImage(named: "moreAction_icon.png"), forState: UIControlState.Normal)
-        _btn_moreAction!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
+        _btn_moreAction=UIButton(frame:CGRect(x: self.view.frame.width-50, y: _barH-44, width: 50, height: 44))
+        _btn_moreAction?.setImage(UIImage(named: "edit.png"), forState: UIControlState.Normal)
         _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
-
         
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
@@ -123,7 +122,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         _profilePanel = UIView(frame: CGRect(x: 0, y: 0, width: _myFrame!.width, height: _profileH))
         _profilePanel?.backgroundColor = UIColor.whiteColor()
-        
+        _line_profile=UIView(frame: CGRect(x: 0, y: _profileH, width: _myFrame!.width, height: 0.5))
+        _line_profile?.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        _profilePanel?.addSubview(_line_profile!)
         
         _profile_icon_img = PicView(frame: CGRect(x: _gap!, y: _gapY!, width: _imgW!, height: _imgW!))
         _profile_icon_img?.scrollEnabled=false
@@ -135,22 +136,26 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         _btn_edite = UIButton(frame: CGRect(x: 0.275*_frameW!,y: _gapY!+0.6*_imgW!,width: 2*0.33*(_frameW!-_gap!-0.275*_frameW!),height: 0.4*_imgW!))
         _btn_edite?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        _btn_edite?.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        _btn_edite?.backgroundColor = UIColor(white: 0.9, alpha: 1)
         _btn_edite?.layer.masksToBounds = true
         _btn_edite?.layer.cornerRadius = 5
+        var attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "编辑个人主页")
+        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         _btn_edite?.titleLabel?.textAlignment = NSTextAlignment.Center
-        _btn_edite?.setTitle("编辑个人主页", forState: UIControlState.Normal)
-        _btn_edite?.titleLabel?.font=UIFont.systemFontOfSize(15)
+        _btn_edite?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+        _btn_edite?.titleLabel?.font=UIFont.systemFontOfSize(12)
         _btn_edite?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_share = UIButton(frame: CGRect(x: _btn_edite!.frame.origin.x+_btn_edite!.frame.width+3,y: _btn_edite!.frame.origin.y,width: _frameW!-_btn_edite!.frame.origin.x-_btn_edite!.frame.width-3-_gap!,height: _btn_edite!.frame.height))
         _btn_share?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        _btn_share?.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        _btn_share?.backgroundColor = UIColor(white: 0.9, alpha: 1)
         _btn_share?.layer.masksToBounds = true
         _btn_share?.layer.cornerRadius = 5
         _btn_share?.titleLabel?.textAlignment = NSTextAlignment.Center
-        _btn_share?.setTitle("分享", forState: UIControlState.Normal)
-        _btn_share?.titleLabel?.font=UIFont.systemFontOfSize(15)
+        attributedString = NSMutableAttributedString(string: "分享")
+        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        _btn_share?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+        _btn_share?.titleLabel?.font=UIFont.systemFontOfSize(12)
         _btn_share?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_follow = UIButton(frame: _btn_edite!.frame)
@@ -159,8 +164,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_follow?.layer.masksToBounds = true
         _btn_follow?.layer.cornerRadius = 5
         _btn_follow?.titleLabel?.textAlignment = NSTextAlignment.Center
-        _btn_follow?.setTitle("+关注", forState: UIControlState.Normal)
-        _btn_follow?.titleLabel?.font=UIFont.systemFontOfSize(15)
+        attributedString = NSMutableAttributedString(string: "＋关注")
+        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        _btn_follow?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+        _btn_follow?.titleLabel?.font=UIFont.systemFontOfSize(12)
         _btn_follow?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
@@ -170,39 +177,40 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_message?.layer.masksToBounds = true
         _btn_message?.layer.cornerRadius = 5
         _btn_message?.titleLabel?.textAlignment = NSTextAlignment.Center
-        _btn_message?.setTitle("私信", forState: UIControlState.Normal)
-        _btn_message?.titleLabel?.font=UIFont.systemFontOfSize(15)
+        attributedString = NSMutableAttributedString(string: "私信")
+        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        _btn_message?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+        _btn_message?.titleLabel?.font=UIFont.systemFontOfSize(12)
         _btn_message?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         
         
         
-        _label_album = UILabel(frame: CGRect(x: _btn_edite!.frame.origin.x,y: 0.26*_imgW!+_gapY!,width: 0.5*_btn_edite!.frame.width,height: 15))
-        _label_album?.textColor = UIColor.darkGrayColor()
+        _label_album = UILabel(frame: CGRect(x: _btn_edite!.frame.origin.x,y: 0.26*_imgW!+_gapY!+3,width: 0.5*_btn_edite!.frame.width,height: 15))
+        _label_album?.textColor = UIColor(white: 0.4, alpha: 1)
         _label_album?.textAlignment = NSTextAlignment.Center
         _label_album?.text = "图册"
-        _label_album?.font=UIFont.systemFontOfSize(15)
+        _label_album?.font=UIFont.systemFontOfSize(13)
         
         
         _label_followed = UILabel(frame: CGRect(x: _btn_edite!.frame.origin.x+0.5*_btn_edite!.frame.width,y: _label_album!.frame.origin.y,width: 0.5*_btn_edite!.frame.width,height: 15))
-        _label_followed?.textColor = UIColor.darkGrayColor()
+        _label_followed?.textColor = UIColor(white: 0.4, alpha: 1)
         _label_followed?.textAlignment = NSTextAlignment.Center
         _label_followed?.text="被关注"
-        _label_followed?.font=UIFont.systemFontOfSize(15)
+        _label_followed?.font=UIFont.systemFontOfSize(13)
         
         _label_following = UILabel(frame: CGRect(x: _btn_share!.frame.origin.x,y: _label_album!.frame.origin.y,width: _btn_share!.frame.width,height: 15))
-        _label_following?.textColor = UIColor.darkGrayColor()
+        _label_following?.textColor = UIColor(white: 0.4, alpha: 1)
         _label_following?.textAlignment = NSTextAlignment.Center
         _label_following?.text="关注"
-        _label_following?.font=UIFont.systemFontOfSize(15)
+        _label_following?.font=UIFont.systemFontOfSize(13)
         
         
-        _albumNum_label = UILabel(frame:CGRect(x:_label_album!.frame.origin.x,y:_gapY!,width:_label_album!.frame.width,height:20))
-       
+        _albumNum_label = UILabel(frame:CGRect(x:_label_album!.frame.origin.x,y:_gapY!+3,width:_label_album!.frame.width,height:20))
         _albumNum_label?.textColor = UIColor.blackColor()
         _albumNum_label?.textAlignment = NSTextAlignment.Center
-        
+        _albumNum_label?.font = UIFont.systemFontOfSize(14)
         
         
         
@@ -210,19 +218,20 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _followed_label = UILabel(frame: CGRect(x: _albumNum_label!.frame.origin.x+_albumNum_label!.frame.width,y: _albumNum_label!.frame.origin.y,width: _albumNum_label!.frame.width,height: _albumNum_label!.frame.height))
         _followed_label?.textColor = UIColor.blackColor()
         _followed_label?.textAlignment = NSTextAlignment.Center
-        
+        _followed_label?.font = UIFont.systemFontOfSize(14)
         
         
         
         _following_label = UILabel(frame: CGRect(x: _btn_share!.frame.origin.x,y: _albumNum_label!.frame.origin.y,width: _btn_share!.frame.width,height: _albumNum_label!.frame.height))
         _following_label?.textColor = UIColor.blackColor()
         _following_label?.textAlignment = NSTextAlignment.Center
+        _following_label?.font = UIFont.systemFontOfSize(14)
         
         
         
         
-        
-        _sign_text = UITextView(frame: CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: 12))
+        _sign_text = UITextView(frame: CGRect(x: _gap!,y: _imgW!+2*_gap!+3,width: _myFrame!.width-2*_gap!,height: 12))
+        _sign_text?.font = UIFont.systemFontOfSize(13)
         _sign_text?.editable=false
         _sign_text?.alpha = 0
         
@@ -255,17 +264,20 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         
-        _messageAlertView = UIView(frame: CGRect(x: 0, y: _profileH+10, width: _myFrame!.width, height: 40))
+        _messageAlertView = UIView(frame: CGRect(x: 0, y: _profileH+10, width: 194, height: 40))
         _messageAlertView?.layer.masksToBounds=true
         _messageAlertView?.layer.cornerRadius = 10
-        _messageAlertView?.backgroundColor = UIColor.darkGrayColor()
+        _messageAlertView?.backgroundColor = UIColor(white: 0.2, alpha: 0.9)
         
-        _messageIcon = UIImageView(frame: CGRect(x: 180, y: 15, width: 6, height: 10))
+        _messageIcon = UIImageView(frame: CGRect(x: 175, y: 15, width: 6, height: 10))
+        _messageIcon?.userInteractionEnabled=false
         _messageIcon?.image = UIImage(named: "message_arrow.png")
         _messageAlertView?.addSubview(_messageIcon!)
         
-        _messageText = UILabel(frame: CGRect(x: 60, y: 10, width: 80, height: 20))
+        _messageText = UILabel(frame: CGRect(x: 60, y: 13, width: 80, height: 12))
         _messageText?.textAlignment = NSTextAlignment.Center
+        _messageText?.userInteractionEnabled=false
+        _messageText?.font = UIFont.systemFontOfSize(15)
         _messageText?.textColor = UIColor.whiteColor()
         _messageText?.text = "3条新消息"
         _messageAlertView?.addSubview(_messageText!)
@@ -274,11 +286,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _messageAlertView?.addGestureRecognizer(_messageTap!)
         
         
-        _messageImg = PicView(frame: CGRect(x: 5, y: 5, width: 30, height: 30))
+        _messageImg = PicView(frame: CGRect(x: 8, y: 4.5, width: 32, height: 32))
         _messageImg?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
-        
+        _messageImg?.minimumZoomScale=1
+        _messageImg?.userInteractionEnabled=false
+        _messageImg?.maximumZoomScale=1
         _messageImg?._imgView?.layer.masksToBounds = true
-        _messageImg?._imgView?.layer.cornerRadius = 15
+        _messageImg?._imgView?.layer.cornerRadius = 16
         
         _messageAlertView?.addSubview(_messageImg!)
         
@@ -289,12 +303,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         _tableView=UITableView()
         
-        _tableView?.backgroundColor=UIColor.whiteColor()
+        _tableView?.backgroundColor=UIColor.clearColor()
         _tableView?.delegate=self
         _tableView?.dataSource=self
         _tableView?.frame = CGRect(x: 0, y: _barH+_profileH+10, width: _myFrame!.width, height: _myFrame!.height-_barH-_profileH-10)
         _tableView?.registerClass(PicAlbumMessageItem.self, forCellReuseIdentifier: "PicAlbumMessageItem")
         _tableView?.backgroundColor = UIColor.clearColor()
+        _tableView?.separatorStyle = UITableViewCellSeparatorStyle.None
         //_tableView?.separatorColor=UIColor.clearColor()
         //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -400, bottom: 0, right: 0)
         _tableView?.tableFooterView = UIView()
@@ -302,7 +317,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _scrollView = UIScrollView(frame: CGRect(x: 0, y: _barH, width: _myFrame!.width, height: _myFrame!.height-_barH))
         
         
-        self.view.backgroundColor = UIColor(white: 0.9, alpha: 1)
+        self.view.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        
         _scrollView!.addSubview(_tableView!)
         //_scrollView?.scrollEnabled=true
         
@@ -410,7 +426,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         let _size:CGSize = _sign_text!.sizeThatFits(CGSize(width: _sign_text!.frame.width, height: CGFloat.max))
         
-        _sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height:_size.height)
+        _sign_text?.frame = CGRect(x: _gap!,y: _sign_text!.frame.origin.y,width: _myFrame!.width-2*_gap!,height:_size.height)
         
         //_sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: _sign_text!.contentSize.height)
     }
@@ -456,7 +472,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         UIView.beginAnimations("go", context: nil)
-        _sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: _signH!)
+        _sign_text?.frame = CGRect(x: _gap!,y: _sign_text!.frame.origin.y,width: _myFrame!.width-2*_gap!,height: _signH!)
         _sign_text?.alpha=1
         
         _profileH = _sign_text!.frame.origin.y + _sign_text!.frame.height + _gap!
@@ -464,9 +480,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         _profilePanel?.frame = CGRect(x: 0, y: 0, width: _myFrame!.width, height: _profileH)
+        _line_profile?.frame = CGRect(x: 0, y: _profileH, width: _myFrame!.width, height: 0.5)
         
         if _hasNewMessage{
-            _messageAlertView!.frame = CGRect(x: _myFrame!.width/2 - 100, y: _profileH+5, width: 200, height: 40)
+            _messageAlertView!.frame = CGRect(x: _myFrame!.width/2 - 194/2, y: _profileH+10, width: 194, height: 40)
            
             _messageAlertView?.hidden=false
             _messageH = 40
@@ -474,7 +491,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             _messageAlertView?.hidden=true
             _messageH = 0
         }
-        _tableView?.frame = CGRect(x: 0, y: _profileH+10+_messageH, width:  _myFrame!.width, height: _tableView!.contentSize.height)
+        _tableView?.frame = CGRect(x: 0, y: _profileH+20+_messageH, width:  _myFrame!.width, height: _tableView!.contentSize.height)
         _tableView?.scrollEnabled = false
         _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
         UIView.commitAnimations()
@@ -484,7 +501,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         /*
-        
        // println(scrollView.contentOffset.y)
         var _offsetY:CGFloat = 0
         var _frameOff:CGFloat = 10

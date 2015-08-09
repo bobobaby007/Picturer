@@ -482,6 +482,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="mq6-ok-pGh">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="Uos-yO-kZr">
+                                    <size key="itemSize" width="120" height="120"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="0Gz-Ea-fVR" id="JXh-7A-WJn"/>
+                                    <outlet property="delegate" destination="0Gz-Ea-fVR" id="DEQ-rc-4li"/>
+                                </connections>
+                            </collectionView>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="RZK-Qc-ldz" userLabel="Top">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
@@ -705,21 +720,6 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="mq6-ok-pGh">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="Uos-yO-kZr">
-                                    <size key="itemSize" width="120" height="120"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells/>
-                                <connections>
-                                    <outlet property="dataSource" destination="0Gz-Ea-fVR" id="JXh-7A-WJn"/>
-                                    <outlet property="delegate" destination="0Gz-Ea-fVR" id="DEQ-rc-4li"/>
-                                </connections>
-                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
@@ -743,8 +743,8 @@
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="RZK-Qc-ldz"/>
                                 <exclude reference="mq6-ok-pGh"/>
+                                <exclude reference="RZK-Qc-ldz"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="0Sg-ea-SaQ"/>
@@ -759,8 +759,8 @@
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
-                                <include reference="RZK-Qc-ldz"/>
                                 <include reference="mq6-ok-pGh"/>
+                                <include reference="RZK-Qc-ldz"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="0Sg-ea-SaQ"/>

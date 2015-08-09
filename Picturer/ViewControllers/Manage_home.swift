@@ -359,7 +359,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         presentViewController(_cameraPicker!, animated: true, completion: nil)
         
-        println("9999")
+       // println("9999")
     }
     //----相机代理方法
     

@@ -172,7 +172,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _addButton=UIButton()
         _addButton?.backgroundColor=UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1)
         _addButton?.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-        _addButton?.contentMode = UIViewContentMode.ScaleAspectFill
+        _addButton?.imageView?.contentMode = UIViewContentMode.ScaleAspectFill
         _addButton?.setImage(UIImage(named: "addIcon.png"), forState: UIControlState.Normal)
         
        

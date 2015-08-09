@@ -164,7 +164,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         
         _scrollView=UIScrollView()
         _scrollView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
-        
+        _scrollView.clipsToBounds=false
         self.view.insertSubview(_scrollView!, atIndex: 0)
         _scrollView!.bounces=false
         //_scrollView!.bouncesZoom=true

@@ -20,7 +20,7 @@ protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
 
 
 class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
-    
+    let _gap:CGFloat = 15
     var _indexId:Int = 0
     var _indexString:String?
     
@@ -35,7 +35,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _userName_label:UILabel?
     var _updateTime_label:UILabel?
     var _albumTitle_labelV:UIView?
-    var _albumTitle_label:UILabel?
+    var _albumTitle_label:UITextView?
     var _description:UITextView?
     
     var _toolsPanel:UIView?
@@ -73,6 +73,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     var _toolsBarIsOpened:Bool=false
     
+    var _bgV:UIView?
+    var _lineBg:UIView?
     
     override func willMoveToSuperview(newSuperview: UIView?) {
         //setup()
@@ -88,11 +90,11 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             return
         }
         _defaultSize=__size
-        
+        self.backgroundColor = UIColor.clearColor()
         _tapC = UITapGestureRecognizer(target: self, action: Selector("_tapHander:"))
         _buttonTap = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
         //println(_defaultSize!.width)
-        _picV = PicView(frame: CGRect(x: 0, y: 50, width: _defaultSize!.width, height: _defaultSize!.width))
+        _picV = PicView(frame: CGRect(x: 0, y: 45, width: _defaultSize!.width, height: _defaultSize!.width))
         _picV?._setImage("noPic.png")
         _picV?.scrollEnabled=false
         _picV?.maximumZoomScale = 1
@@ -104,47 +106,61 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _picV?.addGestureRecognizer(_tapPic)
         
         
-        _userImg = PicView(frame: CGRect(x: 15, y: 7, width: 36, height: 36))
+        _userImg = PicView(frame: CGRect(x: 15, y: 6.5, width: 32, height: 32))
         _userImg?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         _userImg?.maximumZoomScale = 1
         _userImg?.minimumZoomScale = 1
         _userImg?.layer.masksToBounds=true
-        _userImg?.layer.cornerRadius = 18
+        _userImg?.layer.cornerRadius = 16
         
         _userImg?.addGestureRecognizer(_buttonTap!)
         
         
-        _userName_label = UILabel(frame: CGRect(x: 70, y: 15, width: 200, height: 20))
-        _userName_label?.font = UIFont.systemFontOfSize(12)
-        _updateTime_label = UILabel(frame: CGRect(x: _defaultSize!.width-150, y: 15, width: 140, height: 20))
+        _userName_label = UILabel(frame: CGRect(x: 59, y: 17, width: 200, height: 12))
+        _userName_label?.font = UIFont.boldSystemFontOfSize(14)
+        _userName_label?.textColor = UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)
+        
+        _updateTime_label = UILabel(frame: CGRect(x: _defaultSize!.width-155, y: 17, width: 140, height: 12))
         
         _updateTime_label?.textAlignment = NSTextAlignment.Right
         _updateTime_label?.font = UIFont.systemFontOfSize(12)
         
         
-        _albumTitle_labelV = UIView(frame: CGRect(x: 0, y: 50+_picV!.frame.height-36, width: _defaultSize!.width, height: 36))
+        _albumTitle_labelV = UIView(frame: CGRect(x: 0, y: _picV!.frame.origin.y+_picV!.frame.height-30, width: _defaultSize!.width, height: 30))
+        
         _albumTitle_labelV?.backgroundColor = UIColor(white: 0, alpha: 0.8)
-        _albumTitle_label = UILabel(frame: CGRect(x: 15, y: 8, width: _defaultSize!.width-20, height: 20))
-        _albumTitle_label?.font = UIFont.boldSystemFontOfSize(20)
+        _albumTitle_labelV?.userInteractionEnabled=false
+        _albumTitle_label = UITextView(frame: CGRect(x: 15, y: 8, width: _defaultSize!.width-2*_gap, height: 12))
+        _albumTitle_label?.pagingEnabled=false
+        _albumTitle_label?.textContainer.lineFragmentPadding=0
+        _albumTitle_label?.textContainerInset = UIEdgeInsetsZero
+        _albumTitle_label?.backgroundColor = UIColor.clearColor()
+        _albumTitle_label?.editable=false
+        _albumTitle_label?.selectable=false
+        _albumTitle_label?.userInteractionEnabled=false
+        
+        _albumTitle_label?.font = UIFont.boldSystemFontOfSize(17)
+        
         //_albumTitle_label?.backgroundColor = UIColor.clearColor()
         _albumTitle_label?.textColor = UIColor.whiteColor()
         
-        
         _description = UITextView()
+        _description?.textContainerInset = UIEdgeInsetsZero
+        _description?.textContainer.lineFragmentPadding=0
         _description?.editable=false
-        
-        
-        
+        _description?.selectable=false
+        _description?.font = UIFont.systemFontOfSize(14)
         
         _likeTextView = UITextView()
+        _likeTextView?.font=UIFont.boldSystemFontOfSize(14)
         _likeTextView?.backgroundColor = UIColor.clearColor()
         _likeTextView?.delegate=self
         _likeTextView?.editable=false
         _likeTextView?.tintColor = UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)
         
         
-        _likeIcon = UIImageView(frame: CGRect(x: 12, y: 15, width: 0.6*28, height: 0.6*24))
-        _likeIcon?.image = UIImage(named: "like")
+        _likeIcon = UIImageView(frame: CGRect(x: _gap, y: 15, width: 13.5, height: 12))
+        _likeIcon?.image = UIImage(named: "like.png")
         
         
         
@@ -153,8 +169,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         
         
-        _toolsOpenButton = UIButton(frame: CGRect(x: _defaultSize!.width-0.6*57-10, y: 10, width: 0.6*57, height: 0.6*31))
-        _toolsOpenButton?.setImage(UIImage(named: "toolsBtn"), forState: UIControlState.Normal)
+        _toolsOpenButton = UIButton(frame: CGRect(x: _defaultSize!.width-27.5-_gap, y: _gap, width: 27.5, height: 15))
+        _toolsOpenButton?.setImage(UIImage(named: "toolsBtn.png"), forState: UIControlState.Normal)
         _toolsOpenButton?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
@@ -224,16 +240,13 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _toolsPanel?.addSubview(_toolsOpenButton!)
         _toolsPanel?.addSubview(_toolsButtonPanel_container!)
         
-        
-        
-        
-        
         _commentsPanel = UIView(frame: CGRect(x: 0, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width, height: 36))
         _commentsPanel?.backgroundColor = UIColor(white: 0.95, alpha: 1)
         
         _attributeStr = NSMutableAttributedString()
         
         _commentText = UITextView()
+        _commentText?.font = UIFont.systemFontOfSize(14)
         _commentText!.attributedText = _attributeStr!
         _commentText?.backgroundColor =  UIColor.clearColor()
         _commentText!.delegate=self
@@ -257,7 +270,14 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         
         
+        _bgV = UIView()
+        _bgV?.backgroundColor=UIColor.whiteColor()
         
+        _lineBg = UIView()
+        _lineBg?.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        
+        self.addSubview(_bgV!)
+        self.addSubview(_lineBg!)
         self.addSubview(_picV!)
         self.addSubview(_userImg!)
         self.addSubview(_userName_label!)
@@ -287,26 +307,26 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         //_picV?.frame = CGRect(x: 0, y: 50, width: self.frame.width, height: _h)
         //_picV?._refreshView()
         
-        _albumTitle_labelV?.frame = CGRect(x: 0, y: 50+_picV!.frame.height-36, width: self.frame.width, height: 36)
-        
+        //_albumTitle_labelV?.frame = CGRect(x: 0, y: 50+_picV!.frame.height-36, width: self.frame.width, height: 36)
         
         var _desH:CGFloat = 0
         if _description!.text == ""{
             
         }else{
-            _desH = _description!.contentSize.height
+            let size:CGSize = _description!.sizeThatFits(CGSize(width: _defaultSize!.width-_gap*2, height: CGFloat.max))
+            _desH = size.height+_gap
         }
         
-        _description?.frame = CGRect(x: 10, y: 50+_picV!.frame.height+10, width: _defaultSize!.width-20, height: _desH)
+        _description?.frame = CGRect(x: _gap, y: _picV!.frame.origin.y+_picV!.frame.height+_gap, width: _defaultSize!.width-_gap*2, height: _desH)
         
         
         
         _likeTextView?.frame = CGRect(x: 10, y: 5, width: _defaultSize!.width-10-28, height: _likeTextView!.contentSize.height)
         
         
-        _toolsPanel!.frame = CGRect(x: 0, y: 50+_picV!.frame.height+_desH+5, width: _defaultSize!.width, height: _likeTextView!.contentSize.height+15)
+        _toolsPanel!.frame = CGRect(x: 0, y: _picV!.frame.origin.y+_picV!.frame.height+_desH, width: _defaultSize!.width, height: _likeTextView!.contentSize.height+15)
         
-         _commentText?.frame = CGRect(x: 5, y: 5, width: _defaultSize!.width-30, height: _commentText!.contentSize.height)
+        _commentText?.frame = CGRect(x: 5, y: 5, width: _defaultSize!.width-30, height: _commentText!.contentSize.height)
         
         
         var _moreComentH:CGFloat = 0
@@ -318,12 +338,17 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         }
         _moreCommentText?.frame = CGRect(x: 5, y: _commentText!.contentSize.height-8+5, width: _defaultSize!.width-30, height: _moreComentH)
         
-        _commentsPanel!.frame = CGRect(x: 10, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width-20, height: _moreCommentText!.frame.origin.y+_moreCommentText!.frame.height+10)
+        _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width-2*_gap, height: _moreCommentText!.frame.origin.y+_moreCommentText!.frame.height+10)
         
+        
+        _bgV!.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width, height:_commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+_gap )
+        _lineBg!.frame = CGRect(x: 0, y: _bgV!.frame.height, width: _defaultSize!.width, height: 0.5)
         
         //self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: _h+40)
         
-        _delegate?._resized(_indexId, __height:_commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+50)
+        _delegate?._resized(_indexId, __height:_bgV!.frame.height+_gap)
+        
+        
     }
     
     
@@ -357,6 +382,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _attributeStr?.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, _attributeStr!.length))
         
         _commentText!.attributedText = _attributeStr!
+        
+        
+        _commentText?.linkTextAttributes = [NSForegroundColorAttributeName:UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)]
        
         if _n>3{
             _moreCommentText?.attributedText = linkString("查看全部"+String(_n)+"条评论",withURLString:"moreComment:")
@@ -368,11 +396,12 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     }
     
     func commentString(_commentDict:NSDictionary) -> NSAttributedString {
-        var boldFont = UIFont.boldSystemFontOfSize(UIFont.systemFontSize())
+        var boldFont = UIFont.boldSystemFontOfSize(14)
+       
         var boldAttr = [NSFontAttributeName: boldFont]
         //let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),
          //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
-        let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor()]
+        let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),NSFontAttributeName: UIFont.systemFontOfSize(14)]
         
         var attrString: NSAttributedString = linkString(_commentDict.objectForKey("from_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("from_userId") as! String))
         
@@ -386,8 +415,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             astr.appendAttributedString(attrString)
             astr.appendAttributedString(linkString(_commentDict.objectForKey("to_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("to_userId") as! String)))
         }
-        
-        
         attrString = NSAttributedString(string: ": ", attributes:normalAttr)
         astr.appendAttributedString(attrString)
         attrString = NSAttributedString(string: _commentDict.objectForKey("comment") as! String, attributes:normalAttr)
@@ -399,8 +426,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         // the entire string
         var range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
+        attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFontOfSize(14, weight: 0.1), range:range)
         attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
-        attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor.blueColor(), range:range)
+        attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1), range:range)
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
         attrString.endEditing()
         return attrString
@@ -561,7 +589,23 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _description?.text=__str
     }
     func _setAlbumTitle(__str:String){
-     _albumTitle_label?.text=__str
+        if __str==""{
+            //_albumTitle_label?.hidden=true
+            //_albumTitle_labelV?.hidden=true
+            _albumTitle_label?.text="未命名图册"
+        }else{
+            _albumTitle_label?.text=__str
+            
+        }
+     
+        _albumTitle_label?.hidden=false
+        _albumTitle_labelV?.hidden=false
+        
+        
+        
+        let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap, height: CGFloat.max))
+        _albumTitle_label?.frame = CGRect(x: _gap, y: 6, width: _size.width, height: _size.height)
+        _albumTitle_labelV?.frame = CGRect(x: 0, y: _picV!.frame.origin.y+_picV!.frame.height-_size.height-12, width: _defaultSize!.width, height: _size.height+12)
     }
     func _setUserName(__str:String){
         _userName_label?.text=__str

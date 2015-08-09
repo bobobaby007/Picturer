@@ -541,7 +541,7 @@ class MainAction: AnyObject {
         // println(response.text)
         block(_array)
     }
-    //-
+    //-------获取主页图册列表＊＊当用户是本人，提取本地
     static func _getAlbumListAtUser(__userId:String,block:(NSArray)->Void){
 //        var request = HTTPTask()
 //        request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
@@ -575,6 +575,24 @@ class MainAction: AnyObject {
             
         }
         
+    }
+    //－－－－提取朋友更新图册列表
+    static func _getFriendsNewsList(block:(NSArray)->Void){
+            var _array:NSMutableArray = NSMutableArray()
+            var _n:Int = 10
+            for var i:Int = 0; i<_n;++i{
+                var _dict:NSMutableDictionary = NSMutableDictionary()
+                let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+                _dict.setObject(_pic, forKey: "cover")
+                
+                _dict.setObject(_pic, forKey: "userImg")
+                _dict.setObject("朋友1", forKey: "userName")
+                _dict.setObject("000002", forKey: "userId")
+                _dict.setObject("天边一朵云", forKey: "title")
+                _dict.setObject("个人欣赏", forKey: "description")
+                _array.addObject(_dict)
+            }
+            block(_array)
     }
     
     static func _getAdvertisiongs(block:(NSArray)->Void){
