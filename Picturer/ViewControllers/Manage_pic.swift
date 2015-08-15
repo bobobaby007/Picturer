@@ -101,6 +101,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             return
         }
         self.view.backgroundColor=UIColor.blackColor()
+        self.view.clipsToBounds=true
         
         _desView = UIView(frame: CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: _desH))
         _desView?.backgroundColor=UIColor(white: 0, alpha: 0.8)
@@ -124,9 +125,6 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _btn_moreAction=UIButton(frame:CGRect(x: self.view.frame.width-50, y: _barH-44, width: 50, height: 44))
         _btn_moreAction?.setImage(UIImage(named: "edit.png"), forState: UIControlState.Normal)
         _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        
-        
-        
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()

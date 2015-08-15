@@ -9,9 +9,8 @@
 import Foundation
 import UIKit
 
-class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
+class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate, CollectItem_delegate{
     
-    var _type:String = "friends" //friends,likes
     
     var _barH:CGFloat = 64
     var _myFrame:CGRect?
@@ -30,7 +29,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     var _dataArray:NSArray=[]
     var _setuped:Bool = false
-
+    
     var _scrollView:UIScrollView?
     
     var _heighArray:NSMutableArray?
@@ -91,7 +90,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.font = UIFont.boldSystemFontOfSize(17)
-        _title_label?.text = "朋友"
+        _title_label?.text = "收藏"
         
         
         _topBar?.addSubview(_title_label!)
@@ -150,7 +149,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _tableView?.delegate=self
         _tableView?.dataSource=self
         _tableView?.frame = CGRect(x: 0, y: _barH+10, width: _myFrame!.width, height: _myFrame!.height-_barH-10)
-        _tableView?.registerClass(PicAlbumMessageItem.self, forCellReuseIdentifier: "PicAlbumMessageItem")
+        _tableView?.registerClass(CollectItem.self, forCellReuseIdentifier: "CollectItem")
         _tableView?.backgroundColor = UIColor.clearColor()
         //_tableView?.separatorColor=UIColor.clearColor()
         //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -400, bottom: 0, right: 0)
@@ -192,20 +191,9 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     //提取数据
     func _getMessage(){
-        switch _type{
-            case "friends":
-                MainAction._getMessages { (array) -> Void in
-                    self._messageIn(array)
-                }
-            break
-            case "likes":
-                MainAction._getMessages { (array) -> Void in
-                    self._messageIn(array)
-            }
-        default:
-            break
-        }
-        
+//        MainAction._getMessages { (array) -> Void in
+//            self._messageIn(array)
+//        }
     }
     
     func _messageIn(array:NSArray){
@@ -229,20 +217,9 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     
     func _getDatas(){
-        switch _type{
-        case "friends":
-            MainAction._getFriendsNewsList({ (array) -> Void in
-                self._datasIn(array)
-            })
-            break
-        case "likes":
-            MainAction._getLikesNewsList({ (array) -> Void in
-                self._datasIn(array)
-            })
-            
-        default:
-            break
-        }
+        MainAction._getCollectList({ (array) -> Void in
+            self._datasIn(array)
+        })
     }
     func _datasIn(__array:NSArray){
         self._dataArray = __array
@@ -313,8 +290,8 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        //var cell:PicAlbumMessageItem? = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
-        //var cell:PicAlbumMessageItem = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as! PicAlbumMessageItem
+        //var cell:CollectItem? = tableView.viewWithTag(100+indexPath.row) as? CollectItem
+        //var cell:CollectItem = tableView.dequeueReusableCellWithIdentifier("CollectItem") as! CollectItem
         // println(_heighArray?.count)
         if _heighArray!.count>=indexPath.row+1{
             return CGFloat(_heighArray!.objectAtIndex(indexPath.row) as! NSNumber)
@@ -323,15 +300,11 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         return 100
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:PicAlbumMessageItem?
-        //cell = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
+        var cell:CollectItem?
+        //cell = tableView.viewWithTag(100+indexPath.row) as? CollectItem
         
         
-        cell = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as? PicAlbumMessageItem
-        
-        cell!._type = "pics"
-        cell!._pics = (_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("pics") as? NSArray
-        
+        cell = tableView.dequeueReusableCellWithIdentifier("CollectItem") as? CollectItem
         
         cell!.setup(CGSize(width: self.view.frame.width, height: _defaultH))
         cell!._openPanel(false)
@@ -340,19 +313,17 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
         //cell!.tag = 100+indexPath.row
-        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
-        cell!._setComments(_array, __allNum: _array.count)
-        
-        let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
-        cell!._setLikes(_likeA,__allNum: _likeA.count)
+//        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
+//        cell!._setComments(_array, __allNum: _array.count)
+//        
+//        let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
+//        cell!._setLikes(_likeA,__allNum: _likeA.count)
         
         cell!._indexId = indexPath.row
         cell!._delegate=self
         
-        
-        
+        cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
         cell!._userId = (_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userId") as? String
-    
         cell!._setUserImge((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userImg") as! NSDictionary)
         cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String)
         //cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
@@ -371,7 +342,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
         }
         if _lastH != __height{
-            
+            println(String(__indexId)+":"+String(stringInterpolationSegment: __height))
             _heighArray![__indexId] = __height
             _tableView?.reloadData()
             _refreshView()
@@ -425,7 +396,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             
             break
         case "comment":
-            var _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
+            var _cell:CollectItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! CollectItem
             //println(_cell.frame.origin.y)
             //UIView.beginAnimations("offset", context: nil)
             /*-----在当前页打开输入框
@@ -487,7 +458,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func btnHander(sender:UIButton){
         switch sender{
-       
+            
         default:
             println("")
         }

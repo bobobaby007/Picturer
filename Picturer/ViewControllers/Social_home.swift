@@ -70,15 +70,23 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _contr._userName = MainAction._currentUser.objectForKey("userName") as? String
             self.navigationController?.pushViewController(_contr, animated: true)
         case 1://朋友
-            let _contr:Friends_Home=Friends_Home()
+            
+            var _contr:Friends_Home=Friends_Home()
+            _contr._type="friends"
             self.navigationController?.pushViewController(_contr, animated: true)
+                        
             return
         case 2://妙人
+            var _contr:Friends_Home=Friends_Home()
+            _contr._type="likes"
+            self.navigationController?.pushViewController(_contr, animated: true)
             return
         case 3://发现
             let _contr:Discover_home=Discover_home()
             self.navigationController?.pushViewController(_contr, animated: true)
         case 4://收藏
+            let _contr:Collect_home=Collect_home()
+            self.navigationController?.pushViewController(_contr, animated: true)
             return
         case 5://通讯录
             return

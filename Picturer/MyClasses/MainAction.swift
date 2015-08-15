@@ -273,7 +273,7 @@ class MainAction: AnyObject {
         
         
         _dict.setObject("123456", forKey: "userId")
-        _dict.setObject("其他用户", forKey: "userName")
+        _dict.setObject("Alex", forKey: "userName")
         
         _dict.setObject(13, forKey: "albumNumber")
         
@@ -330,7 +330,7 @@ class MainAction: AnyObject {
         }
         for var i:Int = 0; i<_n;++i{
             var _comment:String = "受到各国大使馆的是"
-            var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: ["某某<"+__albumId!+">","<来"+__albumId!+"来>","111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
+            var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(i) as! String,_testToUserNames?.objectAtIndex(i) as! String,"111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
             
             if i==0{
                 _commentDict.setValue("受到各国的是德国大使馆多少广东省各地说过多少多少多少给多", forKey: "comment")
@@ -582,11 +582,23 @@ class MainAction: AnyObject {
             var _n:Int = 10
             for var i:Int = 0; i<_n;++i{
                 var _dict:NSMutableDictionary = NSMutableDictionary()
-                let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
-                _dict.setObject(_pic, forKey: "cover")
                 
+                var _pics:NSMutableArray = NSMutableArray()
+                
+                var _num:Int = i
+                if _num>8{
+                    _num = 8
+                }
+                
+                for t in 0..._num{
+                    let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex((t+i)%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+                    _pics.addObject(_pic)
+                }
+                _dict.setObject(_pics, forKey: "pics")
+                
+                let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
                 _dict.setObject(_pic, forKey: "userImg")
-                _dict.setObject("朋友1", forKey: "userName")
+                _dict.setObject(_testUserNames?.objectAtIndex(i) as! String, forKey: "userName")
                 _dict.setObject("000002", forKey: "userId")
                 _dict.setObject("天边一朵云", forKey: "title")
                 _dict.setObject("个人欣赏", forKey: "description")
@@ -594,7 +606,51 @@ class MainAction: AnyObject {
             }
             block(_array)
     }
-    
+    //－－－－提取朋友更新图册列表
+    static func _getLikesNewsList(block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 10
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            var _pics:NSMutableArray = NSMutableArray()
+            var _num:Int = i+5
+            if _num>8{
+                _num = 8
+            }
+            for t in 0..._num{
+                let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex((t+i)%8+4) as! String,"fromWeb"], forKeys: ["url","type"])
+                _pics.addObject(_pic)
+            }
+            _dict.setObject(_pics, forKey: "pics")
+            
+            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "userImg")
+            _dict.setObject(_testUserNames?.objectAtIndex(i) as! String, forKey: "userName")
+            _dict.setObject("000002", forKey: "userId")
+            _dict.setObject("天边一朵云", forKey: "title")
+            _dict.setObject("个人欣赏", forKey: "description")
+            _array.addObject(_dict)
+        }
+        block(_array)
+    }
+    //－－－－提取收藏图册列表
+    static func _getCollectList(block:(NSArray)->Void){
+        var _array:NSMutableArray = NSMutableArray()
+        var _n:Int = 10
+        for var i:Int = 0; i<_n;++i{
+            var _dict:NSMutableDictionary = NSMutableDictionary()
+            var _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "cover")
+            
+            _pic = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            _dict.setObject(_pic, forKey: "userImg")
+            _dict.setObject(_testUserNames?.objectAtIndex(i) as! String, forKey: "userName")
+            _dict.setObject("天边一朵云", forKey: "title")
+            _dict.setObject("个人欣赏", forKey: "description")
+            _array.addObject(_dict)
+        }
+        block(_array)
+    }
     static func _getAdvertisiongs(block:(NSArray)->Void){
     
         var _array:NSMutableArray = NSMutableArray()
@@ -615,15 +671,14 @@ class MainAction: AnyObject {
     
     
 }
-
-
-
 var _advertisingPics:NSArray? = ["http://b.hiphotos.baidu.com/image/pic/item/0bd162d9f2d3572c1826b51d8813632763d0c32e.jpg","http://f.hiphotos.baidu.com/image/pic/item/ae51f3deb48f8c5471a15c2e38292df5e0fe7f45.jpg","http://e.hiphotos.baidu.com/image/pic/item/a08b87d6277f9e2fab4441021d30e924b899f343.jpg","http://f.hiphotos.baidu.com/image/pic/item/6159252dd42a2834f964801d58b5c9ea14cebfe2.jpg"]
 
-var _testPics:NSArray? = ["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
+var _testPics:NSArray? = ["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
 
 
-var _testUserNames:NSArray? = ["撒嘎嘎","wong","三等功ww","4ysng----sdgng@as","sdg","跟你说过的","阿里给你的","里那个护送","oeoogaeg","sySYNG2345©˙©∆˚ß","3","fg","人家感到十分娃娃","后排没有拍","94肩负起哦昂","大概","杜省公会"]
+var _testUserNames:NSArray? = ["Anna","小甜菜","大漠之狐","蛋蛋的忧桑","李明","Alex","和尚","Leo.Lee","李萌","文华项","注目2度","天涯1刀","过岸雁","Gary","白云工作室","摄影师刘亮","诸明"]
+
+var _testToUserNames:NSArray? = ["Liam","无理取闹","红云","映射人像摄影","sdg","跟你说过的","阿里给你的","里那个护送","oeoogaeg","sySYNG2345©˙©∆˚ß","3","fg","人家感到十分娃娃","后排没有拍","94肩负起哦昂","大概","杜省公会"]
 
 
 ////////////////////////////－－－－－－－字典变量保存

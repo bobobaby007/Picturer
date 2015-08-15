@@ -67,10 +67,10 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
     
     override func viewDidLoad() {
-        setup()
+        
         super.viewDidLoad()
-        
-        
+        setup()
+        println("222")
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

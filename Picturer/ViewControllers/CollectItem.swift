@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
+protocol CollectItem_delegate:NSObjectProtocol{
     func _resized(__indexId:Int,__height:CGFloat)
     func _moreComment(__indexId:Int)
     func _viewUser(__userId:String)
@@ -19,7 +19,7 @@ protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
 }
 
 
-class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
+class CollectItem:  UITableViewCell,UITextViewDelegate{
     var _picsW:CGFloat = 0
     let _gapForPic:CGFloat = 2
     
@@ -29,14 +29,11 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _indexId:Int = 0
     var _indexString:String?
     
-    var _type:String = "album" // pics
-    
     var _user:NSDictionary?
     var _userId:String?
     var _setuped:Bool = false
     var _picV:PicView?
-    //var _pic:UIImageView?
-   
+    
     var _pics:NSArray?
     var _picsContainer:UIView = UIView()
     var _userImg:PicView?
@@ -61,7 +58,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _btn_share:UIButton = UIButton()
     var _btn_collect:UIButton = UIButton()
     
-    var _delegate:PicAlbumMessageItem_delegate?
+    var _delegate:CollectItem_delegate?
     
     var _cellH:CGFloat?
     
@@ -73,7 +70,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     var _attributeStr:NSMutableAttributedString?
     
-
+    
     var _tapC:UITapGestureRecognizer?
     
     var _buttonTap:UITapGestureRecognizer?
@@ -177,178 +174,86 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _toolsButtonPanel?.layer.masksToBounds=true
         _toolsButtonPanel?.layer.cornerRadius = 5
         _toolsButtonPanel?.clipsToBounds=true
-       
+        
         _toolsButtonPanel_container = UIView()
         _toolsButtonPanel_container?.backgroundColor = UIColor.clearColor()
         _toolsButtonPanel_container?.clipsToBounds=true
         
         _toolsButtonPanel_container?.addSubview(_toolsButtonPanel!)
         
+        _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 40)
+        
+        _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 40))
+        _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+        _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
+        _btn_like.setTitle("赞", forState: UIControlState.Normal)
+        _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 40))
+        _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+        _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
+        _btn_comment.setTitle("评论", forState: UIControlState.Normal)
+        _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        _btn_share = UIButton(frame: CGRect(x: 2*_toolsGap, y: 0, width: _toolsGap, height: 40))
+        _btn_share.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+        _btn_share.titleLabel?.textAlignment = NSTextAlignment.Center
+        _btn_share.setTitle("分享", forState: UIControlState.Normal)
+        _btn_share.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        _btn_collect = UIButton(frame: CGRect(x: 3*_toolsGap, y: 0, width: _toolsGap, height: 40))
+        _btn_collect.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+        _btn_collect.titleLabel?.textAlignment = NSTextAlignment.Center
+        _btn_collect.setTitle("收藏", forState: UIControlState.Normal)
+        _btn_collect.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        _toolsBtnToX = _defaultSize!.width-4*_toolsGap-45
+        _toolsBtnToW = 4*_toolsGap
+        
+        _toolsButtonPanel?.backgroundColor = UIColor.darkGrayColor()
+        _toolsButtonPanel?.addSubview(_btn_like)
+        _toolsButtonPanel?.addSubview(_btn_comment)
+        _toolsButtonPanel?.addSubview(_btn_share)
+        _toolsButtonPanel?.addSubview(_btn_collect)
         
         
         
-        switch _type{
-            case "album":
-                _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 40)
-                
-                _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 40))
-                _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
-                _btn_like.setTitle("赞", forState: UIControlState.Normal)
-                _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-                
-                _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 40))
-                _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
-                _btn_comment.setTitle("评论", forState: UIControlState.Normal)
-                _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-                
-                _btn_share = UIButton(frame: CGRect(x: 2*_toolsGap, y: 0, width: _toolsGap, height: 40))
-                _btn_share.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                _btn_share.titleLabel?.textAlignment = NSTextAlignment.Center
-                _btn_share.setTitle("分享", forState: UIControlState.Normal)
-                _btn_share.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-                
-                _btn_collect = UIButton(frame: CGRect(x: 3*_toolsGap, y: 0, width: _toolsGap, height: 40))
-                _btn_collect.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                _btn_collect.titleLabel?.textAlignment = NSTextAlignment.Center
-                _btn_collect.setTitle("收藏", forState: UIControlState.Normal)
-                _btn_collect.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-                
-                _toolsBtnToX = _defaultSize!.width-4*_toolsGap-45
-                _toolsBtnToW = 4*_toolsGap
-                
-                _toolsButtonPanel?.backgroundColor = UIColor.darkGrayColor()
-                _toolsButtonPanel?.addSubview(_btn_like)
-                _toolsButtonPanel?.addSubview(_btn_comment)
-                _toolsButtonPanel?.addSubview(_btn_share)
-                _toolsButtonPanel?.addSubview(_btn_collect)
-        
-            
-            
-                _picV = PicView(frame: CGRect(x: 0, y: 45, width: _defaultSize!.width, height: _defaultSize!.width))
-                _picV?._setImage("noPic.png")
-                _picV?.scrollEnabled=false
-                _picV?.maximumZoomScale = 1
-                _picV?.minimumZoomScale = 1
-                _picV?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
-                _picV?.layer.masksToBounds = true
-                
-                
-                _bottomOfPic = _picV!.frame.origin.y + _picV!.frame.height
-                
-                let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
-                _picV?.addGestureRecognizer(_tapPic)
-            
-                
-                
-                _albumTitle_labelV = UIView(frame: CGRect(x: 0, y: _bottomOfPic-30, width: _defaultSize!.width, height: 30))
-                
-                _albumTitle_labelV?.backgroundColor = UIColor(white: 0, alpha: 0.8)
-                _albumTitle_labelV?.userInteractionEnabled=false
-                _albumTitle_label = UITextView(frame: CGRect(x: 15, y: 8, width: _defaultSize!.width-2*_gap, height: 12))
-                _albumTitle_label?.pagingEnabled=false
-                _albumTitle_label?.textContainer.lineFragmentPadding=0
-                _albumTitle_label?.textContainerInset = UIEdgeInsetsZero
-                _albumTitle_label?.backgroundColor = UIColor.clearColor()
-                _albumTitle_label?.editable=false
-                _albumTitle_label?.selectable=false
-                _albumTitle_label?.userInteractionEnabled=false
-                
-                _albumTitle_label?.font = UIFont.boldSystemFontOfSize(17)
-                
-                //_albumTitle_label?.backgroundColor = UIColor.clearColor()
-                _albumTitle_label?.textColor = UIColor.whiteColor()
-                
-                
-                self.addSubview(_picV!)
-            
-            case "pics":
-                
-                
-                _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 40)
-                
-                _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 40))
-                _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
-                _btn_like.setTitle("赞", forState: UIControlState.Normal)
-                _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-                
-                _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 40))
-                _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
-                _btn_comment.setTitle("评论", forState: UIControlState.Normal)
-                _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-                _btn_comment.backgroundColor = UIColor.clearColor()
-                
-                _toolsBtnToX = _defaultSize!.width-2*_toolsGap-45
-                _toolsBtnToW = 2*_toolsGap
-                
-                _toolsButtonPanel?.backgroundColor = UIColor.darkGrayColor()
-                _toolsButtonPanel?.addSubview(_btn_like)
-                _toolsButtonPanel?.addSubview(_btn_comment)
-                
-                
-                var _numOneLine:Int
-                
-                if _pics?.count == 1{
-                    _picsW = _defaultSize!.width
-                    _bottomOfPic = 45 + _picsW
-                    _numOneLine = 1
-                    
-                }else if _pics?.count == 2{
-                    _picsW = (_defaultSize!.width - _gapForPic)/2
-                    _bottomOfPic = 45 + _picsW
-                    _numOneLine = 2
-                    
-                }else{
-                    _picsW = (_defaultSize!.width - 2*_gapForPic)/3
-                    _bottomOfPic = 45 + (floor(CGFloat((_pics!.count-1)/3))+1)*(_picsW + _gapForPic)
-                    _numOneLine = 3
-                }
-                
-                for i in 0..._pics!.count-1{
-                    var _p:PicView = PicView(frame: CGRect(x: CGFloat(i%_numOneLine)*(_picsW + _gapForPic), y: (floor(CGFloat(i/3)))*(_picsW + _gapForPic), width: _picsW, height: _picsW))
-                    _p.maximumZoomScale=1
-                    _p.minimumZoomScale=1
-                    _p._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
-                    
-                    //_p._setImage("noPic.png")
-                    _p._setPic(_pics?.objectAtIndex(i) as! NSDictionary, __block: { (ok) -> Void in
-                        //self._refreshView()
-                    })
-                    _picsContainer.addSubview(_p)
-                }
-                //_picsContainer.backgroundColor = UIColor.redColor()
-                _picsContainer.frame = CGRect(x: 0, y: 45, width: _defaultSize!.width, height: _bottomOfPic-45)
-                
-                
-                _albumTitle_labelV = UIView(frame: CGRect(x: 0, y: _bottomOfPic+_gap, width: _defaultSize!.width, height: 30))
-                
-                _albumTitle_labelV?.backgroundColor = UIColor.clearColor()
-                _albumTitle_labelV?.layer.borderWidth = 1
-                _albumTitle_labelV?.layer.borderColor = UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1).CGColor
-                _albumTitle_labelV?.layer.cornerRadius = 5
-                _albumTitle_labelV?.userInteractionEnabled=false
-                _albumTitle_label = UITextView(frame: CGRect(x: 15, y: 8, width: _defaultSize!.width-2*_gap, height: 12))
-                _albumTitle_label?.pagingEnabled=false
-                _albumTitle_label?.textContainer.lineFragmentPadding=0
-                _albumTitle_label?.textContainerInset = UIEdgeInsetsZero
-                _albumTitle_label?.backgroundColor = UIColor.clearColor()
-                _albumTitle_label?.editable=false
-                _albumTitle_label?.selectable=false
-                _albumTitle_label?.userInteractionEnabled=false
-                
-                _albumTitle_label?.font = UIFont.boldSystemFontOfSize(14)
-                _albumTitle_label?.textColor = UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)
-                
-                
-                break
-        default:
-            println("")
-        }
+        _picV = PicView(frame: CGRect(x: 0, y: 45, width: _defaultSize!.width, height: _defaultSize!.width))
+        _picV?._setImage("noPic.png")
+        _picV?.scrollEnabled=false
+        _picV?.maximumZoomScale = 1
+        _picV?.minimumZoomScale = 1
+        _picV?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
+        _picV?.layer.masksToBounds = true
         
         
+        _bottomOfPic = _picV!.frame.origin.y + _picV!.frame.height
+        
+        let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
+        _picV?.addGestureRecognizer(_tapPic)
+        
+        
+        
+        _albumTitle_labelV = UIView(frame: CGRect(x: 0, y: _bottomOfPic-30, width: _defaultSize!.width, height: 30))
+        
+        _albumTitle_labelV?.backgroundColor = UIColor(white: 0, alpha: 0.8)
+        _albumTitle_labelV?.userInteractionEnabled=false
+        _albumTitle_label = UITextView(frame: CGRect(x: 15, y: 8, width: _defaultSize!.width-2*_gap, height: 12))
+        _albumTitle_label?.pagingEnabled=false
+        _albumTitle_label?.textContainer.lineFragmentPadding=0
+        _albumTitle_label?.textContainerInset = UIEdgeInsetsZero
+        _albumTitle_label?.backgroundColor = UIColor.clearColor()
+        _albumTitle_label?.editable=false
+        _albumTitle_label?.selectable=false
+        _albumTitle_label?.userInteractionEnabled=false
+        
+        _albumTitle_label?.font = UIFont.boldSystemFontOfSize(17)
+        
+        //_albumTitle_label?.backgroundColor = UIColor.clearColor()
+        _albumTitle_label?.textColor = UIColor.whiteColor()
+        
+        
+        self.addSubview(_picV!)
         
         _toolsPanel = UIView(frame: CGRect(x: 0, y: _bottomOfPic+5, width: _defaultSize!.width, height: 36))
         _toolsPanel?.addSubview(_likeTextView!)
@@ -384,9 +289,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _commentsPanel?.addSubview(_commentText!)
         _commentsPanel?.addSubview(_moreCommentText!)
         
-        
-        
-        
         self.addSubview(_picsContainer)
         self.addSubview(_userImg!)
         self.addSubview(_userName_label!)
@@ -416,7 +318,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         var _h:CGFloat = 340
         if _imgH != nil{
-         _h = _imgH*(self.frame.width/_imgW)
+            _h = _imgH*(self.frame.width/_imgW)
         }
         //_picV?.frame = CGRect(x: 0, y: 50, width: self.frame.width, height: _h)
         //_picV?._refreshView()
@@ -425,20 +327,14 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         var _desH:CGFloat = 0
         
-        
-        if _type == "pics"{
-            _desH = _albumTitle_labelV!.frame.height+_gap
-        }else{
-            if _description!.text == ""{
-                
-            }else{
-                let size:CGSize = _description!.sizeThatFits(CGSize(width: _defaultSize!.width-_gap*2, height: CGFloat.max))
-                _desH = size.height+_gap
-            }
+        if _description!.text == ""{
             
-            _description?.frame = CGRect(x: _gap, y: _bottomOfPic+_gap, width: _defaultSize!.width-_gap*2, height: _desH)
+        }else{
+            let size:CGSize = _description!.sizeThatFits(CGSize(width: _defaultSize!.width-_gap*2, height: CGFloat.max))
+            _desH = size.height+_gap
         }
         
+        _description?.frame = CGRect(x: _gap, y: _bottomOfPic+_gap, width: _defaultSize!.width-_gap*2, height: _desH)
         
         _likeTextView?.frame = CGRect(x: 10, y: 5, width: _defaultSize!.width-10-28, height: _likeTextView!.contentSize.height)
         
@@ -451,7 +347,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         var _moreComentH:CGFloat = 0
         
         if _moreCommentText?.text == ""{
-        
+            
         }else{
             _moreComentH = _moreCommentText!.contentSize.height
         }
@@ -506,7 +402,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         
         _commentText?.linkTextAttributes = [NSForegroundColorAttributeName:UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)]
-       
+        
         if _n>3{
             _moreCommentText?.attributedText = linkString("查看全部"+String(_n)+"条评论",withURLString:"moreComment:")
         }else{
@@ -518,10 +414,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     func commentString(_commentDict:NSDictionary) -> NSAttributedString {
         var boldFont = UIFont.boldSystemFontOfSize(14)
-       
+        
         var boldAttr = [NSFontAttributeName: boldFont]
         //let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),
-         //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
+        //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
         let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),NSFontAttributeName: UIFont.systemFontOfSize(14)]
         
         var attrString: NSAttributedString = linkString(_commentDict.objectForKey("from_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("from_userId") as! String))
@@ -563,7 +459,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         switch _action{
         case "user":
             let _str:String = URL.absoluteString!
-            let _userId:NSString =  (_str as NSString).substringFromIndex(5)            
+            let _userId:NSString =  (_str as NSString).substringFromIndex(5)
             _delegate?._viewUser(_userId as String)
         case "moreComment":
             //println("hahahah")
@@ -593,14 +489,14 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     func _openPanel(__set:Bool){
         _toolsBarIsOpened=__set
-         UIView.beginAnimations("toolsOpen", context: nil)
-            if __set{
-                _toolsButtonPanel_container?.frame = CGRect(x: _toolsBtnToX!, y: 0, width:_toolsBtnToW!, height: 40)
-                
-            }else{
-                _toolsButtonPanel_container?.frame = CGRect(x: _defaultSize!.width-45, y: 0, width:0, height: 40)
-            }
-            UIView.commitAnimations()
+        UIView.beginAnimations("toolsOpen", context: nil)
+        if __set{
+            _toolsButtonPanel_container?.frame = CGRect(x: _toolsBtnToX!, y: 0, width:_toolsBtnToW!, height: 40)
+            
+        }else{
+            _toolsButtonPanel_container?.frame = CGRect(x: _defaultSize!.width-45, y: 0, width:0, height: 40)
+        }
+        UIView.commitAnimations()
     }
     
     
@@ -664,7 +560,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         }
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
-       // paragraphStyle.headIndent = 50
+        // paragraphStyle.headIndent = 50
         paragraphStyle.firstLineHeadIndent = 20
         _attrStr.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, _attrStr.length))
         _likeTextView!.attributedText = _attrStr
@@ -721,7 +617,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             _albumTitle_label?.text=__str
             
         }
-     
+        
         _albumTitle_label?.hidden=false
         _albumTitle_labelV?.hidden=false
         
@@ -729,19 +625,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap, height: CGFloat.max))
         
-        switch _type{
-            case "album":
-                _albumTitle_label?.frame = CGRect(x: _gap, y: 6, width: _size.width, height: _size.height)
-                _albumTitle_labelV?.frame = CGRect(x: 0, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width, height: _size.height+12)
-            break
-            case "pics":
-                _albumTitle_label?.frame = CGRect(x: 5, y: 3.3, width: _size.width, height: _size.height)
-                _albumTitle_labelV?.frame = CGRect(x: _gap, y: _bottomOfPic+12, width: _size.width+5*2, height: _size.height+3.3*2)
-                
-            break
-        default:
-            break
-        }
+        _albumTitle_label?.frame = CGRect(x: _gap, y: 6, width: _size.width, height: _size.height)
+        _albumTitle_labelV?.frame = CGRect(x: 0, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width, height: _size.height+12)
         
     }
     func _setUserName(__str:String){
@@ -758,9 +643,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     func _setPic(__pic:NSDictionary){
         //println(__pic)
-       //  _pic?.image = UIImage(named: __pic.objectForKey("url") as! String)
+        //  _pic?.image = UIImage(named: __pic.objectForKey("url") as! String)
         _picV?._setPic(__pic, __block: { (__dict) -> Void in
-           self._refreshView()
+            self._refreshView()
         })
     }
     
@@ -770,12 +655,12 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-       // println("ww")
+        // println("ww")
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         //setup()
         
     }
-
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

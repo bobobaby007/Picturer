@@ -97,6 +97,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _imgW = 0.20*_frameW!
         _profileH = _imgW! + 2*_gapY!
         
+        
+        
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
         _topBar?.backgroundColor=UIColor(white: 0.1, alpha: 0.98)
         
@@ -582,10 +584,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         cell!._userId = _userId
         cell!._indexId = indexPath.row
         cell!._delegate=self
-        
-        
-        
-    
+   
         cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
         cell!._setUserImge(_profileDict?.objectForKey("profileImg") as! NSDictionary)
         cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String)
