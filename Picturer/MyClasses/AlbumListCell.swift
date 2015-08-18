@@ -26,6 +26,7 @@ class AlbumListCell :  UITableViewCell{
         if _setuped {
             return
         }
+        
        // _imageView=UIImageView(frame: CGRectMake(10, 5, self.bounds.height-10, self.bounds.height-10))
         _imageView=UIImageView(frame: CGRectMake(10, 8, 75, 75))
         _imageView?.contentMode=UIViewContentMode.ScaleAspectFill

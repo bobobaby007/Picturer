@@ -117,6 +117,9 @@
 		7AA887C51B3F963B006BC338 /* icon_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AA887C41B3F963B006BC338 /* icon_alert.png */; };
 		7AA9ACB31B5133C0006B41FE /* PicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA9ACB21B5133C0006B41FE /* PicView.swift */; };
 		7AAA54E61B60B41100B304EE /* Inputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAA54E51B60B41100B304EE /* Inputer.swift */; };
+		7AAEA3461B833A4300DB5F54 /* blurBg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7AAEA3451B833A4300DB5F54 /* blurBg.jpg */; };
+		7AAEA34B1B833E5400DB5F54 /* LogoAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAEA34A1B833E5400DB5F54 /* LogoAnimation.swift */; };
+		7AAEA34D1B83510000DB5F54 /* logo_triangle.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAEA34C1B83510000DB5F54 /* logo_triangle.png */; };
 		7AB2517B1B7F3B2E0029ED80 /* logo_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB251791B7F3B2E0029ED80 /* logo_black.png */; };
 		7AB251801B7F46690029ED80 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB2517F1B7F46690029ED80 /* message.png */; };
 		7AB2518C1B7F4B010029ED80 /* pic_9.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 7AB251831B7F4B010029ED80 /* pic_9.JPG */; };
@@ -307,6 +310,9 @@
 		7AA887C41B3F963B006BC338 /* icon_alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_alert.png; sourceTree = "<group>"; };
 		7AA9ACB21B5133C0006B41FE /* PicView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicView.swift; sourceTree = "<group>"; };
 		7AAA54E51B60B41100B304EE /* Inputer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inputer.swift; sourceTree = "<group>"; };
+		7AAEA3451B833A4300DB5F54 /* blurBg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blurBg.jpg; sourceTree = "<group>"; };
+		7AAEA34A1B833E5400DB5F54 /* LogoAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoAnimation.swift; sourceTree = "<group>"; };
+		7AAEA34C1B83510000DB5F54 /* logo_triangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_triangle.png; sourceTree = "<group>"; };
 		7AB251791B7F3B2E0029ED80 /* logo_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_black.png; sourceTree = "<group>"; };
 		7AB2517F1B7F46690029ED80 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		7AB251831B7F4B010029ED80 /* pic_9.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pic_9.JPG; sourceTree = "<group>"; };
@@ -482,6 +488,7 @@
 				7AA6A8CA1B4777C200D9E604 /* MainInterface.swift */,
 				7A1FF2431B4AA1E600CEFDAF /* MainAction.swift */,
 				7AA9ACB21B5133C0006B41FE /* PicView.swift */,
+				7AAEA34A1B833E5400DB5F54 /* LogoAnimation.swift */,
 			);
 			path = MyClasses;
 			sourceTree = "<group>";
@@ -489,6 +496,7 @@
 		7A9C86B81B32D52D0051D067 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				7AAEA3451B833A4300DB5F54 /* blurBg.jpg */,
 				7AB251AD1B7F4F5F0029ED80 /* ad */,
 				7AB251821B7F4ADB0029ED80 /* photo */,
 				7AB251811B7F4ABE0029ED80 /* user */,
@@ -511,6 +519,7 @@
 				7A21C44D1B5FF5E700AC99DB /* like.png */,
 				7A0A15E01B5E998F00A8C6F6 /* noPic.png */,
 				7A23A95E1B3E7913009B2E53 /* icon_1.png */,
+				7AAEA34C1B83510000DB5F54 /* logo_triangle.png */,
 				7A1FF2451B4AE48300CEFDAF /* newAlbum.png */,
 				7ADC30EF1B6B89070020220C /* changeToCollect_icon.png */,
 				7A8E3E031B4B9A7200243FA5 /* addIcon.png */,
@@ -794,6 +803,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AA7AEF31B735B0F00FF7EBC /* edit.png in Resources */,
+				7AAEA3461B833A4300DB5F54 /* blurBg.jpg in Resources */,
 				7A21C44E1B5FF5E700AC99DB /* like.png in Resources */,
 				7A8E3E041B4B9A7200243FA5 /* addIcon.png in Resources */,
 				7AB251801B7F46690029ED80 /* message.png in Resources */,
@@ -858,6 +868,7 @@
 				7AA26BA71B4D8C56006CDC61 /* icon_choose.png in Resources */,
 				7AA7AEF11B735B0F00FF7EBC /* back.png in Resources */,
 				7AB2518C1B7F4B010029ED80 /* pic_9.JPG in Resources */,
+				7AAEA34D1B83510000DB5F54 /* logo_triangle.png in Resources */,
 				7AB2518E1B7F4B010029ED80 /* pic_7.JPG in Resources */,
 				7ADD50161B2D402000E44F99 /* LaunchScreen.xib in Resources */,
 				7AA7AEDF1B73094F00FF7EBC /* add01.png in Resources */,
@@ -935,6 +946,7 @@
 				7A2FCA501B5D57BC00033925 /* HTTPUpload.swift in Sources */,
 				7ACFB3851B591A21007F9AB8 /* Manage_PicsToAlbum.swift in Sources */,
 				7AEC21281B3D9CE800D19D22 /* Social_home.swift in Sources */,
+				7AAEA34B1B833E5400DB5F54 /* LogoAnimation.swift in Sources */,
 				7ADD50091B2D402000E44F99 /* AppDelegate.swift in Sources */,
 				7A2FCA481B5D57BC00033925 /* HTTPResponseSerializer.swift in Sources */,
 				7AEC212A1B3DA09600D19D22 /* SocialAlbumCell.swift in Sources */,

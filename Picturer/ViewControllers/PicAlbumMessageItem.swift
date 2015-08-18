@@ -462,14 +462,17 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         }
         _moreCommentText?.frame = CGRect(x: 5, y: _commentText!.contentSize.height-8+5, width: _defaultSize!.width-30, height: _moreComentH)
         
-        _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width-2*_gap, height: _moreCommentText!.frame.origin.y+_moreCommentText!.frame.height+10)
+        if _commentText?.text==""{
+        _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width-2*_gap, height: 0)
+        }else{
+            _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width-2*_gap, height: _moreCommentText!.frame.origin.y+_moreCommentText!.frame.height+10)
+        }
         
         
         _bgV!.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width, height:_commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+_gap )
         _lineBg!.frame = CGRect(x: 0, y: _bgV!.frame.height, width: _defaultSize!.width, height: 0.5)
         
         //self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: _h+40)
-        
         
         
         _delegate?._resized(_indexId, __height:_bgV!.frame.height+_gap)

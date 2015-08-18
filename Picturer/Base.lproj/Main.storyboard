@@ -17,7 +17,7 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -40,6 +40,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" restorationIdentifier="AlbumListCell" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="alum_cell" rowHeight="92" id="Uid-Rf-0n0" customClass="AlbumListCell" customModule="Picturer" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -371,7 +372,7 @@
                                 </variation>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="0.86666666670000003" blue="0.090196078430000007" alpha="0.97999999999999998" colorSpace="calibratedRGB"/>
                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                         <constraints>
                             <constraint firstItem="nab-aG-Hev" firstAttribute="centerY" secondItem="fjW-a6-oHw" secondAttribute="centerY" id="2Jz-fW-2oi"/>
@@ -463,9 +464,11 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
+                        <outlet property="_bottomView" destination="s4A-5j-5r3" id="Met-xP-ulN"/>
                         <outlet property="_btn_camera" destination="H6s-1f-DBH" id="p95-06-R15"/>
                         <outlet property="_btn_new" destination="JEf-FF-GPW" id="gnt-f0-sEE"/>
                         <outlet property="_tableView" destination="nab-aG-Hev" id="Ved-SZ-cyH"/>
+                        <outlet property="_topView" destination="pAc-5c-I02" id="qv1-H3-fzN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sst-wb-qkJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1103,7 +1106,7 @@
                         <viewControllerLayoutGuide type="top" id="cnd-mQ-beO"/>
                         <viewControllerLayoutGuide type="bottom" id="pw6-Ir-ra9"/>
                     </layoutGuides>
-                    <view key="view" alpha="0.89999999999999991" contentMode="scaleToFill" id="0fp-Ny-GYJ">
+                    <view key="view" contentMode="scaleToFill" id="0fp-Ny-GYJ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -1290,6 +1293,7 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
                     <connections>
                         <outlet property="_collectionView" destination="mRa-fK-lbv" id="t9i-5Q-meb"/>
+                        <outlet property="_topView" destination="Cn1-F6-Xl1" id="gLD-AM-coy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0dY-nx-ngj" userLabel="First Responder" sceneMemberID="firstResponder"/>

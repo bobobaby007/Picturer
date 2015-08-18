@@ -13,7 +13,11 @@ import UIKit
 import AssetsLibrary
 import AVFoundation
 
-
+protocol Manage_home_delegate:NSObjectProtocol{
+    func _manage_startToChange()
+    func _manage_changeCancel()
+    func _manage_changeFinished()
+}
 
 class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
    
@@ -23,11 +27,20 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     @IBOutlet weak var _tableView:UITableView!
     @IBOutlet weak var _btn_new:UIButton!
     @IBOutlet weak var _btn_camera:UIButton!
+    @IBOutlet weak var _topView:UIView!
+    @IBOutlet weak var _bottomView:UIView!
     
     var _offset:CGFloat=0
     var _currentIndex:NSIndexPath?
     
     var _cameraImage:NSDictionary?
+    
+    var _delegate:Manage_home_delegate!
+    
+    var _blurV:UIImageView?
+    var _isOuting:Bool = false
+    var _isChanging:Bool = false
+    var _logoAnimation:LogoAnimation?
     
     @IBAction func btnHander(btn:UIButton){
         switch btn{
@@ -59,33 +72,86 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         self.navigationController?.view.layer.addAnimation(animation, forKey: "cornerRadius")
         
         self.navigationController?.pushViewController(_controller!, animated: false)
-        
-        
-        
-     
     }
     
     
     
     //-----拖动方法
     
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        //println("did end")
-    }
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
-        if _offset < -80.0{
-          _offset=0.0
-          switchToSocial()
+        if _isOuting{
+            return
         }
-        _offset=0.0
+        _isChanging = false
+        _delegate?._manage_changeCancel()
+        //UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        //println("did end")
+        
     }
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        if _isOuting{
+            return
+        }
+        
+        
+        if _isChanging{
+            
+        }else{
+            _isChanging = true
+            _delegate?._manage_startToChange()
+        }
+        
         let _h:CGFloat=scrollView.contentOffset.y
-        if _offset>_h{
-            _offset=_h
+        
+        var _y:CGFloat = 64-_h/2
+        
+        
+        var _n:Int = -Int(floor((_h+10)/4))
+        if _n<0{
+            _n=0
+        }
+        _logoAnimation?._changeTo(_n)
+        
+        if _n <= 6{
+            _y = _y+3*7
+        }else if _n <= 12{
+            _y = _y + CGFloat(12-_n)*7/2
+        }else{
+            
+        }
+        
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            self._logoAnimation?.view.center = CGPoint(x: self.view.frame.width/2, y: _y)
+            self._logoAnimation?.view.alpha = 1-CGFloat(25-_n)*0.04
+        })
+        
+        
+        
+        
+    }
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let _h:CGFloat=scrollView.contentOffset.y
+        if _h < -120{
+            out()
         }
     }
+    func out(){
+        //_tableView.userInteractionEnabled = false
+        _isOuting = true
+       // _tableView.bounces = false
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self._tableView.frame.origin = CGPoint(x: 0, y: self.view.frame.height)
+            self._blurV?.alpha = 0
+            self._topView.alpha = 0
+            self._bottomView.alpha = 0
+            self._logoAnimation?.view.alpha = 0
+            
+        }) { (stop) -> Void in
+            _delegate?._manage_changeFinished()
+        }
+    }
+    
     //---------tableview delegate
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
@@ -311,6 +377,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     func canceld() {
         _tableView.reloadData()
+        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        UIApplication.sharedApplication().statusBarHidden=false
     }
     
     //---弹出浏览图片代理
@@ -431,7 +499,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     
     override func viewDidLoad() {
-        
 //        var _album:AlbumObj=AlbumObj()
 //        var _images:NSMutableArray = [["sss":"44"]]
 //        
@@ -444,16 +511,57 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
 
        // println(MainAction._albumList)
         super.viewDidLoad()
-       // _tableView.separatorColor=UIColor.clearColor()
-        _tableView.tableFooterView=UIView()
         
-        self.automaticallyAdjustsScrollViewInsets=false
+        
+        if _blurV ==  nil{
+            //let blurEffect:UIBlurEffect=UIBlurEffect(style: UIBlurEffectStyle.Dark)
+            _blurV = UIImageView(image: UIImage(named: "blurBg.jpg"))
+            _blurV?.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height)
+            
+            self.view.insertSubview(_blurV!, belowSubview: _tableView)
+            
+            
+            _tableView.tableFooterView = UIView()
+            _tableView.tableFooterView=UIView(frame: CGRect(x: 0, y: 0, width: _tableView.frame.width, height: _tableView.frame.height))
+            var _line:UIView = UIView(frame: CGRect(x: 10, y: 0, width: 500, height: 0.5))
+            _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
+            _tableView.tableFooterView?.addSubview(_line)
+            _tableView.backgroundColor = UIColor.clearColor()
+            _tableView.tableFooterView?.backgroundColor = UIColor.whiteColor()
+            self.view.backgroundColor = UIColor.clearColor()
+             self.automaticallyAdjustsScrollViewInsets=false
+            
+            
+            _logoAnimation = LogoAnimation()
+            self.addChildViewController(_logoAnimation!)
+            _logoAnimation?.view.frame = CGRect(x: 0, y: 0, width: 49, height: 49)
+            _logoAnimation?.view.center = CGPoint(x: self.view.frame.width/2, y: 64+30)
+            //self.view.addSubview(_logoAnimation!.view)
+            self.view.insertSubview(_logoAnimation!.view, aboveSubview: _blurV!)
+            
+            
+            
+        }
+        
+       // _tableView.separatorColor=UIColor.clearColor()
+    }
+    override func viewDidAppear(animated: Bool) {
+        //UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        //UIApplication.sharedApplication().statusBarHidden=false
+        _blurV!.frame = CGRect(x: 0, y: 64, width: 500, height: 600)
+        _tableView.frame.origin = CGPoint(x: 0, y: 64)
+        self._blurV?.alpha = 1
+        self._topView.alpha = 1
+        self._bottomView.alpha = 1
+        _isChanging = false
+        _isOuting = false
+        _logoAnimation?.view.alpha = 1
+        _logoAnimation?._reset()
         
         
     }
     override func viewWillAppear(animated: Bool) {
-        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
-        UIApplication.sharedApplication().statusBarHidden=false
+    
     }
     
     

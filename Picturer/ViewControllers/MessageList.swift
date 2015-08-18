@@ -125,7 +125,6 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         var _controller:MyHomepage = MyHomepage()
         _controller._userId = __userId
         self.navigationController?.pushViewController(_controller, animated: true)
-        
     }
     func _viewAlbum(__albumId: String) {
         

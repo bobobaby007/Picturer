@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+protocol MyHomepage_delegate:NSObjectProtocol{
+    func _cancel()
+}
+
 class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
     var _barH:CGFloat = 64
     var _myFrame:CGRect?
@@ -77,7 +81,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
-    
+    var _delegate:MyHomepage_delegate?
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
@@ -255,16 +259,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _profilePanel?.addSubview(_sign_text!)
         //----
         
-        
-        
-        
-        
-        
-        
-        
         //---消息提醒----
-        
-        
         
         _messageAlertView = UIView(frame: CGRect(x: 0, y: _profileH+10, width: 194, height: 40))
         _messageAlertView?.layer.masksToBounds=true
@@ -760,6 +755,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
+            if _delegate != nil{
+                _delegate?._cancel()
+            }
             self.navigationController?.popViewControllerAnimated(true)
             return
         case _btn_moreAction!:

@@ -343,6 +343,7 @@ class MainAction: AnyObject {
         if _n < 1{
             _n = 1
         }
+        //_n = 0
         for var i:Int = 0; i<_n;++i{
             var _comment:String = "受到各国大使馆的是"
             var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(i) as! String,_testToUserNames?.objectAtIndex(i) as! String,"111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
