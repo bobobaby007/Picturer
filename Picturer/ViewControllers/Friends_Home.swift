@@ -388,9 +388,20 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             self.navigationController?.pushViewController(_controller, animated: true)
             
         })
+    }
+    func _viewPicsAtIndex(__array:NSArray,__index:Int){
+
+        var _controller:Social_pic = Social_pic()
         
+        var _pics:NSMutableArray = NSMutableArray()
         
-        
+        for i in 0...__array.count{
+            _pics.addObject(NSDictionary(objects: [__array.objectAtIndex(i),3,5], forKeys: ["pic","likeNumber","commentNumber"]))
+           
+        }
+        _controller._showIndexAtPics(__index, __array: _pics)
+        self.navigationController?.pushViewController(_controller, animated: true)
+
     }
     func _moreComment(__indexId: Int) {
         var _controller:CommentList = CommentList()

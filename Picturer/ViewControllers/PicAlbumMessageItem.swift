@@ -14,6 +14,7 @@ protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
     func _moreComment(__indexId:Int)
     func _viewUser(__userId:String)
     func _viewAlbum(__albumIndex:Int)
+    func _viewPicsAtIndex(__array:NSArray,__index:Int)
     func _moreLike(__indexId:Int)
     func _buttonAction(__action:String,__dict:NSDictionary)
 }
@@ -34,7 +35,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _user:NSDictionary?
     var _userId:String?
     var _setuped:Bool = false
-    var _picV:PicView?
+    var _picV:PicView? = PicView()
     //var _pic:UIImageView?
    
     var _pics:NSArray?
@@ -312,11 +313,15 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                     _p.maximumZoomScale=1
                     _p.minimumZoomScale=1
                     _p._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
-                    
+                    _p._id = i
                     //_p._setImage("noPic.png")
                     _p._setPic(_pics?.objectAtIndex(i) as! NSDictionary, __block: { (ok) -> Void in
                         //self._refreshView()
                     })
+                    
+                    let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
+                    _p.addGestureRecognizer(_tapPic)
+                    
                     _picsContainer.addSubview(_p)
                 }
                 //_picsContainer.backgroundColor = UIColor.redColor()
@@ -620,11 +625,15 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             return
         case _picV!:
             _delegate?._viewAlbum(_indexId)
-            
         default:
+            let _picV:PicView = __tap.view! as! PicView
+            
+            _delegate?._viewPicsAtIndex(_pics!, __index: _picV._id)
+            
             return
         }
     }
+    
     override func removeFromSuperview() {
         //print("out")
         self.superview?.removeGestureRecognizer(_tapC!)

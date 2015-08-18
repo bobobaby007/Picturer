@@ -21,6 +21,8 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
 
     var _collectionArray:NSArray=[["pic":"icon_1.png","title":"主页"],["pic":"icon_2.png","title":"朋友"],["pic":"icon_3.png","title":"妙人"],["pic":"icon_4.png","title":"发现"],["pic":"icon_5.png","title":"收藏"],["pic":"icon_6.png","title":"通讯录"],["pic":"icon_7.png","title":"设置"]]
     
+    var _alertDicts:NSMutableArray?
+    
     
     @IBAction func btnHander(btn:UIButton){
         switch btn{
@@ -53,6 +55,12 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         }
     }
 
+    func _getAlerts(){
+        MainAction._getAlertsOfSocial({ (array) -> Void in
+            self._alertDicts = NSMutableArray(array: array)
+            self._collectionView.reloadData()
+        })
+    }
     
     //-----collection delegate
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
@@ -105,23 +113,24 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         let identify:String = "SocailHomeCell"
         let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
             identify, forIndexPath: indexPath) as! SocailHomeCell
-        
-        cell._setImage( _collectionArray[indexPath.item]["pic"] as! String)
         cell._setTitle(_collectionArray[indexPath.item]["title"] as! String)
         
-        if indexPath.item%2==1{
+        
+        
+        if _alertDicts != nil{
+            let _n:Int = (_alertDicts?.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("num") as! Int
+            cell._setAlertNum(_n)
+            if _n==0{
+                cell._setImage( _collectionArray[indexPath.item]["pic"] as! String)
+            }else{
+                cell._setPic((_alertDicts?.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("pic") as! NSDictionary, __block: { (dict) -> Void in
+                })
+            }
             
-            cell._setAlertNum(8)
-           // cell._setAlertNum(2120)
         }else{
-            cell._setAlertNum(-1)
+            cell._setImage( _collectionArray[indexPath.item]["pic"] as! String)
         }
         
-        if indexPath.item%3==1{
-            cell._setAlertNum(0)
-        }else{
-            
-        }
         return cell
     }
     
@@ -157,16 +166,14 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     override func viewDidLoad() {
         //_scoller.contentSize=CGSize(width: _scoller.bounds.width, height: _scoller.bounds.height+100.0)
-        
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets=false
         
-        
+        _getAlerts()
         
         let layout = LayoutForSocailHome()
         _collectionView.collectionViewLayout=layout
         _collectionView.registerClass(SocailHomeCell.self, forCellWithReuseIdentifier: "SocailHomeCell")
-        
     }
     override func viewWillAppear(animated: Bool) {
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.Default

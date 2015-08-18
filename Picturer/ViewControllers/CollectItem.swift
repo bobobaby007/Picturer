@@ -20,7 +20,7 @@ protocol CollectItem_delegate:NSObjectProtocol{
 
 
 class CollectItem:  UITableViewCell,UITextViewDelegate{
-    var _picsW:CGFloat = 0
+    
     let _gapForPic:CGFloat = 2
     
     var _bottomOfPic:CGFloat = 0 //---到图片底部的位置
@@ -34,24 +34,14 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     var _setuped:Bool = false
     var _picV:PicView?
     
-    var _pics:NSArray?
-    var _picsContainer:UIView = UIView()
+    
     var _userImg:PicView?
     var _userName_label:UILabel?
     var _updateTime_label:UILabel?
     var _albumTitle_labelV:UIView?
     var _albumTitle_label:UITextView?
-    var _description:UITextView?
+    var _description:UILabel?
     
-    var _toolsPanel:UIView?
-    var _likeTextView:UITextView?
-    var _toolsButtonPanel:UIView?
-    var _toolsButtonPanel_container:UIView?
-    var _toolsBtnToX:CGFloat?
-    var _toolsBtnToW:CGFloat?
-    var _toolsOpenButton:UIButton?
-    
-    var _likeIcon:UIImageView?
     
     var _btn_like:UIButton = UIButton()
     var _btn_comment:UIButton = UIButton()
@@ -64,9 +54,6 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     
     var _defaultSize:CGSize?
     
-    var _commentsPanel:UIView?
-    var _commentText:UITextView?
-    var _moreCommentText:UITextView?
     
     var _attributeStr:NSMutableAttributedString?
     
@@ -76,11 +63,8 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     var _buttonTap:UITapGestureRecognizer?
     
     
-    var _toolsBarIsOpened:Bool=false
-    
     var _bgV:UIView?
-    var _lineBg:UIView?
-    
+    var _container:UIView?
     
     
     override func willMoveToSuperview(newSuperview: UIView?) {
@@ -99,14 +83,8 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         _defaultSize=__size
         self.backgroundColor = UIColor.clearColor()
         
-        _bgV = UIView()
-        _bgV?.backgroundColor=UIColor.whiteColor()
         
-        _lineBg = UIView()
-        _lineBg?.backgroundColor = UIColor(white: 0.8, alpha: 1)
-        
-        self.addSubview(_bgV!)
-        self.addSubview(_lineBg!)
+
         
         
         
@@ -116,7 +94,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         
         
-        _userImg = PicView(frame: CGRect(x: 15, y: 6.5, width: 32, height: 32))
+        _userImg = PicView(frame: CGRect(x: 15+_gap, y: 12+_gap, width: 32, height: 32))
         _userImg?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         _userImg?.maximumZoomScale = 1
         _userImg?.minimumZoomScale = 1
@@ -126,99 +104,16 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         _userImg?.addGestureRecognizer(_buttonTap!)
         
         
-        _userName_label = UILabel(frame: CGRect(x: 59, y: 17, width: 200, height: 12))
+        _userName_label = UILabel(frame: CGRect(x: 59+_gap, y: 23+_gap, width: 200, height: 12))
         _userName_label?.font = UIFont.boldSystemFontOfSize(14)
         _userName_label?.textColor = UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)
         
-        _updateTime_label = UILabel(frame: CGRect(x: _defaultSize!.width-155, y: 17, width: 140, height: 12))
+        _updateTime_label = UILabel(frame: CGRect(x: _defaultSize!.width-155-_gap, y: 25+_gap, width: 140, height: 12))
         
         _updateTime_label?.textAlignment = NSTextAlignment.Right
         _updateTime_label?.font = UIFont.systemFontOfSize(12)
-        
-        
-        
-        
-        _description = UITextView()
-        _description?.textContainerInset = UIEdgeInsetsZero
-        _description?.textContainer.lineFragmentPadding=0
-        _description?.editable=false
-        _description?.selectable=false
-        _description?.font = UIFont.systemFontOfSize(14)
-        
-        _likeTextView = UITextView()
-        _likeTextView?.font=UIFont.boldSystemFontOfSize(14)
-        _likeTextView?.backgroundColor = UIColor.clearColor()
-        _likeTextView?.delegate=self
-        _likeTextView?.editable=false
-        _likeTextView?.tintColor = UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)
-        
-        
-        _likeIcon = UIImageView(frame: CGRect(x: _gap, y: 15, width: 13.5, height: 12))
-        _likeIcon?.image = UIImage(named: "like.png")
-        
-        
-        
-        
-        
-        
-        
-        
-        _toolsOpenButton = UIButton(frame: CGRect(x: _defaultSize!.width-27.5-_gap, y: _gap, width: 27.5, height: 15))
-        _toolsOpenButton?.setImage(UIImage(named: "toolsBtn.png"), forState: UIControlState.Normal)
-        _toolsOpenButton?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        
-        //----工具条
-        let _toolsGap:CGFloat = (_defaultSize!.width-80)/4
-        _toolsButtonPanel = UIView()
-        _toolsButtonPanel?.layer.masksToBounds=true
-        _toolsButtonPanel?.layer.cornerRadius = 5
-        _toolsButtonPanel?.clipsToBounds=true
-        
-        _toolsButtonPanel_container = UIView()
-        _toolsButtonPanel_container?.backgroundColor = UIColor.clearColor()
-        _toolsButtonPanel_container?.clipsToBounds=true
-        
-        _toolsButtonPanel_container?.addSubview(_toolsButtonPanel!)
-        
-        _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 40)
-        
-        _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 40))
-        _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-        _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
-        _btn_like.setTitle("赞", forState: UIControlState.Normal)
-        _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 40))
-        _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-        _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
-        _btn_comment.setTitle("评论", forState: UIControlState.Normal)
-        _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        _btn_share = UIButton(frame: CGRect(x: 2*_toolsGap, y: 0, width: _toolsGap, height: 40))
-        _btn_share.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-        _btn_share.titleLabel?.textAlignment = NSTextAlignment.Center
-        _btn_share.setTitle("分享", forState: UIControlState.Normal)
-        _btn_share.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        _btn_collect = UIButton(frame: CGRect(x: 3*_toolsGap, y: 0, width: _toolsGap, height: 40))
-        _btn_collect.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-        _btn_collect.titleLabel?.textAlignment = NSTextAlignment.Center
-        _btn_collect.setTitle("收藏", forState: UIControlState.Normal)
-        _btn_collect.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        _toolsBtnToX = _defaultSize!.width-4*_toolsGap-45
-        _toolsBtnToW = 4*_toolsGap
-        
-        _toolsButtonPanel?.backgroundColor = UIColor.darkGrayColor()
-        _toolsButtonPanel?.addSubview(_btn_like)
-        _toolsButtonPanel?.addSubview(_btn_comment)
-        _toolsButtonPanel?.addSubview(_btn_share)
-        _toolsButtonPanel?.addSubview(_btn_collect)
-        
-        
-        
-        _picV = PicView(frame: CGRect(x: 0, y: 45, width: _defaultSize!.width, height: _defaultSize!.width))
+   
+        _picV = PicView(frame: CGRect(x: _gap+0.5, y: _gap+55, width: _defaultSize!.width-2*_gap-1, height:_defaultSize!.width-2*_gap-1))
         _picV?._setImage("noPic.png")
         _picV?.scrollEnabled=false
         _picV?.maximumZoomScale = 1
@@ -234,11 +129,11 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         
         
-        _albumTitle_labelV = UIView(frame: CGRect(x: 0, y: _bottomOfPic-30, width: _defaultSize!.width, height: 30))
+        _albumTitle_labelV = UIView(frame: CGRect(x: _gap, y: _bottomOfPic-30, width: _defaultSize!.width-2*_gap, height: 30))
         
         _albumTitle_labelV?.backgroundColor = UIColor(white: 0, alpha: 0.8)
         _albumTitle_labelV?.userInteractionEnabled=false
-        _albumTitle_label = UITextView(frame: CGRect(x: 15, y: 8, width: _defaultSize!.width-2*_gap, height: 12))
+        _albumTitle_label = UITextView(frame: CGRect(x: 15+_gap, y: 8, width: _defaultSize!.width-2*_gap, height: 12))
         _albumTitle_label?.pagingEnabled=false
         _albumTitle_label?.textContainer.lineFragmentPadding=0
         _albumTitle_label?.textContainerInset = UIEdgeInsetsZero
@@ -253,50 +148,39 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         _albumTitle_label?.textColor = UIColor.whiteColor()
         
         
+        _description = UILabel(frame: CGRect(x: _gap+10, y: _bottomOfPic, width: _defaultSize!.width-2*_gap-2*10, height: 70))
+//        _description?.textContainerInset = UIEdgeInsetsZero
+//        _description?.textContainer.lineFragmentPadding=0
+//        _description?.editable=false
+//        _description?.textColor = UIColor.blackColor()
+//        _description?.selectable=false
+        _description?.numberOfLines = 2
+        _description?.font = UIFont.systemFontOfSize(14)
+        
+        
+        _bgV = UIView(frame: CGRect(x: _gap, y: _gap, width: _picV!.frame.width, height: _picV!.frame.height+_gap+55+65))
+        _bgV?.layer.cornerRadius = 5
+        _bgV?.layer.borderColor = UIColor(white: 0.5, alpha: 1).CGColor
+        _bgV?.layer.borderWidth=0.5
+        _bgV?.backgroundColor=UIColor.whiteColor()
+        
+        self.addSubview(_bgV!)
+        
+        
         self.addSubview(_picV!)
         
-        _toolsPanel = UIView(frame: CGRect(x: 0, y: _bottomOfPic+5, width: _defaultSize!.width, height: 36))
-        _toolsPanel?.addSubview(_likeTextView!)
-        _toolsPanel?.addSubview(_likeIcon!)
-        _toolsPanel?.addSubview(_toolsOpenButton!)
-        _toolsPanel?.addSubview(_toolsButtonPanel_container!)
         
-        _commentsPanel = UIView(frame: CGRect(x: 0, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width, height: 36))
-        _commentsPanel?.backgroundColor = UIColor(white: 0.95, alpha: 1)
-        
-        _attributeStr = NSMutableAttributedString()
-        
-        _commentText = UITextView()
-        _commentText?.font = UIFont.systemFontOfSize(14)
-        _commentText!.attributedText = _attributeStr!
-        _commentText?.backgroundColor =  UIColor.clearColor()
-        _commentText!.delegate=self
-        _commentText!.attributedText = _attributeStr!
-        _commentText!.selectable=true
-        _commentText!.editable=false
-        _commentText?.userInteractionEnabled=true
-        
-        _moreCommentText = UITextView()
-        _moreCommentText?.backgroundColor =  UIColor.clearColor()
-        _moreCommentText?.tintColor = UIColor.darkGrayColor()
-        _moreCommentText?.delegate = self
-        _moreCommentText!.selectable=true
-        _moreCommentText!.editable=false
-        
-        //changeComments()
-        
-        
-        _commentsPanel?.addSubview(_commentText!)
-        _commentsPanel?.addSubview(_moreCommentText!)
-        
-        self.addSubview(_picsContainer)
         self.addSubview(_userImg!)
         self.addSubview(_userName_label!)
         self.addSubview(_updateTime_label!)
         self.addSubview(_albumTitle_labelV!)
         self.addSubview(_description!)
-        self.addSubview(_toolsPanel!)
-        self.addSubview(_commentsPanel!)
+        
+        
+        
+        
+//        self.addSubview(_toolsPanel!)
+//        self.addSubview(_commentsPanel!)
         
         
         _albumTitle_labelV?.addSubview(_albumTitle_label!)
@@ -311,61 +195,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     //-------------------------调整布局-----------------
     
     func _refreshView(){
-        
-        
-        var _imgH:CGFloat! = _picV?._imgView?.image?.size.height
-        var _imgW:CGFloat! = _picV?._imgView?.image?.size.width
-        
-        var _h:CGFloat = 340
-        if _imgH != nil{
-            _h = _imgH*(self.frame.width/_imgW)
-        }
-        //_picV?.frame = CGRect(x: 0, y: 50, width: self.frame.width, height: _h)
-        //_picV?._refreshView()
-        
-        //_albumTitle_labelV?.frame = CGRect(x: 0, y: 50+_picV!.frame.height-36, width: self.frame.width, height: 36)
-        
-        var _desH:CGFloat = 0
-        
-        if _description!.text == ""{
-            
-        }else{
-            let size:CGSize = _description!.sizeThatFits(CGSize(width: _defaultSize!.width-_gap*2, height: CGFloat.max))
-            _desH = size.height+_gap
-        }
-        
-        _description?.frame = CGRect(x: _gap, y: _bottomOfPic+_gap, width: _defaultSize!.width-_gap*2, height: _desH)
-        
-        _likeTextView?.frame = CGRect(x: 10, y: 5, width: _defaultSize!.width-10-28, height: _likeTextView!.contentSize.height)
-        
-        
-        _toolsPanel!.frame = CGRect(x: 0, y: _bottomOfPic+_desH, width: _defaultSize!.width, height: _likeTextView!.contentSize.height+15)
-        
-        _commentText?.frame = CGRect(x: 5, y: 5, width: _defaultSize!.width-30, height: _commentText!.contentSize.height)
-        
-        
-        var _moreComentH:CGFloat = 0
-        
-        if _moreCommentText?.text == ""{
-            
-        }else{
-            _moreComentH = _moreCommentText!.contentSize.height
-        }
-        _moreCommentText?.frame = CGRect(x: 5, y: _commentText!.contentSize.height-8+5, width: _defaultSize!.width-30, height: _moreComentH)
-        
-        _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width-2*_gap, height: _moreCommentText!.frame.origin.y+_moreCommentText!.frame.height+10)
-        
-        
-        _bgV!.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width, height:_commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+_gap )
-        _lineBg!.frame = CGRect(x: 0, y: _bgV!.frame.height, width: _defaultSize!.width, height: 0.5)
-        
-        //self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: _h+40)
-        
-        
-        
         _delegate?._resized(_indexId, __height:_bgV!.frame.height+_gap)
-        
-        
     }
     
     
@@ -375,42 +205,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     
     
     
-    func _setComments(__comments:NSArray,__allNum:Int){
-        let _lineH:CGFloat = 20
-        var _h:CGFloat
-        let _n:Int = __comments.count
-        
-        _attributeStr = NSMutableAttributedString(string: "")
-        
-        for var i:Int = 0 ; i<_n; ++i{
-            if i>0 {
-                _attributeStr?.appendAttributedString(NSAttributedString(string: "\n"))
-            }
-            let _commentDict:NSDictionary = __comments.objectAtIndex(__comments.count - 1 - i) as! NSDictionary
-            _attributeStr?.appendAttributedString(commentString(_commentDict))
-            if i>1 {
-                break
-            }
-        }
-        
-        
-        var paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 8
-        _attributeStr?.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, _attributeStr!.length))
-        
-        _commentText!.attributedText = _attributeStr!
-        
-        
-        _commentText?.linkTextAttributes = [NSForegroundColorAttributeName:UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)]
-        
-        if _n>3{
-            _moreCommentText?.attributedText = linkString("查看全部"+String(_n)+"条评论",withURLString:"moreComment:")
-        }else{
-            _moreCommentText?.text = ""
-        }
-        
-        
-    }
+    
     
     func commentString(_commentDict:NSDictionary) -> NSAttributedString {
         var boldFont = UIFont.boldSystemFontOfSize(14)
@@ -482,33 +277,6 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     
     
     
-    
-    
-    
-    //---------------------------------工具条------------------------
-    
-    func _openPanel(__set:Bool){
-        _toolsBarIsOpened=__set
-        UIView.beginAnimations("toolsOpen", context: nil)
-        if __set{
-            _toolsButtonPanel_container?.frame = CGRect(x: _toolsBtnToX!, y: 0, width:_toolsBtnToW!, height: 40)
-            
-        }else{
-            _toolsButtonPanel_container?.frame = CGRect(x: _defaultSize!.width-45, y: 0, width:0, height: 40)
-        }
-        UIView.commitAnimations()
-    }
-    
-    
-    //----点击动作
-    func _tapHander(__tap:UITapGestureRecognizer){
-        
-        _openPanel(false)
-        self.superview?.removeGestureRecognizer(_tapC!)
-        //self.window?.removeGestureRecognizer(_tapC!)
-        //self.removeGestureRecognizer(_tapC!)
-    }
-    
     func _buttonTapHander(__tap:UITapGestureRecognizer){
         switch __tap.view!{
         case _userImg!:
@@ -563,8 +331,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         // paragraphStyle.headIndent = 50
         paragraphStyle.firstLineHeadIndent = 20
         _attrStr.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, _attrStr.length))
-        _likeTextView!.attributedText = _attrStr
-        _likeTextView?.editable=false
+       
         //_likeTextView?.selectable=false
         //_likeTextView?.bounces=false
         //_likeTextView?.contentInset = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
@@ -583,15 +350,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
             _delegate?._buttonAction("share", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
         case _btn_collect:
             _delegate?._buttonAction("collect", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
-        case _toolsOpenButton!:
-            if _toolsBarIsOpened{
-                
-                _openPanel(false)
-            }else{
-                
-                _openPanel(true)
-                self.superview?.addGestureRecognizer(_tapC!)
-            }
+       
             
         default:
             println("")
@@ -623,10 +382,10 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         
         
-        let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap, height: CGFloat.max))
+        let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap-2*10, height: CGFloat.max))
         
-        _albumTitle_label?.frame = CGRect(x: _gap, y: 6, width: _size.width, height: _size.height)
-        _albumTitle_labelV?.frame = CGRect(x: 0, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width, height: _size.height+12)
+        _albumTitle_label?.frame = CGRect(x: 10, y: 6, width: _size.width, height: _size.height)
+        _albumTitle_labelV?.frame = CGRect(x: _gap, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width-2*_gap, height: _size.height+12)
         
     }
     func _setUserName(__str:String){
@@ -637,7 +396,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     }
     func _setUserImge(__pic:NSDictionary){
         _userImg?._setPic(__pic, __block: { (__dict) -> Void in
-            self._refreshView()
+           // self._refreshView()
         })
     }
     

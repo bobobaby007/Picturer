@@ -635,6 +635,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
        
         
     }
+    func _viewPicsAtIndex(__array: NSArray, __index: Int) {
+        
+    }
     func _moreComment(__indexId: Int) {
         var _controller:CommentList = CommentList()
         //println(__dict)

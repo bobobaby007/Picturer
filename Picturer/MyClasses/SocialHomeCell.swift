@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AssetsLibrary
 
 class SocailHomeCell:UICollectionViewCell {
     // @IBOutlet weak var _imgView:UIImageView!
@@ -28,7 +29,7 @@ class SocailHomeCell:UICollectionViewCell {
         _imgView=UIImageView(frame: CGRect(x: (bounds.size.width - _iconW) * 0.5, y: (bounds.size.height - _iconW) * 0.5, width: _iconW, height: _iconW))
         _imgView.contentMode=UIViewContentMode.ScaleAspectFill
         _imgView.layer.masksToBounds=true
-        
+        _imgView.layer.cornerRadius = _imgView.frame.width/2
         
         let _width=bounds.size.width/6
         _tag_view=UIImageView(frame: CGRect(x: _imgView.frame.origin.x+_imgView.frame.width-_width/2+5, y:_imgView.frame.origin.y-5, width: _width, height: _width))
@@ -36,9 +37,9 @@ class SocailHomeCell:UICollectionViewCell {
         
         
         
-        let _width_c=bounds.size.width/10
+        let _width_c=bounds.size.width/11
         
-        _tag_circl=UIImageView(frame: CGRect(x: _imgView.frame.origin.x+_imgView.frame.width-_width_c/2+5, y:_imgView.frame.origin.y-5, width: _width_c, height: _width_c))
+        _tag_circl=UIImageView(frame: CGRect(x: _imgView.frame.origin.x+_imgView.frame.width-_width_c/2+3, y:_imgView.frame.origin.y-3, width: _width_c, height: _width_c))
         _tag_circl.image=UIImage(named: "icon_alert")
         
         _tagNum=UILabel()
@@ -104,6 +105,47 @@ class SocailHomeCell:UICollectionViewCell {
             _tag_circl.hidden=true
         }
     }
+    
+    func _setPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
+        switch __pic.objectForKey("type") as! String{
+        case "alasset":
+            let _al:ALAssetsLibrary=ALAssetsLibrary()
+            
+            _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
+                if asset != nil {
+                    self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+                }else{
+                    self._setImage("entroLogo")//----用户删除时
+                }
+                //self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                // self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+                __block(NSDictionary())
+                }, failureBlock: { (error:NSError!) -> Void in
+                    
+            })
+            
+        case "file":
+            self._setImage(__pic.objectForKey("url") as! String)
+            __block(NSDictionary())
+        case "fromWeb":
+            ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
+                // _setImage(image)
+                //println("")
+                if self._imgView != nil{
+                    //self._setImageByImage(image!)
+                    self._imgView?.image=image
+                    __block(NSDictionary())
+                    
+                }else{
+                    println("out")
+                }
+                
+            })
+        default:
+            println()
+        }
+    }
+
     
     func _setImage(_img:String)->Void{
         _imgView.image=UIImage(named: _img as String)

@@ -237,7 +237,7 @@ class MainAction: AnyObject {
             
             
             var _dict:NSMutableDictionary = NSMutableDictionary()
-            var _pic:NSDictionary =  NSDictionary(objects: ["file","1.png"], forKeys: ["type","url"])
+            var _pic:NSDictionary =  NSDictionary(objects: ["file","user_1.jpg"], forKeys: ["type","url"])
             
             
             _dict.setObject(_pic, forKey: "profileImg")
@@ -249,12 +249,27 @@ class MainAction: AnyObject {
             _dict.setObject(66, forKey: "albumNumber")
             _dict.setObject(12, forKey: "followNumber")
             _dict.setObject(30, forKey: "followingNumber")
-            _dict.setObject("文革那份多少粉丝三等功", forKey: "sign")
+            _dict.setObject("浪漫的实用主义  WeChat:tianlu_3213", forKey: "sign")
             
             
             return _dict
         }
     }
+    
+    
+    //-----获取主页提示信息
+    static func _getAlertsOfSocial(__block:(NSArray)->Void){
+        var array:NSMutableArray = NSMutableArray()
+        array.addObject(NSDictionary(objects: [1,NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
+        array.addObject(NSDictionary(objects: [-1,NSDictionary(objects: ["user_8.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
+        array.addObject(NSDictionary(objects: [0,NSDictionary(objects: ["1.png","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
+        array.addObject(NSDictionary(objects: [0,NSDictionary(objects: ["1.png","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
+        array.addObject(NSDictionary(objects: [0,NSDictionary(objects: ["1.png","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
+        array.addObject(NSDictionary(objects: [0,NSDictionary(objects: ["1.png","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
+        array.addObject(NSDictionary(objects: [0,NSDictionary(objects: ["1.png","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
+        __block(array)
+    }
+    
     
     //----------相册图片列表
     
@@ -266,7 +281,7 @@ class MainAction: AnyObject {
             return _currentUser
         }
         var _dict:NSMutableDictionary = NSMutableDictionary()
-        var _pic:NSDictionary =  NSDictionary(objects: ["file","1.png"], forKeys: ["type","url"])
+        var _pic:NSDictionary =  NSDictionary(objects: ["file","user_1.jpg"], forKeys: ["type","url"])
         
         
         _dict.setObject(_pic, forKey: "profileImg")
@@ -306,10 +321,10 @@ class MainAction: AnyObject {
                 _commentDict.setValue("collect", forKey: "type")
             }
             
-            let _pic:NSDictionary = NSDictionary(objects: [String(i%5+2)+".png","file"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["user_"+String(i%5+2)+".jpg","file"], forKeys: ["url","type"])
             _commentDict.setValue(_pic, forKey: "userImg")
             
-            let _albumPic:NSDictionary = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
+            let _albumPic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%6+1)+".JPG","file"], forKeys: ["url","type"])
             _commentDict.setValue(_albumPic, forKey: "albumImg")
             
             
@@ -333,12 +348,12 @@ class MainAction: AnyObject {
             var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(i) as! String,_testToUserNames?.objectAtIndex(i) as! String,"111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
             
             if i==0{
-                _commentDict.setValue("受到各国的是德国大使馆多少广东省各地说过多少多少多少给多", forKey: "comment")
+                _commentDict.setValue("", forKey: "comment")
                 _commentDict.setValue("", forKey: "to_userName")
                 _commentDict.setValue("", forKey: "to_userId")
             }
             
-            let _pic:NSDictionary = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["user_"+String(i%6+1)+".jpg","file"], forKeys: ["url","type"])
             _commentDict.setValue(_pic, forKey: "userImg")
             
             _array.addObject(_commentDict)
@@ -381,7 +396,7 @@ class MainAction: AnyObject {
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
             
-            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%8) as! String,"fromWeb"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%8+1)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
             _dict.setObject(i, forKey: "likeNumber")
             _dict.setObject(i*3, forKey: "commentNumber")
@@ -446,7 +461,7 @@ class MainAction: AnyObject {
         
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
-            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%6+2) as! String,"fromWeb"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%6+2)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
             _dict.setObject("000001", forKey: "albumId")
             
@@ -463,9 +478,9 @@ class MainAction: AnyObject {
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
             
-            var _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%5+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%5+3)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
-            _pic = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
+            _pic = NSDictionary(objects: ["user_"+String(i%6+1)+".jpg","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "userImg")
             _dict.setObject("000001", forKey: "userId")
             _dict.setObject(_testUserNames?.objectAtIndex(i%12) as! String, forKey: "userName")
@@ -483,7 +498,7 @@ class MainAction: AnyObject {
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
             
-            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
             _dict.setObject("000001", forKey: "albumId")
             
@@ -509,7 +524,7 @@ class MainAction: AnyObject {
         var _n:Int = 40
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
-            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
             _dict.setObject("000001", forKey: "albumId")
             _array.addObject(_dict)
@@ -522,7 +537,7 @@ class MainAction: AnyObject {
         var _n:Int = 40
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
-            var _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%5+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%5+3)+".JPG","file"], forKeys: ["url","type"])
             //_dict.setObject(_pic, forKey: "pic")
             //_pic = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "userImg")
@@ -531,7 +546,7 @@ class MainAction: AnyObject {
             if i==1||i==3||i==5{
                 _dict.setObject("", forKey: "sign")
             }else{
-                _dict.setObject("我鞥三sg收到各位更冷冻过的时光树大根深等功", forKey: "sign")
+                _dict.setObject("我不要跟随", forKey: "sign")
             }
             
             _dict.setObject(_testUserNames?.objectAtIndex(i%12) as! String, forKey: "userName")
@@ -565,7 +580,7 @@ class MainAction: AnyObject {
             var _n:Int = 10
             for var i:Int = 0; i<_n;++i{
                 var _dict:NSMutableDictionary = NSMutableDictionary()
-                let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+                let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
                 _dict.setObject(_pic, forKey: "cover")
                 _dict.setObject("天边一朵云", forKey: "title")
                 _dict.setObject("个人欣赏", forKey: "description")
@@ -591,12 +606,12 @@ class MainAction: AnyObject {
                 }
                 
                 for t in 0..._num{
-                    let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex((t+i)%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+                    let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String((t+i)%4+3)+".JPG","file"], forKeys: ["url","type"])
                     _pics.addObject(_pic)
                 }
                 _dict.setObject(_pics, forKey: "pics")
                 
-                let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+                let _pic:NSDictionary = NSDictionary(objects: ["user_"+String(i%10+2)+".JPG","file"], forKeys: ["url","type"])
                 _dict.setObject(_pic, forKey: "userImg")
                 _dict.setObject(_testUserNames?.objectAtIndex(i) as! String, forKey: "userName")
                 _dict.setObject("000002", forKey: "userId")
@@ -618,12 +633,12 @@ class MainAction: AnyObject {
                 _num = 8
             }
             for t in 0..._num{
-                let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex((t+i)%8+4) as! String,"fromWeb"], forKeys: ["url","type"])
+                let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String((t+i)%5+4)+".JPG","file"], forKeys: ["url","type"])
                 _pics.addObject(_pic)
             }
             _dict.setObject(_pics, forKey: "pics")
             
-            let _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["user_"+String(i%8+1)+".jpg","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "userImg")
             _dict.setObject(_testUserNames?.objectAtIndex(i) as! String, forKey: "userName")
             _dict.setObject("000002", forKey: "userId")
@@ -639,14 +654,14 @@ class MainAction: AnyObject {
         var _n:Int = 10
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
-            var _pic:NSDictionary = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%8+1)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "cover")
             
-            _pic = NSDictionary(objects: [_testPics?.objectAtIndex(i%4+3) as! String,"fromWeb"], forKeys: ["url","type"])
+            _pic = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "userImg")
             _dict.setObject(_testUserNames?.objectAtIndex(i) as! String, forKey: "userName")
             _dict.setObject("天边一朵云", forKey: "title")
-            _dict.setObject("个人欣赏", forKey: "description")
+            _dict.setObject("电视购物农工党弄文件哦收到你的手机哦就是东莞酒店送饥饿感你挥洒狄更斯蛋糕是打工俄 u 阿森纳个迪士尼根深蒂固", forKey: "description")
             _array.addObject(_dict)
         }
         block(_array)
@@ -659,7 +674,7 @@ class MainAction: AnyObject {
         for var i:Int = 0; i<_n;++i{
             var _dict:NSMutableDictionary = NSMutableDictionary()
             
-            let _pic:NSDictionary = NSDictionary(objects: [_advertisingPics?.objectAtIndex(i%4) as! String,"fromWeb"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["ad_"+String(i%5+1)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
             _dict.setObject("http://baidu.com", forKey: "link")
            
@@ -671,9 +686,7 @@ class MainAction: AnyObject {
     
     
 }
-var _advertisingPics:NSArray? = ["http://b.hiphotos.baidu.com/image/pic/item/0bd162d9f2d3572c1826b51d8813632763d0c32e.jpg","http://f.hiphotos.baidu.com/image/pic/item/ae51f3deb48f8c5471a15c2e38292df5e0fe7f45.jpg","http://e.hiphotos.baidu.com/image/pic/item/a08b87d6277f9e2fab4441021d30e924b899f343.jpg","http://f.hiphotos.baidu.com/image/pic/item/6159252dd42a2834f964801d58b5c9ea14cebfe2.jpg"]
 
-var _testPics:NSArray? = ["http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg","http://pic.miercn.com/uploads/allimg/150721/40-150H10U219.jpg","http://e.hiphotos.baidu.com/image/pic/item/42166d224f4a20a4aac7452992529822730ed007.jpg","http://g.hiphotos.baidu.com/image/pic/item/caef76094b36acafd0c0d5fd7ed98d1001e99c8b.jpg","http://b.hiphotos.baidu.com/image/pic/item/d6ca7bcb0a46f21f779e1349f5246b600c33ae06.jpg","http://c.hiphotos.baidu.com/image/pic/item/0dd7912397dda144476ed9afb0b7d0a20cf4864c.jpg"]
 
 
 var _testUserNames:NSArray? = ["Anna","小甜菜","大漠之狐","蛋蛋的忧桑","李明","Alex","和尚","Leo.Lee","李萌","文华项","注目2度","天涯1刀","过岸雁","Gary","白云工作室","摄影师刘亮","诸明"]

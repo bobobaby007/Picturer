@@ -17,7 +17,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     var _title_label:UILabel?
     var _frameW:CGFloat?
-    var _gap:CGFloat?
+    var _gap:CGFloat = 15
     var _gapY:CGFloat?
     var _imgW:CGFloat?
     
@@ -61,14 +61,13 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         setup(self.view.frame)
         _getDatas()
     }
-    
     func setup(__frame:CGRect){
         if _setuped {
             return
         }
         _myFrame = __frame
         _frameW = _myFrame!.width
-        _gap = 0.04*_frameW!
+        
         _gapY = 0.06*_frameW!
         _imgW = 0.22*_frameW!
         
@@ -94,7 +93,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         
         _topBar?.addSubview(_title_label!)
-        _topBar?.addSubview(_btn_moreAction!)
+        //_topBar?.addSubview(_btn_moreAction!)
         
         
         
@@ -151,7 +150,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _tableView?.frame = CGRect(x: 0, y: _barH+10, width: _myFrame!.width, height: _myFrame!.height-_barH-10)
         _tableView?.registerClass(CollectItem.self, forCellReuseIdentifier: "CollectItem")
         _tableView?.backgroundColor = UIColor.clearColor()
-        //_tableView?.separatorColor=UIColor.clearColor()
+        _tableView?.separatorColor=UIColor.clearColor()
         //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -400, bottom: 0, right: 0)
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
@@ -268,7 +267,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _tableView?.frame = CGRect(x: 0, y: _messageH, width:  _myFrame!.width, height: _tableView!.contentSize.height)
         
         _tableView?.scrollEnabled = false
-        _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
+        _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height+_gap)
         UIView.commitAnimations()
     }
     
@@ -307,17 +306,11 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell = tableView.dequeueReusableCellWithIdentifier("CollectItem") as? CollectItem
         
         cell!.setup(CGSize(width: self.view.frame.width, height: _defaultH))
-        cell!._openPanel(false)
         
         cell!.separatorInset = UIEdgeInsetsZero
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
-        //cell!.tag = 100+indexPath.row
-//        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
-//        cell!._setComments(_array, __allNum: _array.count)
-//        
-//        let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
-//        cell!._setLikes(_likeA,__allNum: _likeA.count)
+        
         
         cell!._indexId = indexPath.row
         cell!._delegate=self
@@ -326,7 +319,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell!._userId = (_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userId") as? String
         cell!._setUserImge((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userImg") as! NSDictionary)
         cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String)
-        //cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
+        cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
         cell!._setUpdateTime("下午 2:00 更新")
         cell!._setUserName((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userName") as! String)
         //cell!._refreshView()
@@ -342,7 +335,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
             _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
         }
         if _lastH != __height{
-            println(String(__indexId)+":"+String(stringInterpolationSegment: __height))
+            //println(String(__indexId)+":"+String(stringInterpolationSegment: __height))
             _heighArray![__indexId] = __height
             _tableView?.reloadData()
             _refreshView()

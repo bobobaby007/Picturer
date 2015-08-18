@@ -70,7 +70,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
         super.viewDidLoad()
         setup()
-        println("222")
+        self.automaticallyAdjustsScrollViewInsets=false
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

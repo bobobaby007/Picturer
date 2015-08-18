@@ -93,6 +93,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        self.automaticallyAdjustsScrollViewInsets=false
         _getDatas()
     }
     
@@ -100,6 +101,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         if _setuped{
             return
         }
+        
         self.view.backgroundColor=UIColor.blackColor()
         self.view.clipsToBounds=true
         
@@ -111,7 +113,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _desText?.textColor=UIColor.whiteColor()
         
         _desView?.addSubview(_desText!)
-        self.view.addSubview(_desView!)
+        //self.view.addSubview(_desView!)
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
@@ -152,7 +154,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         // self.view.addSubview(_imagesCollection!)
         
         self.view.addSubview(_topBar!)
-        self.view.addSubview(_bottomBar!)
+        //self.view.addSubview(_bottomBar!)
         
         _topBar?.addSubview(_btn_cancel!)
         _topBar?.addSubview(_btn_moreAction!)
@@ -161,7 +163,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         
         
         _scrollView=UIScrollView()
-        _scrollView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        _scrollView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         _scrollView.clipsToBounds=false
         self.view.insertSubview(_scrollView!, atIndex: 0)
         _scrollView!.bounces=false
@@ -277,7 +279,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             _picV=_scrollView?.viewWithTag(100+__index) as! PicView
             //println(_picV.superview?.isEqual(self.view))
         }else{
-            _picV=PicView(frame: CGRect(x: CGFloat(__index)*_scrollView!.frame.width, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
+            _picV=PicView(frame: CGRect(x: CGFloat(__index)*_scrollView!.frame.width, y: 0, width: self.view.frame.width, height: self.view.frame.height))
             _picV.tag=100+__index
         }
         _picV._setPic(_getPicAtIndex(__index),__block: { (__dict) -> Void in
