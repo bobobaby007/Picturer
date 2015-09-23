@@ -219,5 +219,8 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         }
         
     }
+    override func viewWillAppear(animated: Bool) {
+        _referenceTable.frame = CGRect(x: 0, y: _barH+_searchBarH, width: _referenceTable.frame.width, height:_referenceTableH)
+    }
 }
 

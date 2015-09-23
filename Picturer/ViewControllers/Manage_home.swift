@@ -19,16 +19,17 @@ protocol Manage_home_delegate:NSObjectProtocol{
     func _manage_changeFinished()
 }
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
-   
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MyAlerter_delegate,ShareAlert_delegate{
+    var _alerter:MyAlerter?
+    var _shareAlert:ShareAlert?
     var _cameraPicker:UIImagePickerController!
     //var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
-    
     @IBOutlet weak var _tableView:UITableView!
     @IBOutlet weak var _btn_new:UIButton!
     @IBOutlet weak var _btn_camera:UIButton!
     @IBOutlet weak var _topView:UIView!
     @IBOutlet weak var _bottomView:UIView!
+    @IBOutlet weak var _addIcon:UIImageView!
     
     var _offset:CGFloat=0
     var _currentIndex:NSIndexPath?
@@ -38,6 +39,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     var _delegate:Manage_home_delegate!
     
     var _blurV:UIImageView?
+    var _whiteBg:UIView?
     var _isOuting:Bool = false
     var _isChanging:Bool = false
     var _logoAnimation:LogoAnimation?
@@ -45,7 +47,20 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     @IBAction func btnHander(btn:UIButton){
         switch btn{
         case _btn_new:
-            openNewActions()
+            
+            if _shareAlert != nil && _shareAlert!._isOpened{
+                _shareAlert!._close()
+                return
+            }
+            
+            
+            if _alerter != nil && _alerter!._isOpened{
+                _alerter!._close()
+            }else{
+                openNewActions()
+            }
+            
+            
         case _btn_camera:
             _openCamera()
             return
@@ -103,6 +118,15 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         let _h:CGFloat=scrollView.contentOffset.y
         
+        var _whiteTo:CGFloat = 64-_h
+        if _whiteTo<64{
+            _whiteTo = 64
+        }
+        _whiteBg?.frame.origin.y = _whiteTo
+        
+        
+        
+        
         var _y:CGFloat = 64-_h/2
         
         
@@ -147,6 +171,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             self._bottomView.alpha = 0
             self._logoAnimation?.view.alpha = 0
             
+            self._whiteBg!.frame.origin = CGPoint(x: 0, y: self.view.frame.height)
+            
         }) { (stop) -> Void in
             _delegate?._manage_changeFinished()
         }
@@ -169,7 +195,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if MainAction._albumList.count<1{
-            newAlbum(nil)
+            newAlbum()
             return
         }
         
@@ -267,6 +293,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     //---左滑动作
     func actionHander(action:UITableViewRowAction!,index:NSIndexPath!)->Void{
        // println(action, index.row)
+        _tableView.setEditing(false, animated: true)
         switch action.title{
             case "删除":
                 _currentIndex = index
@@ -285,6 +312,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             default:
             println(action.title)
         }
+        
     }
     //-----提示按钮代理
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
@@ -292,14 +320,29 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             deleteCell(_currentIndex!)
         }
     }
+    
     //---打开分享
     func openShare()->Void{
-        let rateMenu = UIAlertController(title: "分享", message: "分享这个相册", preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let appRateAction = UIAlertAction(title: "微博", style: UIAlertActionStyle.Default, handler: nil)
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-        rateMenu.addAction(appRateAction)
-        rateMenu.addAction(cancelAction)
-        self.presentViewController(rateMenu, animated: true, completion: nil)
+        
+        
+        if _shareAlert == nil{
+            _shareAlert = ShareAlert()
+            _shareAlert?._delegate = self
+        }
+        self.addChildViewController(_shareAlert!)
+        self.view.insertSubview(_shareAlert!.view, belowSubview: _bottomView)
+        _shareAlert?._show()
+        
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self._addIcon.transform = CGAffineTransformMakeRotation(3.14*1.25)
+        })
+        
+//        let rateMenu = UIAlertController(title: "分享", message: "分享这个相册", preferredStyle: UIAlertControllerStyle.ActionSheet)
+//        let appRateAction = UIAlertAction(title: "微博", style: UIAlertActionStyle.Default, handler: nil)
+//        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+//        rateMenu.addAction(appRateAction)
+//        rateMenu.addAction(cancelAction)
+//        self.presentViewController(rateMenu, animated: true, completion: nil)
     }
     //----删除相册
     func deleteCell(index:NSIndexPath)->Void{
@@ -322,6 +365,21 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     //---新建
     func openNewActions()->Void{
+        
+        if _alerter == nil{
+            _alerter = MyAlerter()
+            _alerter?._delegate = self
+        }
+        self.addChildViewController(_alerter!)
+        self.view.insertSubview(_alerter!.view, belowSubview: _bottomView)
+        _alerter?._setMenus(["创建图册","添加图片","抓取网页"])
+        _alerter?._show()
+        
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self._addIcon.transform = CGAffineTransformMakeRotation(3.14*1.25)
+        })
+        
+        /*
         //let rateMenu = UIAlertController(title: "新建相册", message: "选择一种新建方式", preferredStyle: UIAlertControllerStyle.ActionSheet)
         let menu=UIAlertController()
         let action1 = UIAlertAction(title: "创建新相册", style: UIAlertActionStyle.Default, handler: newAlbum)
@@ -334,9 +392,46 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         menu.addAction(action4)        
         self.view.window!.rootViewController!.presentViewController(menu, animated: true, completion: nil)
         //self.presentViewController(menu, animated: true, completion: nil)
+*/
     }
+    
+    
+    //----弹出菜单代理
+    func _myAlerterDidShow() {
+        
+    }
+    func _myAlerterStartToClose() {
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self._addIcon.transform = CGAffineTransformMakeRotation(0)
+        })
+    }
+    func _myAlerterClickAtMenuId(__id: Int) {
+        switch __id{
+        case 0:
+            newAlbum()
+            break
+        case 1:
+            newFromLocal()
+            break
+        case 2:
+            newFromWeb()
+            break
+        default:
+            break
+        }
+    }
+    func _myAlerterDidClose() {
+        _alerter?.view.removeFromSuperview()
+        _alerter?.removeFromParentViewController()
+        
+        _shareAlert?.view.removeFromSuperview()
+        _shareAlert?.removeFromParentViewController()
+    }
+    
+    
+    
     //---创建新相册
-    func newAlbum(action:UIAlertAction!) -> Void{
+    func newAlbum() -> Void{
         var _controller:Manage_new?
         _controller=Manage_new()
         _controller?._delegate=self
@@ -345,7 +440,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         self.navigationController?.pushViewController(_controller!, animated: true)
     }
     //---添加新照片
-    func newFromLocal(action:UIAlertAction!) -> Void{
+    func newFromLocal() -> Void{
         var _controller:Manage_imagePicker?
         _controller=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_imagePicker") as? Manage_imagePicker
         _controller?._delegate=self
@@ -354,7 +449,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         self.navigationController?.pushViewController(_controller!, animated: true)
         
     }
-    
+    //---创建新相册
+    func newFromWeb() -> Void{
+        
+    }
     //----弹出编辑\新建\图片到相册 代理
     func saved(dict: NSDictionary) {
         switch dict.objectForKey("Action_Type") as! String{
@@ -397,10 +495,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _tableView.reloadData()
     }
     
-    //---创建新相册
-    func newFromWeb(action:UIAlertAction!) -> Void{
-        
-    }
+   
     
     //-----弹出新建相册选择图片代理
     
@@ -519,10 +614,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _blurV?.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height)
             
             self.view.insertSubview(_blurV!, belowSubview: _tableView)
-            
-            
-            _tableView.tableFooterView = UIView()
-            _tableView.tableFooterView=UIView(frame: CGRect(x: 0, y: 0, width: _tableView.frame.width, height: _tableView.frame.height))
+            _whiteBg = UIView(frame: CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height))
+            _whiteBg?.backgroundColor = UIColor.whiteColor()
+            //_tableView.tableFooterView = UIView()
+            _tableView.tableFooterView=UIView(frame: CGRect(x: 0, y: 0, width: _tableView.frame.width, height:10))
             var _line:UIView = UIView(frame: CGRect(x: 10, y: 0, width: 500, height: 0.5))
             _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
             _tableView.tableFooterView?.addSubview(_line)
@@ -537,8 +632,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _logoAnimation?.view.frame = CGRect(x: 0, y: 0, width: 49, height: 49)
             _logoAnimation?.view.center = CGPoint(x: self.view.frame.width/2, y: 64+30)
             //self.view.addSubview(_logoAnimation!.view)
-            self.view.insertSubview(_logoAnimation!.view, aboveSubview: _blurV!)
             
+            self.view.insertSubview(_logoAnimation!.view, aboveSubview: _blurV!)
+            self.view.insertSubview(_whiteBg!, aboveSubview: _blurV!)
             
             
         }
@@ -557,8 +653,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _isOuting = false
         _logoAnimation?.view.alpha = 1
         _logoAnimation?._reset()
-        
-        
+        _whiteBg!.frame.origin = CGPoint(x: 0, y: 64)
     }
     override func viewWillAppear(animated: Bool) {
     

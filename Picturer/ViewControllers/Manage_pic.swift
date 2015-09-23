@@ -58,7 +58,6 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     
     var _showType:String = "pic" // collection
     
-    
     var _like_iconT:UILabel = UILabel()
     var _comment_iconT:UILabel = UILabel()
     var _like_numT:UILabel = UILabel()

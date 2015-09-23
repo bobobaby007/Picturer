@@ -9,9 +9,7 @@
 import Foundation
 import UIKit
 
-protocol MyHomepage_delegate:NSObjectProtocol{
-    func _cancel()
-}
+
 
 class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
     var _barH:CGFloat = 64
@@ -81,7 +79,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
-    var _delegate:MyHomepage_delegate?
+    var _naviDelegate:Navi_Delegate?
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
@@ -105,6 +103,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
         _topBar?.backgroundColor=UIColor(white: 0.1, alpha: 0.98)
+        
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
@@ -755,8 +754,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
-            if _delegate != nil{
-                _delegate?._cancel()
+            if _naviDelegate != nil{
+                _naviDelegate?._cancel()
             }
             self.navigationController?.popViewControllerAnimated(true)
             return

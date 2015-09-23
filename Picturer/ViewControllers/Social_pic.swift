@@ -116,10 +116,13 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
-        _btn_cancel=UIButton(frame:CGRect(x: 6, y: 30, width: 40, height: 22))
+        
+        
+        
+        _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
-        _btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
         
         _btn_moreAction=UIButton(frame:CGRect(x: self.view.frame.width-30, y: 30, width: 18, height: 18))
         _btn_moreAction?.setImage(UIImage(named: "changeToCollect_icon.png"), forState: UIControlState.Normal)
@@ -135,6 +138,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _titleT?.font = UIFont.boldSystemFontOfSize(16)
         _titleT?.backgroundColor = UIColor.clearColor()
         _titleT?.textColor=UIColor.whiteColor()
+        _titleT?.editable=false
+        _titleT?.selectable = false
         _titleT?.scrollEnabled = false
         _titleT?.textAlignment=NSTextAlignment.Center
         _titleT?.text="6月2日\n2/28"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -10,7 +10,7 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="entroLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="RW6-WX-pjW">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="startScreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="RW6-WX-pjW">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="100" id="YZR-vY-k4H"/>
@@ -22,18 +22,23 @@
                             <exclude reference="uwE-16-T0N"/>
                         </mask>
                     </variation>
-                    <variation key="widthClass=compact">
+                    <variation key="widthClass=compact" misplaced="YES">
+                        <rect key="frame" x="0.0" y="0.0" width="485" height="480"/>
                         <mask key="constraints">
-                            <include reference="YZR-vY-k4H"/>
-                            <include reference="uwE-16-T0N"/>
+                            <exclude reference="YZR-vY-k4H"/>
+                            <exclude reference="uwE-16-T0N"/>
                         </mask>
                     </variation>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="0.87058823529999996" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="RW6-WX-pjW" secondAttribute="bottom" id="5ke-Pv-ffl"/>
                 <constraint firstAttribute="centerX" secondItem="RW6-WX-pjW" secondAttribute="centerX" id="AgY-CU-SfP"/>
+                <constraint firstItem="RW6-WX-pjW" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Cid-xP-BxR"/>
+                <constraint firstItem="RW6-WX-pjW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="H4a-Wi-63s"/>
                 <constraint firstAttribute="centerY" secondItem="RW6-WX-pjW" secondAttribute="centerY" id="Up6-tv-A3V"/>
+                <constraint firstAttribute="trailing" secondItem="RW6-WX-pjW" secondAttribute="trailing" id="fhf-fP-Bub"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -42,8 +47,12 @@
                     <exclude reference="RW6-WX-pjW"/>
                 </mask>
                 <mask key="constraints">
+                    <exclude reference="5ke-Pv-ffl"/>
                     <exclude reference="AgY-CU-SfP"/>
+                    <exclude reference="Cid-xP-BxR"/>
+                    <exclude reference="H4a-Wi-63s"/>
                     <exclude reference="Up6-tv-A3V"/>
+                    <exclude reference="fhf-fP-Bub"/>
                 </mask>
             </variation>
             <variation key="widthClass=compact">
@@ -51,14 +60,18 @@
                     <include reference="RW6-WX-pjW"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="AgY-CU-SfP"/>
-                    <include reference="Up6-tv-A3V"/>
+                    <include reference="5ke-Pv-ffl"/>
+                    <exclude reference="AgY-CU-SfP"/>
+                    <include reference="Cid-xP-BxR"/>
+                    <include reference="H4a-Wi-63s"/>
+                    <exclude reference="Up6-tv-A3V"/>
+                    <include reference="fhf-fP-Bub"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="548" y="455"/>
         </view>
     </objects>
     <resources>
-        <image name="entroLogo.png" width="250" height="250"/>
+        <image name="startScreen.png" width="750" height="1334"/>
     </resources>
 </document>

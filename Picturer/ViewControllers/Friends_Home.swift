@@ -54,7 +54,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
-    
+    var _naviDelegate:Navi_Delegate?
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
@@ -91,7 +91,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.font = UIFont.boldSystemFontOfSize(17)
-        _title_label?.text = "朋友"
+        
         
         
         _topBar?.addSubview(_title_label!)
@@ -100,7 +100,16 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         
         
-        
+        switch _type{
+            case "likes":
+                _title_label?.text = "妙人"
+            break
+            case "friends":
+                _title_label?.text = "朋友"
+            break
+        default:
+            break
+        }
         
         //---消息提醒----
         
@@ -354,6 +363,8 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell!._userId = (_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userId") as? String
     
         cell!._setUserImge((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userImg") as! NSDictionary)
+        
+        
         cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String)
         //cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
         cell!._setUpdateTime("下午 2:00 更新")
@@ -384,6 +395,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         MainAction._getPicsListAtAlbumId("00003", block: { (array) -> Void in
             var _controller:Social_pic = Social_pic()
+            
             _controller._showIndexAtPics(0, __array: array)
             self.navigationController?.pushViewController(_controller, animated: true)
             
@@ -395,7 +407,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         var _pics:NSMutableArray = NSMutableArray()
         
-        for i in 0...__array.count{
+        for i in 0...__array.count-1{
             _pics.addObject(NSDictionary(objects: [__array.objectAtIndex(i),3,5], forKeys: ["pic","likeNumber","commentNumber"]))
            
         }
@@ -524,6 +536,9 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
+            if _naviDelegate != nil{
+                _naviDelegate?._cancel()
+            }
             self.navigationController?.popViewControllerAnimated(true)
             return
         case _btn_moreAction!:

@@ -53,7 +53,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
-    
+    var _naviDelegate:Navi_Delegate?
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
@@ -477,6 +477,9 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
+            if _naviDelegate != nil{
+                _naviDelegate?._cancel()
+            }
             self.navigationController?.popViewControllerAnimated(true)
             return
         case _btn_moreAction!:

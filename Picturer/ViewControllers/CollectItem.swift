@@ -113,7 +113,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         _updateTime_label?.textAlignment = NSTextAlignment.Right
         _updateTime_label?.font = UIFont.systemFontOfSize(12)
    
-        _picV = PicView(frame: CGRect(x: _gap+0.5, y: _gap+55, width: _defaultSize!.width-2*_gap-1, height:_defaultSize!.width-2*_gap-1))
+        _picV = PicView(frame: CGRect(x: _gap+0.5, y: _gap+55, width: _defaultSize!.width-2*_gap-2, height:_defaultSize!.width-2*_gap-1))
         _picV?._setImage("noPic.png")
         _picV?.scrollEnabled=false
         _picV?.maximumZoomScale = 1
@@ -129,7 +129,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         
         
-        _albumTitle_labelV = UIView(frame: CGRect(x: _gap, y: _bottomOfPic-30, width: _defaultSize!.width-2*_gap, height: 30))
+        _albumTitle_labelV = UIView(frame: CGRect(x: _gap, y: _bottomOfPic-30, width: _defaultSize!.width-2*_gap-2, height: 30))
         
         _albumTitle_labelV?.backgroundColor = UIColor(white: 0, alpha: 0.8)
         _albumTitle_labelV?.userInteractionEnabled=false
@@ -382,10 +382,10 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         
         
-        let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap-2*10, height: CGFloat.max))
+        let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap-2*10-1, height: CGFloat.max))
         
         _albumTitle_label?.frame = CGRect(x: 10, y: 6, width: _size.width, height: _size.height)
-        _albumTitle_labelV?.frame = CGRect(x: _gap, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width-2*_gap, height: _size.height+12)
+        _albumTitle_labelV?.frame = CGRect(x: _gap+1, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width-2*_gap-2, height: _size.height+12)
         
     }
     func _setUserName(__str:String){

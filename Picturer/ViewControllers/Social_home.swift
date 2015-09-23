@@ -18,13 +18,14 @@ protocol Social_home_delegate:NSObjectProtocol{
 }
 
 
-class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,MyHomepage_delegate{
+class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,Navi_Delegate{
     
     @IBOutlet weak var _collectionView:UICollectionView!
     @IBOutlet weak var _topView:UIView!
     
-    var _offset:CGFloat=0
     
+    
+    var _offset:CGFloat=0
     var _isOuting:Bool = false
     var _isChanging:Bool = false
 
@@ -39,6 +40,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     var _whiteColorV:UIView?
     var _topBg:UIView?
     var _logoAnimation:LogoAnimation?
+    var _lastPageTag:Int=0 //-----下一页返回时调用
     
     @IBAction func btnHander(btn:UIButton){
         switch btn{
@@ -142,30 +144,35 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        _lastPageTag = indexPath.item
         switch indexPath.item{
         case 0://主页
             let _contr:MyHomepage=MyHomepage()
             _contr._userId =  MainAction._userId
             _contr._userName = MainAction._currentUser.objectForKey("userName") as? String
-            _contr._delegate = self
+            _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
         case 1://朋友
             
             var _contr:Friends_Home=Friends_Home()
             _contr._type="friends"
+            _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
                         
             return
         case 2://妙人
             var _contr:Friends_Home=Friends_Home()
             _contr._type="likes"
+            _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
             return
         case 3://发现
             let _contr:Discover_home=Discover_home()
+            _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
         case 4://收藏
             let _contr:Collect_home=Collect_home()
+            _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
             return
         case 5://通讯录
@@ -180,6 +187,28 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     //-------下个页面返回代理
     
     func _cancel() {
+        
+        switch _lastPageTag{
+        case 0:
+            var _dict:NSDictionary = NSDictionary(objects: [0,NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"])
+//            _alertDicts[0] =
+            var _array:NSMutableArray = NSMutableArray(array: self._alertDicts!)
+            _array[0]=_dict
+            self._alertDicts = _array
+            self._collectionView.reloadData()
+            break
+        case 1:
+            var _dict:NSDictionary = NSDictionary(objects: [0,NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"])
+            //            _alertDicts[0] =
+            var _array:NSMutableArray = NSMutableArray(array: self._alertDicts!)
+            _array[1]=_dict
+            self._alertDicts = _array
+            self._collectionView.reloadData()
+            break
+        default:
+            break
+        }
+        
          UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.Default
          UIApplication.sharedApplication().statusBarHidden=false
     }
@@ -256,7 +285,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _collectionView.backgroundColor = UIColor.clearColor()
             
             
-            bgColorV = UIView(frame: CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height))
+            bgColorV = UIView(frame: CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height+500))
             bgColorV!.backgroundColor = UIColor.blackColor()
             
             _topBg = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64))
@@ -296,6 +325,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         _logoAnimation?._reset()
     }
     override func viewWillAppear(animated: Bool) {
+        self.automaticallyAdjustsScrollViewInsets =  false
        // UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.Default
        // UIApplication.sharedApplication().statusBarHidden=false
     }

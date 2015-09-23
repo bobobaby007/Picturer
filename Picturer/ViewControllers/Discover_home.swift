@@ -25,7 +25,7 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
     var _tabBtnView:UIView?
     var _tab_reference:UIButton?
     var _tab_search:UIButton?
-
+    var _naviDelegate:Navi_Delegate?
     
     
     override func viewDidLoad() {
@@ -39,8 +39,10 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
-        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: _barH))
-        _btn_cancel?.setTitle("<", forState: UIControlState.Normal)
+        
+        
+        _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
+        _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
@@ -63,15 +65,17 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
         
         _tab_reference = UIButton()
         _tab_reference?.setTitle("发现", forState: UIControlState.Normal)
-        _tab_reference?.frame=CGRect(x: 0, y: 0, width: 80, height: 34)
+        _tab_reference?.titleLabel?.font = UIFont.systemFontOfSize(14)
+        _tab_reference?.frame=CGRect(x: 0, y: 0, width: 70, height: 29)
         _tab_reference?.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _tab_search = UIButton()
         _tab_search?.setTitle("搜索", forState: UIControlState.Normal)
-        _tab_search?.frame=CGRect(x: 80, y: 0, width: 80, height: 34)
+        _tab_search?.titleLabel?.font = UIFont.systemFontOfSize(14)
+        _tab_search?.frame=CGRect(x: 70, y: 0, width: 70, height: 29)
         _tab_search?.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
-        _tabBtnView = UIView(frame: CGRect(x: 0.5*self.view.frame.width-80, y: 22, width: 160, height: 34))
+        _tabBtnView = UIView(frame: CGRect(x: 0.5*self.view.frame.width-70, y: 28, width: 140, height: 29))
         _tabBtnView?.layer.masksToBounds = true
         _tabBtnView?.layer.cornerRadius = 5
         _tabBtnView?.layer.borderWidth = 1
@@ -132,6 +136,9 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
+            if _naviDelegate != nil{
+                _naviDelegate?._cancel()
+            }
             self.navigationController?.popViewControllerAnimated(true)
         
         case _tab_reference!:

@@ -190,27 +190,33 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         switch _type{
             case "album":
-                _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 40)
+                _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 35)
                 
-                _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 40))
+                for i in 1...3{
+                    var _line:UIView = UIView(frame: CGRect(x: CGFloat(i)*_toolsGap, y:5, width: 0.5, height: 25))
+                    _line.backgroundColor = UIColor(white: 0.24, alpha: 1)
+                    _toolsButtonPanel?.addSubview(_line)
+                }
+                
+                _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 35))
                 _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
                 _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_like.setTitle("赞", forState: UIControlState.Normal)
                 _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
-                _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 40))
+                _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 35))
                 _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
                 _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_comment.setTitle("评论", forState: UIControlState.Normal)
                 _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
-                _btn_share = UIButton(frame: CGRect(x: 2*_toolsGap, y: 0, width: _toolsGap, height: 40))
+                _btn_share = UIButton(frame: CGRect(x: 2*_toolsGap, y: 0, width: _toolsGap, height: 35))
                 _btn_share.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
                 _btn_share.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_share.setTitle("分享", forState: UIControlState.Normal)
                 _btn_share.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
-                _btn_collect = UIButton(frame: CGRect(x: 3*_toolsGap, y: 0, width: _toolsGap, height: 40))
+                _btn_collect = UIButton(frame: CGRect(x: 3*_toolsGap, y: 0, width: _toolsGap, height: 35))
                 _btn_collect.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
                 _btn_collect.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_collect.setTitle("收藏", forState: UIControlState.Normal)
@@ -267,15 +273,21 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             case "pics":
                 
                 
-                _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 40)
+                _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 2*_toolsGap, height: 35)
                 
-                _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 40))
+                for i in 1...1{
+                    var _line:UIView = UIView(frame: CGRect(x: CGFloat(i)*_toolsGap, y:5, width: 0.5, height: 25))
+                    _line.backgroundColor = UIColor(white: 0.24, alpha: 1)
+                    _toolsButtonPanel?.addSubview(_line)
+                }
+                
+                _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 35))
                 _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
                 _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_like.setTitle("赞", forState: UIControlState.Normal)
                 _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
-                _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 40))
+                _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 35))
                 _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
                 _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_comment.setTitle("评论", forState: UIControlState.Normal)
@@ -433,6 +445,13 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         if _type == "pics"{
             _desH = _albumTitle_labelV!.frame.height+_gap
+            
+            //---暂时去掉标题
+            _desH = 0
+            _albumTitle_labelV?.hidden=true
+            _albumTitle_label?.hidden = true
+            //---
+            
         }else{
             if _description!.text == ""{
                 
@@ -443,6 +462,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             
             _description?.frame = CGRect(x: _gap, y: _bottomOfPic+_gap, width: _defaultSize!.width-_gap*2, height: _desH)
         }
+        
+        
         
         
         _likeTextView?.frame = CGRect(x: 10, y: 5, width: _defaultSize!.width-10-28, height: _likeTextView!.contentSize.height)
@@ -462,14 +483,17 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         }
         _moreCommentText?.frame = CGRect(x: 5, y: _commentText!.contentSize.height-8+5, width: _defaultSize!.width-30, height: _moreComentH)
         
+        var _bgH:CGFloat = _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height
+        
         if _commentText?.text==""{
         _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width-2*_gap, height: 0)
         }else{
-            _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width-2*_gap, height: _moreCommentText!.frame.origin.y+_moreCommentText!.frame.height+10)
+            _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height-5, width: _defaultSize!.width-2*_gap, height: _moreCommentText!.frame.origin.y+_moreCommentText!.frame.height+10)
+            _bgH = _commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+_gap
         }
         
         
-        _bgV!.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width, height:_commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+_gap )
+        _bgV!.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width, height:_bgH )
         _lineBg!.frame = CGRect(x: 0, y: _bgV!.frame.height, width: _defaultSize!.width, height: 0.5)
         
         //self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: _h+40)
@@ -603,10 +627,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _toolsBarIsOpened=__set
          UIView.beginAnimations("toolsOpen", context: nil)
             if __set{
-                _toolsButtonPanel_container?.frame = CGRect(x: _toolsBtnToX!, y: 0, width:_toolsBtnToW!, height: 40)
+                _toolsButtonPanel_container?.frame = CGRect(x: _toolsBtnToX!, y: 5, width:_toolsBtnToW!, height: 35)
                 
             }else{
-                _toolsButtonPanel_container?.frame = CGRect(x: _defaultSize!.width-45, y: 0, width:0, height: 40)
+                _toolsButtonPanel_container?.frame = CGRect(x: _defaultSize!.width-45, y: 5, width:0, height: 35)
             }
             UIView.commitAnimations()
     }
@@ -643,6 +667,14 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     }
     //-------点赞人
     func _setLikes(__likes:NSArray,__allNum:Int){
+        if __likes.count<1{
+            _likeIcon?.hidden = true
+            return
+        }else{
+            _likeIcon?.hidden=false
+        }
+        
+        
         var _attrStr:NSMutableAttributedString = NSMutableAttributedString(string: "")
         if __allNum > 10{
             _attrStr = NSMutableAttributedString(attributedString: linkString(String(__allNum)+"个赞", withURLString:"moreLike:"))
@@ -734,8 +766,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             
         }
      
-        _albumTitle_label?.hidden=false
-        _albumTitle_labelV?.hidden=false
+        //_albumTitle_label?.hidden=false
+        //_albumTitle_labelV?.hidden=false
         
         
         

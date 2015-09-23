@@ -49,13 +49,16 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor.blackColor()
-        _btn_cancel=UIButton(frame:CGRect(x: 10, y: 30, width: 13, height: 22))
+        
+        
+        _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: _barH))
+        _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
+        _title_label?.font = UIFont.boldSystemFontOfSize(17)
         _title_label?.text="评论"
         
         _tableView=UITableView()
