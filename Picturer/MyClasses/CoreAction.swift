@@ -14,7 +14,7 @@ class CoreAction: AnyObject {
     class func _fileFullPath(__name:String) -> String{
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
         let documentsDirectory = paths[0] as! String
-        let path:String = documentsDirectory.stringByAppendingPathComponent(__name)
+        let path:String = (documentsDirectory as NSString).stringByAppendingPathComponent(__name)
         return path
     }
     
@@ -25,11 +25,11 @@ class CoreAction: AnyObject {
     
        // println(path)
         if(!fileManager.fileExistsAtPath(path)) {
-            println("file is not exist"+path)
+            print("file is not exist"+path)
         } else {
            
         }
-       var _result = NSMutableDictionary(contentsOfFile: path)
+       let _result = NSMutableDictionary(contentsOfFile: path)
        if _result == nil {
             return nil
         }else{
@@ -40,7 +40,7 @@ class CoreAction: AnyObject {
     class func _ifHasFile(__name:NSString)->Bool{
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
         let documentsDirectory = paths[0] as! String
-        let path = documentsDirectory.stringByAppendingPathComponent(__name as String)
+        let path = (documentsDirectory as NSString).stringByAppendingPathComponent(__name as String)
         let fileManager = NSFileManager.defaultManager()
         return fileManager.fileExistsAtPath(path)
     }

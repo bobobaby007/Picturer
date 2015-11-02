@@ -150,7 +150,7 @@ class Manage_description: UIViewController,UITextViewDelegate {
             self.navigationController?.popViewControllerAnimated(true)
             _delegate?.canceld()
         case _btn_save!:
-            var _dict:NSMutableDictionary=NSMutableDictionary()
+            let _dict:NSMutableDictionary=NSMutableDictionary()
             if _desInput?.text != _desPlaceHold{
                _dict.setObject(_desInput!.text, forKey: "description")
             }
@@ -159,7 +159,7 @@ class Manage_description: UIViewController,UITextViewDelegate {
             _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
-            println(sender)
+            print(sender)
         }
         
     }

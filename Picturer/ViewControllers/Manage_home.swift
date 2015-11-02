@@ -65,7 +65,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _openCamera()
             return
         default:
-            println("")
+            print("", terminator: "")
         }
     }
     func switchToSocial(){
@@ -174,7 +174,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             self._whiteBg!.frame.origin = CGPoint(x: 0, y: self.view.frame.height)
             
         }) { (stop) -> Void in
-            _delegate?._manage_changeFinished()
+            self._delegate?._manage_changeFinished()
         }
     }
     
@@ -228,7 +228,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         
         
-        var cell:AlbumListCell=_tableView.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
+        let cell:AlbumListCell=_tableView.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
         
         //cell.separatorInset = UIEdgeInsets(top: 0, left: -1, bottom: 0, right: 0)
         cell.preservesSuperviewLayoutMargins = false
@@ -271,18 +271,18 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
     }
     
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         if MainAction._albumList.count<1{
             return []
         }
         
         
-        var deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "删除", handler: actionHander)
-        var shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "分享", handler: actionHander)
+        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "删除", handler: actionHander)
+        let shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "分享", handler: actionHander)
        // var editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "编辑" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             
         //})
-        var editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "编辑", handler: actionHander)
+        let editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "编辑", handler: actionHander)
         //----设置颜色
         deleteAction.backgroundColor=UIColor(red: 255/255, green: 62/255, blue: 53/255, alpha: 1)
         shareAction.backgroundColor=UIColor(red: 255/255, green: 222/255, blue: 23/255, alpha: 1)
@@ -294,10 +294,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func actionHander(action:UITableViewRowAction!,index:NSIndexPath!)->Void{
        // println(action, index.row)
         _tableView.setEditing(false, animated: true)
-        switch action.title{
+        switch action.title as String!{
             case "删除":
                 _currentIndex = index
-                var _alert:UIAlertView = UIAlertView()
+                let _alert:UIAlertView = UIAlertView()
                 _alert.delegate=self
                 _alert.title="确定删除相册？"
                 _alert.addButtonWithTitle("确定")
@@ -310,7 +310,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             editeAlbum(index.row)
             
             default:
-            println(action.title)
+            print(action.title)
         }
         
     }
@@ -469,7 +469,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
                 _controller?._imagesArray=NSMutableArray(array: dict.objectForKey("images") as! NSArray)
                 self.navigationController?.pushViewController(_controller!, animated: true)
         default:
-            println("")
+            print("")
         }
         _tableView.reloadData()
     }
@@ -526,16 +526,16 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     //----相机代理方法
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         _cameraPicker.dismissViewControllerAnimated(true, completion: nil)
         
         
         //_loadImagesAt(0)
         
-        var _alassetsl:ALAssetsLibrary = ALAssetsLibrary()
+        //var _alassetsl:ALAssetsLibrary = ALAssetsLibrary()
         //println(info)
         
-        let image:UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
+        //let image:UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
         
         
         
@@ -549,26 +549,26 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         
         
-       UIImageWriteToSavedPhotosAlbum(info[UIImagePickerControllerOriginalImage] as? UIImage, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
+       UIImageWriteToSavedPhotosAlbum((info[UIImagePickerControllerOriginalImage] as? UIImage)!, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
         //_cameraPicker.image = info[UIImagePickerControllerOriginalImage] as? UIImage
     }
     func cameraSaveOk(URL:NSURL, Error:NSError)->Void{
-        let _url:NSString=URL.absoluteString!
-        let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
+        //let _url:NSString=URL.absoluteString
+        //let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
         //asset.originalAsset = result
         //self._images!.insertObject(_dict, atIndex: 0)
     }
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
         if error == nil {
             
-            var library:ALAssetsLibrary = ALAssetsLibrary()
+            let library:ALAssetsLibrary = ALAssetsLibrary()
             library.enumerateGroupsWithTypes(ALAssetsGroupSavedPhotos, usingBlock: {(group: ALAssetsGroup! , outStop: UnsafeMutablePointer<ObjCBool>) in
                 if group != nil {
                     group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
                         if result != nil {
-                                let asset = DKAsset()
-                                var _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
-                                let _url:NSString=_nsurl.absoluteString!
+                                //let asset = DKAsset()
+                                let _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
+                                let _url:NSString=_nsurl.absoluteString
                                 let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
                                 self._cameraImage = _dict
                             // println(self._cameraImage)
@@ -618,7 +618,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _whiteBg?.backgroundColor = UIColor.whiteColor()
             //_tableView.tableFooterView = UIView()
             _tableView.tableFooterView=UIView(frame: CGRect(x: 0, y: 0, width: _tableView.frame.width, height:10))
-            var _line:UIView = UIView(frame: CGRect(x: 10, y: 0, width: 500, height: 0.5))
+            let _line:UIView = UIView(frame: CGRect(x: 10, y: 0, width: 500, height: 0.5))
             _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
             _tableView.tableFooterView?.addSubview(_line)
             _tableView.backgroundColor = UIColor.clearColor()

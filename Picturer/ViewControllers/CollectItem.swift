@@ -208,16 +208,16 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     
     
     func commentString(_commentDict:NSDictionary) -> NSAttributedString {
-        var boldFont = UIFont.boldSystemFontOfSize(14)
+       // let boldFont = UIFont.boldSystemFontOfSize(14)
         
-        var boldAttr = [NSFontAttributeName: boldFont]
+       // var boldAttr = [NSFontAttributeName: boldFont]
         //let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),
         //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
         let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),NSFontAttributeName: UIFont.systemFontOfSize(14)]
         
         var attrString: NSAttributedString = linkString(_commentDict.objectForKey("from_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("from_userId") as! String))
         
-        var astr:NSMutableAttributedString = NSMutableAttributedString()
+        let astr:NSMutableAttributedString = NSMutableAttributedString()
         astr.appendAttributedString(attrString)
         
         if _commentDict.objectForKey("to_userName") == nil || _commentDict.objectForKey("to_userName") as! String == "" {
@@ -234,11 +234,15 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         return astr
     }
     func linkString(string:String, withURLString:String) -> NSAttributedString {
-        var attrString = NSMutableAttributedString(string: string )
+        let attrString = NSMutableAttributedString(string: string )
         // the entire string
-        var range:NSRange = NSMakeRange(0, attrString.length)
+        let range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
-        attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFontOfSize(14, weight: 0.1), range:range)
+        if #available(iOS 8.2, *) {
+            attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFontOfSize(14, weight: 0.1), range:range)
+        } else {
+            // Fallback on earlier versions
+        }
         attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
         attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1), range:range)
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
@@ -249,11 +253,11 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     //-----文字链接代理
     
     func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
-        var _action:String = URL.scheme!
-        println(_action)
+        let _action:String = URL.scheme
+        print(_action)
         switch _action{
         case "user":
-            let _str:String = URL.absoluteString!
+            let _str:String = URL.absoluteString
             let _userId:NSString =  (_str as NSString).substringFromIndex(5)
             _delegate?._viewUser(_userId as String)
         case "moreComment":
@@ -262,7 +266,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         case "moreLike":
             _delegate?._moreLike(_indexId)
         default:
-            println("")
+            print("")
         }
         //println(URL.absoluteString)
         //println(URL.scheme)
@@ -321,12 +325,12 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
                     _lineLength = _lineLength + _addingLength
                 }
                 
-                var attrString: NSAttributedString = linkString(_addingStr,withURLString: "user:"+(_likeDict.objectForKey("userId") as! String))
+                let attrString: NSAttributedString = linkString(_addingStr,withURLString: "user:"+(_likeDict.objectForKey("userId") as! String))
                 _attrStr.appendAttributedString(attrString)
             }
             
         }
-        var paragraphStyle = NSMutableParagraphStyle()
+        let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
         // paragraphStyle.headIndent = 50
         paragraphStyle.firstLineHeadIndent = 20
@@ -353,7 +357,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
        
             
         default:
-            println("")
+            print("")
         }
     }
     
@@ -420,7 +424,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

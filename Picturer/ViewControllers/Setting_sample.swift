@@ -77,7 +77,7 @@ class Setting_sample: UIViewController, UITableViewDelegate,UITableViewDataSourc
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
-        var cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
+        let cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
         
         cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         
@@ -126,12 +126,12 @@ class Setting_sample: UIViewController, UITableViewDelegate,UITableViewDataSourc
             self.navigationController?.popViewControllerAnimated(true)
             _delegate?.canceld()
         case _btn_save!:
-            var _dict:NSMutableDictionary=NSMutableDictionary()
+            let _dict:NSMutableDictionary=NSMutableDictionary()
             //_dict.setObject(_Action_Type.Setting_tags.rawValue, forKey: "Action_Type")
             _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
-            println(sender)
+            print(sender)
         }
         
     }

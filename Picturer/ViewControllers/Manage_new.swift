@@ -207,7 +207,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
                         
         }
         
-        _titleInput?.text=_album!.objectForKey("title") as! String
+        _titleInput?.text=_album!.objectForKey("title") as? String
         
         if (_album!.objectForKey("description") != nil){
             if _album!.objectForKey("description") as! String != ""{
@@ -242,7 +242,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
-        var cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
+        let cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
     
         cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         cell.separatorInset=UIEdgeInsetsZero
@@ -276,7 +276,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             case 1:
                 cell.detailTextLabel?.text="按上传时间倒序排列"
             default:
-                println()
+                print("")
             }
             
         case 2:
@@ -293,7 +293,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             case 4:
                 cell.detailTextLabel?.text="选中朋友不可见"
             default:
-                println()
+                print("")
             }
         case 3:
             cell.textLabel?.text="评论权限"
@@ -304,11 +304,11 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             case 1:
                 cell.detailTextLabel?.text="不允许评论"
             default:
-                println()
+                print("")
             }
 
         default:
-            println("")
+            print("")
         }
         
 //        var _view:UIView=UIView()
@@ -351,7 +351,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             _controller._selectedId = _album?.objectForKey("reply") as! Int
             self.navigationController?.pushViewController(_controller, animated: true)
         default:
-            println("")
+            print("")
         }
     }
    
@@ -369,7 +369,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         case "power":
             _album?.setObject(dict.objectForKey("selectedId")!, forKey:"powerType")
         default:
-            println("")
+            print("")
         }
         _tableView?.reloadData()
     }
@@ -397,7 +397,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         //return 30
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        var _pic:Manage_pic? = Manage_pic()
+        let _pic:Manage_pic? = Manage_pic()
         //let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
         //_pic=storyboard.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
         _pic?._delegate=self
@@ -584,7 +584,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             //self.view.window!.rootViewController!.presentViewController(_controller!, animated: true, completion: nil)
             self.navigationController?.pushViewController(_controller!, animated: true)
         default:
-            println(sender)
+            print(sender)
         }
         
     }

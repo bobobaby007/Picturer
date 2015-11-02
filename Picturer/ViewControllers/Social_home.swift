@@ -46,7 +46,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         switch btn{
             
         default:
-            println("")
+            print("")
         }
         
         
@@ -122,7 +122,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
             self._topBg!.alpha = 0
             self._logoAnimation?.view.alpha = 0
             }) { (stop) -> Void in
-                _delegate?._social_changeFinished()
+                self._delegate?._social_changeFinished()
         }
     }
     
@@ -154,14 +154,14 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
             self.navigationController?.pushViewController(_contr, animated: true)
         case 1://朋友
             
-            var _contr:Friends_Home=Friends_Home()
+            let _contr:Friends_Home=Friends_Home()
             _contr._type="friends"
             _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
                         
             return
         case 2://妙人
-            var _contr:Friends_Home=Friends_Home()
+            let _contr:Friends_Home=Friends_Home()
             _contr._type="likes"
             _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
@@ -180,7 +180,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         case 6://设置
             return
         default:
-            println("22")
+            print("22")
         }
     }
     
@@ -190,17 +190,17 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
         switch _lastPageTag{
         case 0:
-            var _dict:NSDictionary = NSDictionary(objects: [0,NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"])
+            let _dict:NSDictionary = NSDictionary(objects: [0,NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"])
 //            _alertDicts[0] =
-            var _array:NSMutableArray = NSMutableArray(array: self._alertDicts!)
+            let _array:NSMutableArray = NSMutableArray(array: self._alertDicts!)
             _array[0]=_dict
             self._alertDicts = _array
             self._collectionView.reloadData()
             break
         case 1:
-            var _dict:NSDictionary = NSDictionary(objects: [0,NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"])
+            let _dict:NSDictionary = NSDictionary(objects: [0,NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"])
             //            _alertDicts[0] =
-            var _array:NSMutableArray = NSMutableArray(array: self._alertDicts!)
+            let _array:NSMutableArray = NSMutableArray(array: self._alertDicts!)
             _array[1]=_dict
             self._alertDicts = _array
             self._collectionView.reloadData()

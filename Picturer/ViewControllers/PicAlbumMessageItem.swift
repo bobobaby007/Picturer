@@ -193,31 +193,47 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 4*_toolsGap, height: 35)
                 
                 for i in 1...3{
-                    var _line:UIView = UIView(frame: CGRect(x: CGFloat(i)*_toolsGap, y:5, width: 0.5, height: 25))
+                    let _line:UIView = UIView(frame: CGRect(x: CGFloat(i)*_toolsGap, y:5, width: 0.5, height: 25))
                     _line.backgroundColor = UIColor(white: 0.24, alpha: 1)
                     _toolsButtonPanel?.addSubview(_line)
                 }
                 
                 _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 35))
-                _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                if #available(iOS 8.2, *) {
+                    _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                } else {
+                    // Fallback on earlier versions
+                }
                 _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_like.setTitle("赞", forState: UIControlState.Normal)
                 _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 35))
-                _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                if #available(iOS 8.2, *) {
+                    _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                } else {
+                    // Fallback on earlier versions
+                }
                 _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_comment.setTitle("评论", forState: UIControlState.Normal)
                 _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 _btn_share = UIButton(frame: CGRect(x: 2*_toolsGap, y: 0, width: _toolsGap, height: 35))
-                _btn_share.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                if #available(iOS 8.2, *) {
+                    _btn_share.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                } else {
+                    // Fallback on earlier versions
+                }
                 _btn_share.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_share.setTitle("分享", forState: UIControlState.Normal)
                 _btn_share.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 _btn_collect = UIButton(frame: CGRect(x: 3*_toolsGap, y: 0, width: _toolsGap, height: 35))
-                _btn_collect.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                if #available(iOS 8.2, *) {
+                    _btn_collect.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                } else {
+                    // Fallback on earlier versions
+                }
                 _btn_collect.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_collect.setTitle("收藏", forState: UIControlState.Normal)
                 _btn_collect.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -276,19 +292,27 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 _toolsButtonPanel!.frame = CGRect(x: 0, y: 0, width: 2*_toolsGap, height: 35)
                 
                 for i in 1...1{
-                    var _line:UIView = UIView(frame: CGRect(x: CGFloat(i)*_toolsGap, y:5, width: 0.5, height: 25))
+                    let _line:UIView = UIView(frame: CGRect(x: CGFloat(i)*_toolsGap, y:5, width: 0.5, height: 25))
                     _line.backgroundColor = UIColor(white: 0.24, alpha: 1)
                     _toolsButtonPanel?.addSubview(_line)
                 }
                 
                 _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 35))
-                _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                if #available(iOS 8.2, *) {
+                    _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                } else {
+                    // Fallback on earlier versions
+                }
                 _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_like.setTitle("赞", forState: UIControlState.Normal)
                 _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 35))
-                _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                if #available(iOS 8.2, *) {
+                    _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
+                } else {
+                    // Fallback on earlier versions
+                }
                 _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_comment.setTitle("评论", forState: UIControlState.Normal)
                 _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -321,7 +345,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 }
                 
                 for i in 0..._pics!.count-1{
-                    var _p:PicView = PicView(frame: CGRect(x: CGFloat(i%_numOneLine)*(_picsW + _gapForPic), y: (floor(CGFloat(i/3)))*(_picsW + _gapForPic), width: _picsW, height: _picsW))
+                    let _p:PicView = PicView(frame: CGRect(x: CGFloat(i%_numOneLine)*(_picsW + _gapForPic), y: (floor(CGFloat(i/3)))*(_picsW + _gapForPic), width: _picsW, height: _picsW))
                     _p.maximumZoomScale=1
                     _p.minimumZoomScale=1
                     _p._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
@@ -362,7 +386,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 
                 break
         default:
-            println("")
+            print("")
         }
         
         
@@ -428,13 +452,13 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     func _refreshView(){
         
         
-        var _imgH:CGFloat! = _picV?._imgView?.image?.size.height
-        var _imgW:CGFloat! = _picV?._imgView?.image?.size.width
+//        let _imgH:CGFloat! = _picV?._imgView?.image?.size.height
+//        let _imgW:CGFloat! = _picV?._imgView?.image?.size.width
         
-        var _h:CGFloat = 340
-        if _imgH != nil{
-         _h = _imgH*(self.frame.width/_imgW)
-        }
+//        var _h:CGFloat = 340
+//        if _imgH != nil{
+//         _h = _imgH*(self.frame.width/_imgW)
+//        }
         //_picV?.frame = CGRect(x: 0, y: 50, width: self.frame.width, height: _h)
         //_picV?._refreshView()
         
@@ -512,8 +536,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     
     func _setComments(__comments:NSArray,__allNum:Int){
-        let _lineH:CGFloat = 20
-        var _h:CGFloat
+        //let _lineH:CGFloat = 20
+        //var _h:CGFloat
         let _n:Int = __comments.count
         
         _attributeStr = NSMutableAttributedString(string: "")
@@ -530,7 +554,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         }
         
         
-        var paragraphStyle = NSMutableParagraphStyle()
+        let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
         _attributeStr?.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, _attributeStr!.length))
         
@@ -549,16 +573,16 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     }
     
     func commentString(_commentDict:NSDictionary) -> NSAttributedString {
-        var boldFont = UIFont.boldSystemFontOfSize(14)
+        //let boldFont = UIFont.boldSystemFontOfSize(14)
        
-        var boldAttr = [NSFontAttributeName: boldFont]
+        //var boldAttr = [NSFontAttributeName: boldFont]
         //let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),
          //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
         let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),NSFontAttributeName: UIFont.systemFontOfSize(14)]
         
         var attrString: NSAttributedString = linkString(_commentDict.objectForKey("from_userName") as! String,withURLString: "user:"+(_commentDict.objectForKey("from_userId") as! String))
         
-        var astr:NSMutableAttributedString = NSMutableAttributedString()
+        let astr:NSMutableAttributedString = NSMutableAttributedString()
         astr.appendAttributedString(attrString)
         
         if _commentDict.objectForKey("to_userName") == nil || _commentDict.objectForKey("to_userName") as! String == "" {
@@ -575,11 +599,15 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         return astr
     }
     func linkString(string:String, withURLString:String) -> NSAttributedString {
-        var attrString = NSMutableAttributedString(string: string )
+        let attrString = NSMutableAttributedString(string: string )
         // the entire string
-        var range:NSRange = NSMakeRange(0, attrString.length)
+        let range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
-        attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFontOfSize(14, weight: 0.1), range:range)
+        if #available(iOS 8.2, *) {
+            attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFontOfSize(14, weight: 0.1), range:range)
+        } else {
+            // Fallback on earlier versions
+        }
         attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
         attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1), range:range)
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
@@ -590,11 +618,11 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     //-----文字链接代理
     
     func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
-        var _action:String = URL.scheme!
-        println(_action)
+        let _action:String = URL.scheme
+        print(_action)
         switch _action{
         case "user":
-            let _str:String = URL.absoluteString!
+            let _str:String = URL.absoluteString
             let _userId:NSString =  (_str as NSString).substringFromIndex(5)            
             _delegate?._viewUser(_userId as String)
         case "moreComment":
@@ -603,7 +631,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         case "moreLike":
             _delegate?._moreLike(_indexId)
         default:
-            println("")
+            print("")
         }
         //println(URL.absoluteString)
         //println(URL.scheme)
@@ -701,12 +729,12 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                     _lineLength = _lineLength + _addingLength
                 }
                 
-                var attrString: NSAttributedString = linkString(_addingStr,withURLString: "user:"+(_likeDict.objectForKey("userId") as! String))
+                let attrString: NSAttributedString = linkString(_addingStr,withURLString: "user:"+(_likeDict.objectForKey("userId") as! String))
                 _attrStr.appendAttributedString(attrString)
             }
             
         }
-        var paragraphStyle = NSMutableParagraphStyle()
+        let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 8
        // paragraphStyle.headIndent = 50
         paragraphStyle.firstLineHeadIndent = 20
@@ -742,7 +770,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             }
             
         default:
-            println("")
+            print("")
         }
     }
     
@@ -820,7 +848,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

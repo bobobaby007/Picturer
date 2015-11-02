@@ -52,15 +52,15 @@ class ShareAlert: UIViewController {
         
         _topToY = self.view.frame.height - 271 - _bottomHeight
         
-        var _imageV:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 271))
+        let _imageV:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 271))
         _imageV.backgroundColor = UIColor.whiteColor()
         _imageV.contentMode = UIViewContentMode.ScaleAspectFit
         _imageV.image = UIImage(named: "shareIcons.png")
         
         
-        var _line1:UIView = UIView(frame: CGRect(x: 0, y: 271/2, width: self.view.frame.width, height: 0.5))
+        let _line1:UIView = UIView(frame: CGRect(x: 0, y: 271/2, width: self.view.frame.width, height: 0.5))
         _line1.backgroundColor = UIColor(white: 0.8, alpha: 1)
-        var _line2:UIView = UIView(frame: CGRect(x: self.view.frame.width/2, y: 0, width: 0.5, height: 271))
+        let _line2:UIView = UIView(frame: CGRect(x: self.view.frame.width/2, y: 0, width: 0.5, height: 271))
         _line2.backgroundColor = UIColor(white: 0.8, alpha: 1)
         
         _container?.addSubview(_imageV)

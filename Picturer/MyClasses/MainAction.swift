@@ -21,7 +21,7 @@ class MainAction: AnyObject {
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{
-                var _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
                 var _list:NSMutableArray?=_ud.valueForKey(_ALBUM_LIST) as? NSMutableArray
                 //println(_list)
                 if _list==nil{
@@ -35,7 +35,7 @@ class MainAction: AnyObject {
         set{
             //println("set")
             _aList=newValue
-            var _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
             _ud.setObject(_aList, forKey: _ALBUM_LIST)
              //println(_ud.dictionaryRepresentation())
         }
@@ -43,7 +43,7 @@ class MainAction: AnyObject {
     
     
     static func _getImagesOfAlbumId(__id:String)->NSArray?{
-        var _images:NSArray=[]
+        let _images:NSArray=[]
 //        let _albumPlist:NSDictionary? = CoreAction._loadPlist(__id)
 //        if _albumPlist == nil{
 //           return nil
@@ -59,16 +59,16 @@ class MainAction: AnyObject {
     }
     //----添加图片到相册
     static func _insertPicsToAlbumById(__pics:NSArray,__albumIndex:Int){
-        var _images:NSMutableArray = NSMutableArray(array: _getImagesOfAlbumIndex(__albumIndex)!)
+        let _images:NSMutableArray = NSMutableArray(array: _getImagesOfAlbumIndex(__albumIndex)!)
         _images.addObjectsFromArray(__pics as [AnyObject])        
         _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
     }
     
     static func _insertAlbum(dict:NSDictionary)->String{
-        var _list:NSMutableArray=NSMutableArray(array:_albumList )
-        var _album:NSMutableDictionary = NSMutableDictionary(dictionary: dict)
+        let _list:NSMutableArray=NSMutableArray(array:_albumList )
+        let _album:NSMutableDictionary = NSMutableDictionary(dictionary: dict)
         
-        var _id:String="1234555"
+        let _id:String="1234555"
         _album.setObject(_id, forKey: "id")
         _album.setObject(_id, forKey: "last_update_at")
         _album.setObject(_id, forKey: "create_at")
@@ -86,7 +86,7 @@ class MainAction: AnyObject {
         _tempAlbum = NSMutableDictionary(dictionary: dict)
     }
     static func _getAlbumAtIndex(index:Int)->NSDictionary?{
-        var _albumDict:NSMutableDictionary = NSMutableDictionary(dictionary: MainAction._albumList.objectAtIndex(index) as! NSDictionary)
+        let _albumDict:NSMutableDictionary = NSMutableDictionary(dictionary: MainAction._albumList.objectAtIndex(index) as! NSDictionary)
         _setDefault(_albumDict)
         return _albumDict
     }
@@ -129,22 +129,22 @@ class MainAction: AnyObject {
 
     //----直接从列表里按照位置删除
     static func _deleteAlbumAtIndex(index:Int){
-        var _list:NSMutableArray=NSMutableArray(array:_albumList )
+        let _list:NSMutableArray=NSMutableArray(array:_albumList )
         //println(index)
         _list.removeObjectAtIndex(index)
         _albumList=_list
     }
     static func _getCoverFromAlbumAtIndex(index:Int)->NSDictionary?{
-        var _album:NSMutableDictionary = NSMutableDictionary(dictionary: _getAlbumAtIndex(index)!)        
+        let _album:NSMutableDictionary = NSMutableDictionary(dictionary: _getAlbumAtIndex(index)!)        
         _setDefault(_album)
-        var _images:NSArray = _album.objectForKey("images") as! NSArray
+        let _images:NSArray = _album.objectForKey("images") as! NSArray
         if _images.count<1{
             return nil
         }
         
         //println(_album.objectForKey("cover"))
         
-        var _cover:NSDictionary = _album.objectForKey("cover") as! NSDictionary
+        let _cover:NSDictionary = _album.objectForKey("cover") as! NSDictionary
         
         
         
@@ -161,13 +161,13 @@ class MainAction: AnyObject {
     }
     //----检测相册里是否有某张照片
     static func _albumHasPic(__albumIndex:Int,__pic:NSDictionary)->Bool{
-        var _album:NSDictionary = _getAlbumAtIndex(__albumIndex)!
+        let _album:NSDictionary = _getAlbumAtIndex(__albumIndex)!
         if __pic.objectForKey("url") != nil{
             
         }else{
             return false
         }
-        var _images:NSArray = _album.objectForKey("images") as! NSArray
+        let _images:NSArray = _album.objectForKey("images") as! NSArray
         for var i:Int = 0 ; i<_images.count ;++i{
             if (_images.objectAtIndex(i) as! NSDictionary).objectForKey("url") as! String == __pic.objectForKey("url") as! String{
                 return true
@@ -176,8 +176,8 @@ class MainAction: AnyObject {
         return false
     }
     static func _changeAlbumAtIndex(index:Int,dict:NSDictionary){
-        var _list:NSMutableArray=NSMutableArray(array:_albumList )
-        var _album:NSMutableDictionary=NSMutableDictionary(dictionary: _list.objectAtIndex(index) as! NSDictionary)
+        let _list:NSMutableArray=NSMutableArray(array:_albumList )
+        let _album:NSMutableDictionary=NSMutableDictionary(dictionary: _list.objectAtIndex(index) as! NSDictionary)
         
         //let keys:NSArray = dict.allKeys
         
@@ -197,13 +197,13 @@ class MainAction: AnyObject {
     //------修改相册里的某张图片
     static func _changePicAtAlbum(index:Int,albumIndex:Int,dict:NSDictionary){
         
-        var _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!
+        let _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!
         
         
         
-        var _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
+        let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
         
-        var _img:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(index) as! NSDictionary)
+        let _img:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(index) as! NSDictionary)
         
         for (key,value) in dict{
             //println(key,value)
@@ -236,8 +236,8 @@ class MainAction: AnyObject {
         get{
             
             
-            var _dict:NSMutableDictionary = NSMutableDictionary()
-            var _pic:NSDictionary =  NSDictionary(objects: ["file","user_1.jpg"], forKeys: ["type","url"])
+            let _dict:NSMutableDictionary = NSMutableDictionary()
+            let _pic:NSDictionary =  NSDictionary(objects: ["file","user_1.jpg"], forKeys: ["type","url"])
             
             
             _dict.setObject(_pic, forKey: "profileImg")
@@ -259,7 +259,7 @@ class MainAction: AnyObject {
     
     //-----获取主页提示信息
     static func _getAlertsOfSocial(__block:(NSArray)->Void){
-        var array:NSMutableArray = NSMutableArray()
+        let array:NSMutableArray = NSMutableArray()
         array.addObject(NSDictionary(objects: [1,NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
         array.addObject(NSDictionary(objects: [-1,NSDictionary(objects: ["user_8.jpg","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
         array.addObject(NSDictionary(objects: [0,NSDictionary(objects: ["1.png","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
@@ -280,8 +280,8 @@ class MainAction: AnyObject {
         if userId == _userId{
             return _currentUser
         }
-        var _dict:NSMutableDictionary = NSMutableDictionary()
-        var _pic:NSDictionary =  NSDictionary(objects: ["file","user_1.jpg"], forKeys: ["type","url"])
+        let _dict:NSMutableDictionary = NSMutableDictionary()
+        let _pic:NSDictionary =  NSDictionary(objects: ["file","user_1.jpg"], forKeys: ["type","url"])
         
         
         _dict.setObject(_pic, forKey: "profileImg")
@@ -302,11 +302,11 @@ class MainAction: AnyObject {
     
     //------消息列表
     static func _getMessages(block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 1
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 1
         for var i:Int = 0; i<_n;++i{
-            var _comment:String = _testComments?.objectAtIndex(random()%31) as! String
-            var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(random()%31) as! String,_testComments?.objectAtIndex(random()%31) as! String,"111111","123456",_comment,"下午1:00","comment","333333"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time","type","albumId"])
+            let _comment:String = _testComments?.objectAtIndex(random()%31) as! String
+            let _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(random()%31) as! String,_testComments?.objectAtIndex(random()%31) as! String,"111111","123456",_comment,"下午1:00","comment","333333"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time","type","albumId"])
             
             if i==0||i==5||i==6{
                 _commentDict.setValue("好喜欢这个哈", forKey: "comment")
@@ -336,8 +336,8 @@ class MainAction: AnyObject {
     
     //-----提取某个相册评论－－－－－－//－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－过渡方法
     static func _getCommentsOfAlubm(__albumId:String?,block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = __albumId!.toInt()!
+        let _array:NSMutableArray = NSMutableArray()
+        var _n:Int = Int(__albumId!)!
         if _n < 1{
             _n = 1
         }
@@ -350,8 +350,8 @@ class MainAction: AnyObject {
             
             
             
-            var _comment:String = _testComments?.objectAtIndex(random()%31) as! String
-            var _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(random()%31) as! String,_testToUserNames?.objectAtIndex(i) as! String,"111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
+            let _comment:String = _testComments?.objectAtIndex(random()%31) as! String
+            let _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(random()%31) as! String,_testToUserNames?.objectAtIndex(i) as! String,"111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
 //            if i==0{
 //                _commentDict.setValue("", forKey: "comment")
 //                _commentDict.setValue("", forKey: "to_userName")
@@ -368,8 +368,8 @@ class MainAction: AnyObject {
         block(_array)
     }
     static func _getLikesOfAlubm(__albumId:String?,block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = __albumId!.toInt()!
+        let _array:NSMutableArray = NSMutableArray()
+        var _n:Int = Int(__albumId!)!
         if _n < 1{
             _n = 1
         }
@@ -395,11 +395,11 @@ class MainAction: AnyObject {
     
     //-----提取相册里的所有图片
     static func _getPicsListAtAlbumId(__albumId:String?,block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 28
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 28
         
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
             
             let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%8+1)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
@@ -420,12 +420,12 @@ class MainAction: AnyObject {
     //-----获取相册里的所有图片＊＊＊＊暂时用本地信息替代在线信息
     static func _getPicsListAt(albumIndex:Int,block:(NSArray)->Void){
         
-        var _theA:NSArray = MainAction._getImagesOfAlbumIndex(albumIndex)!
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = _theA.count
-        var _range:Int = (_albumList.objectAtIndex(albumIndex) as! NSDictionary).objectForKey("range") as! Int
+        let _theA:NSArray = MainAction._getImagesOfAlbumIndex(albumIndex)!
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = _theA.count
+        let _range:Int = (_albumList.objectAtIndex(albumIndex) as! NSDictionary).objectForKey("range") as! Int
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
             
             let _pic:NSDictionary = _theA.objectAtIndex(i) as! NSDictionary
             _dict.setObject(_pic, forKey: "pic")
@@ -461,11 +461,11 @@ class MainAction: AnyObject {
     
     //-----提取热门图册
     static func _getHotAlbums(block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 10
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 10
         
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
             let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%6+2)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
             _dict.setObject("000001", forKey: "albumId")
@@ -478,10 +478,10 @@ class MainAction: AnyObject {
     
     //------提取热门用户
     static func _getHotUsers(block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 10
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 10
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
             
             var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%5+3)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
@@ -497,11 +497,11 @@ class MainAction: AnyObject {
     }
     //-----提取推荐相册
     static func _getReferenceAlbums(block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 10
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 10
         
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
             
             let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
@@ -520,15 +520,15 @@ class MainAction: AnyObject {
     }
     //-----推荐搜索标签
     static func _getReferenceTags(block:(NSArray)->Void){
-        var _array:NSArray = ["旅行","健身","艺术","摄影","电影","美食","成长","设计","时尚","魔兽","春天","行为艺术"]
+        let _array:NSArray = ["旅行","健身","艺术","摄影","电影","美食","成长","设计","时尚","魔兽","春天","行为艺术"]
         block(_array)
     }
     //-----搜索结果－－－相册
     static func _getResultOfAlbum(__searchingStr:String, block:(NSArray)->Void){
-       var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 40
+       let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 40
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
             let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")
             _dict.setObject("000001", forKey: "albumId")
@@ -538,11 +538,11 @@ class MainAction: AnyObject {
     }
     //搜索结果－－－－用户
     static func _getResultOfUser(__searchingStr:String, block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 40
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 40
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
-            var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%5+3)+".JPG","file"], forKeys: ["url","type"])
+            let _dict:NSMutableDictionary = NSMutableDictionary()
+            let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%5+3)+".JPG","file"], forKeys: ["url","type"])
             //_dict.setObject(_pic, forKey: "pic")
             //_pic = NSDictionary(objects: [String(i%6+1)+".png","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "userImg")
@@ -569,10 +569,10 @@ class MainAction: AnyObject {
 //        })
         
         if __userId == _userId{
-            var _array:NSMutableArray = NSMutableArray(array: _albumList)
-            var _n:Int = _array.count
+            let _array:NSMutableArray = NSMutableArray(array: _albumList)
+            let _n:Int = _array.count
             for var i:Int = 0; i<_n;++i{
-                var _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(i) as! NSDictionary)
+                let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(i) as! NSDictionary)
                 
                 let _pic:NSDictionary = _getCoverFromAlbumAtIndex(i)!
                 _dict.setObject(_pic, forKey: "cover")
@@ -581,10 +581,10 @@ class MainAction: AnyObject {
             block(_array)
             return
         }else{
-            var _array:NSMutableArray = NSMutableArray()
-            var _n:Int = 10
+            let _array:NSMutableArray = NSMutableArray()
+            let _n:Int = 10
             for var i:Int = 0; i<_n;++i{
-                var _dict:NSMutableDictionary = NSMutableDictionary()
+                let _dict:NSMutableDictionary = NSMutableDictionary()
                 let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
                 _dict.setObject(_pic, forKey: "cover")
                 _dict.setObject("天边一朵云", forKey: "title")
@@ -598,12 +598,12 @@ class MainAction: AnyObject {
     }
     //－－－－提取朋友更新图册列表
     static func _getFriendsNewsList(block:(NSArray)->Void){
-            var _array:NSMutableArray = NSMutableArray()
-            var _n:Int = 10
+            let _array:NSMutableArray = NSMutableArray()
+            let _n:Int = 10
             for var i:Int = 0; i<_n;++i{
-                var _dict:NSMutableDictionary = NSMutableDictionary()
+                let _dict:NSMutableDictionary = NSMutableDictionary()
                 
-                var _pics:NSMutableArray = NSMutableArray()
+                let _pics:NSMutableArray = NSMutableArray()
                 
                 var _num:Int = i
                 if _num>8{
@@ -628,11 +628,11 @@ class MainAction: AnyObject {
     }
     //－－－－提取妙人更新图册列表
     static func _getLikesNewsList(block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 10
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 10
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
-            var _pics:NSMutableArray = NSMutableArray()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
+            let _pics:NSMutableArray = NSMutableArray()
             var _num:Int = i+5
             if _num>8{
                 _num = 8
@@ -655,10 +655,10 @@ class MainAction: AnyObject {
     }
     //－－－－提取收藏图册列表
     static func _getCollectList(block:(NSArray)->Void){
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 10
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 10
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
             var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%8+1)+".JPG","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "cover")
             
@@ -673,11 +673,11 @@ class MainAction: AnyObject {
     }
     static func _getAdvertisiongs(block:(NSArray)->Void){
     
-        var _array:NSMutableArray = NSMutableArray()
-        var _n:Int = 4
+        let _array:NSMutableArray = NSMutableArray()
+        let _n:Int = 4
         
         for var i:Int = 0; i<_n;++i{
-            var _dict:NSMutableDictionary = NSMutableDictionary()
+            let _dict:NSMutableDictionary = NSMutableDictionary()
             
             let _pic:NSDictionary = NSDictionary(objects: ["ad_"+String(i%5+1)+".jpg","file"], forKeys: ["url","type"])
             _dict.setObject(_pic, forKey: "pic")

@@ -77,7 +77,7 @@ class Setting_range: UIViewController, UITableViewDelegate,UITableViewDataSource
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
-        var cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
+        let cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
         
         //cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         
@@ -126,13 +126,13 @@ class Setting_range: UIViewController, UITableViewDelegate,UITableViewDataSource
             self.navigationController?.popViewControllerAnimated(true)
             _delegate?.canceld()
         case _btn_save!:
-            var _dict:NSMutableDictionary=NSMutableDictionary()
+            let _dict:NSMutableDictionary=NSMutableDictionary()
             _dict.setObject("range", forKey: "Action_Type")
             _dict.setObject(_selectedId, forKey: "selectedId")
             _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
-            println(sender)
+            print(sender)
         }
         
     }

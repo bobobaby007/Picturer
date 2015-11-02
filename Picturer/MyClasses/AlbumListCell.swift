@@ -87,7 +87,7 @@ class AlbumListCell :  UITableViewCell{
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 
                 if asset != nil {
-                    self.setThumbImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                    self.setThumbImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue()))
                 }else{
                     self.setThumbImage("entroLogo")//----用户删除时
                 }
@@ -99,7 +99,7 @@ class AlbumListCell :  UITableViewCell{
                     
             })
         default:
-            println()
+            print("")
         }
     }
 

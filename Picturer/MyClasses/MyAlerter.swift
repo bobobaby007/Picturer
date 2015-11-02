@@ -63,7 +63,7 @@ class MyAlerter: UIViewController {
         _container!.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: CGFloat(_menus!.count) * _gap)
         _container?.backgroundColor = UIColor.whiteColor()
         
-        for subV in _container!.subviews as! [UIView]{
+        for subV in _container!.subviews {
             subV.removeFromSuperview()
         }
         
@@ -71,7 +71,7 @@ class MyAlerter: UIViewController {
         _topToY = self.view.frame.height - _bottomHeight - _container!.frame.height
         
         for i in 0..._menus!.count-1{
-            var _v:UIButton = UIButton(frame: CGRect(x: 0, y: CGFloat(i)*_gap, width: self.view.frame.width, height: _gap))
+            let _v:UIButton = UIButton(frame: CGRect(x: 0, y: CGFloat(i)*_gap, width: self.view.frame.width, height: _gap))
             _v.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
             _v.titleLabel?.font = UIFont.systemFontOfSize(18)
             _v.setTitle(_menus!.objectAtIndex(i) as? String, forState: UIControlState.Normal)
@@ -79,7 +79,7 @@ class MyAlerter: UIViewController {
             _v.addTarget(self, action: "_buttonHander:", forControlEvents: UIControlEvents.TouchUpInside)
             _container?.addSubview(_v)
             if i>0{
-                var _line:UIView = UIView(frame: CGRect(x: 0, y: CGFloat(i)*_gap, width: self.view.frame.width, height: 0.5))
+                let _line:UIView = UIView(frame: CGRect(x: 0, y: CGFloat(i)*_gap, width: self.view.frame.width, height: 0.5))
                 _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
                 _container?.addSubview(_line)
             }

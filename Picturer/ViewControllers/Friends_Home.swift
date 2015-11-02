@@ -394,7 +394,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         
         MainAction._getPicsListAtAlbumId("00003", block: { (array) -> Void in
-            var _controller:Social_pic = Social_pic()
+            let _controller:Social_pic = Social_pic()
             
             _controller._showIndexAtPics(0, __array: array)
             self.navigationController?.pushViewController(_controller, animated: true)
@@ -403,9 +403,9 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     func _viewPicsAtIndex(__array:NSArray,__index:Int){
 
-        var _controller:Social_pic = Social_pic()
+        let _controller:Social_pic = Social_pic()
         
-        var _pics:NSMutableArray = NSMutableArray()
+        let _pics:NSMutableArray = NSMutableArray()
         
         for i in 0...__array.count-1{
             _pics.addObject(NSDictionary(objects: [__array.objectAtIndex(i),3,5], forKeys: ["pic","likeNumber","commentNumber"]))
@@ -416,13 +416,13 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
 
     }
     func _moreComment(__indexId: Int) {
-        var _controller:CommentList = CommentList()
+        let _controller:CommentList = CommentList()
         //println(__dict)
         _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(__indexId) as? NSArray)!)
         self.navigationController?.pushViewController(_controller, animated: true)
     }
     func _moreLike(__indexId: Int) {
-        println(__indexId)
+        print(__indexId)
     }
     func _viewUser(__userId: String) {
         //println(__userId)
@@ -436,8 +436,8 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             if _hasUserInLikesAtIndex(__dict.objectForKey("indexId") as! Int, __userId: MainAction._currentUser.objectForKey("userId") as! String){
                 return
             }
-            var _arr:NSMutableArray = NSMutableArray(array: self._likeArray!)
-            var _dict:NSMutableArray = NSMutableArray(array:_arr.objectAtIndex(__dict.objectForKey("indexId") as! Int) as! NSArray)
+            let _arr:NSMutableArray = NSMutableArray(array: self._likeArray!)
+            let _dict:NSMutableArray = NSMutableArray(array:_arr.objectAtIndex(__dict.objectForKey("indexId") as! Int) as! NSArray)
             let _user:NSDictionary = MainAction._currentUser as NSDictionary
             _dict.addObject(NSDictionary(objects: [_user.objectForKey("userName") as! String,_user.objectForKey("userId") as! String], forKeys: ["userName","userId"]))
             _arr[__dict.objectForKey("indexId") as! Int] = _dict
@@ -448,7 +448,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             
             break
         case "comment":
-            var _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
+            let _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
             //println(_cell.frame.origin.y)
             //UIView.beginAnimations("offset", context: nil)
             /*-----在当前页打开输入框
@@ -468,7 +468,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             _inputer?._open()
             */
             
-            var _controller:CommentList = CommentList()
+            let _controller:CommentList = CommentList()
             //println(__dict)
             _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(_cell._indexId) as? NSArray)!)
             
@@ -500,11 +500,11 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     //-----输入框代理
     
     func _inputer_send(__dict:NSDictionary) {
-        println(__dict.objectForKey("text"))
+        print(__dict.objectForKey("text"))
         _inputer?._close()
     }
     func _inputer_changed(__dict: NSDictionary) {
-        println(__dict.objectForKey("text"))
+        print(__dict.objectForKey("text"))
     }
     //-------------
     
@@ -512,7 +512,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         switch sender{
        
         default:
-            println("")
+            print("")
         }
     }
     
@@ -542,15 +542,15 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             self.navigationController?.popViewControllerAnimated(true)
             return
         case _btn_moreAction!:
-            var _alertController:UIAlertController = UIAlertController()
+            let _alertController:UIAlertController = UIAlertController()
             
-            var _action:UIAlertAction = UIAlertAction(title: "消息列表", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            let _action:UIAlertAction = UIAlertAction(title: "消息列表", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
                 self._hasNewMessage = false
                 self._refreshView()
                 self._openMessageList()
             })
             
-            var _actionCancel:UIAlertAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil)
+            let _actionCancel:UIAlertAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil)
             _alertController.addAction(_action)
             _alertController.addAction(_actionCancel)
             
@@ -568,7 +568,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     //---打开消息列表
     func _openMessageList(){
         
-        var _controller:MessageList = MessageList()
+        let _controller:MessageList = MessageList()
         self.navigationController?.pushViewController(_controller, animated: true)
     }
     

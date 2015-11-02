@@ -31,48 +31,48 @@ class LogoAnimation:UIViewController {
         
         
         for i in 1...7{
-            var _v:UIView = UIView(frame: CGRect(x: CGFloat(7-i)*_w, y: 0, width: _w, height: _w))
+            let _v:UIView = UIView(frame: CGRect(x: CGFloat(7-i)*_w, y: 0, width: _w, height: _w))
             _v.tag = 100+i
             _v.backgroundColor = color
             _v.alpha = 0
             self.view.addSubview(_v)
         }
         for i in 8...13{
-            var _v:UIView = UIView(frame: CGRect(x: 0, y:CGFloat(i-7)*_w, width: _w, height: _w))
+            let _v:UIView = UIView(frame: CGRect(x: 0, y:CGFloat(i-7)*_w, width: _w, height: _w))
             _v.tag = 100+i
             _v.backgroundColor = color
             _v.alpha = 0
             self.view.addSubview(_v)
         }
         for i in 14...17{
-            var _v:UIView = UIView(frame: CGRect(x: CGFloat(i-13)*_w, y:6*_w, width: _w, height: _w))
+            let _v:UIView = UIView(frame: CGRect(x: CGFloat(i-13)*_w, y:6*_w, width: _w, height: _w))
             _v.tag = 100+i
             _v.backgroundColor = color
             _v.alpha = 0
             self.view.addSubview(_v)
         }
         for i in 18...19{
-            var _v:UIView = UIView(frame: CGRect(x: 4*_w, y:CGFloat(19-i+4)*_w, width: _w, height: _w))
+            let _v:UIView = UIView(frame: CGRect(x: 4*_w, y:CGFloat(19-i+4)*_w, width: _w, height: _w))
             _v.tag = 100+i
             _v.backgroundColor = color
             _v.alpha = 0
             self.view.addSubview(_v)
         }
         for i in 20...21{
-            var _v:UIView = UIView(frame: CGRect(x: CGFloat(4+i-19)*_w, y:4*_w, width: _w, height: _w))
+            let _v:UIView = UIView(frame: CGRect(x: CGFloat(4+i-19)*_w, y:4*_w, width: _w, height: _w))
             _v.tag = 100+i
             _v.backgroundColor = color
             _v.alpha = 0
             self.view.addSubview(_v)
         }
         for i in 22...24{
-            var _v:UIView = UIView(frame: CGRect(x: 6*_w, y:CGFloat(25-i)*_w, width: _w, height: _w))
+            let _v:UIView = UIView(frame: CGRect(x: 6*_w, y:CGFloat(25-i)*_w, width: _w, height: _w))
             _v.tag = 100+i
             _v.backgroundColor = color
             _v.alpha = 0
             self.view.addSubview(_v)
         }
-        var _v:UIImageView = UIImageView(frame: CGRect(x: 5*_w, y: 5*_w, width: _w*2, height: _w*2))
+        let _v:UIImageView = UIImageView(frame: CGRect(x: 5*_w, y: 5*_w, width: _w*2, height: _w*2))
         _v.image = UIImage(named: "logo_triangle.png")
         _v.tag = 100+25
         _v.alpha = 0

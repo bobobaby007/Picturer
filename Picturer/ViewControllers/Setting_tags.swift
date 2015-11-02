@@ -65,7 +65,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
         
         _inputText=UITextField(frame:CGRectMake(0,80,self.view.frame.width,50))
        
-        var _leftV:UIView=UIView(frame: CGRectMake(0, 0, _gap, 40))
+        let _leftV:UIView=UIView(frame: CGRectMake(0, 0, _gap, 40))
         _inputText?.leftView=_leftV
         _inputText?.leftViewMode=UITextFieldViewMode.Always
         
@@ -110,7 +110,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
             
             let _gapY:CGFloat = 40
             
-            var _text:UILabel = UILabel(frame: CGRectMake(_gap+CGFloat(i%5)*(_gapX+_width), 150+floor(CGFloat(i/5))*_gapY, _width, 30))
+            let _text:UILabel = UILabel(frame: CGRectMake(_gap+CGFloat(i%5)*(_gapX+_width), 150+floor(CGFloat(i/5))*_gapY, _width, 30))
             _text.backgroundColor=UIColor(white: 0.8, alpha: 0.3)
             _text.textAlignment=NSTextAlignment.Center
             _text.layer.masksToBounds=true
@@ -119,7 +119,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
             
             _text.userInteractionEnabled=true
             
-            var _tapRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+            let _tapRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
             _text.addGestureRecognizer(_tapRec)
             
             
@@ -148,7 +148,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
     }
     
     func _tagPutIn(__str:String){
-        let _str:String = _inputText!.text
+        let _str:String = _inputText!.text!
         let _strLeng:Int=_str.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2
         
         if (_strLeng+__str.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2)>_maxC{
@@ -168,9 +168,9 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
     }
     //---限制字数
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let _str:String = _inputText!.text
+        let _str:String = _inputText!.text!
         let _strLeng:Int=_str.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2
-        println(_strLeng)
+        print(_strLeng)
         if _strLeng > _maxC{
             _inputText!.text = (_str as NSString).substringToIndex(_maxC)
         }
@@ -183,10 +183,10 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
             self.navigationController?.popViewControllerAnimated(true)
             _delegate?.canceld()
         case _btn_save!:
-            var _dict:NSMutableDictionary=NSMutableDictionary()
+            let _dict:NSMutableDictionary=NSMutableDictionary()
             _dict.setObject("tags", forKey: "Action_Type")
             
-            let _str:String = _inputText!.text
+            let _str:String = _inputText!.text!
             let _tagArray:NSArray = _str.componentsSeparatedByString(",")
             
             _dict.setObject(_tagArray, forKey: "tags")
@@ -194,7 +194,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
             _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:
-            println(sender)
+            print(sender)
         }
         
     }

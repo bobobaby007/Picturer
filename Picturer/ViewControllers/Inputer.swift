@@ -128,9 +128,9 @@ class Inputer: UIView,UITextViewDelegate {
         
         let userInfo = notification.userInfo!
         
-        let animationDuration: NSTimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+        //let animationDuration: NSTimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         //let animationCurve:UIViewAnimationCurve = (userInfo[UIKeyboardAnimationCurveUserInfoKey] as! NSString).
-        let keyboardScreenBeginFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
+        //let keyboardScreenBeginFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
         let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         
         //println(keyboardScreenBeginFrame)
@@ -182,7 +182,7 @@ class Inputer: UIView,UITextViewDelegate {
         
     }
     override func removeFromSuperview() {
-        print("i out")
+        print("i out", terminator: "")
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
         super.removeFromSuperview()
@@ -259,7 +259,7 @@ class Inputer: UIView,UITextViewDelegate {
         //self.userInteractionEnabled=false
     }
     func _closeStop(){
-        print("out")
+        print("out", terminator: "")
     }
     
     

@@ -157,7 +157,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         _collectionLayout=UICollectionViewFlowLayout()
         let _imagesW:CGFloat=(self.view.frame.width-2*_space)/3
-        let _imagesH:CGFloat=ceil(CGFloat(_picsArray!.count)/4)*(_imagesW+_space)
+        //let _imagesH:CGFloat=ceil(CGFloat(_picsArray!.count)/4)*(_imagesW+_space)
         
         
         _collectionLayout?.minimumInteritemSpacing=_space
@@ -239,11 +239,11 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     }
     
     func _clear(){
-        let _n = _scrollView.subviews.count
+        //let _n = _scrollView.subviews.count
         
         for view in _scrollView.subviews{
             view.removeFromSuperview()
-            println("remove")
+            print("remove")
         }
         _scrollView?.removeFromSuperview()
         
@@ -288,7 +288,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
             _isScrolling=false
             
             
-            var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
+            let _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
             
             _moveToPicByIndex(_p)
             
@@ -368,7 +368,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
                 
             }
         default:
-            println(sender)
+            print(sender)
         }
         
     }

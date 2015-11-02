@@ -85,7 +85,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
-        var cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell", forIndexPath: indexPath) as! MessageList_Cell
+        let cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell", forIndexPath: indexPath) as! MessageList_Cell
         cell.setUp(self.view.frame.width)
         cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
         cell._delegate = self
@@ -104,7 +104,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         // var cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell", forIndexPath: indexPath) as! MessageList_Cell
         
         
-        var cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell") as! MessageList_Cell
+        let cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell") as! MessageList_Cell
         cell.setUp(self.view.frame.width)
         cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
         
@@ -116,13 +116,13 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         
-        var cell:MessageList_Cell = _tableView!.cellForRowAtIndexPath(indexPath) as! MessageList_Cell
+        //var cell:MessageList_Cell = _tableView!.cellForRowAtIndexPath(indexPath) as! MessageList_Cell
        // cell.selected = false
         
     }
     
     func _viewUser(__userId: String) {
-        var _controller:MyHomepage = MyHomepage()
+        let _controller:MyHomepage = MyHomepage()
         _controller._userId = __userId
         self.navigationController?.pushViewController(_controller, animated: true)
     }
@@ -151,7 +151,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
             _dataArray = []
             _tableView?.reloadData()
         default:
-            println(sender)
+            print(sender)
         }
         
     }

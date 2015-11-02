@@ -110,14 +110,14 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
           
         switch _currentAction{
         case _action_normal:
-            println("")
+            print("")
         case _action_delete:
-           println("")
+           print("")
         default:
-            println("not set action")
+            print("not set action")
         }
         
-        var _controller:Manage_pic = Manage_pic()
+        let _controller:Manage_pic = Manage_pic()
         _controller._showIndexAtPics(indexPath.item, __array: _imagesArray)
         if _albumIndex != nil{
             _controller._albumIndex = _albumIndex
@@ -139,7 +139,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         _deleteSelectedPics()
     }
     func _setCover(picIndex: Int) {
-        var _dict:NSDictionary = NSDictionary(object: _imagesArray.objectAtIndex(picIndex), forKey: "cover") as NSDictionary
+        let _dict:NSDictionary = NSDictionary(object: _imagesArray.objectAtIndex(picIndex), forKey: "cover") as NSDictionary
         MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
     }
     
@@ -147,7 +147,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     //---瀑布流时图片cell选择代理
     
     func PicDidSelected(pic: PicsShowCell) {
-        var _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _imagesArray[pic._index!] as! NSDictionary)
+        let _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _imagesArray[pic._index!] as! NSDictionary)
         _pic.setObject(pic._selected, forKey: "selected")
         _imagesArray[pic._index!]=_pic
         if(pic._selected){
@@ -167,7 +167,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
     }
     func _selectedAtIndex(__index:Int)->Bool{
-        var _has:Bool=false
+        let _has:Bool=false
         if _SelectedIndexs.count<1{
             return false
         }
@@ -191,7 +191,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             case _action_delete:
                 self._changeActionTo(_action_normal)
             default:
-                println("")
+                print("")
             }
             
         case _btn_edit!:
@@ -203,18 +203,18 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
                     return
                 }
                 
-                var _alert:UIAlertView = UIAlertView()
+                let _alert:UIAlertView = UIAlertView()
                 _alert.delegate=self
                 _alert.title="确定删除图片？"
                 _alert.addButtonWithTitle("确定")
                 _alert.addButtonWithTitle("取消")
                 _alert.show()
             default:
-                println("")
+                print("")
             }
             
         default:
-            println("")
+            print("")
         }
         
     }
@@ -226,17 +226,17 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
                     _deleteSelectedPics()
                 }
         default:
-            println("")
+            print("")
         }
         
     }
     //-----删除当前选中的图片
     func _deleteSelectedPics(){
-        var _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _getSelectedAndRestArray())
+        let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _getSelectedAndRestArray())
         _dict.setValue(_albumIndex, forKey: "albumIndex")
         _delegate?.didDeletedPics(_dict)
-        var _indexs:NSMutableIndexSet = NSMutableIndexSet()
-        var _itemsIndexs:NSMutableArray=[]
+        let _indexs:NSMutableIndexSet = NSMutableIndexSet()
+        let _itemsIndexs = NSMutableArray(array: [NSIndexPath]() )
         for i in _SelectedIndexs{
             _indexs.addIndex(Int(i as! NSNumber))
             _itemsIndexs.addObject(NSIndexPath(forItem: Int(i as! NSNumber), inSection: 0))
@@ -247,7 +247,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         _changeActionTo(_action_normal)
         
         _imagesArray.removeObjectsAtIndexes(_indexs)
-        _collectionView.deleteItemsAtIndexPaths(_itemsIndexs as [AnyObject])
+        _collectionView.deleteItemsAtIndexPaths(NSArray(array: _itemsIndexs) as! [NSIndexPath])
 
         _SelectedIndexs=[]
     }
@@ -286,7 +286,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
     
     func _needToSelect(__set:Bool){
-        var _n:Int = _collectionView.numberOfItemsInSection(0)
+        let _n:Int = _collectionView.numberOfItemsInSection(0)
         
         for var i = 0; i < _n; ++i{
             let cell:PicsShowCell? = _collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: i, inSection: 0)) as? PicsShowCell
@@ -298,9 +298,9 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
     
     func _getSelectedAndRestArray()->NSDictionary{
-        var _selectedA:NSMutableArray=[]
-        var _restA:NSMutableArray=[]
-        var _n:Int = _imagesArray.count
+        let _selectedA:NSMutableArray=[]
+        let _restA:NSMutableArray=[]
+        let _n:Int = _imagesArray.count
         for var i = 0;i<_n;++i{
             var _pic:NSDictionary
             
@@ -317,7 +317,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
                 _restA.addObject(_pic)
             }
         }
-        var _dict:NSDictionary=NSDictionary(objects: [_selectedA,_restA], forKeys: ["selectedImages","restImages"])
+        let _dict:NSDictionary=NSDictionary(objects: [_selectedA,_restA], forKeys: ["selectedImages","restImages"])
         return _dict
     }
     
@@ -341,7 +341,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     func imagePickerDidSelected(images: NSArray) {
         _imagesArray.addObjectsFromArray(images as [AnyObject])
         
-        var _dict:NSMutableDictionary = NSMutableDictionary()
+        let _dict:NSMutableDictionary = NSMutableDictionary()
         
         _dict.setValue(_albumIndex, forKey: "albumIndex")
         _dict.setValue(images, forKey: "addedImages")

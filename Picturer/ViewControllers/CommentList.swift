@@ -85,7 +85,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
-        var cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell", forIndexPath: indexPath) as! CommentList_Cell
+        let cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell", forIndexPath: indexPath) as! CommentList_Cell
         cell.setUp(self.view.frame.width)
         cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
         cell._delegate = self
@@ -104,7 +104,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
        // var cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell", forIndexPath: indexPath) as! CommentList_Cell
         
         
-        var cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell") as! CommentList_Cell
+        let cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell") as! CommentList_Cell
         cell.setUp(self.view.frame.width)
         cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
         
@@ -116,7 +116,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
        
         
-        var cell:CommentList_Cell = _tableView!.cellForRowAtIndexPath(indexPath) as! CommentList_Cell
+        let cell:CommentList_Cell = _tableView!.cellForRowAtIndexPath(indexPath) as! CommentList_Cell
         cell.selected = false
         
         //_tableView?.reloadData()
@@ -133,7 +133,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     //----cell 代理
     
     func _viewUser(__userId: String) {
-        var _controller:MyHomepage = MyHomepage()
+        let _controller:MyHomepage = MyHomepage()
         _controller._userId = __userId
         self.navigationController?.pushViewController(_controller, animated: true)
         
@@ -165,7 +165,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         }
        
         
-        var _d:NSDictionary = NSDictionary(objects: [MainAction._currentUser.objectForKey("userName") as! String,_to_userName,MainAction._currentUser.objectForKey("userId") as! String,_to_userId,__dict.objectForKey("text") as! String,MainAction._currentUser.objectForKey("profileImg") as! NSDictionary], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg"])
+        let _d:NSDictionary = NSDictionary(objects: [MainAction._currentUser.objectForKey("userName") as! String,_to_userName,MainAction._currentUser.objectForKey("userId") as! String,_to_userId,__dict.objectForKey("text") as! String,MainAction._currentUser.objectForKey("profileImg") as! NSDictionary], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg"])
         
         
         
@@ -183,7 +183,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         case _btn_cancel!:
             self.navigationController?.popViewControllerAnimated(true)
         default:
-            println(sender)
+            print(sender)
         }
         
     }

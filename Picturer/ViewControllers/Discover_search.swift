@@ -53,11 +53,11 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         
        _searchBar.frame = CGRect(x: 0, y: _barH, width: self.view.frame.width, height: _searchBarH)
         _searchBar.backgroundColor = UIColor(red: 201/255, green: 201/255, blue: 206/255, alpha: 1)
-        var _searchLableV:UIView = UIView(frame: CGRect(x: _gap, y: 7, width: self.view.frame.width-2*_gap, height: _searchBarH-14))
+        let _searchLableV:UIView = UIView(frame: CGRect(x: _gap, y: 7, width: self.view.frame.width-2*_gap, height: _searchBarH-14))
         _searchLableV.backgroundColor = UIColor.whiteColor()
         _searchLableV.layer.cornerRadius=5
         
-        var _icon:UIImageView = UIImageView(image: UIImage(named: "search_icon.png"))
+        let _icon:UIImageView = UIImageView(image: UIImage(named: "search_icon.png"))
         _icon.frame=CGRect(x: _gap, y: 10, width: 13, height: 13)
         
         _searchT.frame = CGRect(x: _gap+13+5, y: 1, width: self.view.frame.width-2*_gap-_gap, height: _searchBarH-14)
@@ -124,10 +124,10 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         _showSearchReference()
     }
     func textFieldDidEndEditing(textField: UITextField) {
-        println(_searchT.text)
+        print(_searchT.text)
     }
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        _showSearchResult(textField.text)
+        _showSearchResult(textField.text!)
         
         return true
     }
@@ -137,8 +137,8 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         return 2
     }
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var _view:UIView = UIView()
-        var _label:UILabel = UILabel(frame: CGRect(x: _gap, y: 0, width: self.view.frame.width-2*_gap, height: 30))
+        let _view:UIView = UIView()
+        let _label:UILabel = UILabel(frame: CGRect(x: _gap, y: 0, width: self.view.frame.width-2*_gap, height: 30))
         _label.font =  UIFont.systemFontOfSize(12)
         switch section{
         case 0:
@@ -180,7 +180,7 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         
-        var cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
+        let cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
         cell.textLabel?.font = UIFont.systemFontOfSize(16)
         //cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         
@@ -208,7 +208,7 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
             break
         }
     
-        var cell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        let cell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
         cell.selected=false
     }
     func clickAction(sender:UIButton){

@@ -174,8 +174,8 @@ class TransitioningObject: NSObject, UIViewControllerAnimatedTransitioning {
         let fromView : UIView = transitionContext.viewForKey(UITransitionContextFromViewKey)!
         let toView : UIView = transitionContext.viewForKey(UITransitionContextToViewKey)!
         
-        transitionContext.containerView().addSubview(fromView)
-        transitionContext.containerView().addSubview(toView)
+        transitionContext.containerView()!.addSubview(fromView)
+        transitionContext.containerView()!.addSubview(toView)
         
         //The "to" view with start "off screen" and slide left pushing the "from" view "off screen"
         
@@ -201,7 +201,7 @@ class TransitioningObject: NSObject, UIViewControllerAnimatedTransitioning {
         }
     }
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
         return 0.35
     }
 }

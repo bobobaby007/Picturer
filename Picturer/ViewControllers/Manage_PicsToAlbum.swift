@@ -209,7 +209,7 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
     //----选中相册index
     func _selectAlbumAt(index:Int){
         _albumIndex=index
-        var _n:Int = _albumCollection!.numberOfItemsInSection(0)
+        let _n:Int = _albumCollection!.numberOfItemsInSection(0)
         
         for var i = 0; i < _n; ++i{
             let cell:PicsShowCell? = _albumCollection!.cellForItemAtIndexPath(NSIndexPath(forItem: i, inSection: 0)) as? PicsShowCell
@@ -300,7 +300,7 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
             //self.view.window!.rootViewController!.presentViewController(_controller!, animated: true, completion: nil)
             self.navigationController?.pushViewController(_controller!, animated: true)
         default:
-            println(sender)
+            print(sender)
         }
         
     }

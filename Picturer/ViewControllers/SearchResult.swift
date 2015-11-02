@@ -132,7 +132,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell:SearchResult_user_Cell = tableView.dequeueReusableCellWithIdentifier("SearchResult_user_Cell", forIndexPath: indexPath) as! SearchResult_user_Cell
+        let cell:SearchResult_user_Cell = tableView.dequeueReusableCellWithIdentifier("SearchResult_user_Cell", forIndexPath: indexPath) as! SearchResult_user_Cell
         cell.setup(self.frame.width)
         cell._setUserImg((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("userImg") as! NSDictionary)
         
@@ -154,9 +154,9 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell:UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("collectionCell", forIndexPath: indexPath) as! UICollectionViewCell
+        let cell:UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("collectionCell", forIndexPath: indexPath) 
         
-        var _picV:PicView = PicView(frame:CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height))
+        let _picV:PicView = PicView(frame:CGRect(x: 0, y: 0, width: cell.frame.width, height: cell.frame.height))
         _picV._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         _picV.maximumZoomScale = 1
         _picV.minimumZoomScale = 1
@@ -186,7 +186,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
         }
         
     }
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

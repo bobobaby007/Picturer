@@ -88,7 +88,7 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         _tapG = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
         _imageView!.addGestureRecognizer(_tapG!)
         
-        var _tap2 = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+        let _tap2 = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
         _alumPicV!.addGestureRecognizer(_tap2)
         //println(_defaultWidth)
         _setuped=true
@@ -146,13 +146,13 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
     }
     
     func commentString(_commentDict:NSDictionary) -> NSAttributedString {
-        var boldFont = UIFont.boldSystemFontOfSize(UIFont.systemFontSize())
-        var boldAttr = [NSFontAttributeName: boldFont]
+        //let boldFont = UIFont.boldSystemFontOfSize(UIFont.systemFontSize())
+        //var boldAttr = [NSFontAttributeName: boldFont]
         //let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),
         //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
         let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor()]
         
-        var astr:NSMutableAttributedString = NSMutableAttributedString()
+        let astr:NSMutableAttributedString = NSMutableAttributedString()
         
         
         
@@ -181,9 +181,9 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         return astr
     }
     func linkString(string:String, withURLString:String) -> NSAttributedString {
-        var attrString = NSMutableAttributedString(string: string )
+        let attrString = NSMutableAttributedString(string: string )
         // the entire string
-        var range:NSRange = NSMakeRange(0, attrString.length)
+        let range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
         attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
         attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor.blueColor(), range:range)
@@ -193,17 +193,17 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
     }
     
     func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
-        var _action:String = URL.scheme!
-        println(_action)
+        let _action:String = URL.scheme
+        print(_action)
         switch _action{
         case "user":
-            let _str:String = URL.absoluteString!
+            let _str:String = URL.absoluteString
             let _userId:NSString =  (_str as NSString).substringFromIndex(5)
             _delegate?._viewUser(String(_userId))
         case "reply":
-            println("hahahah")
+            print("hahahah")
         default:
-            println("")
+            print("")
         }
         //println(URL.absoluteString)
         //println(URL.scheme)

@@ -75,7 +75,7 @@ class PicsShowCell:UICollectionViewCell{
         let _width=bounds.size.width/2
         _tag_view=UIImageView(frame: CGRect(x: bounds.size.width-_width, y:0, width: _width, height: _width))
         
-        var _tapRoc=UITapGestureRecognizer(target: self, action: Selector("clickAction:"))
+        let _tapRoc=UITapGestureRecognizer(target: self, action: Selector("clickAction:"))
         
         //self.userInteractionEnabled=true
         //_imgView.userInteractionEnabled=true
@@ -90,7 +90,7 @@ class PicsShowCell:UICollectionViewCell{
         
         
     }
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -113,7 +113,7 @@ class PicsShowCell:UICollectionViewCell{
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 
                 if asset != nil {
-                    self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
+                    self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue()))
                 }else{
                     self._setImage("entroLogo")//----用户删除时
                 }
@@ -121,7 +121,7 @@ class PicsShowCell:UICollectionViewCell{
                 //----self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
                 
                 }, failureBlock: { (error:NSError!) -> Void in
-                    println(error)
+                    print(error)
             })
             
         case "file":
@@ -137,12 +137,12 @@ class PicsShowCell:UICollectionViewCell{
                    
                     
                 }else{
-                    println("out")
+                    print("out")
                 }
                 
             })
         default:
-            println()
+            print("")
         }
     }
     func _setCornerRadius(__set:CGFloat){

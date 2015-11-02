@@ -140,7 +140,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         
         //---三角位置
         var size = CGRect()
-        var size2 = CGSize()
+        let size2 = CGSize()
         size = (_group.groupName+"").boundingRectWithSize(size2, options: NSStringDrawingOptions.UsesFontLeading, attributes: nil, context: nil);
         _img_arrow?.frame=CGRect(x: self.view.bounds.width/2+size.width,y: 32,width: 10,height: 10)
         
@@ -152,8 +152,8 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 let asset = DKAsset()
                 
                 //asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
-                var _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
-                let _url:NSString=_nsurl.absoluteString!
+                let _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
+                let _url:NSString=_nsurl.absoluteString
                 let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
                 //asset.originalAsset = result
                 self._images!.insertObject(_dict, atIndex: 0)
@@ -173,7 +173,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         func collectionView(collectionView: UICollectionView,
             cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
                 let identify:String = "PicsShowCell"
-                var cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
+                let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                     identify, forIndexPath: indexPath) as! PicsShowCell
                 
                 
@@ -185,7 +185,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                     let _pic:NSDictionary=_images?.objectAtIndex(indexPath.item-1) as! NSDictionary
                     
                     
-                    var _asset:DKAsset=_imageItems?.objectAtIndex(indexPath.item-1) as! DKAsset
+                    let _asset:DKAsset=_imageItems?.objectAtIndex(indexPath.item-1) as! DKAsset
                     
                     cell._selected = _asset._seleceted
 //                    
@@ -219,7 +219,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                 
                 presentViewController(_cameraPicker, animated: true, completion: nil)
             }else{
-                var _controller:Manage_pic = Manage_pic()
+                let _controller:Manage_pic = Manage_pic()
                 _controller._showIndexAtPics(indexPath.item-1, __array: _images!)
                
                 self.navigationController?.pushViewController(_controller, animated: true)
@@ -233,14 +233,14 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         
         //var _ps:NSMutableArray=NSMutableArray(array: _images!)
         
-        var _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _images?.objectAtIndex(pic._index!) as! NSDictionary)
+        let _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _images?.objectAtIndex(pic._index!) as! NSDictionary)
         _pic.setObject(pic._selected, forKey: "selected")
         
         
         
         _images![pic._index!]=_pic
         
-        var _asset:DKAsset=_imageItems?.objectAtIndex(pic._index!) as! DKAsset
+        let _asset:DKAsset=_imageItems?.objectAtIndex(pic._index!) as! DKAsset
         
         _asset._seleceted=pic._selected
        
@@ -281,16 +281,16 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     
     //----相机代理方法
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         _cameraPicker.dismissViewControllerAnimated(true, completion: nil)
        
         
         //_loadImagesAt(0)
         
-        var _alassetsl:ALAssetsLibrary = ALAssetsLibrary()
+        //var _alassetsl:ALAssetsLibrary = ALAssetsLibrary()
         //println(info)
         
-        let image:UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
+        //let image:UIImage = (info[UIImagePickerControllerOriginalImage] as? UIImage)!
         
         
         
@@ -304,11 +304,11 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         
        
         
-        UIImageWriteToSavedPhotosAlbum(info[UIImagePickerControllerOriginalImage] as? UIImage, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
+        UIImageWriteToSavedPhotosAlbum((info[UIImagePickerControllerOriginalImage] as? UIImage)!, self, Selector("image:didFinishSavingWithError:contextInfo:"), nil)
         //_cameraPicker.image = info[UIImagePickerControllerOriginalImage] as? UIImage
     }
     func cameraSaveOk(URL:NSURL, Error:NSError)->Void{
-        let _url:NSString=URL.absoluteString!
+        let _url:NSString=URL.absoluteString
         let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
         //asset.originalAsset = result
         self._images!.insertObject(_dict, atIndex: 0)
@@ -342,7 +342,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             //self.navigationController?.presentViewController(_groupPicker!, animated: true, completion: nil)
             self.presentViewController(_groupPicker!, animated: true, completion: nil)
         case _btn_ok!:
-            var _imgs:NSMutableArray=NSMutableArray()
+            let _imgs:NSMutableArray=NSMutableArray()
             
             let _c:Int = _images!.count
             
@@ -372,7 +372,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             
             
         default:
-            println("")
+            print("")
         }
     }
     override func viewWillAppear(animated: Bool) {

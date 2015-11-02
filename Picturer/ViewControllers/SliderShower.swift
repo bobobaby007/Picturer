@@ -53,7 +53,7 @@ class SliderShower: UIView,UIScrollViewDelegate{
         self.addSubview(_pageController!)
         
         for var i:Int = 0;i<_imagesArray?.count;++i{
-            var _picV:PicView = PicView(frame: CGRect(x: CGFloat(i)*self.bounds.width, y: 0, width: self.bounds.width, height: self.bounds.height))
+            let _picV:PicView = PicView(frame: CGRect(x: CGFloat(i)*self.bounds.width, y: 0, width: self.bounds.width, height: self.bounds.height))
             _scrollView?.addSubview(_picV)
             _picV._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
             _picV._setPic((_imagesArray?.objectAtIndex(i) as! NSDictionary).objectForKey("pic") as! NSDictionary, __block: { (__dict) -> Void in
@@ -77,7 +77,7 @@ class SliderShower: UIView,UIScrollViewDelegate{
     }
     //---停止挪动
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
+        let _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
         //scrollView.setContentOffset(CGPoint(x: CGFloat(_p)*self.frame.width, y: 0), animated: true)
         _pageController?.currentPage = _p
         
@@ -111,7 +111,7 @@ class SliderShower: UIView,UIScrollViewDelegate{
         _timer?.invalidate()
     }
    
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

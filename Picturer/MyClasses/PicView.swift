@@ -37,7 +37,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
             
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 if asset != nil {
-                    self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+                    self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
                 }else{
                     self._setImage("entroLogo")//----用户删除时
                 }
@@ -61,12 +61,12 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                     __block(NSDictionary())
                     
                 }else{
-                    println("out")
+                    print("out")
                 }
                 
             })
         default:
-            println()
+            print("")
         }
     }
     
@@ -86,7 +86,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         _imgView?.image=_img
         
     }
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

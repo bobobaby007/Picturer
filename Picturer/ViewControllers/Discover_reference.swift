@@ -69,7 +69,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
         _picW = (self.view.frame.width - 4*_gap+10)/4
         _sliderGapH = (_SectionH-_picW)/4
         
-        var _labelH = 3*_sliderGapH
+        let _labelH = 3*_sliderGapH
         
         
         var _view:UIView = UIView(frame: CGRect(x: 0, y: _barH+_sliderH+_sectionGap, width: self.view.frame.width, height: _SectionH))
@@ -80,7 +80,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
         _label.font=UIFont.systemFontOfSize(14)
         _view.addSubview(_label)
         
-        _btn_more_hotAlbum = UIButton.buttonWithType(UIButtonType.Custom) as? UIButton
+        _btn_more_hotAlbum = UIButton(type: UIButtonType.Custom)
         _btn_more_hotAlbum?.frame=CGRect(x: self.view.frame.width-50-_gap, y: 0, width: 80, height: _labelH)
         _btn_more_hotAlbum?.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
         _btn_more_hotAlbum?.titleLabel?.font = UIFont.systemFontOfSize(12)
@@ -100,7 +100,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
         _label.font=UIFont.systemFontOfSize(14)
         _view.addSubview(_label)
         
-        _btn_more_hotUser = UIButton.buttonWithType(UIButtonType.Custom) as? UIButton
+        _btn_more_hotUser = UIButton(type: UIButtonType.Custom)
         _btn_more_hotUser?.frame=CGRect(x: self.view.frame.width-50-_gap, y: 0, width: 80, height: _labelH)
         _btn_more_hotUser?.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
         _btn_more_hotUser?.titleLabel?.font = UIFont.systemFontOfSize(12)
@@ -121,7 +121,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
         _label.font=UIFont.systemFontOfSize(14)
         _view.addSubview(_label)
         
-        _btn_more_hotUser = UIButton.buttonWithType(UIButtonType.Custom) as? UIButton
+        _btn_more_hotUser = UIButton(type: UIButtonType.Custom)
         _btn_more_hotUser?.frame=CGRect(x: self.view.frame.width-50-_gap, y: 0, width: 80, height: _labelH)
         _btn_more_hotUser?.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
         _btn_more_hotUser?.titleLabel?.font = UIFont.systemFontOfSize(12)
@@ -139,7 +139,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
     
     func _getDatas(){
         MainAction._getAdvertisiongs { (array) -> Void in
-            _sliderShower?._setup(array)
+            self._sliderShower?._setup(array)
         }
         MainAction._getHotAlbums { (array) -> Void in
             self._hotAlbumArray = array
@@ -174,14 +174,14 @@ class Discover_search: UIViewController,ClickItemDelegate{
     
     
     func _hotAlbumsIn(){
-        var _n:Int = _hotAlbumArray!.count
-        var _scrollView:UIScrollView = UIScrollView(frame: CGRect(x: 0, y: 3*_sliderGapH, width: self.view.frame.width, height: _picW))
+        let _n:Int = _hotAlbumArray!.count
+        let _scrollView:UIScrollView = UIScrollView(frame: CGRect(x: 0, y: 3*_sliderGapH, width: self.view.frame.width, height: _picW))
         _scrollView.contentSize = CGSize(width: CGFloat(_n-1)*(_picW+_gap)+_gap, height: _picW)
         _scrollView.showsHorizontalScrollIndicator=false
         _scrollView.showsVerticalScrollIndicator=false
         
         for var i:Int = 0; i<_n-1;++i{
-            var _pic:ClickPicItem = ClickPicItem(frame: CGRect(x: CGFloat(i)*(_picW+_gap)+_gap, y: 0, width: _picW, height: _picW))
+            let _pic:ClickPicItem = ClickPicItem(frame: CGRect(x: CGFloat(i)*(_picW+_gap)+_gap, y: 0, width: _picW, height: _picW))
             _pic._index = i
             _pic._type = "hotAlbum"
             _pic._delegate = self
@@ -192,14 +192,14 @@ class Discover_search: UIViewController,ClickItemDelegate{
         
     }
     func _hotUsersIn(){
-        var _n:Int = _hotUserArray!.count
-        var _scrollView:UIScrollView = UIScrollView(frame: CGRect(x: 0, y: 3*_sliderGapH, width: self.view.frame.width, height: _picW))
+        let _n:Int = _hotUserArray!.count
+        let _scrollView:UIScrollView = UIScrollView(frame: CGRect(x: 0, y: 3*_sliderGapH, width: self.view.frame.width, height: _picW))
         _scrollView.contentSize = CGSize(width: CGFloat(_n-1)*(_picW+_gap)+_gap, height: _picW)
         _scrollView.showsHorizontalScrollIndicator=false
         _scrollView.showsVerticalScrollIndicator=false
         
         for var i:Int = 0; i<_n-1;++i{
-            var _pic:ClickUserItem = ClickUserItem(frame: CGRect(x: CGFloat(i)*(_picW+_gap)+_gap, y: 0, width: _picW, height: _picW))
+            let _pic:ClickUserItem = ClickUserItem(frame: CGRect(x: CGFloat(i)*(_picW+_gap)+_gap, y: 0, width: _picW, height: _picW))
             _pic._index = i
             _pic._type = "hotUser"
             _pic._delegate = self
@@ -211,14 +211,14 @@ class Discover_search: UIViewController,ClickItemDelegate{
         _hotUserView!.addSubview(_scrollView)
     }
     func _referenceAlbumsIn(){
-        var _n:Int = _referenceArray!.count
-        var _scrollView:UIScrollView = UIScrollView(frame: CGRect(x: 0, y: 3*_sliderGapH, width: self.view.frame.width, height: _picW))
+        let _n:Int = _referenceArray!.count
+        let _scrollView:UIScrollView = UIScrollView(frame: CGRect(x: 0, y: 3*_sliderGapH, width: self.view.frame.width, height: _picW))
         _scrollView.contentSize = CGSize(width: CGFloat(_n-1)*(_picW+_gap)+_gap, height: _picW)
         _scrollView.showsHorizontalScrollIndicator=false
         _scrollView.showsVerticalScrollIndicator=false
         
         for var i:Int = 0; i<_n-1;++i{
-            var _pic:ClickPicItem = ClickPicItem(frame: CGRect(x: CGFloat(i)*(_picW+_gap)+_gap, y: 0, width: _picW, height: _picW))
+            let _pic:ClickPicItem = ClickPicItem(frame: CGRect(x: CGFloat(i)*(_picW+_gap)+_gap, y: 0, width: _picW, height: _picW))
             _pic._index = i
             _pic._type = "referenceAlbum"
             _pic._delegate = self
@@ -236,7 +236,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
             case "hotAlbum":
                 MainAction._getPicsListAtAlbumId((_referenceArray!.objectAtIndex(__dict.objectForKey("index") as! Int) as! NSDictionary).objectForKey("albumId") as? String, block: { (array) -> Void in
                     
-                    var _controller:Social_pic = Social_pic()
+                    let _controller:Social_pic = Social_pic()
                     _controller._showIndexAtPics(0, __array: array)
                     
                    
@@ -244,7 +244,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
                 })
             return
         case "hotUser":            
-            var _controller:MyHomepage = MyHomepage()
+            let _controller:MyHomepage = MyHomepage()
             _controller._userId = (_hotUserArray!.objectAtIndex(__dict.objectForKey("index") as! Int) as! NSDictionary).objectForKey("userId") as! String
             (self.parentViewController?.view.superview?.nextResponder() as! UIViewController).navigationController?.pushViewController(_controller, animated: true)
             
@@ -252,7 +252,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
         case "referenceAlbum":
             
             MainAction._getPicsListAtAlbumId((_referenceArray!.objectAtIndex(__dict.objectForKey("index") as! Int) as! NSDictionary).objectForKey("albumId") as? String, block: { (array) -> Void in
-                var _controller:Social_pic = Social_pic()
+                let _controller:Social_pic = Social_pic()
                 _controller._showIndexAtPics(0, __array: array)
                 (self.parentViewController?.view.superview?.nextResponder() as! UIViewController).navigationController?.pushViewController(_controller, animated: true)
             })
@@ -307,7 +307,7 @@ class ClickPicItem: UIView {
         })
         
     }
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -317,7 +317,7 @@ class ClickUserItem:ClickPicItem {
     var _nameLabel:UILabel?
     override init(frame: CGRect) {
         super.init(frame: frame)
-        var _overV:UIView = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        let _overV:UIView = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         _overV.layer.cornerRadius = 5
         _overV.backgroundColor = UIColor(white: 0, alpha: 0.5)
         addSubview(_overV)
@@ -357,7 +357,7 @@ class ClickUserItem:ClickPicItem {
     func _setAlbumImage(__pic:NSDictionary){
         super._setPic(__pic)
     }
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

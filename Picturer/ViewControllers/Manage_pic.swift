@@ -207,11 +207,11 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     }
     
     func _clear(){
-        let _n = _scrollView.subviews.count
+        
         
         for view in _scrollView.subviews{
             view.removeFromSuperview()
-            println("remove")
+            print("remove")
         }
        // _scrollView?.removeFromSuperview()
     }
@@ -255,7 +255,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             _isScrolling=false
             
             
-            var _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
+            let _p:Int = Int(scrollView.contentOffset.x/scrollView.frame.width)
             
             _moveToPicByIndex(_p)
             
@@ -310,11 +310,11 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             case "edit":
                 openActions()
             default:
-                println("")
+                print("")
             }
             return
         default:
-            println(sender)
+            print(sender)
         }
         
     }
@@ -350,12 +350,12 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
 //        var _dict:NSDictionary = NSDictionary(object: _getPicAtIndex(_currentIndex!), forKey: "cover") as NSDictionary
 //        MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
         
-        var _alert:UIAlertView = UIAlertView(title: "设置封面成功", message: nil, delegate: nil, cancelButtonTitle: "确认")
+        let _alert:UIAlertView = UIAlertView(title: "设置封面成功", message: nil, delegate: nil, cancelButtonTitle: "确认")
         _alert.show()
     }
     //---打开描述编辑
     func changeDes(action:UIAlertAction!){
-        var _controller:Manage_description=Manage_description()
+        let _controller:Manage_description=Manage_description()
         
         
         
@@ -393,8 +393,8 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     }
     func saved(dict: NSDictionary) {
         
-        var _array:NSMutableArray = NSMutableArray(array: _picsArray!)
-        var _picDict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(_currentIndex!) as! NSDictionary)
+        let _array:NSMutableArray = NSMutableArray(array: _picsArray!)
+        let _picDict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(_currentIndex!) as! NSDictionary)
         
         if _albumIndex != nil{
             MainAction._changePicAtAlbum(_currentIndex!, albumIndex: _albumIndex!, dict: dict)
