@@ -16,8 +16,6 @@ class SocialAlbumCell :  UITableViewCell{
     var _desLable:UILabel?
     var _timeLable:UILabel?
     
-    
-    
     func setThumbImage(_image:NSString)->Void{
         _imageView=UIImageView(frame: CGRectMake(0, 0, self.bounds.width, self.bounds.height))
         _imageView?.contentMode=UIViewContentMode.ScaleAspectFill

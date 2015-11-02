@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -46,6 +47,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Uid-Rf-0n0" id="MwJ-Rd-goY">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="91.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
@@ -425,17 +427,18 @@
                                 <exclude reference="s4A-5j-5r3"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="NSC-cZ-st4"/>
+                                <exclude reference="2Jz-fW-2oi"/>
+                                <exclude reference="Inc-s8-6vX"/>
+                                <exclude reference="cov-R2-NdY"/>
+                                <exclude reference="hhh-f3-7DK"/>
+                                <exclude reference="oCe-NW-dA8"/>
                                 <exclude reference="6Op-YI-zwf"/>
                                 <exclude reference="9O0-rY-CP1"/>
                                 <exclude reference="TIa-8g-8iP"/>
                                 <exclude reference="VdE-NR-mr2"/>
                                 <exclude reference="ts8-VD-sql"/>
                                 <exclude reference="xvb-0C-6iu"/>
-                                <exclude reference="2Jz-fW-2oi"/>
-                                <exclude reference="Inc-s8-6vX"/>
-                                <exclude reference="cov-R2-NdY"/>
-                                <exclude reference="hhh-f3-7DK"/>
-                                <exclude reference="oCe-NW-dA8"/>
                                 <exclude reference="D5i-sT-mLb"/>
                                 <exclude reference="HRt-Xv-OgO"/>
                                 <exclude reference="O2e-w2-mVN"/>
@@ -444,7 +447,6 @@
                                 <exclude reference="lTc-sH-1I7"/>
                                 <exclude reference="qah-iA-bz0"/>
                                 <exclude reference="vBi-cZ-iI6"/>
-                                <exclude reference="NSC-cZ-st4"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -454,23 +456,23 @@
                                 <include reference="s4A-5j-5r3"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="NSC-cZ-st4"/>
+                                <include reference="Inc-s8-6vX"/>
+                                <include reference="cov-R2-NdY"/>
+                                <exclude reference="hhh-f3-7DK"/>
+                                <include reference="oCe-NW-dA8"/>
                                 <include reference="6Op-YI-zwf"/>
                                 <exclude reference="9O0-rY-CP1"/>
                                 <include reference="TIa-8g-8iP"/>
                                 <include reference="VdE-NR-mr2"/>
                                 <include reference="ts8-VD-sql"/>
                                 <include reference="xvb-0C-6iu"/>
-                                <include reference="Inc-s8-6vX"/>
-                                <include reference="cov-R2-NdY"/>
-                                <exclude reference="hhh-f3-7DK"/>
-                                <include reference="oCe-NW-dA8"/>
                                 <include reference="HRt-Xv-OgO"/>
                                 <exclude reference="QlE-A8-y1m"/>
                                 <exclude reference="fVQ-JT-qUl"/>
                                 <include reference="lTc-sH-1I7"/>
                                 <include reference="qah-iA-bz0"/>
                                 <exclude reference="vBi-cZ-iI6"/>
-                                <include reference="NSC-cZ-st4"/>
                             </mask>
                         </variation>
                     </view>
