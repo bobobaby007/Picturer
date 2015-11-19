@@ -62,7 +62,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _btn_share:UIButton = UIButton()
     var _btn_collect:UIButton = UIButton()
     
-    var _delegate:PicAlbumMessageItem_delegate?
+    weak var _delegate:PicAlbumMessageItem_delegate?
     
     var _cellH:CGFloat?
     

@@ -48,7 +48,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     var _btn_share:UIButton = UIButton()
     var _btn_collect:UIButton = UIButton()
     
-    var _delegate:CollectItem_delegate?
+    weak var _delegate:CollectItem_delegate?
     
     var _cellH:CGFloat?
     

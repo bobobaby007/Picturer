@@ -21,7 +21,7 @@ class Setting_power: UIViewController, UITableViewDelegate,UITableViewDataSource
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:Setting_powerDelegate?
+    weak var _delegate:Setting_powerDelegate?
     
     var _tableView:UITableView?
     let _tableCellH:CGFloat=40

@@ -21,7 +21,7 @@ class Setting_sample: UIViewController, UITableViewDelegate,UITableViewDataSourc
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:Setting_sampleDelegate?
+    weak var _delegate:Setting_sampleDelegate?
     
     var _tableView:UITableView?
     let _tableCellH:CGFloat=40

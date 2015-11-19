@@ -24,7 +24,7 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
     var _desT:UITextView?
     var _timeLable:UILabel?
     var _setuped:Bool=false
-    var _delegate:MessageList_Cell_delegate?
+    weak var _delegate:MessageList_Cell_delegate?
     var _alumPicV:PicView?
     var _albumId:String?
     var _tapG:UITapGestureRecognizer?

@@ -17,7 +17,6 @@ class MainAction: AnyObject {
     static let _ALBUM_LIST = "ALBUM_LIST"
     static var _aList:NSMutableArray?
     static var _tempAlbum:NSMutableDictionary?
-    
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{
@@ -90,16 +89,8 @@ class MainAction: AnyObject {
         _setDefault(_albumDict)
         return _albumDict
     }
-    
-    
-    
-    
-    
     //-----设置相册默认值-----
-    
-    
     static func _setDefault(_album:NSMutableDictionary){
-        
         if _album.objectForKey("title") == nil{
             _album.setObject("", forKey: "title")
         }
@@ -124,9 +115,7 @@ class MainAction: AnyObject {
         if _album.objectForKey("reply") == nil{
             _album.setObject(0, forKey: "reply")
         }
-        
     }
-
     //----直接从列表里按照位置删除
     static func _deleteAlbumAtIndex(index:Int){
         let _list:NSMutableArray=NSMutableArray(array:_albumList )
@@ -196,32 +185,16 @@ class MainAction: AnyObject {
     }
     //------修改相册里的某张图片
     static func _changePicAtAlbum(index:Int,albumIndex:Int,dict:NSDictionary){
-        
         let _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!
-        
-        
-        
         let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
-        
         let _img:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(index) as! NSDictionary)
-        
         for (key,value) in dict{
             //println(key,value)
             _img.setObject(value, forKey: key as! String)
         }
-        
         _images[index] = _img
-        
         _changeAlbumAtIndex(albumIndex, dict: NSDictionary(object: _images, forKey: "images"))
-        
     }
-    
-    
-    
-    
-    
-    
-    
     
     //=========================社交部分
     
@@ -234,29 +207,18 @@ class MainAction: AnyObject {
     }
     static var _currentUser:NSDictionary{
         get{
-            
-            
             let _dict:NSMutableDictionary = NSMutableDictionary()
             let _pic:NSDictionary =  NSDictionary(objects: ["file","user_1.jpg"], forKeys: ["type","url"])
-            
-            
             _dict.setObject(_pic, forKey: "profileImg")
-            
-            
             _dict.setObject("000000", forKey: "userId")
             _dict.setObject("小小白", forKey: "userName")
-            
             _dict.setObject(66, forKey: "albumNumber")
             _dict.setObject(12, forKey: "followNumber")
             _dict.setObject(30, forKey: "followingNumber")
             _dict.setObject("浪漫的实用主义  WeChat:tianlu_3213", forKey: "sign")
-            
-            
             return _dict
         }
     }
-    
-    
     //-----获取主页提示信息
     static func _getAlertsOfSocial(__block:(NSArray)->Void){
         let array:NSMutableArray = NSMutableArray()
@@ -269,11 +231,7 @@ class MainAction: AnyObject {
         array.addObject(NSDictionary(objects: [0,NSDictionary(objects: ["1.png","file"], forKeys: ["url","type"])], forKeys: ["num","pic"]))
         __block(array)
     }
-    
-    
     //----------相册图片列表
-    
-    
     
     //---------提取用户信息
     static func _getUserProfileAtId(userId:String) -> NSDictionary{
@@ -333,7 +291,6 @@ class MainAction: AnyObject {
         // println(response.text)
         block(_array)
     }
-    
     //-----提取某个相册评论－－－－－－//－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－过渡方法
     static func _getCommentsOfAlubm(__albumId:String?,block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
@@ -347,9 +304,6 @@ class MainAction: AnyObject {
         }
         //_n = 0
         for var i:Int = 0; i <= (_n-1);++i{
-            
-            
-            
             let _comment:String = _testComments?.objectAtIndex(random()%31) as! String
             let _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(random()%31) as! String,_testToUserNames?.objectAtIndex(i) as! String,"111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
 //            if i==0{
@@ -374,15 +328,12 @@ class MainAction: AnyObject {
             _n = 1
         }
         for var i:Int = 0; i < (_n-1);++i{
-            
-            
             var _dict:NSMutableDictionary
             if i==1||i==5||i==6{
                 _dict = NSMutableDictionary(objects: [_testUserNames!.objectAtIndex(random()%31) as! String,"111111"], forKeys: ["userName","userId"])
             }else{
                 _dict = NSMutableDictionary(objects: [_testUserNames!.objectAtIndex(random()%31) as! String,"111111"], forKeys: ["userName","userId"])
             }
-           
             _array.addObject(_dict)
         }
         // println(response.text)
@@ -392,7 +343,6 @@ class MainAction: AnyObject {
     static func _postLike(__dict:NSDictionary){
         
     }
-    
     //-----提取相册里的所有图片
     static func _getPicsListAtAlbumId(__albumId:String?,block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
@@ -419,7 +369,6 @@ class MainAction: AnyObject {
     }
     //-----获取相册里的所有图片＊＊＊＊暂时用本地信息替代在线信息
     static func _getPicsListAt(albumIndex:Int,block:(NSArray)->Void){
-        
         let _theA:NSArray = MainAction._getImagesOfAlbumIndex(albumIndex)!
         let _array:NSMutableArray = NSMutableArray()
         let _n:Int = _theA.count
@@ -443,22 +392,16 @@ class MainAction: AnyObject {
             }else{
                 _array.insertObject(_dict, atIndex: 0)
             }
-            
-            
         }
          
         block(_array)
     }
-    
-    
-    
     static func _getLikesOfPicId(__picId:String){
         
     }
     static func _getCommentsOfPicId(__picId:String){
         
     }
-    
     //-----提取热门图册
     static func _getHotAlbums(block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
@@ -475,7 +418,6 @@ class MainAction: AnyObject {
         // println(response.text)
         block(_array)
     }
-    
     //------提取热门用户
     static func _getHotUsers(block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
@@ -702,7 +644,7 @@ var _testComments:NSArray?=["拍的不错","你去哪了","又玩去了吗？","
 
 var _testDes:NSArray?=["小隐隐于山，大隐隐于市","向往宁静的生活，不过分的追名逐利。生活安详自得便好","一杯清茶泡禅意","淡淡的是一种意境，归隐是一种安逸。","喜欢这样淡淡的生活，喜欢这样的中庸。","别说我没有志气，我就是这样。","一人独钓一江水","这个是一个宣泄的地方，把孤单留在这里","用微笑去面对所有。","我不是佛，我做不到永远微笑，但是我会在背后默默的流泪。","一座城一生心疼","那些曾经让我感动，甚至现在还让我感动着的人们","带给我力量，给过我支持，尽管是虚拟的世界里","一些人一生追随","我爱的小哀,你执著的是什么？","那不是你的意愿，不是你的错啊…为什么要这样对你？","心疼你…如果能保护你","一颗心哀之永恒","也许风景哪里都好，那里的风景永远是最美的","一座城一生挂念","一个人走过的风风雨雨，","那个谁说的，一个人的旅行或许不叫旅行，叫流浪吧","那么，虽然我没有去过很多地方，但是，一个也曾去流浪了一些地方","浪迹天涯独自走","这些曾经或现在，出现在我生命中的人（还有未有照片的）","现在以及以后，或许在，或许不在","谢谢，你们给予我的那些温暖。","值得铭记的温暖"]
 
-////////////////////////////－－－－－－－字典变量保存
+////////////////////////////－－－－－－－字典变量索引
 /*
 
 UserProfileDict:

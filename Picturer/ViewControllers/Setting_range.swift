@@ -21,7 +21,7 @@ class Setting_range: UIViewController, UITableViewDelegate,UITableViewDataSource
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:Setting_rangeDelegate?
+    weak var _delegate:Setting_rangeDelegate?
     
     var _tableView:UITableView?
     let _tableCellH:CGFloat=40

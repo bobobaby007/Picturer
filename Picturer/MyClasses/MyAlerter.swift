@@ -23,12 +23,13 @@ class MyAlerter: UIViewController {
     var _menus:NSArray?
     var _container:UIView?
     var _bottomHeight:CGFloat = 57
+    var _cancelButtonHeight:CGFloat = 50
     var _topToY:CGFloat = 0
-    var _delegate:MyAlerter_delegate?
+    weak var _delegate:MyAlerter_delegate?
     var _bg:UIView?
     var _tap:UITapGestureRecognizer?
     var _isOpened:Bool = false
-    
+    var _canelButton:UIButton?
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -40,6 +41,7 @@ class MyAlerter: UIViewController {
         }
         
         _container = UIView()
+        
         
         _tap = UITapGestureRecognizer(target: self, action: "tapHander:")
         
@@ -60,19 +62,20 @@ class MyAlerter: UIViewController {
             self.view.addSubview(_container!)
         }
         
-        _container!.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: CGFloat(_menus!.count) * _gap)
-        _container?.backgroundColor = UIColor.whiteColor()
+        _container!.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: CGFloat(_menus!.count) * _gap+_bottomHeight)
+        _container?.backgroundColor = UIColor.lightGrayColor()
         
         for subV in _container!.subviews {
             subV.removeFromSuperview()
         }
         
         
-        _topToY = self.view.frame.height - _bottomHeight - _container!.frame.height
+        _topToY = self.view.frame.height  - _container!.frame.height
         
         for i in 0..._menus!.count-1{
             let _v:UIButton = UIButton(frame: CGRect(x: 0, y: CGFloat(i)*_gap, width: self.view.frame.width, height: _gap))
             _v.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            _v.backgroundColor = UIColor.whiteColor()
             _v.titleLabel?.font = UIFont.systemFontOfSize(18)
             _v.setTitle(_menus!.objectAtIndex(i) as? String, forState: UIControlState.Normal)
             _v.tag = 100+i
@@ -83,19 +86,26 @@ class MyAlerter: UIViewController {
                 _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
                 _container?.addSubview(_line)
             }
-            
-            
         }
+        _canelButton = UIButton(frame: CGRect(x: 0, y: _container!.frame.height - _cancelButtonHeight, width: self.view.frame.width, height: _cancelButtonHeight))
+        _canelButton!.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        _canelButton!.titleLabel?.font = UIFont.systemFontOfSize(18)
+        _canelButton!.backgroundColor = UIColor.blackColor()
+        _canelButton!.setTitle("取消", forState: UIControlState.Normal)
+        _canelButton!.addTarget(self, action: "_buttonHander:", forControlEvents: UIControlEvents.TouchUpInside)
+        _canelButton!.tag = -100
+        _container?.addSubview(_canelButton!)
+        
     }
-    
-    
-    
-    
     func tapHander(__tap:UITapGestureRecognizer){
         _close()
     }
     func _buttonHander(__sender:UIButton){
         _close()
+        if __sender.tag == -100{
+            return
+        }
+        
         _delegate?._myAlerterClickAtMenuId(__sender.tag-100)
     }
     func _show(){
@@ -122,6 +132,10 @@ class MyAlerter: UIViewController {
             
             self._bg?.hidden = true
             self._delegate?._myAlerterDidClose()
+            
+            self.view.removeFromSuperview()
+            self.removeFromParentViewController()
+            
         }
     }
     

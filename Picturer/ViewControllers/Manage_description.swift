@@ -16,7 +16,7 @@ protocol Manage_description_delegate:NSObjectProtocol{
 }
 
 class Manage_description: UIViewController,UITextViewDelegate {
-    var _delegate:Manage_description_delegate?
+    weak var _delegate:Manage_description_delegate?
     var _topBar:UIView?
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?

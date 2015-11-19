@@ -23,8 +23,8 @@ class PicsShowCell:UICollectionViewCell{
     var _tag_view:UIImageView!
     var _index:Int?
     
-    var _delegate:PicsShowCellDelegate?
-    
+    weak var _delegate:PicsShowCellDelegate?
+   
     
     var _hasTag:Bool=false{
 //        get{
@@ -93,9 +93,6 @@ class PicsShowCell:UICollectionViewCell{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
     func clickAction(sender:UITapGestureRecognizer){
         self._selected = !self._selected
         _delegate?.PicDidSelected(self)
@@ -107,6 +104,8 @@ class PicsShowCell:UICollectionViewCell{
 //        }
     }
     func _setPic(__pic:NSDictionary){
+        
+        
         switch __pic.objectForKey("type") as! String{
         case "alasset":
             let _al:ALAssetsLibrary=ALAssetsLibrary()
@@ -126,7 +125,6 @@ class PicsShowCell:UICollectionViewCell{
             
         case "file":
             self._setImage(__pic.objectForKey("url") as! String)
-            
         case "fromWeb":
             ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
                 // _setImage(image)

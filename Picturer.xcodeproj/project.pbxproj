@@ -32,6 +32,21 @@
 		7A23A96A1B3E7913009B2E53 /* icon_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A23A9631B3E7913009B2E53 /* icon_6.png */; };
 		7A23A96B1B3E7913009B2E53 /* icon_7.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A23A9641B3E7913009B2E53 /* icon_7.png */; };
 		7A2922B21B6A66AB0031B2F2 /* MessageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2922B11B6A66AB0031B2F2 /* MessageList.swift */; };
+		7A2925781BF9C24400A71EB4 /* ImportImageFromWebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2925771BF9C24400A71EB4 /* ImportImageFromWebController.swift */; };
+		7A2925791BF9C24400A71EB4 /* ImportImageFromWebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2925771BF9C24400A71EB4 /* ImportImageFromWebController.swift */; };
+		7A29257F1BF9C98D00A71EB4 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A29257B1BF9C98D00A71EB4 /* libWeChatSDK.a */; };
+		7A2925801BF9C98D00A71EB4 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A29257B1BF9C98D00A71EB4 /* libWeChatSDK.a */; };
+		7A2925811BF9C98D00A71EB4 /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7A29257C1BF9C98D00A71EB4 /* read_me.txt */; };
+		7A2925821BF9C98D00A71EB4 /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7A29257C1BF9C98D00A71EB4 /* read_me.txt */; };
+		7A2925851BF9CD7500A71EB4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2925841BF9CD7500A71EB4 /* SystemConfiguration.framework */; };
+		7A2925871BF9CDBF00A71EB4 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2925861BF9CDBF00A71EB4 /* libz.tbd */; };
+		7A2925891BF9CDD100A71EB4 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2925881BF9CDD100A71EB4 /* libsqlite3.0.tbd */; };
+		7A29258B1BF9DA5200A71EB4 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A29258A1BF9DA5200A71EB4 /* libc++.tbd */; };
+		7A29258D1BF9DADA00A71EB4 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A29258C1BF9DADA00A71EB4 /* CoreTelephony.framework */; };
+		7A39E9B11BEC9E02007C0381 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A39E9B01BEC9E02007C0381 /* CameraPreview.swift */; };
+		7A39E9B21BEC9E02007C0381 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A39E9B01BEC9E02007C0381 /* CameraPreview.swift */; };
+		7A39E9B41BECB37A007C0381 /* PicsShowCellOfCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A39E9B31BECB37A007C0381 /* PicsShowCellOfCamera.swift */; };
+		7A39E9B51BECB37A007C0381 /* PicsShowCellOfCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A39E9B31BECB37A007C0381 /* PicsShowCellOfCamera.swift */; };
 		7A45766D1B5CA11500DDE09A /* PicAlbumMessageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A45766C1B5CA11500DDE09A /* PicAlbumMessageItem.swift */; };
 		7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A49DC961B3544A7004FAF14 /* Manage_imagePicker.swift */; };
 		7A49DC9A1B354DB4004FAF14 /* pic_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A49DC981B354DB4004FAF14 /* pic_selected.png */; };
@@ -216,6 +231,19 @@
 		7A23A9631B3E7913009B2E53 /* icon_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_6.png; sourceTree = "<group>"; };
 		7A23A9641B3E7913009B2E53 /* icon_7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_7.png; sourceTree = "<group>"; };
 		7A2922B11B6A66AB0031B2F2 /* MessageList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageList.swift; sourceTree = "<group>"; };
+		7A2925771BF9C24400A71EB4 /* ImportImageFromWebController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportImageFromWebController.swift; sourceTree = "<group>"; };
+		7A29257B1BF9C98D00A71EB4 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		7A29257C1BF9C98D00A71EB4 /* read_me.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = read_me.txt; sourceTree = "<group>"; };
+		7A29257D1BF9C98D00A71EB4 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		7A29257E1BF9C98D00A71EB4 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		7A2925831BF9CC0000A71EB4 /* WechatDemo_Bridging_Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatDemo_Bridging_Header.h; sourceTree = "<group>"; };
+		7A2925841BF9CD7500A71EB4 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7A2925861BF9CDBF00A71EB4 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		7A2925881BF9CDD100A71EB4 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		7A29258A1BF9DA5200A71EB4 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		7A29258C1BF9DADA00A71EB4 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		7A39E9B01BEC9E02007C0381 /* CameraPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		7A39E9B31BECB37A007C0381 /* PicsShowCellOfCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicsShowCellOfCamera.swift; sourceTree = "<group>"; };
 		7A45766C1B5CA11500DDE09A /* PicAlbumMessageItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicAlbumMessageItem.swift; sourceTree = "<group>"; };
 		7A49DC961B3544A7004FAF14 /* Manage_imagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_imagePicker.swift; sourceTree = "<group>"; };
 		7A49DC981B354DB4004FAF14 /* pic_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic_selected.png; sourceTree = "<group>"; };
@@ -331,6 +359,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A29258D1BF9DADA00A71EB4 /* CoreTelephony.framework in Frameworks */,
+				7A29258B1BF9DA5200A71EB4 /* libc++.tbd in Frameworks */,
+				7A2925891BF9CDD100A71EB4 /* libsqlite3.0.tbd in Frameworks */,
+				7A2925871BF9CDBF00A71EB4 /* libz.tbd in Frameworks */,
+				7A2925851BF9CD7500A71EB4 /* SystemConfiguration.framework in Frameworks */,
+				7A29257F1BF9C98D00A71EB4 /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +372,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A2925801BF9C98D00A71EB4 /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +394,25 @@
 				7A45766A1B5CA01700DDE09A /* Social */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		7A2925761BF9C21F00A71EB4 /* ImportImageFromWeb */ = {
+			isa = PBXGroup;
+			children = (
+				7A2925771BF9C24400A71EB4 /* ImportImageFromWebController.swift */,
+			);
+			path = ImportImageFromWeb;
+			sourceTree = "<group>";
+		};
+		7A29257A1BF9C98D00A71EB4 /* SDKExport */ = {
+			isa = PBXGroup;
+			children = (
+				7A29257B1BF9C98D00A71EB4 /* libWeChatSDK.a */,
+				7A29257C1BF9C98D00A71EB4 /* read_me.txt */,
+				7A29257D1BF9C98D00A71EB4 /* WXApi.h */,
+				7A29257E1BF9C98D00A71EB4 /* WXApiObject.h */,
+			);
+			path = SDKExport;
 			sourceTree = "<group>";
 		};
 		7A45766A1B5CA01700DDE09A /* Social */ = {
@@ -399,6 +453,7 @@
 		7A45766E1B5CA7E900DDE09A /* components */ = {
 			isa = PBXGroup;
 			children = (
+				7A2925761BF9C21F00A71EB4 /* ImportImageFromWeb */,
 				7A0A15D41B5E2D0B00A8C6F6 /* SwiftImageLoader-master */,
 			);
 			path = components;
@@ -410,6 +465,7 @@
 				7A9C86C71B32DD490051D067 /* AlbumListCell.swift */,
 				7AA180A41B34034D005B42C0 /* CustomLayout.swift */,
 				7AA180A61B341006005B42C0 /* PicsShowCell.swift */,
+				7A39E9B31BECB37A007C0381 /* PicsShowCellOfCamera.swift */,
 				7AEC21291B3DA09600D19D22 /* SocialAlbumCell.swift */,
 				7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */,
 				7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */,
@@ -421,6 +477,7 @@
 				7AAD75E71B843459007C0CB1 /* MyAlerter.swift */,
 				7AAD76021B84BF2B007C0CB1 /* ShareAlert.swift */,
 				7AAD75F01B846027007C0CB1 /* Navi_Delegate.swift */,
+				7A39E9B01BEC9E02007C0381 /* CameraPreview.swift */,
 			);
 			path = MyClasses;
 			sourceTree = "<group>";
@@ -556,6 +613,11 @@
 		7ADD4FFA1B2D402000E44F99 = {
 			isa = PBXGroup;
 			children = (
+				7A29258C1BF9DADA00A71EB4 /* CoreTelephony.framework */,
+				7A29258A1BF9DA5200A71EB4 /* libc++.tbd */,
+				7A2925881BF9CDD100A71EB4 /* libsqlite3.0.tbd */,
+				7A2925861BF9CDBF00A71EB4 /* libz.tbd */,
+				7A2925841BF9CD7500A71EB4 /* SystemConfiguration.framework */,
 				7ADD50051B2D402000E44F99 /* Picturer */,
 				7ADD501E1B2D402000E44F99 /* PicturerTests */,
 				7ADD50041B2D402000E44F99 /* Products */,
@@ -574,6 +636,7 @@
 		7ADD50051B2D402000E44F99 /* Picturer */ = {
 			isa = PBXGroup;
 			children = (
+				7A29257A1BF9C98D00A71EB4 /* SDKExport */,
 				7A9C86B51B324F060051D067 /* MyClasses */,
 				7A0C1DBD1B307A9200C52A5D /* ViewControllers */,
 				7A45766E1B5CA7E900DDE09A /* components */,
@@ -586,6 +649,7 @@
 				7ADD50141B2D402000E44F99 /* LaunchScreen.xib */,
 				7ADD500A1B2D402000E44F99 /* Picturers.xcdatamodeld */,
 				7ADD50061B2D402000E44F99 /* Supporting Files */,
+				7A2925831BF9CC0000A71EB4 /* WechatDemo_Bridging_Header.h */,
 			);
 			path = Picturer;
 			sourceTree = "<group>";
@@ -754,6 +818,7 @@
 				7AAD75EF1B845D6D007C0CB1 /* startScreen.png in Resources */,
 				7AB251A21B7F4B0F0029ED80 /* user_3.jpg in Resources */,
 				7AB251941B7F4B010029ED80 /* pic_1.JPG in Resources */,
+				7A2925811BF9C98D00A71EB4 /* read_me.txt in Resources */,
 				7AA7AEED1B732C4700FF7EBC /* blank.png in Resources */,
 				7A49DC9B1B354DB4004FAF14 /* pic_unSelected.png in Resources */,
 				7AB251B41B7F4F5F0029ED80 /* ad_2.jpg in Resources */,
@@ -812,6 +877,7 @@
 				7AA7AEF21B735B0F00FF7EBC /* back.png in Resources */,
 				7AA7AEE41B73094F00FF7EBC /* camera.png in Resources */,
 				7A8E3E051B4B9A7200243FA5 /* addIcon.png in Resources */,
+				7A2925821BF9C98D00A71EB4 /* read_me.txt in Resources */,
 				7A1FF2471B4AE48300CEFDAF /* newAlbum.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -824,6 +890,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AA7AED61B72730800FF7EBC /* UserListCell.swift in Sources */,
+				7A39E9B11BEC9E02007C0381 /* CameraPreview.swift in Sources */,
 				7A9CD0AB1B7EFE7300152C61 /* CollectItem.swift in Sources */,
 				7AA26BB01B4D9A34006CDC61 /* Setting_power.swift in Sources */,
 				7AA180A51B34034D005B42C0 /* CustomLayout.swift in Sources */,
@@ -846,8 +913,10 @@
 				7A6F8A871B62AC29007F949A /* Discover_home.swift in Sources */,
 				7A508EFB1B65F6F0000FCA87 /* CommentList_Cell.swift in Sources */,
 				7A9C86C81B32DD490051D067 /* AlbumListCell.swift in Sources */,
+				7A39E9B41BECB37A007C0381 /* PicsShowCellOfCamera.swift in Sources */,
 				7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */,
 				7A6F8A8C1B62AF14007F949A /* Discover_reference.swift in Sources */,
+				7A2925781BF9C24400A71EB4 /* ImportImageFromWebController.swift in Sources */,
 				7AFE77241B6B9A940021E35E /* Social_pic.swift in Sources */,
 				7ACFB3851B591A21007F9AB8 /* Manage_PicsToAlbum.swift in Sources */,
 				7AEC21281B3D9CE800D19D22 /* Social_home.swift in Sources */,
@@ -884,6 +953,9 @@
 				7AA26BB41B4D9A57006CDC61 /* Setting_range.swift in Sources */,
 				7AA26BB11B4D9A34006CDC61 /* Setting_power.swift in Sources */,
 				7AC9B1331B724D8400D05787 /* MainAction.swift in Sources */,
+				7A39E9B21BEC9E02007C0381 /* CameraPreview.swift in Sources */,
+				7A39E9B51BECB37A007C0381 /* PicsShowCellOfCamera.swift in Sources */,
+				7A2925791BF9C24400A71EB4 /* ImportImageFromWebController.swift in Sources */,
 				7ADD50221B2D402000E44F99 /* PicturersTests.swift in Sources */,
 				7AA26BAE1B4D9A15006CDC61 /* Setting_reply.swift in Sources */,
 			);
@@ -939,6 +1011,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -958,10 +1031,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -985,6 +1058,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -999,7 +1073,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
@@ -1009,12 +1083,20 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Picturer/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Picturer/SDKExport",
+				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.4view.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Picturer;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = Picturer/WechatDemo_Bridging_Header.h;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -1024,12 +1106,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Picturer/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Picturer/SDKExport",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.4view.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Picturer;
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = Picturer/WechatDemo_Bridging_Header.h;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
@@ -1047,6 +1136,10 @@
 				);
 				INFOPLIST_FILE = PicturerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Picturer/SDKExport",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.4view.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = PicturerTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Picturer.app/Picturer";
@@ -1063,6 +1156,10 @@
 				);
 				INFOPLIST_FILE = PicturerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Picturer/SDKExport",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "cn.4view.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = PicturerTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Picturer.app/Picturer";

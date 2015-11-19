@@ -36,13 +36,15 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     
     var _cameraImage:NSDictionary?
     
-    var _delegate:Manage_home_delegate!
+    weak var _delegate:Manage_home_delegate!
     
     var _blurV:UIImageView?
     var _whiteBg:UIView?
     var _isOuting:Bool = false
     var _isChanging:Bool = false
     var _logoAnimation:LogoAnimation?
+    
+    var _setuped:Bool = false
     
     @IBAction func btnHander(btn:UIButton){
         switch btn{
@@ -373,6 +375,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         self.addChildViewController(_alerter!)
         self.view.insertSubview(_alerter!.view, belowSubview: _bottomView)
         _alerter?._setMenus(["创建图册","添加图片","抓取网页"])
+        _alerter?._canelButton?.hidden=true
         _alerter?._show()
         
         UIView.animateWithDuration(0.4, animations: { () -> Void in
@@ -426,6 +429,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         _shareAlert?.view.removeFromSuperview()
         _shareAlert?.removeFromParentViewController()
+        
+        _alerter = nil
     }
     
     
@@ -606,13 +611,18 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
 
        // println(MainAction._albumList)
         super.viewDidLoad()
-        
-        
+        setup()
+       // _tableView.separatorColor=UIColor.clearColor()
+    }
+    
+    func setup(){
+        if _setuped{
+            return
+        }
         if _blurV ==  nil{
             //let blurEffect:UIBlurEffect=UIBlurEffect(style: UIBlurEffectStyle.Dark)
             _blurV = UIImageView(image: UIImage(named: "blurBg.jpg"))
             _blurV?.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height)
-            
             self.view.insertSubview(_blurV!, belowSubview: _tableView)
             _whiteBg = UIView(frame: CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height))
             _whiteBg?.backgroundColor = UIColor.whiteColor()
@@ -624,7 +634,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _tableView.backgroundColor = UIColor.clearColor()
             _tableView.tableFooterView?.backgroundColor = UIColor.whiteColor()
             self.view.backgroundColor = UIColor.clearColor()
-             self.automaticallyAdjustsScrollViewInsets=false
+            self.automaticallyAdjustsScrollViewInsets=false
             
             
             _logoAnimation = LogoAnimation()
@@ -635,11 +645,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             
             self.view.insertSubview(_logoAnimation!.view, aboveSubview: _blurV!)
             self.view.insertSubview(_whiteBg!, aboveSubview: _blurV!)
-            
-            
         }
         
-       // _tableView.separatorColor=UIColor.clearColor()
+        _setuped = true
     }
     override func viewDidAppear(animated: Bool) {
         //UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent

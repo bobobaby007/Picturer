@@ -33,7 +33,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     var _alertDicts:NSMutableArray?
     
-    var _delegate:Social_home_delegate?
+    weak var _delegate:Social_home_delegate?
     
     var layout:LayoutForSocailHome?
     var bgColorV:UIView?

@@ -39,7 +39,7 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
     var _albumCollection:UICollectionView?
     
     
-    var _delegate:Manage_PicsToAlbumDelegate?
+    weak var _delegate:Manage_PicsToAlbumDelegate?
     
     
     var _savingDict:NSMutableDictionary?

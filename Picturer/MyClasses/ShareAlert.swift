@@ -24,7 +24,7 @@ class ShareAlert: UIViewController {
     var _container:UIView?
     var _bottomHeight:CGFloat = 57
     var _topToY:CGFloat = 0
-    var _delegate:ShareAlert_delegate?
+    weak var _delegate:ShareAlert_delegate?
     var _bg:UIView?
     var _tap:UITapGestureRecognizer?
     var _isOpened:Bool = false

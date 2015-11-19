@@ -16,16 +16,16 @@ protocol Manage_show_delegate:NSObjectProtocol{
     func canceld()
 }
 
-class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PicsShowCellDelegate,UIAlertViewDelegate,ImagePickerDeletegate,Manage_pic_delegate{
+class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PicsShowCellDelegate,UIAlertViewDelegate,ImagePickerDeletegate,Manage_pic_delegate,MyAlerter_delegate{
     
     @IBOutlet weak var _btn_back:UIButton?
     @IBOutlet weak var _collectionView:UICollectionView!
     @IBOutlet weak var _titleButton:UIButton?
     @IBOutlet weak var _btn_edit:UIButton?
     
-    
+    var _alerter:MyAlerter?
     let _barH:CGFloat = 64
-    var _delegate:Manage_show_delegate?
+    weak var _delegate:Manage_show_delegate?
     
     let _action_normal:String="normal"
     let _action_delete:String="delete"
@@ -65,9 +65,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
 
         }
     }
-    
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         setup()
         self.automaticallyAdjustsScrollViewInsets=false
@@ -107,7 +105,6 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             return cell
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-          
         switch _currentAction{
         case _action_normal:
             print("")
@@ -323,19 +320,48 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     //-----弹出选择按钮
     func openActions()->Void{
-        //let rateMenu = UIAlertController(title: "新建相册", message: "选择一种新建方式", preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let menu=UIAlertController()
         
-        let action1 = UIAlertAction(title: "添加", style: UIAlertActionStyle.Default, handler: gotoAdd)
-        let action2 = UIAlertAction(title: "删除", style: UIAlertActionStyle.Default, handler: gotoDelete)
-        let action3 = UIAlertAction(title: "分享", style: UIAlertActionStyle.Default, handler: gotoShare)
-        let action4 = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil)
-        menu.addAction(action1)
-        menu.addAction(action2)
-        menu.addAction(action3)
-        menu.addAction(action4)
-        self.presentViewController(menu, animated: true, completion: nil)
+        if _alerter == nil{
+            _alerter = MyAlerter()
+            _alerter?._delegate = self
+        }
+        self.addChildViewController(_alerter!)
+        self.view.addSubview(_alerter!.view)
+        _alerter?._setMenus(["添加","删除","分享"])
+        
+        _alerter?._show()
+        
+        
     }
+    
+    //----弹出选择按钮代理
+    func _myAlerterClickAtMenuId(__id: Int) {
+        switch __id{
+        case 0:
+            self.gotoAdd()
+            break
+        case 1:
+            self.gotoDelete()
+            break
+        case 2:
+            self.gotoShare()
+            break
+        default:
+            break
+        }
+    }
+    func _myAlerterDidClose() {
+        _alerter?.view.removeFromSuperview()
+        _alerter?.removeFromParentViewController()
+        _alerter = nil
+    }
+    func _myAlerterStartToClose() {
+        
+    }
+    func _myAlerterDidShow() {
+        
+    }
+    
     
     //-----选择相册代理
     func imagePickerDidSelected(images: NSArray) {
@@ -358,7 +384,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
 
     //---打开添加窗口
-    func gotoAdd(action:UIAlertAction!) -> Void{
+    func gotoAdd() -> Void{
         let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
         var _controller:Manage_imagePicker?
         _controller=storyboard.instantiateViewControllerWithIdentifier("Manage_imagePicker") as? Manage_imagePicker
@@ -366,12 +392,42 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         //self.view.window!.rootViewController!.presentViewController(_controller!, animated: true, completion: nil)
         self.navigationController?.pushViewController(_controller!, animated: true)
     }
-    func gotoDelete(action:UIAlertAction!)->Void{
+    func gotoDelete()->Void{
         _changeActionTo(_action_delete)
     }
-    func gotoShare(action:UIAlertAction!)->Void{
-        
-        
+    func gotoShare()->Void{
+        //sendWXContentUser()
+     sendWXContentFriend()
+    }
+    
+    func sendWXContentUser() {//分享给朋友！！
+        let message:WXMediaMessage = WXMediaMessage()
+        message.title = "分享图片：--"
+        message.description = "描述"
+        message.setThumbImage(UIImage(named: "icon_3.png"));
+        let ext:WXWebpageObject = WXWebpageObject();
+        ext.webpageUrl = "http://4view.cn"
+        message.mediaObject = ext
+        let resp = GetMessageFromWXResp()
+        resp.message = message
+        WXApi.sendResp(resp);
+    }
+    
+    func sendWXContentFriend() {//分享朋友圈
+        let message:WXMediaMessage = WXMediaMessage()
+        message.title = "分享图片："
+        message.description = ""
+        message.setThumbImage(UIImage(named: "icon_3.png"));
+        let ext:WXWebpageObject = WXWebpageObject();
+        ext.webpageUrl = "http://4view.cn"
+        message.mediaObject = ext
+        message.mediaTagName = "摄影"
+        let req = SendMessageToWXReq()
+        req.scene = 1
+        req.text = "分享图片："
+        req.bText = false
+        req.message = message
+        WXApi.sendReq(req);
     }
     
     override func viewWillAppear(animated: Bool) {

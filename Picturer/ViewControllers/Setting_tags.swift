@@ -21,7 +21,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:Setting_tagsDelegate?
+    weak var _delegate:Setting_tagsDelegate?
     
     
     var _inputText:UITextField?

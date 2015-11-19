@@ -19,7 +19,7 @@ protocol Inputer_delegate:NSObjectProtocol{
 
 class Inputer: UIView,UITextViewDelegate {
     
-    var _delegate:Inputer_delegate?
+    weak var _delegate:Inputer_delegate?
     
     var _placeHold:String = "输入文字"{
         didSet{

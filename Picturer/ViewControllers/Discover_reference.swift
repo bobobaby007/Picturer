@@ -276,7 +276,7 @@ protocol ClickItemDelegate:NSObjectProtocol{
 
 class ClickPicItem: UIView {
     var _pic:PicView?
-    var _delegate:ClickItemDelegate?
+    weak var _delegate:ClickItemDelegate?
     var _type:String?
     var _index:Int?
     var _tapG:UITapGestureRecognizer?

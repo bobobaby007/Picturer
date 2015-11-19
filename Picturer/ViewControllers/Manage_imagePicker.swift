@@ -58,7 +58,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     
         var _groupPicker:groupPickerController?
         var _cameraPicker: UIImagePickerController!
-        var _delegate:ImagePickerDeletegate?
+        weak var _delegate:ImagePickerDeletegate?
     
         lazy private var library: ALAssetsLibrary = {
             return ALAssetsLibrary()
@@ -73,7 +73,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         var _imageItems:NSMutableArray?=[]
        var _firstLoaded:Bool=true
     
-    
+        var _cameraCell:PicsShowCellOfCamera?
     
         
         override func viewDidLoad() {
@@ -83,7 +83,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
             let layout = CustomLayout()
             _collectionView.collectionViewLayout=layout
             _collectionView.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
-            
+            _collectionView.registerClass(PicsShowCellOfCamera.self, forCellWithReuseIdentifier: "PicsShowCellOfCamera")
             
             
             library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
@@ -99,10 +99,6 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                         assetGroup.groupName = groupName
                         assetGroup.thumbnail = UIImage(CGImage: group.posterImage().takeUnretainedValue())
                         assetGroup.group = group
-                        
-                        
-                        
-                        
                         self._groups.insertObject(assetGroup, atIndex: 0)
                         
                         if self._firstLoaded{
@@ -112,11 +108,6 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                         
                       //  self._groups.addObject(assetGroup)
                     }
-                    
-                    
-                    
-                    
-                    
                     
                 } else {
                     
@@ -146,11 +137,7 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         
         _group.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
-                
-                
-                
                 let asset = DKAsset()
-                
                 //asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
                 let _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
                 let _url:NSString=_nsurl.absoluteString
@@ -166,27 +153,24 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         }
 
     }
-    
         func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return _images!.count+1;
         }
         func collectionView(collectionView: UICollectionView,
             cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-                let identify:String = "PicsShowCell"
-                let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
-                    identify, forIndexPath: indexPath) as! PicsShowCell
-                
                 
                 if indexPath.item==0{
-                    cell._setImage("camara.png")
-                    cell._hasTag=false
+                    let identify:String = "PicsShowCellOfCamera"
+                    let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
+                        identify, forIndexPath: indexPath) as! PicsShowCellOfCamera
+                    return cell
                 }else{
+                    let identify:String = "PicsShowCell"
+                    let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
+                        identify, forIndexPath: indexPath) as! PicsShowCell
                     cell._index=indexPath.item-1
                     let _pic:NSDictionary=_images?.objectAtIndex(indexPath.item-1) as! NSDictionary
-                    
-                    
                     let _asset:DKAsset=_imageItems?.objectAtIndex(indexPath.item-1) as! DKAsset
-                    
                     cell._selected = _asset._seleceted
 //                    
 //                    println(_pic.objectForKey("seleceted"))
@@ -202,8 +186,9 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
                     cell._setPic(_pic)
                     cell._delegate=self
                     cell._hasTag=true
+                    return cell
                 }
-                return cell
+                
         }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
             
@@ -389,7 +374,7 @@ class groupPickerController: UIViewController {
     
     var _tableView:UITableView?
     
-    var _delegate:UITableViewDelegate?
+    weak var _delegate:UITableViewDelegate?
     var _source:UITableViewDataSource?
     
     

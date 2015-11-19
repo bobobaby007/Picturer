@@ -38,7 +38,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     var _picsArray:NSMutableArray?
     var _pic:NSMutableDictionary?
     
-    var _delegate:Social_pic_delegate?
+    weak var _delegate:Social_pic_delegate?
     var _scrollView:UIScrollView!
     
     var _viewType:String="view"//---view 浏览编辑，标题显示张数 //---select 选择 //--edit 编辑

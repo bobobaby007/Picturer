@@ -22,7 +22,7 @@ class CommentList_Cell :  UITableViewCell,UITextViewDelegate{
     var _desT:UITextView?
     var _timeLable:UILabel?
     var _setuped:Bool=false
-    var _delegate:CommentList_Cell_delegate?
+    weak var _delegate:CommentList_Cell_delegate?
     override func didMoveToSuperview() {
        _refreshView()
     }

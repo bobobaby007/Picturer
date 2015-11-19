@@ -22,7 +22,7 @@ class Setting_reply: UIViewController, UITableViewDelegate,UITableViewDataSource
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     var _title_label:UILabel?
-    var _delegate:Setting_replyDelegate?
+    weak var _delegate:Setting_replyDelegate?
     //var _delegate:SettingChangeDelegate?
     
     var _tableView:UITableView?

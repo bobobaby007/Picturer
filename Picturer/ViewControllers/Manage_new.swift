@@ -60,7 +60,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     var _desInput:UITextView?
     var _desAlert:UILabel?
     
-    var _delegate:Manage_newDelegate?
+    weak var _delegate:Manage_newDelegate?
     
     var _textsIsEditing:Bool=false
     var _tapRec:UITapGestureRecognizer?
@@ -96,10 +96,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _imagesCollection?.dataSource=self
         _imagesCollection?.scrollEnabled=false
         
-        _scrollView=UIScrollView()
-        _scrollView?.bounces=false
         
-        //_scrollView?.scrollEnabled=true
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor(white:0.1, alpha: 0.98)
@@ -178,15 +175,22 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
        
         _imagesBox?.addSubview(_addButton!)
         _imagesBox?.addSubview(_imagesCollection!)
+        
+        _scrollView=UIScrollView()
+        
+        _scrollView?.scrollEnabled=true
+        _scrollView?.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+        _scrollView?.delegate=self
+        _scrollView?.bounces=true
+        _scrollView?.clipsToBounds=false
+        
         _scrollView?.addSubview(_imagesBox!)
         _scrollView?.addSubview(_tableView!)
         _scrollView?.addSubview(_titleView!)
         _scrollView?.addSubview(_desView!)
         
-        _scrollView?.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
-        _scrollView?.delegate=self
-        _scrollView?.bounces=true
-        _scrollView?.clipsToBounds=false
+        
+        
         _tapRec=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
         
         
@@ -235,6 +239,8 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _scrollView?.addSubview(_line_tableView_t!)
         
         _setuped=true
+        
+        //refreshView()
     }
     
     
@@ -555,7 +561,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         let _scrollH=_imageBoxH+3*_gap+_titleViewH+_desInputViewH+_tableViewCellH*4+_tableViewCellH/2
         _scrollView?.frame=CGRect(x: 0, y: _barH, width: self.view.frame.width, height: self.view.frame.height-_barH)
-        _scrollView?.contentSize=CGSize(width: self.view.frame.width, height: _scrollH)
+        _scrollView?.contentSize=CGSize(width: self.view.frame.width, height: max (self.view.frame.height-_barH+1,_scrollH))
         
         
         _line_imageBox_b?.frame = CGRect(x: 0, y: _imageBoxH, width: self.view.frame.width, height: 0.5)

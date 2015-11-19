@@ -18,11 +18,11 @@ protocol Manage_pic_delegate:NSObjectProtocol{
     
 }
 
-class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_delegate{
+class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_delegate,MyAlerter_delegate{
     let _barH:CGFloat = 64
     let _gap:CGFloat=15
     let _space:CGFloat=5
-    
+    var _alerter:MyAlerter?
     var _albumIndex:Int?
     
     var _action:String?
@@ -42,7 +42,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     var _picsArray:NSMutableArray?
     var _pic:NSMutableDictionary?
     
-    var _delegate:Manage_pic_delegate?
+    weak var _delegate:Manage_pic_delegate?
     var _scrollView:UIScrollView!
     
     var _viewType:String="view"//---view 浏览编辑，标题显示张数 //---select 选择 //--edit 编辑
@@ -267,18 +267,22 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     
     func _viewInAtIndex(__index:Int){
         
-        var _picV:PicView!
+        
+        
         if __index<0{
             return
         }
         if __index>_picsArray!.count-1{
             return
         }
+        var _picV:PicView!
         if (_scrollView?.viewWithTag(100+__index) != nil){
             _picV=_scrollView?.viewWithTag(100+__index) as! PicView
+            
             //println(_picV.superview?.isEqual(self.view))
         }else{
             _picV=PicView(frame: CGRect(x: CGFloat(__index)*_scrollView!.frame.width, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            _picV._scaleType = PicView._ScaleType_Fit
             _picV.tag=100+__index
         }
         _picV._setPic(_getPicAtIndex(__index),__block: { (__dict) -> Void in
@@ -320,31 +324,46 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     }
     //-----弹出选择按钮
     func openActions()->Void{
+        if _alerter == nil{
+            _alerter = MyAlerter()
+            _alerter?._delegate = self
+        }
+        self.addChildViewController(_alerter!)
+        self.view.addSubview(_alerter!.view)
+        _alerter?._setMenus(["图片描述","设为封面","保存图片","删除","分享"])
         
-        let menu=UIAlertController()
-
-        let action1 = UIAlertAction(title: "图片描述", style: UIAlertActionStyle.Default, handler: changeDes)
-        let action2 = UIAlertAction(title: "设为封面", style: UIAlertActionStyle.Default, handler: setToCover)
-        let action3 = UIAlertAction(title: "保存图片", style: UIAlertActionStyle.Default, handler: actionHander)
-        let action4 = UIAlertAction(title: "删除", style: UIAlertActionStyle.Default, handler: actionHander)
-        let action5 = UIAlertAction(title: "分享", style: UIAlertActionStyle.Default, handler: actionHander)
-        let action6 = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil)
+        _alerter?._show()
         
-        menu.addAction(action1)
-        menu.addAction(action2)
-        menu.addAction(action3)
-        menu.addAction(action4)
-        menu.addAction(action5)
-        menu.addAction(action6)
-        self.presentViewController(menu, animated: true, completion: nil)
     }
-    
-    
-    func actionHander(action:UIAlertAction!){
+    //----弹出选择按钮代理
+    func _myAlerterClickAtMenuId(__id: Int) {
+        switch __id{
+        case 0:
+            self.changeDes()
+            break
+        case 1:
+            self.setToCover()
+            break
+        case 2://
+            
+            break
+        default:
+            break
+        }
+    }
+    func _myAlerterDidClose() {
+        _alerter?.view.removeFromSuperview()
+        _alerter?.removeFromParentViewController()
+        _alerter = nil
+    }
+    func _myAlerterStartToClose() {
+        
+    }
+    func _myAlerterDidShow() {
         
     }
     //-----设为封面
-    func setToCover(action:UIAlertAction!){
+    func setToCover(){
         _delegate?._setCover(_realIndex(_currentIndex!))
 //        
 //        var _dict:NSDictionary = NSDictionary(object: _getPicAtIndex(_currentIndex!), forKey: "cover") as NSDictionary
@@ -354,16 +373,11 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _alert.show()
     }
     //---打开描述编辑
-    func changeDes(action:UIAlertAction!){
+    func changeDes(){
         let _controller:Manage_description=Manage_description()
-        
-        
-        
         if _pic!.objectForKey("description") != nil{
             _controller._desPlaceHold = _pic!.objectForKey("description") as? String
         }
-        
-        
         _controller._delegate=self
         self.navigationController?.pushViewController(_controller, animated: true)
         
