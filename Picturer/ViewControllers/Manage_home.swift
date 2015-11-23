@@ -19,10 +19,11 @@ protocol Manage_home_delegate:NSObjectProtocol{
     func _manage_changeFinished()
 }
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MyAlerter_delegate,ShareAlert_delegate{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MyAlerter_delegate,ShareAlert_delegate,SearchPage_delegate{
     var _alerter:MyAlerter?
     var _shareAlert:ShareAlert?
     var _cameraPicker:UIImagePickerController!
+    var _searchPage:SearchPage?
     //var _albumArray:[AnyObject]=["1.png","2.png","3.png","4.png","5.png","6.png","7.png"]
     @IBOutlet weak var _tableView:UITableView!
     @IBOutlet weak var _btn_new:UIButton!
@@ -30,6 +31,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     @IBOutlet weak var _topView:UIView!
     @IBOutlet weak var _bottomView:UIView!
     @IBOutlet weak var _addIcon:UIImageView!
+    @IBOutlet weak var _btn_search:UIButton!
     
     var _offset:CGFloat=0
     var _currentIndex:NSIndexPath?
@@ -45,6 +47,61 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     var _logoAnimation:LogoAnimation?
     
     var _setuped:Bool = false
+    override func viewDidLoad() {
+        //        var _album:AlbumObj=AlbumObj()
+        //        var _images:NSMutableArray = [["sss":"44"]]
+        //
+        //        for var i=0;i<3; ++i{
+        //            var _pic:PicObj=PicObj()
+        //            _pic.thumbImage = "33333" + String(i)
+        //            _album.images.addObject(_pic)
+        //        }
+        //        println(_album._toDict())
+        
+        // println(MainAction._albumList)
+        super.viewDidLoad()
+        setup()
+        // _tableView.separatorColor=UIColor.clearColor()
+    }
+    
+    func setup(){
+        if _setuped{
+            return
+        }
+        if _blurV ==  nil{
+            //let blurEffect:UIBlurEffect=UIBlurEffect(style: UIBlurEffectStyle.Dark)
+            _blurV = UIImageView(image: UIImage(named: "blurBg.jpg"))
+            _blurV?.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height)
+            self.view.insertSubview(_blurV!, belowSubview: _tableView)
+            _whiteBg = UIView(frame: CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height))
+            _whiteBg?.backgroundColor = UIColor.whiteColor()
+            //_tableView.tableFooterView = UIView()
+            _tableView.tableFooterView=UIView(frame: CGRect(x: 0, y: 0, width: _tableView.frame.width, height:10))
+            let _line:UIView = UIView(frame: CGRect(x: 10, y: 0, width: 500, height: 0.5))
+            _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
+            _tableView.tableFooterView?.addSubview(_line)
+            _tableView.backgroundColor = UIColor.clearColor()
+            _tableView.tableFooterView?.backgroundColor = UIColor.whiteColor()
+            self.view.backgroundColor = UIColor.clearColor()
+            self.automaticallyAdjustsScrollViewInsets=false
+            
+            
+            _logoAnimation = LogoAnimation()
+            self.addChildViewController(_logoAnimation!)
+            _logoAnimation?.view.frame = CGRect(x: 0, y: 0, width: 49, height: 49)
+            _logoAnimation?.view.center = CGPoint(x: self.view.frame.width/2, y: 64+30)
+            //self.view.addSubview(_logoAnimation!.view)
+            
+            self.view.insertSubview(_logoAnimation!.view, aboveSubview: _blurV!)
+            self.view.insertSubview(_whiteBg!, aboveSubview: _blurV!)
+        }
+        
+        _setuped = true
+    }
+    func _refresh(){
+        _tableView.reloadData()
+    }
+    
     
     @IBAction func btnHander(btn:UIButton){
         switch btn{
@@ -66,10 +123,35 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         case _btn_camera:
             _openCamera()
             return
+        case _btn_search:
+            _openSearchPage()
+            break
         default:
             print("", terminator: "")
         }
     }
+    
+    //--打开搜索面板
+    func _openSearchPage(){
+        if _searchPage == nil{
+            _searchPage = SearchPage()
+            _searchPage?._delegate = self
+            self.addChildViewController(_searchPage!)
+            self.view.addSubview(_searchPage!.view)
+            
+        }
+    }
+    //搜索代理
+    func _searchPage_cancel() {
+        _searchPage?.view.removeFromSuperview()
+        _searchPage?.removeFromParentViewController()
+        
+        _searchPage = nil
+        
+        _refresh()
+        
+    }
+    //-----切换到社交
     func switchToSocial(){
         var _controller:Social_home?
         _controller=self.storyboard?.instantiateViewControllerWithIdentifier("Social_home") as? Social_home
@@ -351,9 +433,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         //_albumArray.removeAtIndex(index.row)
         //_tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Left)
         //_tableView.deleteRowsAtIndexPaths([index], withRowAnimation: UITableViewRowAnimation.Automatic)
-        MainAction._deleteAlbumAtIndex(index.row)
-        
-        _tableView.reloadData()
+       MainAction._deleteAlbumAtIndex(index.row)
+        _refresh()
     }
     //----编辑相册
     func editeAlbum(index:Int) -> Void{
@@ -598,57 +679,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
     }
     
-    override func viewDidLoad() {
-//        var _album:AlbumObj=AlbumObj()
-//        var _images:NSMutableArray = [["sss":"44"]]
-//        
-//        for var i=0;i<3; ++i{
-//            var _pic:PicObj=PicObj()
-//            _pic.thumbImage = "33333" + String(i)
-//            _album.images.addObject(_pic)
-//        }
-//        println(_album._toDict())
-
-       // println(MainAction._albumList)
-        super.viewDidLoad()
-        setup()
-       // _tableView.separatorColor=UIColor.clearColor()
-    }
     
-    func setup(){
-        if _setuped{
-            return
-        }
-        if _blurV ==  nil{
-            //let blurEffect:UIBlurEffect=UIBlurEffect(style: UIBlurEffectStyle.Dark)
-            _blurV = UIImageView(image: UIImage(named: "blurBg.jpg"))
-            _blurV?.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height)
-            self.view.insertSubview(_blurV!, belowSubview: _tableView)
-            _whiteBg = UIView(frame: CGRect(x: 0, y: 64, width: self.view.frame.width, height: self.view.frame.height))
-            _whiteBg?.backgroundColor = UIColor.whiteColor()
-            //_tableView.tableFooterView = UIView()
-            _tableView.tableFooterView=UIView(frame: CGRect(x: 0, y: 0, width: _tableView.frame.width, height:10))
-            let _line:UIView = UIView(frame: CGRect(x: 10, y: 0, width: 500, height: 0.5))
-            _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
-            _tableView.tableFooterView?.addSubview(_line)
-            _tableView.backgroundColor = UIColor.clearColor()
-            _tableView.tableFooterView?.backgroundColor = UIColor.whiteColor()
-            self.view.backgroundColor = UIColor.clearColor()
-            self.automaticallyAdjustsScrollViewInsets=false
-            
-            
-            _logoAnimation = LogoAnimation()
-            self.addChildViewController(_logoAnimation!)
-            _logoAnimation?.view.frame = CGRect(x: 0, y: 0, width: 49, height: 49)
-            _logoAnimation?.view.center = CGPoint(x: self.view.frame.width/2, y: 64+30)
-            //self.view.addSubview(_logoAnimation!.view)
-            
-            self.view.insertSubview(_logoAnimation!.view, aboveSubview: _blurV!)
-            self.view.insertSubview(_whiteBg!, aboveSubview: _blurV!)
-        }
-        
-        _setuped = true
-    }
     override func viewDidAppear(animated: Bool) {
         //UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         //UIApplication.sharedApplication().statusBarHidden=false

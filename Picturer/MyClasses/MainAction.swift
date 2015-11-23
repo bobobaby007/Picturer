@@ -13,10 +13,15 @@ import UIKit
 
 
 class MainAction: AnyObject {
+    static let _token:String = "testToken"
+    
+    
     static let _album_prefix = "Album_"
     static let _ALBUM_LIST = "ALBUM_LIST"
     static var _aList:NSMutableArray?
     static var _tempAlbum:NSMutableDictionary?
+    static let _color_yellow:UIColor = UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1)//----黄色
+    static let _barH:CGFloat = 64
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{
@@ -39,6 +44,12 @@ class MainAction: AnyObject {
              //println(_ud.dictionaryRepresentation())
         }
     }
+    //-----创建相册
+    static func _createAlbum(){
+        
+    }
+    
+    
     
     
     static func _getImagesOfAlbumId(__id:String)->NSArray?{
@@ -146,6 +157,21 @@ class MainAction: AnyObject {
         }else{
             return _images.objectAtIndex(_images.count-1) as? NSDictionary
         }
+        
+    }
+    static func _searchAlbum(__str:String)->NSArray{
+        let _array:NSMutableArray = NSMutableArray()
+        //print(MainAction._albumList)
+        for var i:Int = 0; i < MainAction._albumList.count; ++i{
+            let _dict:NSDictionary = MainAction._albumList.objectAtIndex(i) as! NSDictionary
+            let _title:String = _dict.objectForKey("title") as! String
+            if _title.lowercaseString.rangeOfString(__str.lowercaseString) != nil{
+                _array.addObject(_dict)
+            }
+        }
+        print(_array)
+        
+        return _array
         
     }
     //----检测相册里是否有某张照片
