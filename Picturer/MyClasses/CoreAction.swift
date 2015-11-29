@@ -8,8 +8,42 @@
 
 import Foundation
 import UIKit
-
 class CoreAction {
+    //----从网页查找图片
+    static func _getImagesFromUrl(__url:String,__block:(NSDictionary)->Void){
+        let request = NSMutableURLRequest(URL: NSURL(string:__url)!)
+        request.HTTPMethod = "GET"
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, erro) -> Void in
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            if erro != nil{
+                print("链接失败:",__url,erro)
+                __block(NSDictionary(objects: [erro!.code], forKeys: ["recode"]))//--- -1009
+                return
+            }
+            let _str = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            let str:String = String(_str)
+            let pattern = "http.*?(.png|.jpg|.gif)"
+            do{
+                let _images:NSMutableArray = []
+                let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpressionOptions.CaseInsensitive)
+                let res = regex.matchesInString(str, options: NSMatchingOptions(rawValue: 0), range: NSMakeRange(0, str.characters.count))
+                var count = res.count
+                print("链接成功:",count)
+                while count > 0 {
+                    let checkingRes = res[--count]
+                    let tempStr = (str as NSString).substringWithRange(checkingRes.range)
+                    _images.addObject(tempStr)
+                    //print("图片:",tempStr)
+                }
+                __block(NSDictionary(objects: [200,_images], forKeys: ["recode","images"]))//--- 200成功
+            }catch{
+                print(error)
+                __block(NSDictionary(objects: [0], forKeys: ["recode"]))//--- -1009
+            }
+        })
+        task.resume()
+    }
     //-----当前时间串转换成字符串
     static func _timeStrOfCurrent()->String {
         //let timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
@@ -41,21 +75,17 @@ class CoreAction {
         let f:NSDateFormatter = NSDateFormatter()
         f.timeZone = NSTimeZone.localTimeZone()
         f.dateFormat = "yyyy-M-dd'T'HH:mm:ss.SSSZZZ"
-        
         let now = f.stringFromDate(NSDate())
         let startDate = f.dateFromString(dateStr)
         let endDate = f.dateFromString(now)
         let calendar: NSCalendar = NSCalendar.currentCalendar()
         //let calendarUnits =
-        
         let dateComponents = calendar.components([NSCalendarUnit.WeekOfMonth,NSCalendarUnit.Day,NSCalendarUnit.Hour,NSCalendarUnit.Minute,NSCalendarUnit.Second], fromDate: startDate!, toDate: endDate!, options: NSCalendarOptions.init(rawValue: 0))
-        
         let weeks = abs(dateComponents.weekOfMonth)
         let days = abs(dateComponents.day)
         let hours = abs(dateComponents.hour)
         let min = abs(dateComponents.minute)
-        let sec = abs(dateComponents.second)
-        
+        let sec = abs(dateComponents.second)        
         var timeAgo = ""
         if (sec > 0){
             if (sec > 1) {
@@ -240,13 +270,13 @@ class CoreAction {
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { (data, response, erro) -> Void in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if erro != nil{
-                //print("链接失败:",__url,erro)
+                print("链接失败:",__url,erro)
                 //__block(NSDictionary(objects: [1009], forKeys: ["recode"]))//--- -1009
                 __block(NSDictionary(objects: [erro!.code], forKeys: ["recode"]))//--- -1009
                 return
             }
             let _str = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print(__url,_str)
+            print("链接成功:",__url,_str)
             do{
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
                 __block(jsonResult as! NSDictionary)
@@ -257,8 +287,4 @@ class CoreAction {
         })
         task.resume()
     }
-    
-    
-    
-    
 }

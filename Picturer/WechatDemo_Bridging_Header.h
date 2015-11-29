@@ -15,3 +15,8 @@
 @import UIKit;   //这个一定要导入啊，不然....
 #import "WXApiObject.h"
 #import "WXApi.h"
+
+#import <libxml/HTMLtree.h>
+#import <libxml/xpathInternals.h>
+
+//#import "Kanna.h"

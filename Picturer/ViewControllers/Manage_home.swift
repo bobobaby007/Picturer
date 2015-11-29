@@ -19,7 +19,7 @@ protocol Manage_home_delegate:NSObjectProtocol{
     func _manage_changeFinished()
 }
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MyAlerter_delegate,ShareAlert_delegate,SearchPage_delegate{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MyAlerter_delegate,ShareAlert_delegate,SearchPage_delegate,NewFromWeb_delegate{
     var _alerter:MyAlerter?
     var _shareAlert:ShareAlert?
     var _cameraPicker:UIImagePickerController!
@@ -47,6 +47,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     var _logoAnimation:LogoAnimation?
     
     var _setuped:Bool = false
+    
     override func viewDidLoad() {
         //        var _album:AlbumObj=AlbumObj()
         //        var _images:NSMutableArray = [["sss":"44"]]
@@ -61,6 +62,23 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         // println(MainAction._albumList)
         super.viewDidLoad()
         setup()
+//        MainInterface._signup("18612438608", __pass: "123456") { (__dict) -> Void in
+//            
+//        }
+//        MainInterface._login("18612438608", __pass: "123456") { (__dict) -> Void in
+//            
+//        }
+
+//        MainInterface._getMyAlbumList { (__dict) -> Void in
+//            
+//        }
+//        MainInterface._createAlbum("") { (__dict) -> Void in
+//            
+//        }
+        
+        //SyncAction._addAction("", __content: NSDictionary())
+        
+        
         // _tableView.separatorColor=UIColor.clearColor()
     }
     
@@ -535,9 +553,14 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         self.navigationController?.pushViewController(_controller!, animated: true)
         
     }
-    //---创建新相册
+    //---网页抓取
     func newFromWeb() -> Void{
-        
+        var _controller:NewFromWeb?
+        _controller=NewFromWeb()
+        _controller?._delegate=self
+        // println(_show)
+        //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
+        self.navigationController?.pushViewController(_controller!, animated: true)
     }
     //----弹出编辑\新建\图片到相册 代理
     func saved(dict: NSDictionary) {
@@ -547,7 +570,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             case "edite_album":
             MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
             case "pics_to_album"://选择图片到指定相册
-                MainAction._insertPicsToAlbumById( dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+                MainAction._insertPicsToAlbumById(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+            
+                
             case "pics_to_album_new"://选择图片到新建立相册
                 var _controller:Manage_new?
                 _controller=Manage_new()
@@ -564,6 +589,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         UIApplication.sharedApplication().statusBarHidden=false
     }
+    
     
     //---弹出浏览图片代理
     func didDeletedPics(dict: NSDictionary) {
@@ -597,6 +623,18 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         self.navigationController?.pushViewController(_controller!, animated: true)
     }
     
+    //---网页抓取代理
+    
+    func _newFromWeb_selected(images: NSArray) {
+        var _controller:Manage_PicsToAlbum?
+        _controller=Manage_PicsToAlbum()
+        _controller?._delegate=self
+        _controller?._imagesArray=NSMutableArray(array: images)
+        // println(_show)
+        //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
+        // self.navigationController?.popViewControllerAnimated(false)
+        self.navigationController?.pushViewController(_controller!, animated: true)
+    }
     
     //---------相机
     
@@ -656,9 +694,14 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
                                 let _nsurl:NSURL = (result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL)!
                                 let _url:NSString=_nsurl.absoluteString
                                 let _dict:NSDictionary = NSDictionary(objects: [_url,"alasset"], forKeys: ["url","type"])
+                            
+                            
+                                                       
+                            
                                 self._cameraImage = _dict
                             // println(self._cameraImage)
                         } else {
+                            
                             self.imagePickerDidSelected([self._cameraImage!])
                         }}
                 }else {

@@ -124,21 +124,30 @@ class PicsShowCell:UICollectionViewCell{
             })
             
         case "file":
-            self._setImage(__pic.objectForKey("url") as! String)
-        case "fromWeb":
-            ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
-                // _setImage(image)
-                //println("")
-                if self._imgView != nil{
-                    //self._setImageByImage(image!)
-                    self._imgView?.image=image
-                   
+            let _str = __pic.objectForKey("url") as! String
+            let _range = _str.rangeOfString("http")
+            if _range?.count != nil{
+                ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
+                    // _setImage(image)
+                    //println("")
+                    if image==nil{
+                        //--加载失败
+                        print("图片加载失败:",__pic.objectForKey("url"))
+                        return
+                    }
+                    if self._imgView != nil{
+                        self._setImageByImage(image!)
+                        //self._imgView?.image=image
+                        
+                    }else{
+                        print("out")
+                    }
                     
-                }else{
-                    print("out")
-                }
+                })
+            }else{
+                self._setImage(__pic.objectForKey("url") as! String)
                 
-            })
+            }
         default:
             print("")
         }

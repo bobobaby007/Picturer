@@ -137,6 +137,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
     func _setCover(picIndex: Int) {
         let _dict:NSDictionary = NSDictionary(object: _imagesArray.objectAtIndex(picIndex), forKey: "cover") as NSDictionary
+       
         MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
     }
     

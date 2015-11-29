@@ -165,11 +165,20 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
             }
             
         }else{
-            var _pic:Manage_pic?
-            let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
-            _pic=storyboard.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
-            self.navigationController?.pushViewController(_pic!, animated: true)
+            
+            let _pic:Manage_pic? = Manage_pic()
+            //let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
+            //_pic=storyboard.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
+            //_pic?._delegate=self
+            //_pic?._range = _album?.objectForKey("range") as! Int
             _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
+            self.navigationController?.pushViewController(_pic!, animated: true)
+            
+//            var _pic:Manage_pic?
+//            let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
+//            _pic=storyboard.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
+//            self.navigationController?.pushViewController(_pic!, animated: true)
+//            _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
         }
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {

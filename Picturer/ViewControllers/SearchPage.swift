@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 
+
+
 protocol SearchPage_delegate:NSObjectProtocol{
     func _searchPage_cancel()
 }
@@ -114,7 +116,7 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         _tableView?.reloadData()
     }
     
-    //---
+    //---文字代理
     func textDidChanged(sender:UITextField){
         _search()
     }

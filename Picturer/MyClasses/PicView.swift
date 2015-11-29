@@ -38,7 +38,6 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     func _refreshView(){
         //_imgView?.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
     }
-    
     func _setPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
         switch __pic.objectForKey("type") as! String{
         case "alasset":
@@ -47,16 +46,18 @@ class PicView: UIScrollView,UIScrollViewDelegate{
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 if asset != nil {
                     self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
+                    
+                                        
                 }else{
                     self._setImage("entroLogo")//----用户删除时
                 }
+                
                 //self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
                 // self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
                 __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
                 }, failureBlock: { (error:NSError!) -> Void in
                     __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
             })
-            
         case "file":
             let _str = __pic.objectForKey("url") as! String
             let _range = _str.rangeOfString("http")
@@ -174,5 +175,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
     
 }

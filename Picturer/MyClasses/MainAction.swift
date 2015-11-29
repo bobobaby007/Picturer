@@ -13,9 +13,6 @@ import UIKit
 
 
 class MainAction: AnyObject {
-    static let _token:String = "testToken"
-    
-    
     static let _album_prefix = "Album_"
     static let _ALBUM_LIST = "ALBUM_LIST"
     static var _aList:NSMutableArray?
@@ -44,13 +41,6 @@ class MainAction: AnyObject {
              //println(_ud.dictionaryRepresentation())
         }
     }
-    //-----创建相册
-    static func _createAlbum(){
-        
-    }
-    
-    
-    
     
     static func _getImagesOfAlbumId(__id:String)->NSArray?{
         let _images:NSArray=[]
@@ -77,15 +67,11 @@ class MainAction: AnyObject {
     static func _insertAlbum(dict:NSDictionary)->String{
         let _list:NSMutableArray=NSMutableArray(array:_albumList )
         let _album:NSMutableDictionary = NSMutableDictionary(dictionary: dict)
-        
-        let _id:String="1234555"
+        let _id:String=String(Int(NSDate().timeIntervalSince1970))
         _album.setObject(_id, forKey: "id")
         _album.setObject(_id, forKey: "last_update_at")
         _album.setObject(_id, forKey: "create_at")
         _album.setObject(0, forKey: "uploaded")
-        
-        
-        
         _list.insertObject(_album, atIndex: 0)
         //_albumList?.addObject(album._toDict())
         _albumList=_list
