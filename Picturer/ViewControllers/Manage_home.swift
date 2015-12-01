@@ -12,6 +12,7 @@ import Foundation
 import UIKit
 import AssetsLibrary
 import AVFoundation
+import SQLite
 
 protocol Manage_home_delegate:NSObjectProtocol{
     func _manage_startToChange()
@@ -62,6 +63,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         // println(MainAction._albumList)
         super.viewDidLoad()
         setup()
+        
+        
+        
+        
 //        MainInterface._signup("18612438608", __pass: "123456") { (__dict) -> Void in
 //            
 //        }

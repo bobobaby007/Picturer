@@ -8,7 +8,8 @@
 
 import Foundation
 import UIKit
-class CoreAction {
+class CoreAction {    
+    
     //----从网页查找图片
     static func _getImagesFromUrl(__url:String,__block:(NSDictionary)->Void){
         let request = NSMutableURLRequest(URL: NSURL(string:__url)!)

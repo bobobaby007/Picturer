@@ -16,7 +16,5 @@
 #import "WXApiObject.h"
 #import "WXApi.h"
 
-#import <libxml/HTMLtree.h>
-#import <libxml/xpathInternals.h>
 
 //#import "Kanna.h"

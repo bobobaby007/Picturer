@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+//import SQLite
 //import SwiftHTTP
 
 
@@ -19,6 +20,11 @@ class MainAction: AnyObject {
     static var _tempAlbum:NSMutableDictionary?
     static let _color_yellow:UIColor = UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1)//----黄色
     static let _barH:CGFloat = 64
+    
+    
+    
+    
+    
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{
@@ -41,7 +47,6 @@ class MainAction: AnyObject {
              //println(_ud.dictionaryRepresentation())
         }
     }
-    
     static func _getImagesOfAlbumId(__id:String)->NSArray?{
         let _images:NSArray=[]
 //        let _albumPlist:NSDictionary? = CoreAction._loadPlist(__id)

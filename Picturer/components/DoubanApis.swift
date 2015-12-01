@@ -14,9 +14,7 @@ class DoubanApis: NSObject {
             return __str
         }
         var str:String = __str.stringByReplacingOccurrencesOfString("/photo/thumb/", withString: "/photo/large/")
-        
         str = str.stringByReplacingOccurrencesOfString("/photo/photo/", withString: "/photo/large/")
-        
         return str
     }
     static func _isDoubanLink(_str:String)->Bool{
