@@ -27,6 +27,7 @@ class MainInterface: AnyObject {
     static let _URL_Album_Info:String="album/info/"
     static let _URL_Pic_Create:String = "picture/create/"
     static let _URL_Pic_update:String = "picture/update/"
+    static let _URL_Pic_list:String = "picture/list/"
     
     //-----注册
     static func _signup(__mob:String, __pass:String, __block:(NSDictionary)->Void){
@@ -56,8 +57,16 @@ class MainInterface: AnyObject {
     }
     //-----获取相册列表
     static func _getMyAlbumList(__block:(NSDictionary)->Void){
-        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_List+"\(_uid)/0/10") { (__dict) -> Void in
-            print(__dict)
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_List+"\(_uid)/0/100") { (__dict) -> Void in
+            //print(__dict)
+            __block(__dict)
+        }
+    }
+    
+    //-----相册里的图片
+    static func _getImagesOfAlbum(__albumId:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Pic_list+"\(__albumId)/0/100") { (__dict) -> Void in
+            //print(__dict)
             __block(__dict)
         }
     }
@@ -74,8 +83,7 @@ class MainInterface: AnyObject {
     static func _uploadPic(__pic:NSDictionary,__album_id:String,__block:(NSDictionary)->Void){
         
         //559a7b34b28d4ec8e088cf0d
-        
-        
+    
         switch __pic.objectForKey("type") as! String{
         case "alasset":
             let _al:ALAssetsLibrary=ALAssetsLibrary()
@@ -128,5 +136,11 @@ class MainInterface: AnyObject {
             print("")
         }
         
+    }
+    
+    //-----获取图片完整url
+    static func _imageUrl(__str:String)->String{
+        let _url:String = _basicDoman + "uploadDir/" + __str
+        return _url
     }
 }

@@ -12,7 +12,6 @@ import Foundation
 import UIKit
 import AssetsLibrary
 import AVFoundation
-import SQLite
 
 protocol Manage_home_delegate:NSObjectProtocol{
     func _manage_startToChange()
@@ -64,7 +63,13 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         super.viewDidLoad()
         setup()
         
-        
+        MainAction._refreshAlbumListFromServer { (__dict) -> Void in
+           // self._refresh()
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self._refresh()
+            })
+        }
         
         
 //        MainInterface._signup("18612438608", __pass: "123456") { (__dict) -> Void in
@@ -349,8 +354,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         }else{
             let _album:NSDictionary=MainAction._albumList[indexPath.row] as! NSDictionary
             cell.setTitle((_album.objectForKey("title") as? String)!)
-            cell.setTime("下午2:00")
-            
+            cell.setTime(CoreAction._dateDiff(_album.objectForKey("last_update_at") as! String))
             
             cell.setDescription(String(stringInterpolationSegment: MainAction._getImagesOfAlbumIndex(indexPath.row)!.count)+"张")
             //cell.detailTextLabel?.text="ss"
@@ -360,7 +364,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             if _pic != nil{
                 cell._setPic(_pic)
             }else{
-                cell.setThumbImage("blank.png")
+                cell._setPic(NSDictionary(objects: ["blank.png","file"], forKeys: ["url","type"]))
             }
             
         }
@@ -575,7 +579,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             case "edite_album":
             MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
             case "pics_to_album"://选择图片到指定相册
-                MainAction._insertPicsToAlbumById(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+                MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
             
                 
             case "pics_to_album_new"://选择图片到新建立相册

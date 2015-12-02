@@ -39,6 +39,10 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         //_imgView?.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
     }
     func _setPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
+        
+        
+        
+        
         switch __pic.objectForKey("type") as! String{
         case "alasset":
             let _al:ALAssetsLibrary=ALAssetsLibrary()

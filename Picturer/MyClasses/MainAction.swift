@@ -22,9 +22,6 @@ class MainAction: AnyObject {
     static let _barH:CGFloat = 64
     
     
-    
-    
-    
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{
@@ -47,41 +44,172 @@ class MainAction: AnyObject {
              //println(_ud.dictionaryRepresentation())
         }
     }
+    
+    //-----重置
+    static func _reset(){
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        _ud.setObject(nil, forKey: _ALBUM_LIST)
+        _aList = nil
+    }
+    
+    //----从服务器更新图册列表
+    static func _refreshAlbumListFromServer(__block:(NSDictionary)->Void){
+       // _reset()
+        MainInterface._getMyAlbumList { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
+               // print(ablums)
+                for var i:Int = 0; i < ablums.count; ++i{
+                    let _album = ablums.objectAtIndex(i) as! NSDictionary
+                    //print(_album)
+                    
+                    
+                    
+                    let _index = _getAlbumIndexOfId(_album.objectForKey("_id") as! String)
+                    if _index != -1{
+                        _changeAlbumAtIndex(_index, dict: _album)
+                    }else{
+                        //print(_album.objectForKey("title"))
+                        _insertAlbum(_album)
+                    }
+                    
+                    dispatch_sync(dispatch_get_main_queue(), {
+                        _getImagesOfAlbumIdFromServer(_album.objectForKey("_id") as! String, __block: { (__dict) -> Void in
+                            
+                        })
+                    })
+                }
+                __block(__dict)
+            }
+        }
+    }
+    //----从服务器获取相册里的图片列表
+    static func _getImagesOfAlbumIdFromServer(__albumId:String , __block:(NSDictionary)->Void){
+        MainInterface._getImagesOfAlbum(__albumId) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                let images:NSArray = __dict.objectForKey("list") as! [NSDictionary]
+                
+                let _index = _getAlbumIndexOfId(__albumId)
+                if _index != -1{
+                    print(images)
+                    _refreshImagesOfAlbumByIndex(images, __albumIndex: _index)
+                }
+                __block(__dict)
+            }
+        }
+    }
+    
+    
+    
+    //--通过图册id查找图册Index
+    static func _getAlbumIndexOfId(__id:String)->Int{
+        for var i:Int = 0; i < MainAction._albumList.count; ++i{
+            let _dict:NSDictionary = MainAction._albumList.objectAtIndex(i) as! NSDictionary
+            let _id:String = _dict.objectForKey("_id") as! String
+            if _id.lowercaseString.rangeOfString(__id.lowercaseString) != nil{
+                return i
+            }
+        }
+        return -1
+    }
+    //----通过图册id提取图片
     static func _getImagesOfAlbumId(__id:String)->NSArray?{
         let _images:NSArray=[]
-//        let _albumPlist:NSDictionary? = CoreAction._loadPlist(__id)
-//        if _albumPlist == nil{
-//           return nil
-//        }else{
-//            let _album:NSDictionary = _albumPlist?.objectForKey("root") as! NSDictionary
-//            return _images
-//        }
+        let _index:Int = _getAlbumIndexOfId(__id)
+        if _index>=0{
+            return _getImagesOfAlbumIndex(_index)
+        }
         return _images
     }
+    
     static func _getImagesOfAlbumIndex(__index:Int)->NSArray?{
         let _album:NSDictionary = MainAction._getAlbumAtIndex(__index)!
         return NSMutableArray(array: _album.objectForKey("images") as! NSArray)
     }
-    //----添加图片到相册
-    static func _insertPicsToAlbumById(__pics:NSArray,__albumIndex:Int){
+    //----添加图片到相册通过id
+    static func _insertPicsToAlbumByIndex(__pics:NSArray,__albumIndex:Int){
         let _images:NSMutableArray = NSMutableArray(array: _getImagesOfAlbumIndex(__albumIndex)!)
-        _images.addObjectsFromArray(__pics as [AnyObject])        
+        for var i:Int = 0; i<__pics.count;++i{
+            let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: __pics.objectAtIndex(i) as! NSDictionary)
+            if _pic.objectForKey("_id") == nil{
+                _pic.setObject("", forKey: "_id")
+            }
+            if _pic.objectForKey("last_update_at") == nil{
+                _pic.setObject(CoreAction._timeStrOfCurrent(), forKey: "last_update_at")
+            }
+            if _pic.objectForKey("title") == nil{
+                _pic.setObject("", forKey: "title")
+            }
+            let _localId:String=String(Int(NSDate().timeIntervalSince1970))
+            _pic.setObject(_localId, forKey: "localId")
+            if _pic.objectForKey("create_at") == nil{
+                _pic.setObject(CoreAction._timeStrOfCurrent(), forKey: "create_at")
+            }
+            _images.insertObject(_pic, atIndex: 0)
+            
+            
+        }
         _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
     }
     
+    //----更新图片
+    static func _refreshImagesOfAlbumByIndex(__pics:NSArray,__albumIndex:Int){
+        let _images:NSMutableArray = NSMutableArray(array: _getImagesOfAlbumIndex(__albumIndex)!)
+        for var i:Int = 0; i<__pics.count;++i{
+            let _pic:NSDictionary = __pics.objectAtIndex(i) as! NSDictionary
+            var _has:Bool = false
+            
+            for var u:Int = 0;u<_images.count;++u{
+                let _image:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(u) as! NSDictionary)
+                if _image.objectForKey("_id") as! String == _pic.objectForKey("_id")  as! String{
+                    for (key,value) in _pic{
+                        //println(key,value)
+                        if  String(value) != ""{
+                            _image.setObject(value, forKey: key as! String)
+                        }
+                    }
+                    _images[u] = _image
+                    _has = true
+                    break
+                }
+            }
+            if !_has{
+                _images.insertObject(_pic, atIndex: 0)
+            }
+            
+        }
+        _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
+    }
+    
+    //----新建相册
     static func _insertAlbum(dict:NSDictionary)->String{
         let _list:NSMutableArray=NSMutableArray(array:_albumList )
         let _album:NSMutableDictionary = NSMutableDictionary(dictionary: dict)
-        let _id:String=String(Int(NSDate().timeIntervalSince1970))
-        _album.setObject(_id, forKey: "id")
-        _album.setObject(_id, forKey: "last_update_at")
-        _album.setObject(_id, forKey: "create_at")
+        if _album.objectForKey("_id") == nil{
+            _album.setObject("", forKey: "_id")
+        }
+        if _album.objectForKey("images") == nil{
+            _album.setObject(NSArray(), forKey: "images")
+        }
+        if _album.objectForKey("title") == nil{
+            _album.setObject("", forKey: "title")
+        }
+        let _localId:String=String(Int(NSDate().timeIntervalSince1970))
+        _album.setObject(_localId, forKey: "localId")
+        
+        if _album.objectForKey("last_update_at") == nil{
+            _album.setObject(CoreAction._timeStrOfCurrent(), forKey: "last_update_at")
+        }
+        if _album.objectForKey("create_at") == nil{
+            _album.setObject(CoreAction._timeStrOfCurrent(), forKey: "create_at")
+        }
         _album.setObject(0, forKey: "uploaded")
         _list.insertObject(_album, atIndex: 0)
         //_albumList?.addObject(album._toDict())
         _albumList=_list
        // println(_albumList)
-        return _id
+        
+        return _localId
     }
     static func _saveTempAlbum(dict:NSDictionary){
         _tempAlbum = NSMutableDictionary(dictionary: dict)
@@ -125,6 +253,9 @@ class MainAction: AnyObject {
         _list.removeObjectAtIndex(index)
         _albumList=_list
     }
+    
+    //----获取封面
+    
     static func _getCoverFromAlbumAtIndex(index:Int)->NSDictionary?{
         let _album:NSMutableDictionary = NSMutableDictionary(dictionary: _getAlbumAtIndex(index)!)        
         _setDefault(_album)
@@ -132,17 +263,15 @@ class MainAction: AnyObject {
         if _images.count<1{
             return nil
         }
-        
         //println(_album.objectForKey("cover"))
         
-        let _cover:NSDictionary = _album.objectForKey("cover") as! NSDictionary
-        
-        
-        
-        if _albumHasPic(index,__pic: _cover){
-            return _cover
+        if let _cover:NSDictionary = _album.objectForKey("cover") as? NSDictionary{
+            if _albumHasPic(index,__pic: _cover){
+                return _cover
+            }
+        }else{
+            
         }
-        
         if _album.objectForKey("range") != nil && _album.objectForKey("range") as! Int == 0{
             return _images.objectAtIndex(0) as? NSDictionary
         }else{
@@ -161,9 +290,7 @@ class MainAction: AnyObject {
             }
         }
         print(_array)
-        
         return _array
-        
     }
     //----检测相册里是否有某张照片
     static func _albumHasPic(__albumIndex:Int,__pic:NSDictionary)->Bool{
@@ -181,25 +308,26 @@ class MainAction: AnyObject {
         }
         return false
     }
+    
     static func _changeAlbumAtIndex(index:Int,dict:NSDictionary){
         let _list:NSMutableArray=NSMutableArray(array:_albumList )
         let _album:NSMutableDictionary=NSMutableDictionary(dictionary: _list.objectAtIndex(index) as! NSDictionary)
-        
         //let keys:NSArray = dict.allKeys
-        
         for (key,value) in dict{
             //println(key,value)
-            _album.setObject(value, forKey: key as! String)
+            if  String(value) != ""{
+                _album.setObject(value, forKey: key as! String)
+            }
+            
         }
-        
         //_album=NSMutableDictionary(dictionary: dict)
-        
-        
         //println(_album)
-        
         _list[index]=_album
         _albumList=_list
     }
+    
+    
+    
     //------修改相册里的某张图片
     static func _changePicAtAlbum(index:Int,albumIndex:Int,dict:NSDictionary){
         let _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!
@@ -211,6 +339,19 @@ class MainAction: AnyObject {
         }
         _images[index] = _img
         _changeAlbumAtIndex(albumIndex, dict: NSDictionary(object: _images, forKey: "images"))
+    }
+    //----获取相册里某图片的index
+    static func _getPicIndexAtAlbumById(__id:String,albumIndex:Int)->Int{
+        let _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!
+        let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
+        for var i:Int = 0; i < _images.count; ++i{
+            let _dict:NSDictionary = _images.objectAtIndex(i) as! NSDictionary
+            let _id:String = _dict.objectForKey("_id") as! String
+            if _id.lowercaseString.rangeOfString(__id.lowercaseString) != nil{
+                return i
+            }
+        }
+        return -1
     }
     
     //=========================社交部分

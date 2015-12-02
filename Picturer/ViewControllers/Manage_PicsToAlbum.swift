@@ -195,7 +195,9 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
         if collectionView.isEqual(_albumCollection){
             
             if indexPath.item == MainAction._albumList.count{
-                cell._setImage("newAlbum.png")
+                
+                cell._setPic(NSDictionary(objects: ["newAlbum.png","file"], forKeys: ["url","type"]))
+                
                 cell._hasTag=false
                 cell._setCorner(5)
             }else{

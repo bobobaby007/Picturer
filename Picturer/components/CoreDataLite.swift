@@ -13,7 +13,6 @@ import CoreData
 
 class CoreDataLite: NSObject {
     
-    
     static func _getAlbumList()->[Album]{
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context = delegate.managedObjectContext
@@ -26,11 +25,21 @@ class CoreDataLite: NSObject {
             return[]
         }
     }
+    static func _newAlum()->Album{
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context = delegate.managedObjectContext
+        let entity = NSEntityDescription.insertNewObjectForEntityForName("Album", inManagedObjectContext: context!) as! Album
+        return entity
+    }
     static func _getAlbumOfId(__id:String)->Album?{
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context = delegate.managedObjectContext
+        
+        
         let request = NSFetchRequest(entityName: "Album")
-        request.predicate = NSPredicate(format: "id=%@", __id)
+        
+       // print(request)
+        //request.predicate = NSPredicate(format: "id=%@", __id)
         do {
             let entitys = try context!.executeFetchRequest(request) as! [Album]
             if entitys.count < 1{
@@ -74,6 +83,12 @@ class CoreDataLite: NSObject {
             return nil
         }
     }
+    static func _newImage()->Image{
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context = delegate.managedObjectContext
+        let entity = NSEntityDescription.insertNewObjectForEntityForName("Image", inManagedObjectContext: context!) as! Image
+        return entity
+    }
     static func _getImageOfLocalId(__id:String)->Image?{
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context = delegate.managedObjectContext
@@ -90,7 +105,6 @@ class CoreDataLite: NSObject {
             return nil
         }
     }
-    
     static func _getImageOfAlbumId(__id:String)->Image?{
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context = delegate.managedObjectContext
@@ -105,6 +119,19 @@ class CoreDataLite: NSObject {
         }
     }
     
+    static func _getImageOfAlbumLocalId(__id:String)->Image?{
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context = delegate.managedObjectContext
+        let request = NSFetchRequest(entityName: "Image")
+        request.predicate = NSPredicate(format: "albumLocalId=%@", __id)
+        do {
+            let entitys = try context!.executeFetchRequest(request) as! [Image]
+            return entitys[0]
+        } catch {
+            //fatalError("Failed to fetch employees: \(error)")
+            return nil
+        }
+    }
     
     static func _update(){
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -120,35 +147,3 @@ class CoreDataLite: NSObject {
 
 //-------set your classes here
 
-class Image: NSManagedObject {
-    
-    // Insert code here to add functionality to your managed object subclass
-    @NSManaged var id: String?
-    @NSManaged var localId: String?
-    @NSManaged var url: String?
-    @NSManaged var albumId: String?
-    @NSManaged var tags: String?
-    @NSManaged var likeNum: Int32
-    @NSManaged var commentNum: Int32
-    @NSManaged var other: String?
-    @NSManaged var permissionType: Int32
-    @NSManaged var permissionPeople: String?
-    @NSManaged var title: String?
-    @NSManaged var des: String?
-    
-}
-
-class Album: NSManagedObject {
-    @NSManaged var id: String?
-    @NSManaged var localId: String?
-    @NSManaged var tags: String?
-    @NSManaged var likeNum: Int32
-    @NSManaged var commentNum: Int32
-    @NSManaged var imagesNum: Int32
-    @NSManaged var permissionType: Int32
-    @NSManaged var title: String?
-    @NSManaged var des: String?
-    @NSManaged var cover: String?
-    @NSManaged var permissionPeople: String?
-    @NSManaged var other: String?
-}

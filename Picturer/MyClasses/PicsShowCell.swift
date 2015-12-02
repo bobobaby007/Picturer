@@ -19,7 +19,7 @@ class PicsShowCell:UICollectionViewCell{
    // @IBOutlet weak var _imgView:UIImageView!
    // @IBOutlet weak var _tag_view:UIImageView!
     
-    var _imgView:UIImageView!
+    var _imgView:PicView!
     var _tag_view:UIImageView!
     var _index:Int?
     
@@ -59,8 +59,8 @@ class PicsShowCell:UICollectionViewCell{
     
     
     func _setCorner(__set:CGFloat){
-        _imgView?.layer.cornerRadius=__set
-        _imgView?.layer.masksToBounds=true
+        _imgView!._imgView!.layer.cornerRadius=__set
+        _imgView!._imgView!.layer.masksToBounds=true
     }
     
     
@@ -68,9 +68,10 @@ class PicsShowCell:UICollectionViewCell{
         //println("go")
         super.init(frame: frame)
         
-        _imgView=UIImageView(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
-        _imgView.contentMode=UIViewContentMode.ScaleAspectFill
-        _imgView.layer.masksToBounds=true
+        _imgView=PicView(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
+        _imgView._scaleType = PicView._ScaleType_Full
+        _imgView!._imgView!.layer.masksToBounds=true
+        _imgView.userInteractionEnabled = false
         
         let _width=bounds.size.width/2
         _tag_view=UIImageView(frame: CGRect(x: bounds.size.width-_width, y:0, width: _width, height: _width))
@@ -105,64 +106,19 @@ class PicsShowCell:UICollectionViewCell{
     }
     func _setPic(__pic:NSDictionary){
         
-        
-        switch __pic.objectForKey("type") as! String{
-        case "alasset":
-            let _al:ALAssetsLibrary=ALAssetsLibrary()
-            _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
-                
-                if asset != nil {
-                    self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue()))
-                }else{
-                    self._setImage("entroLogo")//----用户删除时
-                }
-               //
-                //----self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
-                
-                }, failureBlock: { (error:NSError!) -> Void in
-                    print(error)
+        if let _url = __pic.objectForKey("thumbnail") as? String{
+            _imgView!._setPic(NSDictionary(objects: [MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
             })
+            return
+        }
+        _imgView._setPic(__pic) {_ in
             
-        case "file":
-            let _str = __pic.objectForKey("url") as! String
-            let _range = _str.rangeOfString("http")
-            if _range?.count != nil{
-                ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
-                    // _setImage(image)
-                    //println("")
-                    if image==nil{
-                        //--加载失败
-                        print("图片加载失败:",__pic.objectForKey("url"))
-                        return
-                    }
-                    if self._imgView != nil{
-                        self._setImageByImage(image!)
-                        //self._imgView?.image=image
-                        
-                    }else{
-                        print("out")
-                    }
-                    
-                })
-            }else{
-                self._setImage(__pic.objectForKey("url") as! String)
-                
-            }
-        default:
-            print("")
         }
     }
     func _setCornerRadius(__set:CGFloat){
         _imgView.layer.cornerRadius=__set
         _imgView?.layer.masksToBounds=true
-    }
-    func _setImage(_img:String)->Void{
-        _imgView.image=UIImage(named: _img as String)
-    }
-    func _setImageByImage(_img:UIImage)->Void{
-        _imgView.image=_img
-    }
-    
+    }    
     
     
 }

@@ -192,7 +192,7 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
             if _pic != nil{
                 cell._setPic(_pic)
             }else{
-                cell.setThumbImage("blank.png")
+                cell._setPic(NSDictionary(objects: ["blank.png","file"], forKeys: ["url","type"]))
             }
             
         }
@@ -327,7 +327,7 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         case "edite_album":
             MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
         case "pics_to_album"://选择图片到指定相册
-            MainAction._insertPicsToAlbumById( dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+            MainAction._insertPicsToAlbumByIndex( dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
         case "pics_to_album_new"://选择图片到新建立相册
             var _controller:Manage_new?
             _controller=Manage_new()

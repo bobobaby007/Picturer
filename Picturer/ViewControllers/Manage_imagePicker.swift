@@ -248,7 +248,12 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let cell:AlbumListCell=tableView.dequeueReusableCellWithIdentifier("AlbumListCell", forIndexPath: indexPath) as! AlbumListCell
         let _group:DKAssetGroup=_groups[indexPath.row] as! DKAssetGroup
-        cell.setThumbImageByImage(_group.thumbnail)
+        
+        cell._image?._setImageByImage(_group.thumbnail)
+        
+        
+        
+        
         cell.setTitle(_group.groupName)
         cell.setDescription(String(_group.group.numberOfAssets()))
         //cell.imageView?.image=UIImage(named: _albumArray[indexPath.row] as! String)

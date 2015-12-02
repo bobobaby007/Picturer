@@ -12,7 +12,7 @@ import AssetsLibrary
 
 class AlbumListCell :  UITableViewCell{
     
-    var _imageView:UIImageView?
+    var _image:PicView?
     var _titleLable:UILabel?
     var _desLable:UILabel?
     var _timeLable:UILabel?
@@ -28,11 +28,13 @@ class AlbumListCell :  UITableViewCell{
         }
         
        // _imageView=UIImageView(frame: CGRectMake(10, 5, self.bounds.height-10, self.bounds.height-10))
-        _imageView=UIImageView(frame: CGRectMake(10, 8, 75, 75))
-        _imageView?.contentMode=UIViewContentMode.ScaleAspectFill
-        _imageView?.layer.cornerRadius=5
-        _imageView?.layer.masksToBounds=true
-        self.addSubview(_imageView!)
+        _image=PicView(frame: CGRectMake(10, 8, 75, 75))
+        _image?._scaleType = PicView._ScaleType_Full
+        //_image!._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
+        _image!._imgView?.layer.cornerRadius=5
+        _image!._imgView?.layer.masksToBounds=true
+        
+        self.addSubview(_image!)
         
         //_titleLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-22, self.bounds.width-26, 30))
         _titleLable=UILabel(frame: CGRectMake(100, 24, self.bounds.width-100-61, 17))
@@ -66,50 +68,27 @@ class AlbumListCell :  UITableViewCell{
     }
     
     func _changeToNew()->Void{
-        setThumbImage("newAlbum.png")
-        
+        _setPic(NSDictionary(objects: ["newAlbum.png","file"], forKeys: ["url","type"]))
         _arrowV?.hidden=true
         _timeLable?.hidden=true
         _titleLable?.text="开始，"
-        
         _desLable?.frame = CGRectMake(100, 45, self.bounds.width-100-61, 14)
         _desLable?.text="创建一个新图册"
         _desLable?.textColor=UIColor(white: 0, alpha: 1)
         _desLable?.font=UIFont(name: "Helvetica", size: 17)
-        
-        
     }
     
     func _setPic(__pic:NSDictionary){
-        switch __pic.objectForKey("type") as! String{
-        case "alasset":
-            let _al:ALAssetsLibrary=ALAssetsLibrary()
-            _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
-                
-                if asset != nil {
-                    self.setThumbImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue()))
-                }else{
-                    self.setThumbImage("entroLogo")//----用户删除时
-                }
-
-                //self.setThumbImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
-                //self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
-                
-                }, failureBlock: { (error:NSError!) -> Void in
-                    
+        if let _url = __pic.objectForKey("thumbnail") as? String{
+           
+            _image!._setPic(NSDictionary(objects:[MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
             })
-        default:
-            print("")
+            return
         }
+        _image!._setPic(__pic, __block:{_ in
+        })
     }
 
-    func setThumbImage(_image:NSString)->Void{
-        //setUp()
-        _imageView?.image=UIImage(named: _image as String)
-    }
-    func setThumbImageByImage(_image:UIImage)->Void{
-        _imageView?.image=_image
-    }
     func setTitle(_text:NSString)->Void{
         var _str:String = _text as String
         if _str==""{

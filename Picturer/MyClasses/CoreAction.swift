@@ -276,10 +276,13 @@ class CoreAction {
                 __block(NSDictionary(objects: [erro!.code], forKeys: ["recode"]))//--- -1009
                 return
             }
-            let _str = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print("链接成功:",__url,_str)
+            var _str = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            
+            _str = _str?.stringByReplacingOccurrencesOfString(":null", withString: ":\"\"")
+             print("链接成功:",__url,_str)
+            
             do{
-                let jsonResult = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
+                let jsonResult = try NSJSONSerialization.JSONObjectWithData((_str?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true))!, options: NSJSONReadingOptions.MutableContainers)
                 __block(jsonResult as! NSDictionary)
             }catch{
                 print("failed with url:",__url,"respone:",_str)

@@ -285,16 +285,26 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             _picV._scaleType = PicView._ScaleType_Fit
             _picV.tag=100+__index
         }
-        _picV._setPic(_getPicAtIndex(__index),__block: { (__dict) -> Void in
-            
-        })
+        
+        
         if __index == _currentIndex{
             _picV.addGestureRecognizer(_tapG!)
             _currentPic = _picV
         }
         _scrollView!.addSubview(_picV)
+        
+        
+        let __pic:NSDictionary = _getPicAtIndex(__index)
+        
+        if let _url = __pic.objectForKey("link") as? String{
+            _picV!._setPic(NSDictionary(objects: [MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
+            })
+            return
+        }
+        _picV._setPic(__pic,__block: { (__dict) -> Void in
+            
+        })
     }
-    
     
     func _getDatas(){
         

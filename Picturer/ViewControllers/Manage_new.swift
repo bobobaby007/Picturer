@@ -334,7 +334,6 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         return _tableViewCellH
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
         switch indexPath.row{
         case 0:
             let _controller:Setting_tags=Setting_tags()

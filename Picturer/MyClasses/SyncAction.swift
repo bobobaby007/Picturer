@@ -17,12 +17,13 @@ class SyncAction: NSObject{
     static  var _actions:NSMutableArray = []
     static var _currentIndex:Int = 0
    
+    
+    
     static func _addAction(__type:String,__content:NSDictionary){
         let _id:Int = Int(NSDate().timeIntervalSince1970)
         print("time",_id)
         //_getActionList()
         _actions.addObject(NSDictionary(objects: [__type,__content,_id], forKeys: ["type","content","id"]))
-        
         CoreAction._saveArrayToFile(_actions, __fileName: _listName)
     }
     static func _removeActionAtId(__id:Int)->Void{
