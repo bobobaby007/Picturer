@@ -49,23 +49,25 @@ class PicsSelecter:UIViewController, UICollectionViewDelegate, UICollectionViewD
         }
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=UIColor(white:0.1, alpha: 0.98)
+        _topBar?.backgroundColor=MainAction._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: _gap-3, y: 20, width: 40, height: _barH-20))
         _btn_cancel?.titleLabel?.textAlignment = NSTextAlignment.Left
-        _btn_cancel?.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
+        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-40-_gap+3, y: 20, width: 40, height: _barH-20))
         _btn_save?.titleLabel?.textAlignment = NSTextAlignment.Right
-        _btn_save?.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
+        _btn_save?.titleLabel?.font=MainAction._font_topButton
         
         _btn_save?.setTitle("保存", forState: UIControlState.Normal)
-        _btn_save?.setTitleColor(UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1), forState: UIControlState.Normal)
+        _btn_save?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
         _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
+        _title_label=UILabel(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 64))
+        
         _title_label?.textColor=UIColor.whiteColor()
+        _title_label?.font = MainAction._font_topbarTitle
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.text="选择图片"
         

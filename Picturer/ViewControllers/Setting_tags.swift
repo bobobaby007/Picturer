@@ -15,7 +15,7 @@ protocol Setting_tagsDelegate:NSObjectProtocol{
 }
 
 class Setting_tags: UIViewController,UITextFieldDelegate {
-    let _gap:CGFloat=30
+    let _gap:CGFloat=15
     var _setuped:Bool=false
     var _topBar:UIView?
     var _btn_cancel:UIButton?
@@ -47,23 +47,30 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
-        _topBar?.backgroundColor=UIColor.blackColor()
-        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
+        _topBar?.backgroundColor=MainAction._color_black_bar
+        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 6, width: 40, height: 62))
+        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
+        _btn_cancel?.titleLabel?.font = MainAction._font_topButton
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
+        _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 6, width: 40, height: 62))
+        _btn_save?.titleLabel?.font=MainAction._font_topButton
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
-        _btn_save?.setTitleColor(UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1), forState: UIControlState.Normal)
+        _btn_save?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
+        _btn_save?.titleLabel?.font = MainAction._font_topButton
         _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.textColor=UIColor.whiteColor()
+        _title_label?.font = MainAction._font_topbarTitle
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.text="标签"
         
         
         _inputText=UITextField(frame:CGRectMake(0,80,self.view.frame.width,50))
+        
+        
        
         let _leftV:UIView=UIView(frame: CGRectMake(0, 0, _gap, 40))
         _inputText?.leftView=_leftV
@@ -71,7 +78,9 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
         
         
         _inputText?.backgroundColor=UIColor.whiteColor()
-        _inputText?.placeholder="标签(请用逗号分开)"
+        _inputText?.attributedPlaceholder = NSAttributedString(string:"标签(请用逗号分开)",
+            attributes:[NSForegroundColorAttributeName: MainAction._color_gray_description])
+        _inputText?.font = MainAction._font_cell_title_normal
         _inputText?.delegate=self
         
         _tagsIn()
@@ -83,6 +92,15 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
         
         self.view.addSubview(_inputText!)
         self.view.addSubview(_topBar!)
+        
+        
+        let _line:UIView = UIView(frame: CGRect(x: 0, y: 80, width: self.view.frame.width, height: 0.3))
+        _line.backgroundColor = UIColor(white: 0, alpha: 0.2)
+        self.view.addSubview(_line)
+        
+        let _line2:UIView = UIView(frame: CGRect(x: 0, y: 80+50.1, width: self.view.frame.width, height: 0.3))
+        _line2.backgroundColor = UIColor(white: 0, alpha: 0.2)
+        self.view.addSubview(_line2)
         
         _topBar?.addSubview(_btn_cancel!)
         _topBar?.addSubview(_btn_save!)
@@ -98,11 +116,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
     func refreshView(){
        
     }
-    
     func _defaultTagsIn(){
-        
-        
-        
         for var i:Int=0; i<_defaultTags.count; ++i{
             
             let _gapX:CGFloat = 10
@@ -111,7 +125,9 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
             let _gapY:CGFloat = 40
             
             let _text:UILabel = UILabel(frame: CGRectMake(_gap+CGFloat(i%5)*(_gapX+_width), 150+floor(CGFloat(i/5))*_gapY, _width, 30))
-            _text.backgroundColor=UIColor(white: 0.8, alpha: 0.3)
+            _text.backgroundColor=UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
+            _text.textColor = MainAction._color_black_title
+            _text.font = UIFont.systemFontOfSize(14, weight: 0)
             _text.textAlignment=NSTextAlignment.Center
             _text.layer.masksToBounds=true
             _text.layer.cornerRadius=5
@@ -129,13 +145,8 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
     }
     
     func tapHander(tap:UITapGestureRecognizer){
-        
-        
-        
         let _text:UILabel = tap.view as! UILabel
-        
         _tagPutIn(_text.text!)
-        
     }
     
     func _tagsIn(){

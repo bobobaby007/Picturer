@@ -89,25 +89,28 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
         //_scrollView?.scrollEnabled=true
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
-        _topBar?.backgroundColor=UIColor.blackColor()
+        _topBar?.backgroundColor=MainAction._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
+        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
-        _btn_save?.setTitleColor(UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1), forState: UIControlState.Normal)
+        _btn_save?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
         _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _titleLabel = UILabel(frame: CGRect(x: 0, y: 350, width: self.view.frame.width, height: 20))
        _titleLabel?.text="选择保存到相册"
+        _titleLabel?.font = MainAction._font_topButton
+        _titleLabel?.textColor = MainAction._color_black_title
         _titleLabel?.backgroundColor=UIColor.clearColor()
         //_tableView?.userInteractionEnabled=true
         
         _imagesBox=UIView()
         _imagesBox?.backgroundColor=UIColor.whiteColor()
         _addButton=UIButton()
-        _addButton?.backgroundColor=UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1)
+        _addButton?.backgroundColor=MainAction._color_yellow
         _addButton?.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _addButton?.setImage(UIImage(named: "addIcon.png"), forState: UIControlState.Normal)
@@ -146,10 +149,6 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
         }else{
             return _imagesArray.count
         }
-        
-        
-        
-        
         //return 30
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -186,9 +185,6 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
         let identify:String = "PicsShowCell"
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(
             identify, forIndexPath: indexPath) as! PicsShowCell
-        
-        
-        
         //let _al:ALAsset=_imagesArray.objectAtIndex(indexPath.item) as! ALAsset
         let _pic:NSDictionary
         //println(collectionView)
@@ -201,12 +197,21 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
                 cell._hasTag=false
                 cell._setCorner(5)
             }else{
-                _pic = MainAction._getCoverFromAlbumAtIndex(indexPath.item)!
+                
+                
+                let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(indexPath.row)
+                
+                if _pic != nil{
+                    cell._setPic(_pic)
+                }else{
+                    cell._setPic(NSDictionary(objects: ["blank.png","file"], forKeys: ["url","type"]))
+                }
+                
                 cell._hasTag=true
                 cell._selected=false
                 cell._canSelectInside=false
                 cell._setCorner(5)
-                cell._setPic(_pic)
+                
             }
         }else{
             _pic = _imagesArray.objectAtIndex(indexPath.item) as! NSDictionary
@@ -269,15 +274,13 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
             _imageBoxH=_imagesH+_buttonH+2*_gap
         }else{
             _imageBoxH=_imagesH+_buttonH+3*_gap-_space
-        }   
-        
-        
+        } 
         _addButton?.frame=CGRect(x: _gap, y: _gap, width: self.view.frame.width-2*_gap, height: _buttonH)
         _imagesBox?.frame=CGRect(x: 0, y: 0, width: self.view.frame.width, height:_imageBoxH)
         
         _titleLabel?.frame = CGRect(x: _gap, y: _imageBoxH+_gap, width: self.view.frame.width-20, height: 20)
         
-        let _imagesH_album:CGFloat=ceil(CGFloat(MainAction._albumList.count)/4)*(_imagesW+_space)
+        let _imagesH_album:CGFloat=ceil(CGFloat(MainAction._albumList.count+1)/4)*(_imagesW+_space)
         _collectionLayout_2?.minimumInteritemSpacing=_space
         _collectionLayout_2?.minimumLineSpacing=_space
         _collectionLayout_2!.itemSize=CGSize(width: _imagesW, height: _imagesW)

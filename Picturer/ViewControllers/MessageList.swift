@@ -44,7 +44,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=UIColor.blackColor()
+        _topBar?.backgroundColor=MainAction._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: 6, y: 30, width: 40, height: 22))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
@@ -58,6 +58,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: _barH))
+        _title_label?.font = MainAction._font_topbarTitle
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.text="消息列表"

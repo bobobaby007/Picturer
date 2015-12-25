@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AssetsLibrary
 
-class AlbumListCell :  UITableViewCell{
+class AlbumListCellForSearch :  UITableViewCell{
     
     var _image:PicView?
     var _titleLable:UILabel?
@@ -27,12 +27,12 @@ class AlbumListCell :  UITableViewCell{
             return
         }
         _mySize = __size
-       // _imageView=UIImageView(frame: CGRectMake(10, 5, self.bounds.height-10, self.bounds.height-10))
-        _image=PicView(frame: CGRectMake(10, 8, 75, 75))
+        // _imageView=UIImageView(frame: CGRectMake(10, 5, self.bounds.height-10, self.bounds.height-10))
+        _image=PicView(frame: CGRectMake(10, 7.5, 60, 60))
         _image?._scaleType = PicView._ScaleType_Full
         //_image!._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
-//        _image!._imgView?.layer.cornerRadius=5
-//        _image!._imgView?.layer.masksToBounds=true
+        //        _image!._imgView?.layer.cornerRadius=5
+        //        _image!._imgView?.layer.masksToBounds=true
         
         _image?.layer.cornerRadius = 5
         _image?.layer.masksToBounds=true
@@ -42,7 +42,7 @@ class AlbumListCell :  UITableViewCell{
         self.addSubview(_image!)
         
         //_titleLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-22, self.bounds.width-26, 30))
-        _titleLable=UILabel(frame: CGRectMake(100, 24, _mySize!.width-100-61, 20))
+        _titleLable=UILabel(frame: CGRectMake(100, 29, _mySize!.width-100-61, 20))
         _titleLable?.textAlignment = NSTextAlignment.Left
         _titleLable?.textColor = MainAction._color_black_title
         
@@ -59,7 +59,7 @@ class AlbumListCell :  UITableViewCell{
         _desLable?.textAlignment = NSTextAlignment.Left
         _desLable?.textColor=MainAction._color_gray_subTitle
         _desLable?.font=MainAction._font_cell_subTitle
-        self.addSubview(_desLable!)
+        //self.addSubview(_desLable!)
         
         _timeLable=UILabel(frame: CGRectMake(_mySize!.width-14-50, 27.5, 50, 12))
         _timeLable?.textAlignment = NSTextAlignment.Right
@@ -68,8 +68,8 @@ class AlbumListCell :  UITableViewCell{
         
         _arrowV = UIImageView(image: UIImage(named: "list_arrow.png"))
         _arrowV?.frame = CGRect(x: _mySize!.width-21.5, y: 51, width: 7.5, height: 12.72)
-        self.addSubview(_arrowV!)
-         self.addSubview(_timeLable!)
+        //self.addSubview(_arrowV!)
+        //self.addSubview(_timeLable!)
         
         _setuped=true
         
@@ -93,12 +93,14 @@ class AlbumListCell :  UITableViewCell{
             })
             return
         }else{
+            print(_image)
+            
             _image!._setPic(__pic, __block:{_ in
             })
         }
         
     }
-
+    
     func setTitle(_text:NSString)->Void{
         var _str:String = _text as String
         if _str==""{
@@ -107,12 +109,12 @@ class AlbumListCell :  UITableViewCell{
         _titleLable?.text=(_str)
     }
     func setDescription(_text:NSString)->Void{
-         _desLable?.text=_text as String
+        _desLable?.text=_text as String
     }
     func setTime(_text:NSString)->Void{
-         _timeLable?.text=_text as String
+        _timeLable?.text=_text as String
     }
-
+    
     
     override func awakeFromNib() {
         
@@ -121,7 +123,7 @@ class AlbumListCell :  UITableViewCell{
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
-    //    println("哈哈")
+        //    println("哈哈")
         //super.imageView?.hidden=true
     }
 }

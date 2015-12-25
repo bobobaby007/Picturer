@@ -55,14 +55,17 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         _collectionView.collectionViewLayout=layout
         _collectionView.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
         _collectionView.userInteractionEnabled=true
+        _collectionView.bounces = true
+        _collectionView.alwaysBounceVertical = true
         _setuped=true
+        
+        _titleButton?.titleLabel?.font = MainAction._font_topbarTitle
+        _titleButton?.titleLabel?.textColor = MainAction._color_white_title
         
         if _title == ""{
             _titleButton?.setTitle("未命名相册", forState: UIControlState.Normal)
-
         }else{
             _titleButton?.setTitle(_title, forState: UIControlState.Normal)
-
         }
     }
     override func viewDidLoad() {
@@ -76,7 +79,6 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
     func collectionView(collectionView: UICollectionView,
         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-           
             //println(indexPath)
             let cell = self._collectionView?.dequeueReusableCellWithReuseIdentifier(
                 "PicsShowCell", forIndexPath: indexPath) as! PicsShowCell
@@ -88,11 +90,8 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
                 _pic  = _imagesArray.objectAtIndex(_imagesArray.count-indexPath.item-1) as! NSDictionary
             }
             cell._setPic(_pic)
-            
             cell._selected = _selectedAtIndex(indexPath.item)
-            
             cell._delegate = self
-            
             switch _currentAction{
             case _action_normal:
                cell._hasTag=false
@@ -101,7 +100,6 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             default:
                cell._hasTag=false
             }
-            
             return cell
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -113,8 +111,8 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         default:
             print("not set action")
         }
-        
         let _controller:Manage_pic = Manage_pic()
+        _controller._titleBase = _titleButton!.titleLabel!.text!
         _controller._showIndexAtPics(indexPath.item, __array: _imagesArray)
         if _albumIndex != nil{
             _controller._albumIndex = _albumIndex
@@ -126,7 +124,6 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
        // _pic?._setPic(_imagesArray[indexPath.item] as! NSDictionary)
         //_pic?._setImage(_imagesArray[indexPath.item] as! String)
     }
-    
     //------图片单张展示代理
     func canceled() {
         _collectionView.reloadData()
@@ -140,10 +137,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
        
         MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
     }
-    
-    
     //---瀑布流时图片cell选择代理
-    
     func PicDidSelected(pic: PicsShowCell) {
         let _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _imagesArray[pic._index!] as! NSDictionary)
         _pic.setObject(pic._selected, forKey: "selected")
@@ -152,17 +146,12 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _SelectedIndexs.addObject(pic._index!)
         }else{
             _SelectedIndexs.removeObject(pic._index!)
-            
-            
         }
         if _SelectedIndexs.count>0{
-            _btn_edit?.setTitleColor(UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1), forState: UIControlState.Normal)
+            _btn_edit?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
         }else{
             _btn_edit?.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: UIControlState.Normal)
         }
-        
-        
-        
     }
     func _selectedAtIndex(__index:Int)->Bool{
         let _has:Bool=false
@@ -174,11 +163,8 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
                 return true
             }
         }
-        
         return _has
     }
-    
-    
     @IBAction func clickAction(_btn:UIButton)->Void{
         switch _btn{
         case _btn_back!:
@@ -398,39 +384,10 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
     func gotoShare()->Void{
         //sendWXContentUser()
-     sendWXContentFriend()
+        MainAction._shareAlbumAtIndex(_albumIndex!)
     }
     
-    func sendWXContentUser() {//分享给朋友！！
-        let message:WXMediaMessage = WXMediaMessage()
-        message.title = "分享图片：--"
-        message.description = "描述"
-        message.setThumbImage(UIImage(named: "icon_3.png"));
-        let ext:WXWebpageObject = WXWebpageObject();
-        ext.webpageUrl = "http://4view.cn"
-        message.mediaObject = ext
-        let resp = GetMessageFromWXResp()
-        resp.message = message
-        WXApi.sendResp(resp);
-    }
-    
-    func sendWXContentFriend() {//分享朋友圈
-        let message:WXMediaMessage = WXMediaMessage()
-        message.title = "分享图片："
-        message.description = ""
-        message.setThumbImage(UIImage(named: "icon_3.png"));
-        let ext:WXWebpageObject = WXWebpageObject();
-        ext.webpageUrl = "http://4view.cn"
-        message.mediaObject = ext
-        message.mediaTagName = "摄影"
-        let req = SendMessageToWXReq()
-        req.scene = 1
-        req.text = "分享图片："
-        req.bText = false
-        req.message = message
-        WXApi.sendReq(req);
-    }
-    
+        
     override func viewWillAppear(animated: Bool) {
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         UIApplication.sharedApplication().statusBarHidden=false

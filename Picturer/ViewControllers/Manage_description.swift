@@ -28,7 +28,7 @@ class Manage_description: UIViewController,UITextViewDelegate {
     
     var _tapRec:UITapGestureRecognizer?
     
-    var _gap:CGFloat=20
+    var _gap:CGFloat=15
     var _desPlaceHold:String?
     
     var _setuped:Bool=false
@@ -44,40 +44,39 @@ class Manage_description: UIViewController,UITextViewDelegate {
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
-        _topBar?.backgroundColor=UIColor.blackColor()
+        _topBar?.backgroundColor=MainAction._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
+        _btn_cancel?.titleLabel?.font = MainAction._font_topButton
+        
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
-        _btn_save?.setTitleColor(UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1), forState: UIControlState.Normal)
+        _btn_save?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
+        _btn_save?.titleLabel?.font = MainAction._font_topButton
         _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
-        _title_label?.textColor=UIColor.whiteColor()
+        _title_label?.font = MainAction._font_topbarTitle
+        _title_label?.textColor=MainAction._color_white_title
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.text="图片描述"
-        
-        
-        
         //_desPlaceHold =
-        
         _desInput=UITextView(frame: CGRect(x: _gap, y: _topBar!.frame.height+_gap, width: self.view.frame.width-2*_gap, height: 200))
         if _desPlaceHold != nil{
-            _desInput?.text=_desPlaceHold
+          _desInput?.text=_desPlaceHold
         }
         
         //_desInput?.backgroundColor=UIColor.clearColor()
-        _desInput?.font=UIFont(name: "Helvetica", size: 15)
+        _desInput?.font=MainAction._font_description_at_bottom
+        _desInput?.textContainerInset = UIEdgeInsetsZero
+        _desInput?.textContainer.lineFragmentPadding = 0
         //_desInput?.keyboardAppearance=UIKeyboardAppearance.Dark
         //_desInput?.returnKeyType=UIReturnKeyType.Done
+        
         _desInput?.delegate=self
-        
-        
-        
-        
-        
+        _desInput?.becomeFirstResponder()
         
         _desAlert=UILabel(frame:CGRect(x: _gap, y: _desInput!.frame.origin.y+_desInput!.frame.height, width: self.view.frame.width-2*_gap, height: 20) )
         _desAlert?.text=String(0)+"/"+String(_maxNum)
@@ -94,10 +93,7 @@ class Manage_description: UIViewController,UITextViewDelegate {
         _topBar?.addSubview(_btn_cancel!)
         _topBar?.addSubview(_btn_save!)
         _topBar?.addSubview(_title_label!)
-        
-        
         _tapRec=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
-        
         _setuped=true
     }
     

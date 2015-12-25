@@ -102,7 +102,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
-        _topBar?.backgroundColor=UIColor(white: 0.1, alpha: 0.98)
+        _topBar?.backgroundColor=MainAction._color_black_bar
         
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
@@ -118,7 +118,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.font = UIFont.boldSystemFontOfSize(17)
+        _title_label?.font = MainAction._font_topbarTitle
         
         _topBar?.addSubview(_title_label!)
         _topBar?.addSubview(_btn_moreAction!)
@@ -165,7 +165,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         _btn_follow = UIButton(frame: _btn_edite!.frame)
         _btn_follow?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        _btn_follow?.backgroundColor = UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1)
+        _btn_follow?.backgroundColor = MainAction._color_yellow
         _btn_follow?.layer.masksToBounds = true
         _btn_follow?.layer.cornerRadius = 5
         _btn_follow?.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -178,7 +178,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         _btn_message = UIButton(frame: _btn_share!.frame)
         _btn_message?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        _btn_message?.backgroundColor = UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1)
+        _btn_message?.backgroundColor = MainAction._color_yellow
         _btn_message?.layer.masksToBounds = true
         _btn_message?.layer.cornerRadius = 5
         _btn_message?.titleLabel?.textAlignment = NSTextAlignment.Center

@@ -8,8 +8,17 @@
 
 import Foundation
 import UIKit
-class CoreAction {    
-    
+class CoreAction {
+    //---打印所有的字体
+    static func _printAllFonts(){
+        let fontFamilyNames = UIFont.familyNames()
+        for familyName in fontFamilyNames {
+            print("------------------------------")
+            print("Font Family Name = [\(familyName)]")
+            let names = UIFont.fontNamesForFamilyName(familyName)
+            print("Font Names = [\(names)]")
+        }
+    }
     //----从网页查找图片
     static func _getImagesFromUrl(__url:String,__block:(NSDictionary)->Void){
         let request = NSMutableURLRequest(URL: NSURL(string:__url)!)
@@ -24,18 +33,19 @@ class CoreAction {
             }
             let _str = NSString(data: data!, encoding: NSUTF8StringEncoding)
             let str:String = String(_str)
-            let pattern = "http.*?(.png|.jpg|.gif)"
+           let pattern = "(http://+?|https://+?)([^(>|\"|<|'|,|;)]+)(.png|.jpg|.gif)"
             do{
                 let _images:NSMutableArray = []
                 let regex = try NSRegularExpression(pattern: pattern, options: NSRegularExpressionOptions.CaseInsensitive)
                 let res = regex.matchesInString(str, options: NSMatchingOptions(rawValue: 0), range: NSMakeRange(0, str.characters.count))
                 var count = res.count
-                print("链接成功:",count)
+               // print("链接成功:",count)
                 while count > 0 {
                     let checkingRes = res[--count]
                     let tempStr = (str as NSString).substringWithRange(checkingRes.range)
+                
                     _images.addObject(tempStr)
-                    //print("图片:",tempStr)
+                    print("图片:",tempStr)
                 }
                 __block(NSDictionary(objects: [200,_images], forKeys: ["recode","images"]))//--- 200成功
             }catch{

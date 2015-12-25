@@ -12,6 +12,7 @@
 		7A0A15E11B5E998F00A8C6F6 /* noPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15E01B5E998F00A8C6F6 /* noPic.png */; };
 		7A0A15E21B5E998F00A8C6F6 /* noPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15E01B5E998F00A8C6F6 /* noPic.png */; };
 		7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */; };
+		7A1987BF1C29863900458675 /* icon_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1987BE1C29863900458675 /* icon_close.png */; };
 		7A1D94FA1B6A7B12009CCE10 /* MessageList_Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1D94F91B6A7B12009CCE10 /* MessageList_Cell.swift */; };
 		7A1D94FF1B6B26E9009CCE10 /* collect.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1D94FE1B6B26E9009CCE10 /* collect.png */; };
 		7A1D95001B6B26E9009CCE10 /* collect.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1D94FE1B6B26E9009CCE10 /* collect.png */; };
@@ -160,6 +161,7 @@
 		7AB251B61B7F4F5F0029ED80 /* ad_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7AB251B11B7F4F5F0029ED80 /* ad_4.jpg */; };
 		7AB251B71B7F4F5F0029ED80 /* ad_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7AB251B21B7F4F5F0029ED80 /* ad_5.jpg */; };
 		7AC247471B4A669F00A5187B /* AlbumList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7AC247461B4A669F00A5187B /* AlbumList.plist */; };
+		7AC4DFA01C21B7EA009A88BF /* SyncActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */; };
 		7AC55DAE1B3E97EE00FDC851 /* SocialHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */; };
 		7AC55DB01B3E9C7D00FDC851 /* LayoutForSocailHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */; };
 		7AC783831B405B6A00A75214 /* MyHomepage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC783821B405B6A00A75214 /* MyHomepage.swift */; };
@@ -179,6 +181,7 @@
 		7ADE72D71C092E8800BB6DBB /* PicsSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE72D61C092E8800BB6DBB /* PicsSelecter.swift */; };
 		7ADE72D91C093C4500BB6DBB /* NewFromWeb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE72D81C093C4500BB6DBB /* NewFromWeb.swift */; };
 		7ADE73001C09A0F300BB6DBB /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ADE72FF1C09A0F300BB6DBB /* libxml2.tbd */; };
+		7ADEE5101C24F7C40040AB29 /* AlbumListCellForSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADEE50F1C24F7C40040AB29 /* AlbumListCellForSearch.swift */; };
 		7AE185141BFF3B8300C4D6CF /* SearchPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE185131BFF3B8300C4D6CF /* SearchPage.swift */; };
 		7AE9295B1C0C114800EA4FBE /* Picturer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AE929591C0C114800EA4FBE /* Picturer.xcdatamodeld */; };
 		7AE9296C1C0DF52E00EA4FBE /* Album+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE929681C0DF52E00EA4FBE /* Album+CoreDataProperties.swift */; };
@@ -221,6 +224,7 @@
 		7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		7A0A15E01B5E998F00A8C6F6 /* noPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noPic.png; sourceTree = "<group>"; };
 		7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_home.swift; sourceTree = "<group>"; };
+		7A1987BE1C29863900458675 /* icon_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_close.png; sourceTree = "<group>"; };
 		7A1D94F91B6A7B12009CCE10 /* MessageList_Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageList_Cell.swift; sourceTree = "<group>"; };
 		7A1D94FE1B6B26E9009CCE10 /* collect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = collect.png; sourceTree = "<group>"; };
 		7A1FF2431B4AA1E600CEFDAF /* MainAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainAction.swift; sourceTree = "<group>"; };
@@ -338,6 +342,7 @@
 		7AB251B11B7F4F5F0029ED80 /* ad_4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ad_4.jpg; sourceTree = "<group>"; };
 		7AB251B21B7F4F5F0029ED80 /* ad_5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ad_5.jpg; sourceTree = "<group>"; };
 		7AC247461B4A669F00A5187B /* AlbumList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AlbumList.plist; sourceTree = "<group>"; };
+		7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncActionView.swift; path = ../MyClasses/SyncActionView.swift; sourceTree = "<group>"; };
 		7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialHomeCell.swift; sourceTree = "<group>"; };
 		7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutForSocailHome.swift; sourceTree = "<group>"; };
 		7AC783821B405B6A00A75214 /* MyHomepage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyHomepage.swift; sourceTree = "<group>"; };
@@ -359,6 +364,7 @@
 		7ADE72D61C092E8800BB6DBB /* PicsSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicsSelecter.swift; sourceTree = "<group>"; };
 		7ADE72D81C093C4500BB6DBB /* NewFromWeb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewFromWeb.swift; sourceTree = "<group>"; };
 		7ADE72FF1C09A0F300BB6DBB /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		7ADEE50F1C24F7C40040AB29 /* AlbumListCellForSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumListCellForSearch.swift; sourceTree = "<group>"; };
 		7AE185131BFF3B8300C4D6CF /* SearchPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchPage.swift; sourceTree = "<group>"; };
 		7AE9295A1C0C114800EA4FBE /* Picturer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Picturer.xcdatamodel; sourceTree = "<group>"; };
 		7AE929681C0DF52E00EA4FBE /* Album+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Album+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -488,6 +494,7 @@
 			isa = PBXGroup;
 			children = (
 				7A9C86C71B32DD490051D067 /* AlbumListCell.swift */,
+				7ADEE50F1C24F7C40040AB29 /* AlbumListCellForSearch.swift */,
 				7AA180A41B34034D005B42C0 /* CustomLayout.swift */,
 				7AA180A61B341006005B42C0 /* PicsShowCell.swift */,
 				7A39E9B31BECB37A007C0381 /* PicsShowCellOfCamera.swift */,
@@ -511,6 +518,7 @@
 			isa = PBXGroup;
 			children = (
 				7AAD76001B84BE28007C0CB1 /* shareIcons.png */,
+				7A1987BE1C29863900458675 /* icon_close.png */,
 				7AAD75EE1B845D6D007C0CB1 /* startScreen.png */,
 				7AAEA3451B833A4300DB5F54 /* blurBg.jpg */,
 				7AB251AD1B7F4F5F0029ED80 /* ad */,
@@ -563,6 +571,7 @@
 		7AADB5CB1B5E016100E059B6 /* Manage */ = {
 			isa = PBXGroup;
 			children = (
+				7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */,
 				7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */,
 				7AFB23521B317849001C75C9 /* tableTest.swift */,
 				7A9C86C91B3348700051D067 /* Manage_show.swift */,
@@ -761,7 +770,7 @@
 			attributes = {
 				LastSwiftMigration = 0710;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = 4view;
 				TargetAttributes = {
 					7ADD50021B2D402000E44F99 = {
@@ -845,6 +854,7 @@
 				7AC247471B4A669F00A5187B /* AlbumList.plist in Resources */,
 				7AB251931B7F4B010029ED80 /* pic_2.JPG in Resources */,
 				7A49DC9A1B354DB4004FAF14 /* pic_selected.png in Resources */,
+				7A1987BF1C29863900458675 /* icon_close.png in Resources */,
 				7AB2518D1B7F4B010029ED80 /* pic_8.JPG in Resources */,
 				7AB251A41B7F4B0F0029ED80 /* user_2.jpg in Resources */,
 				7AAD76011B84BE28007C0CB1 /* shareIcons.png in Resources */,
@@ -970,12 +980,14 @@
 				7ADE72D91C093C4500BB6DBB /* NewFromWeb.swift in Sources */,
 				7AA26BAD1B4D9A15006CDC61 /* Setting_reply.swift in Sources */,
 				7AAD75F11B846027007C0CB1 /* Navi_Delegate.swift in Sources */,
+				7AC4DFA01C21B7EA009A88BF /* SyncActionView.swift in Sources */,
 				7AA26BA51B4D7052006CDC61 /* Setting_sample.swift in Sources */,
 				7A9C86CA1B3348700051D067 /* Manage_show.swift in Sources */,
 				7AC9B12D1B72437000D05787 /* SearchResult.swift in Sources */,
 				7AAD75E81B843459007C0CB1 /* MyAlerter.swift in Sources */,
 				7AEBE2CD1B54C76A00FC6E9D /* Manage_description.swift in Sources */,
 				7A1D94FA1B6A7B12009CCE10 /* MessageList_Cell.swift in Sources */,
+				7ADEE5101C24F7C40040AB29 /* AlbumListCellForSearch.swift in Sources */,
 				7AA9ACB31B5133C0006B41FE /* PicView.swift in Sources */,
 				7ADE72D51C07D77600BB6DBB /* SyncAction.swift in Sources */,
 				7AA0E1B01B46779E0070538F /* CoreAction.swift in Sources */,
@@ -1068,9 +1080,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				USER_HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
@@ -1110,7 +1122,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
@@ -1128,7 +1140,7 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Picturer/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1153,7 +1165,7 @@
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = "$(SRCROOT)/Picturer/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

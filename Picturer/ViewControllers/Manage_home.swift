@@ -33,6 +33,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     @IBOutlet weak var _addIcon:UIImageView!
     @IBOutlet weak var _btn_search:UIButton!
     
+    var _btn_actions:UIButton?
+    
     var _offset:CGFloat=0
     var _currentIndex:NSIndexPath?
     
@@ -62,6 +64,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         // println(MainAction._albumList)
         super.viewDidLoad()
         setup()
+        
+        
+        CoreAction._printAllFonts()
         
         MainAction._refreshAlbumListFromServer { (__dict) -> Void in
            // self._refresh()
@@ -122,6 +127,17 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             
             self.view.insertSubview(_logoAnimation!.view, aboveSubview: _blurV!)
             self.view.insertSubview(_whiteBg!, aboveSubview: _blurV!)
+            
+            
+            _btn_actions = UIButton(frame: CGRect(x: self.view.frame.width - 100, y: 20, width:50 , height: 50))
+            _btn_actions?.setTitle("^_^", forState: UIControlState.Normal)
+            _btn_actions?.titleLabel?.font = UIFont.systemFontOfSize(12)
+            _btn_actions?.addTarget(self, action: "btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
+            _topView.addSubview(_btn_actions!)
+            
+            _topView.backgroundColor = MainAction._color_black_bar
+            
+            _btn_new.backgroundColor = MainAction._color_yellow_bar
         }
         
         _setuped = true
@@ -129,12 +145,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func _refresh(){
         _tableView.reloadData()
     }
-    
-    
     @IBAction func btnHander(btn:UIButton){
         switch btn{
         case _btn_new:
-            
             if _shareAlert != nil && _shareAlert!._isOpened{
                 _shareAlert!._close()
                 return
@@ -152,8 +165,19 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _openCamera()
             return
         case _btn_search:
-            _openSearchPage()
+            if _searchPage == nil{
+                _openSearchPage()
+            }else{
+                _closeSearchPage()
+            }
+            
             break
+        case _btn_actions!:
+            let _actionView:SyncActionView = SyncActionView()
+            self.presentViewController(_actionView, animated: true, completion: { () -> Void in
+                
+            })
+            return
         default:
             print("", terminator: "")
         }
@@ -165,20 +189,38 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _searchPage = SearchPage()
             _searchPage?._delegate = self
             self.addChildViewController(_searchPage!)
+            _searchPage?.view.frame = CGRect(x: 0, y: MainAction._barH, width: self.view.frame.width, height: self.view.frame.height-MainAction._barH)
             self.view.addSubview(_searchPage!.view)
-            
         }
     }
     //搜索代理
     func _searchPage_cancel() {
+        _closeSearchPage()
+    }
+    func _selcetedAlbumIndex(__index:Int){
+        _openAlbumAtIndex(__index)
+    }
+    //-----
+    
+    func _closeSearchPage(){
         _searchPage?.view.removeFromSuperview()
         _searchPage?.removeFromParentViewController()
-        
         _searchPage = nil
-        
         _refresh()
-        
     }
+    
+    func _openAlbumAtIndex(__index:Int){
+        let _album:NSDictionary = MainAction._getAlbumAtIndex(__index)!
+        var _show:Manage_show?
+        _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
+        _show?._albumIndex=__index
+        _show?._title = _album.objectForKey("title") as? String
+        //_show?._setTitle(_album.objectForKey("title") as! String)
+        _show?._range = _album.objectForKey("range") as! Int
+        _show?._delegate=self
+        self.navigationController?.pushViewController(_show!, animated: true)
+    }
+    
     //-----切换到社交
     func switchToSocial(){
         var _controller:Social_home?
@@ -282,7 +324,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             self._topView.alpha = 0
             self._bottomView.alpha = 0
             self._logoAnimation?.view.alpha = 0
-            
             self._whiteBg!.frame.origin = CGPoint(x: 0, y: self.view.frame.height)
             
         }) { (stop) -> Void in
@@ -311,21 +352,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             return
         }
         
-        let _album:NSDictionary = MainAction._getAlbumAtIndex(indexPath.row)!
+        _openAlbumAtIndex(indexPath.row)
         
         
-        var _show:Manage_show?
-        _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
-    
-        _show?._albumIndex=indexPath.row
-        _show?._title = _album.objectForKey("title") as? String
-        //_show?._setTitle(_album.objectForKey("title") as! String)
-        _show?._range = _album.objectForKey("range") as! Int
-        
-        
-        _show?._delegate=self
-
-        self.navigationController?.pushViewController(_show!, animated: true)
     }
     
     func tableView(tableView:UITableView, numberOfRowsInSection section: Int) -> Int{
@@ -341,6 +370,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         
         let cell:AlbumListCell=_tableView.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
+        
+        
+        cell.setUp(CGSize(width: self.view.frame.width, height: 91))
         
         //cell.separatorInset = UIEdgeInsets(top: 0, left: -1, bottom: 0, right: 0)
         cell.preservesSuperviewLayoutMargins = false
@@ -444,8 +476,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         self.view.insertSubview(_shareAlert!.view, belowSubview: _bottomView)
         _shareAlert?._show()
         
+        
         UIView.animateWithDuration(0.4, animations: { () -> Void in
-            self._addIcon.transform = CGAffineTransformMakeRotation(3.14*1.25)
+            self._addIcon.transform = CGAffineTransformMakeRotation( 45 * CGFloat(M_PI) / 180.0)
+            
         })
         
 //        let rateMenu = UIAlertController(title: "分享", message: "分享这个相册", preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -487,7 +521,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _alerter?._show()
         
         UIView.animateWithDuration(0.4, animations: { () -> Void in
-            self._addIcon.transform = CGAffineTransformMakeRotation(3.14*1.25)
+            self._addIcon.transform = CGAffineTransformMakeRotation( (90+45) * CGFloat(M_PI) / 180.0)
         })
         
         /*
@@ -577,7 +611,11 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             case "new_album":
             MainAction._insertAlbum(dict)
             case "edite_album":
-            MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
+            
+    
+            MainAction._changeAlbumInfoAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
+            MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+            
             case "pics_to_album"://选择图片到指定相册
                 MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
             

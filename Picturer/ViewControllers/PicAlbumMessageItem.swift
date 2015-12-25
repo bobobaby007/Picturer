@@ -199,41 +199,33 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 }
                 
                 _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 35))
-                if #available(iOS 8.2, *) {
+                
                     _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                } else {
-                    // Fallback on earlier versions
-                }
+                
                 _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_like.setTitle("赞", forState: UIControlState.Normal)
                 _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 35))
-                if #available(iOS 8.2, *) {
+                
                     _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                } else {
-                    // Fallback on earlier versions
-                }
+                
                 _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_comment.setTitle("评论", forState: UIControlState.Normal)
                 _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 _btn_share = UIButton(frame: CGRect(x: 2*_toolsGap, y: 0, width: _toolsGap, height: 35))
-                if #available(iOS 8.2, *) {
+                
                     _btn_share.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                } else {
-                    // Fallback on earlier versions
-                }
+                
                 _btn_share.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_share.setTitle("分享", forState: UIControlState.Normal)
                 _btn_share.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 _btn_collect = UIButton(frame: CGRect(x: 3*_toolsGap, y: 0, width: _toolsGap, height: 35))
-                if #available(iOS 8.2, *) {
+                
                     _btn_collect.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                } else {
-                    // Fallback on earlier versions
-                }
+                
                 _btn_collect.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_collect.setTitle("收藏", forState: UIControlState.Normal)
                 _btn_collect.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -298,21 +290,17 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 }
                 
                 _btn_like = UIButton(frame: CGRect(x: 0, y: 0, width: _toolsGap, height: 35))
-                if #available(iOS 8.2, *) {
+                
                     _btn_like.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                } else {
-                    // Fallback on earlier versions
-                }
+                
                 _btn_like.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_like.setTitle("赞", forState: UIControlState.Normal)
                 _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 _btn_comment = UIButton(frame: CGRect(x: _toolsGap, y: 0, width: _toolsGap, height: 35))
-                if #available(iOS 8.2, *) {
+                
                     _btn_comment.titleLabel?.font = UIFont.systemFontOfSize(16, weight: 1)
-                } else {
-                    // Fallback on earlier versions
-                }
+                
                 _btn_comment.titleLabel?.textAlignment = NSTextAlignment.Center
                 _btn_comment.setTitle("评论", forState: UIControlState.Normal)
                 _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -368,7 +356,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 
                 _albumTitle_labelV?.backgroundColor = UIColor.clearColor()
                 _albumTitle_labelV?.layer.borderWidth = 1
-                _albumTitle_labelV?.layer.borderColor = UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1).CGColor
+                _albumTitle_labelV?.layer.borderColor = MainAction._color_yellow.CGColor
                 _albumTitle_labelV?.layer.cornerRadius = 5
                 _albumTitle_labelV?.userInteractionEnabled=false
                 _albumTitle_label = UITextView(frame: CGRect(x: 15, y: 8, width: _defaultSize!.width-2*_gap, height: 12))
@@ -603,11 +591,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         // the entire string
         let range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
-        if #available(iOS 8.2, *) {
+        
             attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFontOfSize(14, weight: 0.1), range:range)
-        } else {
-            // Fallback on earlier versions
-        }
+        
         attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
         attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1), range:range)
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)

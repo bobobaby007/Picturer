@@ -238,11 +238,9 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         // the entire string
         let range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
-        if #available(iOS 8.2, *) {
-            attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFontOfSize(14, weight: 0.1), range:range)
-        } else {
-            // Fallback on earlier versions
-        }
+        
+        attrString.addAttribute(NSFontAttributeName, value:UIFont.systemFontOfSize(14, weight: 0.1), range:range)
+        
         attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
         attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1), range:range)
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)

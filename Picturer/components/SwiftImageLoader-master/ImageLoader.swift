@@ -23,7 +23,6 @@ class ImageLoader {
     func imageForUrl(urlString: String, completionHandler:(image: UIImage?, url: String) -> ()) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {()in
             let data: NSData? = self.cache.objectForKey(urlString) as? NSData
-            
             if let goodData = data {
                 let image = UIImage(data: goodData)
                 dispatch_async(dispatch_get_main_queue(), {() in

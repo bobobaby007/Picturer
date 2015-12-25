@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import AssetsLibrary
+import AVFoundation
 
 class MainInterface: AnyObject {
  
@@ -72,18 +73,28 @@ class MainInterface: AnyObject {
     }
     
     //-----修改相册
-    static func _changeAlbum(){
-        
+    static func _changeAlbum(__albumId:String,__changeingStr:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)"+__changeingStr, __url: _basicDoman+_version+"/"+_URL_Album_Update+__albumId) { (__dict) -> Void in
+            //print(__dict)
+            __block(__dict)
+        }
     }
     //-----删除相册
-    static func _deleteAlbum(){
-        
+    static func _deleteAlbum(__albumId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_Delete+__albumId) { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
     }
     //----上传图片
     static func _uploadPic(__pic:NSDictionary,__album_id:String,__block:(NSDictionary)->Void){
         
         //559a7b34b28d4ec8e088cf0d
-    
+        if __pic.objectForKey("type") == nil{
+            print("图片有问题:",__pic)
+            return
+        }
+        
         switch __pic.objectForKey("type") as! String{
         case "alasset":
             let _al:ALAssetsLibrary=ALAssetsLibrary()
@@ -136,6 +147,64 @@ class MainInterface: AnyObject {
             print("")
         }
         
+    }
+    
+    
+    //---发给微信朋友圈
+    static func _sendWXContentUser(__title:String,__des:String, __url:String,__pic:NSDictionary) {//分享给朋友！！
+        _getSmallPic(__pic) { (__image) -> Void in
+            let message:WXMediaMessage = WXMediaMessage()
+            message.title = __title
+            message.description = __des
+            message.setThumbImage(__image);
+            let ext:WXWebpageObject = WXWebpageObject();
+            ext.webpageUrl = __url
+            message.mediaObject = ext
+            let resp = GetMessageFromWXResp()
+            resp.message = message
+            WXApi.sendResp(resp);
+        }
+        
+    }
+    //---发送微信朋友圈
+    static func _sendWXContentFriend(__title:String,__des:String,__url:String,__pic:NSDictionary) {//分享朋友圈
+        _getSmallPic(__pic) { (__image) -> Void in
+            let message:WXMediaMessage = WXMediaMessage()
+            message.title = __title
+            message.description = __des
+            message.setThumbImage(__image);
+            let ext:WXWebpageObject = WXWebpageObject();
+            ext.webpageUrl = __url
+            message.mediaObject = ext
+            message.mediaTagName = "摄影"
+            let req = SendMessageToWXReq()
+            req.scene = 1
+            req.text = "分享图片："
+            req.bText = false
+            req.message = message
+            WXApi.sendReq(req);
+        }
+    }
+    
+    static func _getSmallPic(__pic:NSDictionary,__block:(UIImage)->Void){
+        let _image:PicView = PicView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+        if let _url = __pic.objectForKey("thumbnail") as? String{
+            
+            _image._setPic(NSDictionary(objects:[MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
+                __block(CoreAction._captureImage(_image))
+            })
+            
+        }
+        _image._setPic(__pic, __block:{_ in
+            __block(CoreAction._captureImage(_image))
+        })
+
+    }
+
+    //----获取图册完整地址,用于分享
+    static func _albumUrl(__albumId:String)->String{
+        let _url:String = _basicDoman + _version + "/share/album/" + __albumId
+        return _url
     }
     
     //-----获取图片完整url

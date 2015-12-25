@@ -76,7 +76,8 @@ class MyAlerter: UIViewController {
             let _v:UIButton = UIButton(frame: CGRect(x: 0, y: CGFloat(i)*_gap, width: self.view.frame.width, height: _gap))
             _v.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
             _v.backgroundColor = UIColor.whiteColor()
-            _v.titleLabel?.font = UIFont.systemFontOfSize(18)
+            _v.titleLabel?.font = UIFont.systemFontOfSize(17.5, weight: 0)
+            _v.titleLabel?.textColor = MainAction._color_black_title
             _v.setTitle(_menus!.objectAtIndex(i) as? String, forState: UIControlState.Normal)
             _v.tag = 100+i
             _v.addTarget(self, action: "_buttonHander:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -89,8 +90,8 @@ class MyAlerter: UIViewController {
         }
         _canelButton = UIButton(frame: CGRect(x: 0, y: _container!.frame.height - _cancelButtonHeight, width: self.view.frame.width, height: _cancelButtonHeight))
         _canelButton!.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        _canelButton!.titleLabel?.font = UIFont.systemFontOfSize(18)
-        _canelButton!.backgroundColor = UIColor.blackColor()
+        _canelButton!.titleLabel?.font = MainAction._font_topbarTitle
+        _canelButton!.backgroundColor = MainAction._color_black_bottom
         _canelButton!.setTitle("取消", forState: UIControlState.Normal)
         _canelButton!.addTarget(self, action: "_buttonHander:", forControlEvents: UIControlEvents.TouchUpInside)
         _canelButton!.tag = -100

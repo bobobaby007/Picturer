@@ -42,9 +42,10 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
 //        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-//        _topBar?.backgroundColor=UIColor.blackColor()
+//        _topBar?.backgroundColor=MainAction._color_black_bar
 //        _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: _barH))
 //        _btn_cancel?.setTitle("返回", forState: UIControlState.Normal)
+//        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
 //        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
 //        _topBar?.addSubview(_btn_cancel!)
 

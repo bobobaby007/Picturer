@@ -24,7 +24,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     let _space:CGFloat=5
     var _alerter:MyAlerter?
     var _albumIndex:Int?
-    
+    var _titleBase:String = ""
     var _action:String?
     
     var _setuped:Bool=false
@@ -49,7 +49,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     
     var _desView:UIView?
     var _desText:UITextView?
-    var _desH:CGFloat=0//-----描述面板高度
+    var _desH:CGFloat=200//-----描述面板高度
     
     var _isScrolling:Bool = false
     
@@ -78,7 +78,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
                 UIApplication.sharedApplication().statusBarHidden=false
             }else{
                 _topBar?.frame=CGRect(x: 0, y: -_barH, width: _topBar!.frame.width, height: _topBar!.frame.height)
-                _desView?.frame=CGRect(x: 0, y: self.view.frame.height+0, width: self.view.frame.width, height: _desH)
+                //_desView?.frame=CGRect(x: 0, y: self.view.frame.height+0, width: self.view.frame.width, height: _desH)
                 UIApplication.sharedApplication().statusBarHidden=true
             }
             
@@ -105,20 +105,29 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         self.view.clipsToBounds=true
         
         _desView = UIView(frame: CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: _desH))
-        _desView?.backgroundColor=UIColor(white: 0, alpha: 0.8)
+        _desView?.backgroundColor=UIColor(white: 0, alpha: 0.5)
+        _desView?.userInteractionEnabled = false
         
-        _desText=UITextView(frame: CGRect(x: 5, y: 5, width: self.view.frame.width-10, height: 0))
+        _desText=UITextView(frame: CGRect(x: 5, y: 5, width: self.view.frame.width-10, height: _desH))
+        _desText?.textContainer.lineFragmentPadding = 0
+        _desText?.textContainerInset = UIEdgeInsetsZero
+        
+        _desText?.textAlignment = NSTextAlignment.Justified
         _desText?.backgroundColor=UIColor.clearColor()
         _desText?.textColor=UIColor.whiteColor()
+        _desText?.editable = false
+        _desText?.selectable = false
+        _desText?.font = MainAction._font_description_at_bottom
         
         _desView?.addSubview(_desText!)
-        //self.view.addSubview(_desView!)
+        self.view.addSubview(_desView!)
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor(white: 0.1, alpha: 0.98)
         
-        _btn_cancel=UIButton(frame:CGRect(x: 11, y: _barH-21-11, width: 51, height: 21))
+        _btn_cancel=UIButton(frame:CGRect(x: MainAction._gap_2, y: _barH-21-11, width: 51, height: 21))
+        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
         _btn_cancel?.setImage(UIImage(named: "back.png"), forState: UIControlState.Normal)
         //_btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -128,11 +137,12 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=UIColor.blackColor()
+        _topBar?.backgroundColor=MainAction._color_black_bar
         
-        _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 56))
+        _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 60))
         _titleT?.editable = false
-        _titleT?.font = UIFont.boldSystemFontOfSize(16)
+        _titleT?.font = MainAction._font_topbarTitle_at_one_pic
+        _titleT?.textColor = MainAction._color_white_title
         _titleT?.backgroundColor = UIColor.clearColor()
         _titleT?.textColor=UIColor.whiteColor()
         _titleT?.scrollEnabled = false
@@ -186,7 +196,11 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _tapG=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
         //_scrollView?.addGestureRecognizer(_tapG!)
         
+        _showingBar = true
+        
         _moveToPicByIndex(_currentIndex!)
+        
+        
         
         _setuped=true
     }
@@ -204,6 +218,29 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         if _currentIndex < 0{
             _currentIndex = 0
         }
+        
+        
+    }
+    
+    //----设置描述
+    func _setDescription(__str:String){
+        _desText?.text = __str
+        if  __str == ""{
+            _desView?.hidden = true
+        }else{
+            _desView?.hidden = false
+        }
+        let _size:CGSize = _desText!.sizeThatFits(CGSize(width: self.view.frame.width-2*_gap, height: CGFloat.max))
+        
+        _desText?.frame =  CGRect(x: _gap, y: _gap/2, width: self.view.frame.width-2*_gap, height: _size.height)
+        
+        _desH = (_desText?.frame.height)!+_gap/2+_gap
+        
+        if _showingBar{
+            _showingBar = true
+        }else{
+            _showingBar = false
+        }
     }
     
     func _clear(){
@@ -211,7 +248,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         
         for view in _scrollView.subviews{
             view.removeFromSuperview()
-            print("remove")
+            //print("remove")
         }
        // _scrollView?.removeFromSuperview()
     }
@@ -225,21 +262,27 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         if (_currentIndex!>_picsArray!.count-1){
             _currentIndex=_picsArray!.count-1
         }
+        var _str:String = ""
+        if _titleBase == ""{
+            _str = _titleBase+"\n"+String(_currentIndex!+1)+"/"+String(_picsArray!.count)
+        }else{
+            _str = _titleBase+"\n"+String(_currentIndex!+1)+"/"+String(_picsArray!.count)
+        }
+        _titleT?.text = _str
         
-        _titleT?.text = "5月12日 12:33 \n"+String(_currentIndex!+1)+"/"+String(_picsArray!.count)
+        //print(_str)
         
         _pic = NSMutableDictionary(dictionary: (_getPicAtIndex(_currentIndex!)))
-        
+        if _pic!.objectForKey("description") != nil{
+            _setDescription(_pic!.objectForKey("description") as! String)
+        }else{
+            _setDescription("")
+        }
         _viewInAtIndex(__index)
-        
         _viewInAtIndex(__index+1)
         _viewInAtIndex(__index-1)
-        
-        
     }
-    
     //---正在挪动的时候
-    
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         if scrollView == _scrollView{
             _showingBar = false
@@ -266,9 +309,6 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     }
     
     func _viewInAtIndex(__index:Int){
-        
-        
-        
         if __index<0{
             return
         }
@@ -418,18 +458,22 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     func saved(dict: NSDictionary) {
         
         let _array:NSMutableArray = NSMutableArray(array: _picsArray!)
-        let _picDict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(_currentIndex!) as! NSDictionary)
+        let _picDict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(_realIndex(_currentIndex!)) as! NSDictionary)
         
         if _albumIndex != nil{
-            MainAction._changePicAtAlbum(_currentIndex!, albumIndex: _albumIndex!, dict: dict)
+            MainAction._changePicAtAlbum(_realIndex(_currentIndex!), albumIndex: _albumIndex!, dict: dict)
             _picDict.setValue(dict.objectForKey("description"), forKey: "description")
+           // print("_currentIndex:",_currentIndex)
         }
         
         // _array.removeObject(_pic)
         
-        _array[_currentIndex!] = _picDict
+        _array[_realIndex(_currentIndex!)] = _picDict
         
         _picsArray = _array
+        
+        print("1:",_array)
+        print("2:",_picsArray)
         
         _clear()
         

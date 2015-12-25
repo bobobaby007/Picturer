@@ -18,8 +18,7 @@ class DoubanApis: NSObject {
         return str
     }
     static func _isDoubanLink(_str:String)->Bool{
-        
-        let _range = _str.rangeOfString("http")
+        let _range = _str.rangeOfString("douban.com")
         if _range?.count != nil{
             return true
         }else{

@@ -38,16 +38,19 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     func _refreshView(){
         //_imgView?.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
     }
-    func _setPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
+    func _setPic(__pic:NSDictionary?,__block:(NSDictionary)->Void){
+        
+        if __pic == nil{
+            print("图片错误: found nil")
+            return
+        }
         
         
-        
-        
-        switch __pic.objectForKey("type") as! String{
+        switch __pic!.objectForKey("type") as! String{
         case "alasset":
             let _al:ALAssetsLibrary=ALAssetsLibrary()
             
-            _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
+            _al.assetForURL(NSURL(string: __pic!.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 if asset != nil {
                     self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
                     
@@ -63,15 +66,15 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                     __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
             })
         case "file":
-            let _str = __pic.objectForKey("url") as! String
+            let _str = __pic!.objectForKey("url") as! String
             let _range = _str.rangeOfString("http")
             if _range?.count != nil{
-                ImageLoader.sharedLoader.imageForUrl(__pic.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
+                ImageLoader.sharedLoader.imageForUrl(__pic!.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
                     // _setImage(image)
                     //println("")
                     if image==nil{
                         //--加载失败
-                        print("图片加载失败:",__pic.objectForKey("url"))
+                        print("图片加载失败:",__pic!.objectForKey("url"))
                         __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
                         return
                     }
@@ -85,7 +88,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                     
                 })
             }else{
-                self._setImage(__pic.objectForKey("url") as! String)
+                self._setImage(__pic!.objectForKey("url") as! String)
                 __block(NSDictionary())
             }
             
@@ -161,7 +164,11 @@ class PicView: UIScrollView,UIScrollViewDelegate{
             break
         }
         _imgView?.frame = CGRect(x: 0, y: 0, width:_img.size.width*_scale, height: _img.size.height*_scale)
+        
+        
         _imgView?.image=_img
+        
+        
         
         //_imgView?.center = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
         self.setContentOffset(CGPoint(x: (_imgView!.frame.width-self.frame.width)/2, y: (_imgView!.frame.height-self.frame.height)/2), animated: false)

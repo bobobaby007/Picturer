@@ -80,6 +80,9 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
            
             super.viewDidLoad()
             
+            _btn_title?.tintColor = MainAction._color_white_title
+            _btn_title?.titleLabel?.font = MainAction._font_topbarTitle
+            
             let layout = CustomLayout()
             _collectionView.collectionViewLayout=layout
             _collectionView.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
@@ -392,9 +395,10 @@ class groupPickerController: UIViewController {
     override func viewDidLoad() {
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
         
-        _topBar?.backgroundColor=UIColor.blackColor()
+        _topBar?.backgroundColor=MainAction._color_black_bar
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 0, width: 40, height: 62))
+        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         

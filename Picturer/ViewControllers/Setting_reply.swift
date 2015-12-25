@@ -42,18 +42,21 @@ class Setting_reply: UIViewController, UITableViewDelegate,UITableViewDataSource
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
-        _topBar?.backgroundColor=UIColor.blackColor()
+        _topBar?.backgroundColor=MainAction._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
+        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
+        _btn_save?.titleLabel?.font=MainAction._font_topButton
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
-        _btn_save?.setTitleColor(UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1), forState: UIControlState.Normal)
+        _btn_save?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
         _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.textColor=UIColor.whiteColor()
+        _title_label?.font = MainAction._font_topbarTitle
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.text="评论权限"
         
@@ -97,6 +100,8 @@ class Setting_reply: UIViewController, UITableViewDelegate,UITableViewDataSource
         UIGraphicsEndImageContext();
         
         cell.textLabel?.text=_settings.objectAtIndex(indexPath.row).objectForKey("title") as? String
+        cell.textLabel?.textColor = MainAction._color_black_title
+        cell.textLabel?.font = MainAction._font_cell_title_normal
         //cell.detailTextLabel?.text=_settings.objectAtIndex(indexPath.row).objectForKey("des") as? String
         
         return cell

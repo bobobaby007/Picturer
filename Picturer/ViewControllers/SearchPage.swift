@@ -14,20 +14,22 @@ import UIKit
 
 protocol SearchPage_delegate:NSObjectProtocol{
     func _searchPage_cancel()
+    func _selcetedAlbumIndex(__index:Int)
 }
 
 class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,Manage_show_delegate,ShareAlert_delegate,Manage_newDelegate{
-    let _barH:CGFloat = 64
+    let _barH:CGFloat = 43
     //var _topBar:UIView?
     //var _btn_cancel:UIButton?
     var _alerter:MyAlerter?
     var _shareAlert:ShareAlert?
     var _setuped:Bool=false
-    let _statusH:CGFloat = 14
+    let _statusH:CGFloat = 0
     let _searchBarH:CGFloat = 43
     var _searchBar:UIView = UIView()
     var _btn_cancel:UIButton?
     var _searchT:UITextField = UITextField()
+    let _searchT_H:CGFloat = 28
     var _gap:CGFloat = 10
     
     var _currentIndex:NSIndexPath?
@@ -35,8 +37,12 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
     
     var _searchingStr:String = ""
     
-    var _resultArray:NSArray = []
+    var _albumArray:NSArray = []
+    var _sectionArray:NSMutableArray = []
     var _blurV:UIVisualEffectView?
+    
+    
+    var _tap:UITapGestureRecognizer?
     
     weak var _delegate:SearchPage_delegate?
     override func viewDidLoad() {
@@ -46,33 +52,41 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         if _setuped{
             return
         }
+        //self.automaticallyAdjustsScrollViewInsets = false
+//        _blurV = UIVisualEffectView(frame: self.view.bounds)
+//        _blurV?.effect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+//        
+//        
+//        self.view.addSubview(_blurV!)
         
-        _blurV = UIVisualEffectView(frame: self.view.bounds)
-        _blurV?.effect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        
+        _tap = UITapGestureRecognizer(target: self, action: "tapHander:")
         
         
-        self.view.addSubview(_blurV!)
-        
-        self.view.backgroundColor=UIColor(white: 1, alpha: 0.8)
+        self.view.backgroundColor=UIColor(white: 1, alpha: 1)
         
         
         _searchBar.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: _searchBarH+_statusH)
         _searchBar.backgroundColor = MainAction._color_yellow
-        let _searchLableV:UIView = UIView(frame: CGRect(x: _gap, y: 7+_statusH, width: self.view.frame.width-2*_gap-_gap-40, height: _searchBarH-14))
+        
+        let _searchLableV:UIView = UIView(frame: CGRect(x: _gap, y: (_searchBarH-_searchT_H)/2+_statusH, width: self.view.frame.width-_gap-55, height: _searchT_H))
         _searchLableV.backgroundColor = UIColor.whiteColor()
         _searchLableV.layer.cornerRadius=5
         
-        _btn_cancel = UIButton(frame: CGRect(x: _searchLableV.frame.origin.x+_searchLableV.frame.width+_gap, y: 7+_statusH, width: 40, height: _searchBarH-14))
+        _btn_cancel = UIButton(frame: CGRect(x: _searchLableV.frame.origin.x+_searchLableV.frame.width, y: (_searchBarH-_searchT_H)/2+_statusH, width: 55, height: _searchBarH-14))
+        _btn_cancel?.titleLabel?.font = UIFont(name: "PingFangSC-Regular", size: 14)!
+        _btn_cancel?.setTitleColor(MainAction._color_black_title, forState: UIControlState.Normal)
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
         
         let _icon:UIImageView = UIImageView(image: UIImage(named: "search_icon.png"))
-        _icon.frame=CGRect(x: _gap, y: 10, width: 13, height: 13)
+        _icon.frame=CGRect(x: _gap, y: 8, width: 13, height: 13)
         
-        _searchT.frame = CGRect(x: _gap+13+5, y: 1, width: self.view.frame.width-2*_gap-_gap, height: _searchBarH-14)
+        _searchT.frame = CGRect(x: _gap+13+5, y: 1, width: _searchLableV.frame.width-13-5, height: _searchT_H)
         _searchT.addTarget(self, action: "textDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
         _searchT.placeholder = "搜索"
-        _searchT.font = UIFont.systemFontOfSize(13)
+        _searchT.font = UIFont.systemFontOfSize(14)
+        _searchT.tintColor = MainAction._color_gray_time
         _searchT.delegate = self
         _searchT.returnKeyType = UIReturnKeyType.Search
         
@@ -83,11 +97,17 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         _searchBar.addSubview(_btn_cancel!)
         
         _tableView = UITableView(frame: CGRect(x: 0, y: _searchBar.frame.height, width: self.view.frame.width, height: self.view.frame.height-_searchBar.frame.height))
-        _tableView?.registerClass(AlbumListCell.self, forCellReuseIdentifier: "alum_cell")
-        _tableView?.backgroundColor = UIColor.clearColor()
+        
+        _tableView?.registerClass(AlbumListCellForSearch.self, forCellReuseIdentifier: "alum_cell")
+        
         _tableView?.dataSource = self
+        //_tableView?.userInteractionEnabled = false
+        _tableView?.backgroundView = UIView(frame: CGRect(x: 0, y: _searchBar.frame.height, width: self.view.frame.width, height: self.view.frame.height-_searchBar.frame.height))
+        _tableView?.backgroundView?.userInteractionEnabled = true
+        _tableView?.backgroundView?.addGestureRecognizer(_tap!)
         _tableView?.delegate = self
-        _tableView!.tableFooterView=UIView(frame: CGRect(x: 0, y: 0, width: _tableView!.frame.width, height:10))
+        _tableView!.tableFooterView=UIView(frame: CGRect(x: 0, y: 0, width: _tableView!.frame.width, height:0))
+        _tableView?.tableFooterView?.backgroundColor = UIColor.clearColor()
         _tableView!.backgroundColor = UIColor.clearColor()
         _tableView!.tableFooterView?.backgroundColor = UIColor.whiteColor()
         
@@ -99,7 +119,10 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         
         _setuped=true
     }
-    
+    func tapHander(sender:UITapGestureRecognizer){
+        print("放弃")
+        _delegate?._searchPage_cancel()
+    }
     func btnHander(sender:UIButton){
         switch sender{
         case _btn_cancel!:
@@ -109,10 +132,15 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
             break
         }
     }
-    
-    
     func _search(){
-        _resultArray = MainAction._searchAlbum(_searchT.text!)
+        _albumArray = MainAction._searchAlbum(_searchT.text!)
+        
+        
+        _sectionArray = []
+        if _albumArray.count > 0{
+            _sectionArray.addObject(NSDictionary(objects: [_albumArray,"album"], forKeys: ["array","type"]))
+        }
+        
         _tableView?.reloadData()
     }
     
@@ -138,64 +166,128 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         return true
     }
     //---------tableview delegate
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 37.5
+    }
+    
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
+        return false
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return _sectionArray.count
+    }
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let _dict:NSDictionary = _sectionArray.objectAtIndex(section) as! NSDictionary
+        let _type:String = _dict.objectForKey("type") as! String
+        
+        
+        let _v:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 37.5))
+        _v.backgroundColor = UIColor.whiteColor()
+        let _label:UILabel = UILabel(frame: CGRect(x: 10, y: (37.5-15)/2 , width: self.view.frame.width - 10, height: 15))
+       _label.font = MainAction._font_cell_subTitle
+        _label.textColor = MainAction._color_gray_subTitle
+        
+        switch _type{
+            case "album":
+                _label.text = "图册"
+            break
+        default:
+            break
+        }
+        
+        _v.addSubview(_label)
+        
+        let _line:UIView = UIView(frame: CGRect(x: 10, y: 37.5 , width: self.view.frame.width - 10, height: 0.3))
+        _line.backgroundColor = UIColor(white: 0, alpha: 0.2)
+        _v.addSubview(_line)
+        
+        return _v
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         //return _tableView.bounds.size.height/5
         
-        return 91
+        return 75
     }
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let _album:NSDictionary = MainAction._getAlbumAtIndex(indexPath.row)!
-        var _show:Manage_show?
-        _show=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
-        _show?._albumIndex=indexPath.row
-        _show?._title = _album.objectForKey("title") as? String
-        //_show?._setTitle(_album.objectForKey("title") as! String)
-        _show?._range = _album.objectForKey("range") as! Int
-        _show?._delegate=self
-        self.navigationController?.pushViewController(_show!, animated: true)
+        let _dict:NSDictionary = _sectionArray.objectAtIndex(indexPath.section) as! NSDictionary
+        let _type:String = _dict.objectForKey("type") as! String
+        
+        
+        switch _type{
+        case "album":
+            openAlbumAtRow(indexPath.row)
+            break
+        default:
+            break
+        }
+        
+       
+    }
+    
+    //---打开相册
+    func openAlbumAtRow(__row:Int){
+        
+        let _dict:NSDictionary=_albumArray[__row] as! NSDictionary
+        
+        var _index:Int
+        if MainAction._haOnlineId(_dict){
+            _index = MainAction._getAlbumIndexOfId(_dict.objectForKey("_id") as! String)
+        }else{
+            _index = MainAction._getAlbumIndexOfLocalId(_dict.objectForKey("localId") as! Int)
+        }
+        
+        _delegate?._selcetedAlbumIndex(_index)
     }
     
     func tableView(tableView:UITableView, numberOfRowsInSection section: Int) -> Int{
-        return _resultArray.count
+        let _dict:NSDictionary = _sectionArray.objectAtIndex(section) as! NSDictionary
+        let _array:NSArray = _dict.objectForKey("array") as! NSArray
+        
+        return _array.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath:NSIndexPath) -> UITableViewCell{
-        let cell:AlbumListCell=_tableView!.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
+        
+        let _dict:NSDictionary = _sectionArray.objectAtIndex(indexPath.section) as! NSDictionary
+        let _array:NSArray = _dict.objectForKey("array") as! NSArray
+
+        
+        
+        let cell:AlbumListCellForSearch=_tableView!.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCellForSearch
         //cell.separatorInset = UIEdgeInsets(top: 0, left: -1, bottom: 0, right: 0)
         cell.preservesSuperviewLayoutMargins = false
         cell.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         
-        
+        cell.setUp(CGSize(width: self.view.frame.width, height: 75))
         //cell.textLabel?.text=_albumArray[indexPath.row] as? String
         
-        if _resultArray.count<1{
-            cell._changeToNew()
+        
+        let _album:NSDictionary=_array[indexPath.row] as! NSDictionary
+        cell.setTitle((_album.objectForKey("title") as? String)!)
+        cell.setTime("下午2:00")
+        
+        
+        cell.setDescription(String(stringInterpolationSegment: MainAction._getImagesOfAlbumIndex(indexPath.row)!.count)+"张")
+        //cell.detailTextLabel?.text="ss"
+        
+        var _index:Int
+        if MainAction._haOnlineId(_album){
+            _index = MainAction._getAlbumIndexOfId(_album.objectForKey("_id") as! String)
         }else{
-            let _album:NSDictionary=_resultArray[indexPath.row] as! NSDictionary
-            cell.setTitle((_album.objectForKey("title") as? String)!)
-            cell.setTime("下午2:00")
-            
-            
-            cell.setDescription(String(stringInterpolationSegment: MainAction._getImagesOfAlbumIndex(indexPath.row)!.count)+"张")
-            //cell.detailTextLabel?.text="ss"
-            
-            let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(indexPath.row)
-            
-            if _pic != nil{
-                cell._setPic(_pic)
-            }else{
-                cell._setPic(NSDictionary(objects: ["blank.png","file"], forKeys: ["url","type"]))
-            }
-            
+            _index = MainAction._getAlbumIndexOfLocalId(_album.objectForKey("localId") as! Int)
         }
+        let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(_index)
+        
+        if _pic != nil{
+            cell._setPic(_pic)
+            
+        }else{
+            cell._setPic(NSDictionary(objects: ["blank.png","file"], forKeys: ["url","type"]))
+        }
+            
+        
         //cell.imageView?.image=UIImage(named: _albumArray[indexPath.row] as! String)
         return cell
         
@@ -206,7 +298,7 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
     }
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        if _resultArray.count<1{
+        if _albumArray.count<1{
             return []
         }
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "删除", handler: actionHander)
@@ -325,7 +417,8 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         case "new_album":
             MainAction._insertAlbum(dict)
         case "edite_album":
-            MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
+            MainAction._changeAlbumInfoAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
+            MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
         case "pics_to_album"://选择图片到指定相册
             MainAction._insertPicsToAlbumByIndex( dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
         case "pics_to_album_new"://选择图片到新建立相册
