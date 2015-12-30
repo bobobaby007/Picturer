@@ -107,7 +107,7 @@ class SyncActionView: UIViewController, UITableViewDataSource, UITableViewDelega
         
         _actionsArray = SyncAction._actions
         
-        print(_actionsArray)
+        //print(_actionsArray)
         _tableView?.reloadData()
         
     }
@@ -124,7 +124,7 @@ class SyncActionView: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        return 400
+        return 100
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:UITableViewCell
@@ -138,7 +138,13 @@ class SyncActionView: UIViewController, UITableViewDataSource, UITableViewDelega
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "CollectItem")
         }
         
-        cell.textLabel?.text = String(_actionsArray.objectAtIndex(indexPath.row))
+        var _str:String = String(indexPath.row)
+        
+        let _dict:NSDictionary = _actionsArray.objectAtIndex(indexPath.row) as! NSDictionary
+        
+        _str = _str + (_dict.objectForKey("type") as! String)
+        
+        cell.textLabel?.text = _str
         
         
         return cell

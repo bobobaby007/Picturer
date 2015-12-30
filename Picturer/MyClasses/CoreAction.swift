@@ -166,7 +166,7 @@ class CoreAction {
     }
     //------截图
     static func _captureImage(__view:UIView)->UIImage{
-        UIGraphicsBeginImageContextWithOptions(__view.frame.size,true, 0.0);
+        UIGraphicsBeginImageContextWithOptions(__view.frame.size,false, 0.0);
         __view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let img:UIImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

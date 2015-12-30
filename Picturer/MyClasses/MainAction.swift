@@ -123,6 +123,7 @@ class MainAction: AnyObject {
                 if _index != -1{
                     print("相册\(__albumId)里的图片：",images)
                     _refreshImagesOfAlbumByIndex(images, __albumIndex: _index)
+                    _asynImagesOfAlbumByIndex(_index)
                 }
                 __block(__dict)
             }
@@ -184,56 +185,21 @@ class MainAction: AnyObject {
     }
     //----从本地添加图片到相册通过index
     static func _insertPicsToAlbumByIndex(__pics:NSArray,__albumIndex:Int){
-        
-        
-        
         let _album:NSDictionary = MainAction._getAlbumAtIndex(__albumIndex)!
         let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
         
         for var i:Int = 0; i<__pics.count;++i{
-            
-            
             let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: __pics.objectAtIndex(i) as! NSDictionary)
             
             if _albumHasPic(__albumIndex,__pic: _pic){
                 continue
             }
-
+            let _newPic:NSDictionary = SyncAction._uploadPicToAlbum(_pic, _album: _album)
             
-            if _pic.objectForKey("_id") == nil{
-                _pic.setObject("", forKey: "_id")
-            }
-            if _pic.objectForKey("last_update_at") == nil{
-                _pic.setObject(CoreAction._timeStrOfCurrent(), forKey: "last_update_at")
-            }
-            if _pic.objectForKey("title") == nil{
-                _pic.setObject("", forKey: "title")
-            }
-            if _pic.objectForKey("create_at") == nil{
-                _pic.setObject(CoreAction._timeStrOfCurrent(), forKey: "create_at")
-            }
-            
-            let _localId:String=String(Int(NSDate().timeIntervalSince1970))
-            _pic.setObject(_localId, forKey: "localId")
-            
-            if let _albumId = _album.objectForKey("_id") as? String{
-                _pic.setObject(_albumId, forKey: "albumId")//---------已经有在线相册id的用在线相册id保存关联
-            }else{
-                let _localAbumId:String = _album.objectForKey("localId") as! String
-                _pic.setObject(_localAbumId, forKey: "localAbumId")//-------没有在线相册id用本地相册id关联
-            }
-            print(_pic)
-            
-            SyncAction._addAction(SyncAction._Type_uploadPic, __content: _pic)
-            
-            _images.insertObject(_pic, atIndex: 0)
+            _images.insertObject(_newPic, atIndex: 0)
         }
         _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
     }
-    
-    
-   
-    
     //----更新相册里的图片
     static func _refreshImagesOfAlbumByIndex(__pics:NSArray,__albumIndex:Int){
         let _images:NSMutableArray = NSMutableArray(array: _getImagesOfAlbumIndex(__albumIndex)!)
@@ -243,25 +209,48 @@ class MainAction: AnyObject {
             
             for var u:Int = 0;u<_images.count;++u{
                 let _image:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(u) as! NSDictionary)
-                if _image.objectForKey("_id") as! String == _pic.objectForKey("_id")  as! String{
-                    for (key,value) in _pic{
-                        //println(key,value)
-                        if  String(value) != ""{
-                            _image.setObject(value, forKey: key as! String)
+                
+                if let _id:String = _image.objectForKey("_id") as? String{
+                    if _id == _pic.objectForKey("_id")  as! String{
+                        for (key,value) in _pic{
+                            //println(key,value)
+                            if  String(value) != ""{
+                                _image.setObject(value, forKey: key as! String)
+                            }
                         }
+                        _images[u] = _image
+                        _has = true
+                        break
                     }
-                    _images[u] = _image
-                    _has = true
-                    break
                 }
+                
             }
             if !_has{
                 _images.insertObject(_pic, atIndex: 0)
             }
-            
         }
         _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
     }
+    
+    //----同步到服务器，相册里的图片
+    static func _asynImagesOfAlbumByIndex(__albumIndex:Int){
+        let _album:NSDictionary = MainAction._getAlbumAtIndex(__albumIndex)!
+        let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
+        
+        for var u:Int = 0;u<_images.count;++u{
+            var _image:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(u) as! NSDictionary)
+            
+            if _haOnlineId(_image){
+                
+            }else{
+              _image = NSMutableDictionary(dictionary: SyncAction._uploadPicToAlbum(_image, _album: _album))
+            }
+            
+            _images[u] = _image
+        }
+        _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
+    }
+    
     
     //----新建相册
     static func _insertAlbum(dict:NSDictionary){
@@ -294,9 +283,7 @@ class MainAction: AnyObject {
         if _album.objectForKey("_id") as! String == ""{
             SyncAction._addAction(SyncAction._Type_newAlbum, __content: _album)
         }
-        
         //－－－－
-        
         _albumList=_list
        // println(_albumList)
         
@@ -304,7 +291,6 @@ class MainAction: AnyObject {
     static func _saveTempAlbum(dict:NSDictionary){
         _tempAlbum = NSMutableDictionary(dictionary: dict)
     }
-    
     //-----设置相册默认值-----
     static func _setDefault(_album:NSMutableDictionary){
         if _album.objectForKey("title") == nil{
@@ -337,8 +323,11 @@ class MainAction: AnyObject {
         let _list:NSMutableArray=NSMutableArray(array:_albumList )
         //println(index)
         let _dict:NSDictionary = _list.objectAtIndex(index) as! NSDictionary
-        _deleteAlbumFromServer(_dict)
-        
+        if let _id:String = _dict.objectForKey("_id") as? String{
+            if _id != ""{
+                _deleteAlbumFromServer(_dict)
+            }
+        }
         _list.removeObjectAtIndex(index)
         _albumList=_list
     }
@@ -387,7 +376,6 @@ class MainAction: AnyObject {
     }
     //---判断是否有在线同步id,相册或者相片一样
     static func _haOnlineId(__dict:NSDictionary)->Bool{
-        
         if let _id:String =  __dict.objectForKey("_id") as? String{
             if _id != ""{
                 return true

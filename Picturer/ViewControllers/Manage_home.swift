@@ -66,7 +66,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         setup()
         
         
-        CoreAction._printAllFonts()
+        //CoreAction._printAllFonts()
         
         MainAction._refreshAlbumListFromServer { (__dict) -> Void in
            // self._refresh()

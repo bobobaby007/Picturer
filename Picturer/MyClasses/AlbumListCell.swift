@@ -19,9 +19,6 @@ class AlbumListCell :  UITableViewCell{
     var _setuped:Bool=false
     var _arrowV:UIImageView?
     var _mySize:CGSize?
-    
-    
-    
     func setUp(__size:CGSize){
         if _setuped {
             return
