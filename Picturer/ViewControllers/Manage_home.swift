@@ -609,13 +609,12 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func saved(dict: NSDictionary) {
         switch dict.objectForKey("Action_Type") as! String{
             case "new_album":
-            MainAction._insertAlbum(dict)
+                MainAction._newAlbumFromeServer("title", __block: { (__dict) -> Void in
+                    MainAction._insertAlbum(dict)
+                })
             case "edite_album":
-            
-    
             MainAction._changeAlbumInfoAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
             MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
-            
             case "pics_to_album"://选择图片到指定相册
                 MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
             

@@ -104,7 +104,7 @@ class MainInterface: AnyObject {
                     let __image:UIImage = UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
                     
                     CoreAction._sendToUrl("token=\(_token)&album=\(__album_id)&imagend=jpg&image=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
-                        print(__dict)
+                       // print(__dict)
                         __block(__dict)
                     }
                 }else{
@@ -128,7 +128,7 @@ class MainInterface: AnyObject {
                         return
                     }
                     CoreAction._sendToUrl("token=\(_token)&album=\(__album_id)&uploadpic=\(CoreAction._imageToString(image!))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
-                        print(__dict)
+                        //print(__dict)
                         __block(__dict)
                     }
                     
@@ -138,7 +138,7 @@ class MainInterface: AnyObject {
                 let __image:UIImage = UIImage(named: __pic.objectForKey("url") as! String)!
                 
                 CoreAction._sendToUrl("token=\(_token)&album=\(__album_id)&uploadpic=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
-                    print(__dict)
+                    //print(__dict)
                     __block(__dict)
                 }
             }
@@ -148,7 +148,13 @@ class MainInterface: AnyObject {
         }
         
     }
-    
+    //-----修改图片
+    static func _changePic(__picId:String,__changeingStr:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)"+__changeingStr, __url: _basicDoman+_version+"/"+_URL_Pic_update+__picId) { (__dict) -> Void in
+            //print(__dict)
+            __block(__dict)
+        }
+    }
     
     //---发给微信朋友圈
     static func _sendWXContentUser(__title:String,__des:String, __url:String,__pic:NSDictionary) {//分享给朋友！！

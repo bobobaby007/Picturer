@@ -11,6 +11,7 @@ import UIKit
 class SyncAction: NSObject{
     static let _listName:String = "SyncActionList"
     static let _Type_uploadPic:String = "_Type_uploadPic"
+    static let _Type_updatePic:String = "_Type_updatePic"
     static let _Type_newAlbum:String = "_Type_newAlbum"
     static let _Type_deleteAlbum:String = "_Type_deleteAlbum"
     static let _Type_updateAlbum:String = "_Type_updateAlbum"
@@ -54,7 +55,7 @@ class SyncAction: NSObject{
     
     
     
-    //-----上传图片到相册
+    //-----上传图片到相册,返回带着默认值的pic字典
     static func _uploadPicToAlbum(__pic:NSDictionary,_album:NSDictionary)->NSDictionary{
         let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: __pic)
         
@@ -137,8 +138,7 @@ class SyncAction: NSObject{
                 MainInterface._uploadPic(_content, __album_id: _content.objectForKey("albumId") as! String, __block: { (__dict) -> Void in
                     _actioning = false
                     if __dict.objectForKey("recode") as! Int == 200{
-                        SyncAction._removeActionById(_dict.objectForKey("_id") as! Int)
-                        SyncAction._nextAction()
+                        SyncAction._finishActionById(_dict.objectForKey("_id") as! Int,__dict: __dict)
                     }else{
                         SyncAction._nextAction()
                     }
@@ -176,6 +176,17 @@ class SyncAction: NSObject{
                     }
                 })
                 break
+            case _Type_updatePic:
+                MainInterface._changePic(_content.objectForKey("_id") as! String, __changeingStr: _content.objectForKey("changeingStr") as! String, __block: { (__dict) -> Void in
+                    _actioning = false
+                    if __dict.objectForKey("recode") as! Int == 200{
+                        SyncAction._removeActionById(_dict.objectForKey("_id") as! Int)
+                        SyncAction._nextAction()
+                    }else{
+                        SyncAction._nextAction()
+                    }
+                })
+                break
             default:
                 break
             }
@@ -195,6 +206,14 @@ class SyncAction: NSObject{
                 let _type:String = _dict.objectForKey("type") as! String
                 switch _type{
                     case _Type_deleteAlbum:
+                    
+                        
+                        
+                    break
+                case _Type_uploadPic:
+                    print("图片传成功：",__dict,_content)
+                    let _newPic:NSDictionary = __dict.objectForKey("info") as! NSDictionary
+                    
                     
                     break
                 case _Type_newAlbum:

@@ -118,12 +118,13 @@ class MainAction: AnyObject {
         MainInterface._getImagesOfAlbum(__albumId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 let images:NSArray = __dict.objectForKey("list") as! [NSDictionary]
-                
                 let _index = _getAlbumIndexOfId(__albumId)
                 if _index != -1{
-                    print("相册\(__albumId)里的图片：",images)
-                    _refreshImagesOfAlbumByIndex(images, __albumIndex: _index)
-                    _asynImagesOfAlbumByIndex(_index)
+                    //print("相册\(__albumId)里的图片：",images)
+                    //_refreshImagesOfAlbumByIndex(images, __albumIndex: _index)
+                    //_asynImagesOfAlbumByIndex(_index)
+                    _changeAlbumAtIndex(_index,dict:NSDictionary(object: images, forKey: "images"))
+                    
                 }
                 __block(__dict)
             }
@@ -250,11 +251,13 @@ class MainAction: AnyObject {
         }
         _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
     }
-    
-    
+    static func _newAlbumFromeServer(__title:String,__block:(NSDictionary)->Void){
+        MainInterface._createAlbum(__title) { (__dict) -> Void in
+            __block(__dict)
+        }
+    }
     //----新建相册
     static func _insertAlbum(dict:NSDictionary){
-        
         let _list:NSMutableArray=NSMutableArray(array:_albumList )
         let _album:NSMutableDictionary = NSMutableDictionary(dictionary: dict)
         if _album.objectForKey("_id") == nil{
@@ -268,7 +271,6 @@ class MainAction: AnyObject {
         }
         let _localId:Int = Int(NSDate().timeIntervalSince1970)
         _album.setObject(_localId, forKey: "localId")
-        
         if _album.objectForKey("last_update_at") == nil{
             _album.setObject(CoreAction._timeStrOfCurrent(), forKey: "last_update_at")
         }
@@ -477,14 +479,53 @@ class MainAction: AnyObject {
         }
         _changeAlbumAtIndex(index, dict: _dict)
     }
+    //----通过图片localId添加在线id,图片上传完肯定有相册id
+    static func _changeOnlineIdOfPicByLocalId(__localId:Int,__onlineId:String){
+        let _indexPath:NSIndexPath = _getPathOfPicByLoacleId(__localId)
+        print(_indexPath.row)
+        
+    }
+    //------通过图片localId获取图册和图片对应index
+    static func _getPathOfPicByLoacleId(__localId:Int)->NSIndexPath{
+        for var i:Int = 0; i < MainAction._albumList.count; ++i{
+            let _album:NSDictionary = MainAction._albumList.objectAtIndex(i) as! NSDictionary
+            let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
+            for var _d:Int = 0; _d<_images.count ; ++_d{
+                let _img:NSDictionary = _images.objectAtIndex(_d) as! NSDictionary
+                if let _localId:Int = _img.objectForKey("localId") as? Int{
+                    if _localId == __localId{
+                        return NSIndexPath(forRow: i, inSection: _d)
+                    }
+                }
+            }
+        }
+        return NSIndexPath(forRow: -1, inSection: -1)
+    }
+    
     //------修改相册里的某张图片
     static func _changePicAtAlbum(index:Int,albumIndex:Int,dict:NSDictionary){
         let _album:NSDictionary = MainAction._getAlbumAtIndex(albumIndex)!
         let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
         let _img:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(index) as! NSDictionary)
+        var _str:String = ""
         for (key,value) in dict{
             //println(key,value)
+            if String(key) == "title"{
+                _str = _str + "&title=" + String(value)
+            }
+            if String(key) == "description"{
+                _str = _str + "&description=" + String(value)
+            }
+            
+            
             _img.setObject(value, forKey: key as! String)
+            
+            
+        }
+        if _str != ""{
+            if let _picId = _album.objectForKey("_id") as? String {
+                SyncAction._addAction(SyncAction._Type_updatePic, __content: NSDictionary(objects: [_picId,_str], forKeys: ["_id","changeingStr"]))
+            }
         }
         _images[index] = _img
         _changeAlbumAtIndex(albumIndex, dict: NSDictionary(object: _images, forKey: "images"))
