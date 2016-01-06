@@ -27,6 +27,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         self.showsHorizontalScrollIndicator=false
         self.showsVerticalScrollIndicator=false
         _imgView=UIImageView(frame: self.bounds)
+        _imgView?.backgroundColor = UIColor(white: 0.8, alpha: 0.1)
         //_imgView?.layer.minificationFilter = kCAFilterTrilinear
         //_imgView?.alpha = 0.3
         _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
@@ -69,6 +70,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
             let _str = __pic!.objectForKey("url") as! String
             let _range = _str.rangeOfString("http")
             if _range?.count != nil{
+                _imgView?.image = nil
                 ImageLoader.sharedLoader.imageForUrl(__pic!.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
                     // _setImage(image)
                     //println("")
@@ -81,6 +83,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                     if self._imgView != nil{
                         self._setImageByImage(image!)
                         //self._imgView?.image=image
+                        
                         __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
                     }else{
                         print("out")
@@ -148,8 +151,8 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     }
     func _setImageByImage(_img:UIImage){
         
-        let _scaleW = _imgView!.frame.width/_img.size.width
-        let _scaleH = _imgView!.frame.height/_img.size.height
+        let _scaleW = self.bounds.width/_img.size.width
+        let _scaleH = self.bounds.height/_img.size.height
         
         var _scale = max(_scaleW,_scaleH)
         switch _scaleType{

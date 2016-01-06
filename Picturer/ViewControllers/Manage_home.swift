@@ -51,6 +51,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     var _setuped:Bool = false
     
     override func viewDidLoad() {
+        
         //        var _album:AlbumObj=AlbumObj()
         //        var _images:NSMutableArray = [["sss":"44"]]
         //
@@ -68,13 +69,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         //CoreAction._printAllFonts()
         
-        MainAction._refreshAlbumListFromServer { (__dict) -> Void in
-           // self._refresh()
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                self._refresh()
-            })
-        }
+        _refreshFromServer()
         
         
 //        MainInterface._signup("18612438608", __pass: "123456") { (__dict) -> Void in
@@ -96,6 +91,16 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         // _tableView.separatorColor=UIColor.clearColor()
     }
+    func _refreshFromServer(){
+        
+        MainAction._refreshAlbumListFromServer { (__dict) -> Void in
+            // self._refresh()
+            dispatch_async(dispatch_get_main_queue(), {
+                self._refresh()
+            })
+        }
+    }
+    
     
     func setup(){
         if _setuped{
@@ -133,7 +138,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _btn_actions?.setTitle("^_^", forState: UIControlState.Normal)
             _btn_actions?.titleLabel?.font = UIFont.systemFontOfSize(12)
             _btn_actions?.addTarget(self, action: "btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
-            _topView.addSubview(_btn_actions!)
+            //_topView.addSubview(_btn_actions!)
             
             _topView.backgroundColor = MainAction._color_black_bar
             
@@ -143,6 +148,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _setuped = true
     }
     func _refresh(){
+        
         _tableView.reloadData()
     }
     @IBAction func btnHander(btn:UIButton){
@@ -607,18 +613,24 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     //----弹出编辑\新建\图片到相册 代理
     func saved(dict: NSDictionary) {
+        
         switch dict.objectForKey("Action_Type") as! String{
+            
             case "new_album":
-                MainAction._newAlbumFromeServer("title", __block: { (__dict) -> Void in
-                    MainAction._insertAlbum(dict)
-                })
+//                MainAction._newAlbumFromeServer("title", __block: { (__dict) -> Void in
+//                    MainAction._insertAlbum(dict)
+//                })
+                
+            break
             case "edite_album":
             MainAction._changeAlbumInfoAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
-            MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
-            case "pics_to_album"://选择图片到指定相册
-                MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
             
-                
+            //MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+            break
+            case "pics_to_album"://选择图片到指定相册
+            //    MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+            
+              break
             case "pics_to_album_new"://选择图片到新建立相册
                 var _controller:Manage_new?
                 _controller=Manage_new()
@@ -628,7 +640,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         default:
             print("")
         }
-        _tableView.reloadData()
+        //_tableView.reloadData()
+        
+        
+        _refreshFromServer()
     }
     func canceld() {
         _tableView.reloadData()
@@ -663,6 +678,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _controller=Manage_PicsToAlbum()
         _controller?._delegate=self
         _controller?._imagesArray=NSMutableArray(array: images)
+        
+        
         // println(_show)
         //  var _show = self.storyboard?.instantiateViewControllerWithIdentifier("Manage_show") as? Manage_show
        // self.navigationController?.popViewControllerAnimated(false)

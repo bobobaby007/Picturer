@@ -135,7 +135,7 @@ class SyncAction: NSObject{
             let _content:NSDictionary = _dict.objectForKey("content") as! NSDictionary
             switch _dict.objectForKey("type") as! String{
             case _Type_uploadPic:
-                MainInterface._uploadPic(_content, __album_id: _content.objectForKey("albumId") as! String, __block: { (__dict) -> Void in
+                MainInterface._uploadPic(_content,__block: { (__dict) -> Void in
                     _actioning = false
                     if __dict.objectForKey("recode") as! Int == 200{
                         SyncAction._finishActionById(_dict.objectForKey("_id") as! Int,__dict: __dict)
@@ -145,14 +145,14 @@ class SyncAction: NSObject{
                 })
                 break
             case _Type_newAlbum:
-                MainInterface._createAlbum(_content.objectForKey("title") as! String, __block: { (__dict) -> Void in
-                    _actioning = false
-                    if __dict.objectForKey("recode") as! Int == 200{
-                        SyncAction._finishActionById(_dict.objectForKey("_id") as! Int,__dict: __dict)
-                    }else{
-                        SyncAction._nextAction()
-                    }
-                })
+//                MainInterface._createAlbum(_content.objectForKey("title") as! String, __block: { (__dict) -> Void in
+//                    _actioning = false
+//                    if __dict.objectForKey("recode") as! Int == 200{
+//                        SyncAction._finishActionById(_dict.objectForKey("_id") as! Int,__dict: __dict)
+//                    }else{
+//                        SyncAction._nextAction()
+//                    }
+//                })
                 break
             case _Type_deleteAlbum:
                 MainInterface._deleteAlbum(_content.objectForKey("_id") as! String, __block: { (__dict) -> Void in

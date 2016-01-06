@@ -50,8 +50,8 @@ class MainInterface: AnyObject {
         
     }
     //-----创建相册
-    static func _createAlbum(__title:String,__block:(NSDictionary)->Void){
-        CoreAction._sendToUrl("token=\(_token)&title=\(__title)", __url: _basicDoman+_version+"/"+_URL_Album_Create) { (__dict) -> Void in
+    static func _createAlbum(__Str:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)"+__Str, __url: _basicDoman+_version+"/"+_URL_Album_Create) { (__dict) -> Void in
             print(__dict)
             __block(__dict)
         }
@@ -87,7 +87,7 @@ class MainInterface: AnyObject {
         }
     }
     //----上传图片
-    static func _uploadPic(__pic:NSDictionary,__album_id:String,__block:(NSDictionary)->Void){
+    static func _uploadPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
         
         //559a7b34b28d4ec8e088cf0d
         if __pic.objectForKey("type") == nil{
@@ -103,7 +103,7 @@ class MainInterface: AnyObject {
                 if asset != nil {
                     let __image:UIImage = UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
                     
-                    CoreAction._sendToUrl("token=\(_token)&album=\(__album_id)&imagend=jpg&image=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
+                    CoreAction._sendToUrl("token=\(_token)&&imagend=jpg&image=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
                        // print(__dict)
                         __block(__dict)
                     }
@@ -127,7 +127,7 @@ class MainInterface: AnyObject {
                         __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
                         return
                     }
-                    CoreAction._sendToUrl("token=\(_token)&album=\(__album_id)&uploadpic=\(CoreAction._imageToString(image!))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
+                    CoreAction._sendToUrl("token=\(_token)&uploadpic=\(CoreAction._imageToString(image!))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
                         //print(__dict)
                         __block(__dict)
                     }
@@ -137,7 +137,7 @@ class MainInterface: AnyObject {
                 //self._setImage(__pic.objectForKey("url") as! String)
                 let __image:UIImage = UIImage(named: __pic.objectForKey("url") as! String)!
                 
-                CoreAction._sendToUrl("token=\(_token)&album=\(__album_id)&uploadpic=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
+                CoreAction._sendToUrl("token=\(_token)&uploadpic=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
                     //print(__dict)
                     __block(__dict)
                 }

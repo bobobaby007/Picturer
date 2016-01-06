@@ -18,13 +18,14 @@ protocol PicsShowCellDelegate:NSObjectProtocol{
 class PicsShowCell:UICollectionViewCell{
    // @IBOutlet weak var _imgView:UIImageView!
    // @IBOutlet weak var _tag_view:UIImageView!
-    
+    var _myFrame:CGRect?
     var _imgView:PicView!
     var _tag_view:UIImageView!
     var _index:Int?
     
     weak var _delegate:PicsShowCellDelegate?
    
+    var _uploadingTag:UIView?
     
     var _hasTag:Bool=false{
 //        get{
@@ -67,14 +68,14 @@ class PicsShowCell:UICollectionViewCell{
     override init(frame: CGRect) {
         //println("go")
         super.init(frame: frame)
-        
-        _imgView=PicView(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
+        _myFrame = frame
+        _imgView=PicView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         _imgView._scaleType = PicView._ScaleType_Full
         _imgView!._imgView!.layer.masksToBounds=true
         _imgView.userInteractionEnabled = false
         
-        let _width=bounds.size.width/2
-        _tag_view=UIImageView(frame: CGRect(x: bounds.size.width-_width, y:0, width: _width, height: _width))
+        let _width=_myFrame!.width/2
+        _tag_view=UIImageView(frame: CGRect(x: _myFrame!.width-_width, y:0, width: _width, height: _width))
         
         let _tapRoc=UITapGestureRecognizer(target: self, action: Selector("clickAction:"))
         
@@ -103,6 +104,26 @@ class PicsShowCell:UICollectionViewCell{
 //        default:
 //            self._selected = !self._selected
 //        }
+    }
+    func _isUploading(__is:Bool){
+        if __is{
+            if _uploadingTag == nil{
+                _uploadingTag = UIView(frame: CGRect(x: 0, y: 0, width: _myFrame!.width, height: _myFrame!.height))
+                _uploadingTag?.backgroundColor = UIColor(white: 0.5, alpha: 0.6)
+                let _ing:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+                _ing.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+                _ing.center = CGPoint(x: _myFrame!.width/2,y: _myFrame!.height/2)
+                _ing.startAnimating()
+                _uploadingTag?.addSubview(_ing)
+            }
+            self.addSubview(_uploadingTag!)
+        }else{
+            if _uploadingTag != nil{
+                _uploadingTag?.removeFromSuperview()
+                _uploadingTag = nil
+            }
+
+        }
     }
     func _setPic(__pic:NSDictionary){
         
