@@ -112,8 +112,8 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
     
     
     func _getDatas(){
-        _recentArray = MainAction._getRecentSearchTags()
-        MainAction._getReferenceTags { (array) -> Void in
+        _recentArray = Social_Main._getRecentSearchTags()
+        Social_Main._getReferenceTags { (array) -> Void in
             self._referenceArray = array
             self._referenceTable.reloadData()
         }

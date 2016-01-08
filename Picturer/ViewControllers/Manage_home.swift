@@ -140,9 +140,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _btn_actions?.addTarget(self, action: "btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
             //_topView.addSubview(_btn_actions!)
             
-            _topView.backgroundColor = MainAction._color_black_bar
+            _topView.backgroundColor = Config._color_black_bar
             
-            _btn_new.backgroundColor = MainAction._color_yellow_bar
+            _btn_new.backgroundColor = Config._color_yellow_bar
         }
         
         _setuped = true
@@ -195,7 +195,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _searchPage = SearchPage()
             _searchPage?._delegate = self
             self.addChildViewController(_searchPage!)
-            _searchPage?.view.frame = CGRect(x: 0, y: MainAction._barH, width: self.view.frame.width, height: self.view.frame.height-MainAction._barH)
+            _searchPage?.view.frame = CGRect(x: 0, y: Config._barH, width: self.view.frame.width, height: self.view.frame.height-Config._barH)
             self.view.addSubview(_searchPage!.view)
         }
     }

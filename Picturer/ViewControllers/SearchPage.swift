@@ -67,7 +67,7 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         
         
         _searchBar.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: _searchBarH+_statusH)
-        _searchBar.backgroundColor = MainAction._color_yellow
+        _searchBar.backgroundColor = Config._color_yellow
         
         let _searchLableV:UIView = UIView(frame: CGRect(x: _gap, y: (_searchBarH-_searchT_H)/2+_statusH, width: self.view.frame.width-_gap-55, height: _searchT_H))
         _searchLableV.backgroundColor = UIColor.whiteColor()
@@ -75,7 +75,7 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         
         _btn_cancel = UIButton(frame: CGRect(x: _searchLableV.frame.origin.x+_searchLableV.frame.width, y: (_searchBarH-_searchT_H)/2+_statusH, width: 55, height: _searchBarH-14))
         _btn_cancel?.titleLabel?.font = UIFont(name: "PingFangSC-Regular", size: 14)!
-        _btn_cancel?.setTitleColor(MainAction._color_black_title, forState: UIControlState.Normal)
+        _btn_cancel?.setTitleColor(Config._color_black_title, forState: UIControlState.Normal)
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -86,7 +86,7 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         _searchT.addTarget(self, action: "textDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
         _searchT.placeholder = "搜索"
         _searchT.font = UIFont.systemFontOfSize(14)
-        _searchT.tintColor = MainAction._color_gray_time
+        _searchT.tintColor = Config._color_gray_time
         _searchT.delegate = self
         _searchT.returnKeyType = UIReturnKeyType.Search
         
@@ -184,8 +184,8 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         let _v:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 37.5))
         _v.backgroundColor = UIColor.whiteColor()
         let _label:UILabel = UILabel(frame: CGRect(x: 10, y: (37.5-15)/2 , width: self.view.frame.width - 10, height: 15))
-       _label.font = MainAction._font_cell_subTitle
-        _label.textColor = MainAction._color_gray_subTitle
+       _label.font = Config._font_cell_subTitle
+        _label.textColor = Config._color_gray_subTitle
         
         switch _type{
             case "album":

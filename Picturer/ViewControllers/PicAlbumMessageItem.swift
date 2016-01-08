@@ -356,7 +356,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 
                 _albumTitle_labelV?.backgroundColor = UIColor.clearColor()
                 _albumTitle_labelV?.layer.borderWidth = 1
-                _albumTitle_labelV?.layer.borderColor = MainAction._color_yellow.CGColor
+                _albumTitle_labelV?.layer.borderColor = Config._color_yellow.CGColor
                 _albumTitle_labelV?.layer.cornerRadius = 5
                 _albumTitle_labelV?.userInteractionEnabled=false
                 _albumTitle_label = UITextView(frame: CGRect(x: 15, y: 8, width: _defaultSize!.width-2*_gap, height: 12))

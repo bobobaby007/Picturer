@@ -132,7 +132,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         
         _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 56))
         _titleT?.font = UIFont.boldSystemFontOfSize(16)

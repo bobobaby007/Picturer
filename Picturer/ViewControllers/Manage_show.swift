@@ -59,8 +59,8 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         _collectionView.alwaysBounceVertical = true
         _setuped=true
         
-        _titleButton?.titleLabel?.font = MainAction._font_topbarTitle
-        _titleButton?.titleLabel?.textColor = MainAction._color_white_title
+        _titleButton?.titleLabel?.font = Config._font_topbarTitle
+        _titleButton?.titleLabel?.textColor = Config._color_white_title
         
         if _title == ""{
             _titleButton?.setTitle("未命名相册", forState: UIControlState.Normal)
@@ -148,7 +148,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _SelectedIndexs.removeObject(pic._index!)
         }
         if _SelectedIndexs.count>0{
-            _btn_edit?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
+            _btn_edit?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
         }else{
             _btn_edit?.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: UIControlState.Normal)
         }

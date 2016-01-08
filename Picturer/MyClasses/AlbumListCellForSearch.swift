@@ -44,9 +44,9 @@ class AlbumListCellForSearch :  UITableViewCell{
         //_titleLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-22, self.bounds.width-26, 30))
         _titleLable=UILabel(frame: CGRectMake(100, 29, _mySize!.width-100-61, 20))
         _titleLable?.textAlignment = NSTextAlignment.Left
-        _titleLable?.textColor = MainAction._color_black_title
+        _titleLable?.textColor = Config._color_black_title
         
-        _titleLable?.font = MainAction._font_cell_title
+        _titleLable?.font = Config._font_cell_title
         
         
         //_titleLable?.font = UIFont(name: "Heiti SC Medium", size: 17)
@@ -57,14 +57,14 @@ class AlbumListCellForSearch :  UITableViewCell{
         //_desLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-2, self.bounds.width-26, 30))
         _desLable=UILabel(frame: CGRectMake(100, 51, _mySize!.width-100-61, 14))
         _desLable?.textAlignment = NSTextAlignment.Left
-        _desLable?.textColor=MainAction._color_gray_subTitle
-        _desLable?.font=MainAction._font_cell_subTitle
+        _desLable?.textColor=Config._color_gray_subTitle
+        _desLable?.font=Config._font_cell_subTitle
         //self.addSubview(_desLable!)
         
         _timeLable=UILabel(frame: CGRectMake(_mySize!.width-14-50, 27.5, 50, 12))
         _timeLable?.textAlignment = NSTextAlignment.Right
-        _timeLable?.textColor=MainAction._color_gray_time
-        _timeLable?.font=MainAction._font_cell_time
+        _timeLable?.textColor=Config._color_gray_time
+        _timeLable?.font=Config._font_cell_time
         
         _arrowV = UIImageView(image: UIImage(named: "list_arrow.png"))
         _arrowV?.frame = CGRect(x: _mySize!.width-21.5, y: 51, width: 7.5, height: 12.72)

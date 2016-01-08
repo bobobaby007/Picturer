@@ -117,7 +117,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _desText?.textColor=UIColor.whiteColor()
         _desText?.editable = false
         _desText?.selectable = false
-        _desText?.font = MainAction._font_description_at_bottom
+        _desText?.font = Config._font_description_at_bottom
         
         _desView?.addSubview(_desText!)
         self.view.addSubview(_desView!)
@@ -126,8 +126,8 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=UIColor(white: 0.1, alpha: 0.98)
         
-        _btn_cancel=UIButton(frame:CGRect(x: MainAction._gap_2, y: _barH-21-11, width: 51, height: 21))
-        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
+        _btn_cancel=UIButton(frame:CGRect(x: Config._gap_2, y: _barH-21-11, width: 51, height: 21))
+        _btn_cancel?.titleLabel?.font=Config._font_topButton
         _btn_cancel?.setImage(UIImage(named: "back.png"), forState: UIControlState.Normal)
         //_btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -137,12 +137,12 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         
         _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 60))
         _titleT?.editable = false
-        _titleT?.font = MainAction._font_topbarTitle_at_one_pic
-        _titleT?.textColor = MainAction._color_white_title
+        _titleT?.font = Config._font_topbarTitle_at_one_pic
+        _titleT?.textColor = Config._color_white_title
         _titleT?.backgroundColor = UIColor.clearColor()
         _titleT?.textColor=UIColor.whiteColor()
         _titleT?.scrollEnabled = false
@@ -395,11 +395,17 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             self.setToCover()
             break
         case 2://
-            
+            self._deletetPic()
             break
         default:
             break
         }
+    }
+    
+    //----删除图片
+    func _deletetPic(){
+        _delegate?._deletePic(_currentIndex!)
+        self.navigationController?.popViewControllerAnimated(true)
     }
     func _myAlerterDidClose() {
         _alerter?.view.removeFromSuperview()

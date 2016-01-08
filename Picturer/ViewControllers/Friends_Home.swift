@@ -75,7 +75,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
@@ -90,7 +90,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.font = MainAction._font_topbarTitle
+        _title_label?.font = Config._font_topbarTitle
         
         
         
@@ -203,12 +203,12 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     func _getMessage(){
         switch _type{
             case "friends":
-                MainAction._getMessages { (array) -> Void in
+                Social_Main._getMessages { (array) -> Void in
                     self._messageIn(array)
                 }
             break
             case "likes":
-                MainAction._getMessages { (array) -> Void in
+                Social_Main._getMessages { (array) -> Void in
                     self._messageIn(array)
             }
         default:
@@ -240,12 +240,12 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     func _getDatas(){
         switch _type{
         case "friends":
-            MainAction._getFriendsNewsList({ (array) -> Void in
+            Social_Main._getFriendsNewsList({ (array) -> Void in
                 self._datasIn(array)
             })
             break
         case "likes":
-            MainAction._getLikesNewsList({ (array) -> Void in
+            Social_Main._getLikesNewsList({ (array) -> Void in
                 self._datasIn(array)
             })
             
@@ -271,10 +271,10 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _likeArray = NSMutableArray()
         for var i:Int=0; i<_dataArray.count;++i{
             _heighArray?.addObject(_defaultH)
-            MainAction._getCommentsOfAlubm(String(i), block: { (array) -> Void in
+            Social_Main._getCommentsOfAlubm(String(i), block: { (array) -> Void in
                 self._commentsArray?.addObject(array)
             })
-            MainAction._getLikesOfAlubm(String(i), block: { (array) -> Void in
+            Social_Main._getLikesOfAlubm(String(i), block: { (array) -> Void in
                 self._likeArray?.addObject(array)
             })
         }
@@ -393,7 +393,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     func _viewAlbum(__albumIdex:Int) {
         
         
-        MainAction._getPicsListAtAlbumId("00003", block: { (array) -> Void in
+        Social_Main._getPicsListAtAlbumId("00003", __block: { (array) -> Void in
             let _controller:Social_pic = Social_pic()
             
             _controller._showIndexAtPics(0, __array: array)
@@ -433,16 +433,16 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     func _buttonAction(__action: String, __dict: NSDictionary) {
         switch __action{
         case  "like":
-            if _hasUserInLikesAtIndex(__dict.objectForKey("indexId") as! Int, __userId: MainAction._currentUser.objectForKey("userId") as! String){
+            if _hasUserInLikesAtIndex(__dict.objectForKey("indexId") as! Int, __userId: Social_Main._currentUser.objectForKey("userId") as! String){
                 return
             }
             let _arr:NSMutableArray = NSMutableArray(array: self._likeArray!)
             let _dict:NSMutableArray = NSMutableArray(array:_arr.objectAtIndex(__dict.objectForKey("indexId") as! Int) as! NSArray)
-            let _user:NSDictionary = MainAction._currentUser as NSDictionary
+            let _user:NSDictionary = Social_Main._currentUser as NSDictionary
             _dict.addObject(NSDictionary(objects: [_user.objectForKey("userName") as! String,_user.objectForKey("userId") as! String], forKeys: ["userName","userId"]))
             _arr[__dict.objectForKey("indexId") as! Int] = _dict
             self._likeArray = _arr
-            MainAction._postLike(NSDictionary())
+            Social_Main._postLike(NSDictionary())
             
             _tableView?.reloadData() //--------使用在线接口时全部请求信息后侦听里面再重新加载
             

@@ -38,7 +38,7 @@ class SyncActionView: UIViewController, UITableViewDataSource, UITableViewDelega
             return
         }
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
@@ -53,7 +53,7 @@ class SyncActionView: UIViewController, UITableViewDataSource, UITableViewDelega
         _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.font = MainAction._font_topbarTitle
+        _title_label?.font = Config._font_topbarTitle
         _title_label?.text = "同步"
         
         _topBar?.addSubview(_title_label!)

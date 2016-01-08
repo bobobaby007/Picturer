@@ -177,6 +177,8 @@
 		7ADD50131B2D402000E44F99 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD50121B2D402000E44F99 /* Images.xcassets */; };
 		7ADD50161B2D402000E44F99 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7ADD50141B2D402000E44F99 /* LaunchScreen.xib */; };
 		7ADD50221B2D402000E44F99 /* PicturersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADD50211B2D402000E44F99 /* PicturersTests.swift */; };
+		7ADE1CBC1C3E363E002B7A90 /* Social_Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE1CBB1C3E363E002B7A90 /* Social_Main.swift */; };
+		7ADE1CBE1C3EBF85002B7A90 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE1CBD1C3EBF85002B7A90 /* Config.swift */; };
 		7ADE72D51C07D77600BB6DBB /* SyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE72D41C07D77600BB6DBB /* SyncAction.swift */; };
 		7ADE72D71C092E8800BB6DBB /* PicsSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE72D61C092E8800BB6DBB /* PicsSelecter.swift */; };
 		7ADE72D91C093C4500BB6DBB /* NewFromWeb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE72D81C093C4500BB6DBB /* NewFromWeb.swift */; };
@@ -361,6 +363,8 @@
 		7ADD501B1B2D402000E44F99 /* PicturerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PicturerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ADD50201B2D402000E44F99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7ADD50211B2D402000E44F99 /* PicturersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturersTests.swift; sourceTree = "<group>"; };
+		7ADE1CBB1C3E363E002B7A90 /* Social_Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Social_Main.swift; sourceTree = "<group>"; };
+		7ADE1CBD1C3EBF85002B7A90 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		7ADE72D41C07D77600BB6DBB /* SyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncAction.swift; sourceTree = "<group>"; };
 		7ADE72D61C092E8800BB6DBB /* PicsSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicsSelecter.swift; sourceTree = "<group>"; };
 		7ADE72D81C093C4500BB6DBB /* NewFromWeb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewFromWeb.swift; sourceTree = "<group>"; };
@@ -505,6 +509,7 @@
 				7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */,
 				7AA6A8CA1B4777C200D9E604 /* MainInterface.swift */,
 				7A1FF2431B4AA1E600CEFDAF /* MainAction.swift */,
+				7ADE1CBB1C3E363E002B7A90 /* Social_Main.swift */,
 				7AA9ACB21B5133C0006B41FE /* PicView.swift */,
 				7AAEA34A1B833E5400DB5F54 /* LogoAnimation.swift */,
 				7AAD75E71B843459007C0CB1 /* MyAlerter.swift */,
@@ -513,6 +518,7 @@
 				7A39E9B01BEC9E02007C0381 /* CameraPreview.swift */,
 				7ADE72D41C07D77600BB6DBB /* SyncAction.swift */,
 				7AE152B21C3CBC96009B01F0 /* UploadingList.swift */,
+				7ADE1CBD1C3EBF85002B7A90 /* Config.swift */,
 			);
 			path = MyClasses;
 			sourceTree = "<group>";
@@ -978,6 +984,7 @@
 				7AEC212A1B3DA09600D19D22 /* SocialAlbumCell.swift in Sources */,
 				7AE9295B1C0C114800EA4FBE /* Picturer.xcdatamodeld in Sources */,
 				7AE185141BFF3B8300C4D6CF /* SearchPage.swift in Sources */,
+				7ADE1CBE1C3EBF85002B7A90 /* Config.swift in Sources */,
 				7AAA54E61B60B41100B304EE /* Inputer.swift in Sources */,
 				7A2922B21B6A66AB0031B2F2 /* MessageList.swift in Sources */,
 				7ADE72D91C093C4500BB6DBB /* NewFromWeb.swift in Sources */,
@@ -988,6 +995,7 @@
 				7A9C86CA1B3348700051D067 /* Manage_show.swift in Sources */,
 				7AC9B12D1B72437000D05787 /* SearchResult.swift in Sources */,
 				7AAD75E81B843459007C0CB1 /* MyAlerter.swift in Sources */,
+				7ADE1CBC1C3E363E002B7A90 /* Social_Main.swift in Sources */,
 				7AEBE2CD1B54C76A00FC6E9D /* Manage_description.swift in Sources */,
 				7A1D94FA1B6A7B12009CCE10 /* MessageList_Cell.swift in Sources */,
 				7ADEE5101C24F7C40040AB29 /* AlbumListCellForSearch.swift in Sources */,

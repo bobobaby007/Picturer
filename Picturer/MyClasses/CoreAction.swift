@@ -289,7 +289,7 @@ class CoreAction {
             var _str = NSString(data: data!, encoding: NSUTF8StringEncoding)
             
             _str = _str?.stringByReplacingOccurrencesOfString(":null", withString: ":\"\"")
-             print("链接成功:",__url,_str)
+            // print("链接成功:",__url,_str)
             
             do{
                 let jsonResult = try NSJSONSerialization.JSONObjectWithData((_str?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true))!, options: NSJSONReadingOptions.MutableContainers)

@@ -85,12 +85,12 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
         _albumArray = []
         _albumCollectionView?.reloadData()
         
-        MainAction._getResultOfAlbum(__str, block: { (array) -> Void in
+        Social_Main._getResultOfAlbum(__str, block: { (array) -> Void in
             
             self._albumArray = array
             self._albumCollectionView?.reloadData()
         })
-        MainAction._getResultOfUser(__str, block: { (array) -> Void in
+        Social_Main._getResultOfUser(__str, block: { (array) -> Void in
             self._userArray = array
             self._userTableView?.reloadData()
         })

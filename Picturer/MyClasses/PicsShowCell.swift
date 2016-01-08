@@ -126,7 +126,6 @@ class PicsShowCell:UICollectionViewCell{
         }
     }
     func _setPic(__pic:NSDictionary){
-        
         if let _url = __pic.objectForKey("thumbnail") as? String{
             _imgView!._setPic(NSDictionary(objects: [MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
             })

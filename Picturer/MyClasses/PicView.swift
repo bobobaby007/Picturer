@@ -16,7 +16,10 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     static var _ScaleType_Fit:String = "Fit" //----显示全部
     static var _ScaleType_Full:String = "Full"//----满屏显示
     var _scaleType:String = "Full"
+    
+    var _myFrame:CGRect?
     override init(frame: CGRect) {
+        _myFrame = frame
         super.init(frame: frame)
         self.maximumZoomScale = 5
         self.minimumZoomScale = 1
@@ -151,8 +154,30 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     }
     func _setImageByImage(_img:UIImage){
         
-        let _scaleW = self.bounds.width/_img.size.width
-        let _scaleH = self.bounds.height/_img.size.height
+        switch _scaleType{
+        case PicView._ScaleType_Fit:
+            _imgView?.contentMode = UIViewContentMode.ScaleAspectFit
+            break
+        case PicView._ScaleType_Full:
+            _imgView?.contentMode = UIViewContentMode.ScaleAspectFill
+            break
+        default:
+            
+            break
+        }
+        
+        _imgView?.image=_img
+        
+        
+        
+        
+        return
+        
+        
+        
+        
+        let _scaleW = _myFrame!.width/_img.size.width
+        let _scaleH = _myFrame!.height/_img.size.height
         
         var _scale = max(_scaleW,_scaleH)
         switch _scaleType{
@@ -166,15 +191,17 @@ class PicView: UIScrollView,UIScrollViewDelegate{
             
             break
         }
-        _imgView?.frame = CGRect(x: 0, y: 0, width:_img.size.width*_scale, height: _img.size.height*_scale)
         
+        let _w:CGFloat = _img.size.width*_scale
+        let _h:CGFloat = _img.size.height*_scale
         
         _imgView?.image=_img
         
-        
+        _imgView?.frame = CGRect(x: 0, y: 0, width:_w, height:_h )
         
         //_imgView?.center = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
-        self.setContentOffset(CGPoint(x: (_imgView!.frame.width-self.frame.width)/2, y: (_imgView!.frame.height-self.frame.height)/2), animated: false)
+        self.setContentOffset(CGPoint(x: (_w-_myFrame!.width)/2, y: (_h-_myFrame!.height)/2), animated: false)
+        
         
         //print(self.frame)
         

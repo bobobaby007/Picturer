@@ -129,7 +129,7 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
     //
 
     func _getAlerts(){
-        MainAction._getAlertsOfSocial({ (array) -> Void in
+        Social_Main._getAlertsOfSocial({ (array) -> Void in
             self._alertDicts = NSMutableArray(array: array)
             self._collectionView.reloadData()
         })
@@ -148,8 +148,8 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         switch indexPath.item{
         case 0://主页
             let _contr:MyHomepage=MyHomepage()
-            _contr._userId =  MainAction._userId
-            _contr._userName = MainAction._currentUser.objectForKey("userName") as? String
+            _contr._userId =  Social_Main._userId
+            _contr._userName = Social_Main._currentUser.objectForKey("userName") as? String
             _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
         case 1://朋友

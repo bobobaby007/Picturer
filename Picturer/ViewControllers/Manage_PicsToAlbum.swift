@@ -94,28 +94,28 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
         //_scrollView?.scrollEnabled=true
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
-        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
+        _btn_cancel?.titleLabel?.font=Config._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
-        _btn_save?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
+        _btn_save?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
         _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _titleLabel = UILabel(frame: CGRect(x: 0, y: 350, width: self.view.frame.width, height: 20))
        _titleLabel?.text="选择保存到相册"
-        _titleLabel?.font = MainAction._font_topButton
-        _titleLabel?.textColor = MainAction._color_black_title
+        _titleLabel?.font = Config._font_topButton
+        _titleLabel?.textColor = Config._color_black_title
         _titleLabel?.backgroundColor=UIColor.clearColor()
         //_tableView?.userInteractionEnabled=true
         
         _imagesBox=UIView()
         _imagesBox?.backgroundColor=UIColor.whiteColor()
         _addButton=UIButton()
-        _addButton?.backgroundColor=MainAction._color_yellow
+        _addButton?.backgroundColor=Config._color_yellow
         _addButton?.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _addButton?.setImage(UIImage(named: "addIcon.png"), forState: UIControlState.Normal)

@@ -74,8 +74,8 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
         _searchT.frame = CGRect(x: _gap, y: 0, width: self.view.frame.width-7.5-2*_gap-_btn_cancel!.frame.width-2*_gap, height: _searchLableV.frame.height)
         _searchT.addTarget(self, action: "textDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
         _searchT.attributedPlaceholder = NSAttributedString(string:"输入网址",
-            attributes:[NSForegroundColorAttributeName: MainAction._color_gray_time])
-        _searchT.font = MainAction._font_input
+            attributes:[NSForegroundColorAttributeName: Config._color_gray_time])
+        _searchT.font = Config._font_input
         _searchT.delegate = self
         _searchT.returnKeyType = UIReturnKeyType.Search
         
@@ -84,20 +84,20 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
         _webView?.delegate = self
         
         _btn_getImages = UIButton(frame: CGRect(x: 0, y: self.view.frame.height-48, width: self.view.frame.width, height: 48))
-        _btn_getImages?.backgroundColor = MainAction._color_black_bottom
+        _btn_getImages?.backgroundColor = Config._color_black_bottom
         _btn_getImages?.setTitle("抓取", forState: UIControlState.Normal)
-        _btn_getImages?.titleLabel?.font = MainAction._font_topbarTitle
-        _btn_getImages?.setTitleColor(MainAction._color_white_title, forState: UIControlState.Normal)
+        _btn_getImages?.titleLabel?.font = Config._font_topbarTitle
+        _btn_getImages?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
         _btn_getImages?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         //        _searchLableV.addSubview(_icon)
         
         _btn_goBack = UIButton(frame: CGRect(x: 10, y: _searchBar.frame.origin.y+_searchBar.frame.height+10, width: 20, height: 20))
-        _btn_goBack?.backgroundColor = MainAction._color_yellow
+        _btn_goBack?.backgroundColor = Config._color_yellow
         _btn_goBack?.setTitle("<", forState: UIControlState.Normal)
         _btn_goBack?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_goForward = UIButton(frame: CGRect(x: 40, y: _searchBar.frame.origin.y+_searchBar.frame.height+10, width: 20, height: 20))
-        _btn_goForward?.backgroundColor = MainAction._color_yellow
+        _btn_goForward?.backgroundColor = Config._color_yellow
         _btn_goForward?.setTitle(">", forState: UIControlState.Normal)
         _btn_goForward?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         

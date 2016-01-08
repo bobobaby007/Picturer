@@ -50,9 +50,9 @@ class Discover_search: UIViewController,ClickItemDelegate{
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
-        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
+        _btn_cancel?.titleLabel?.font=Config._font_topButton
         _btn_cancel?.setTitle("返回", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -138,19 +138,19 @@ class Discover_search: UIViewController,ClickItemDelegate{
     
     
     func _getDatas(){
-        MainAction._getAdvertisiongs { (array) -> Void in
+        Social_Main._getAdvertisiongs { (array) -> Void in
             self._sliderShower?._setup(array)
         }
-        MainAction._getHotAlbums { (array) -> Void in
+        Social_Main._getHotAlbums { (array) -> Void in
             self._hotAlbumArray = array
             self._hotAlbumsIn()
         }
         
-        MainAction._getReferenceAlbums{ (array) -> Void in
+        Social_Main._getReferenceAlbums{ (array) -> Void in
             self._referenceArray = array
             self._referenceAlbumsIn()
         }
-        MainAction._getHotUsers { (array) -> Void in
+        Social_Main._getHotUsers { (array) -> Void in
             self._hotUserArray = array
             self._hotUsersIn()
         }
@@ -234,7 +234,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
     func _picTaped(__dict: NSDictionary) {
         switch __dict.objectForKey("type") as! String{
             case "hotAlbum":
-                MainAction._getPicsListAtAlbumId((_referenceArray!.objectAtIndex(__dict.objectForKey("index") as! Int) as! NSDictionary).objectForKey("albumId") as? String, block: { (array) -> Void in
+                Social_Main._getPicsListAtAlbumId((_referenceArray!.objectAtIndex(__dict.objectForKey("index") as! Int) as! NSDictionary).objectForKey("albumId") as? String, __block: { (array) -> Void in
                     
                     let _controller:Social_pic = Social_pic()
                     _controller._showIndexAtPics(0, __array: array)
@@ -251,7 +251,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
             return
         case "referenceAlbum":
             
-            MainAction._getPicsListAtAlbumId((_referenceArray!.objectAtIndex(__dict.objectForKey("index") as! Int) as! NSDictionary).objectForKey("albumId") as? String, block: { (array) -> Void in
+            Social_Main._getPicsListAtAlbumId((_referenceArray!.objectAtIndex(__dict.objectForKey("index") as! Int) as! NSDictionary).objectForKey("albumId") as? String, __block: { (array) -> Void in
                 let _controller:Social_pic = Social_pic()
                 _controller._showIndexAtPics(0, __array: array)
                 (self.parentViewController?.view.superview?.nextResponder() as! UIViewController).navigationController?.pushViewController(_controller, animated: true)

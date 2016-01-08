@@ -111,29 +111,29 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: _gap-3, y: 20, width: 40, height: _barH-20))
         _btn_cancel?.titleLabel?.textAlignment = NSTextAlignment.Left
-        _btn_cancel?.titleLabel?.font = MainAction._font_topButton
+        _btn_cancel?.titleLabel?.font = Config._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-40-_gap+3, y: 20, width: 40, height: _barH-20))
         _btn_save?.titleLabel?.textAlignment = NSTextAlignment.Right
-        _btn_save?.titleLabel?.font = MainAction._font_topButton
+        _btn_save?.titleLabel?.font = Config._font_topButton
         
         _btn_save?.setTitle("保存", forState: UIControlState.Normal)
-        _btn_save?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
+        _btn_save?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
         _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
        
         _titleInput=UITextField(frame: CGRect(x: _gap, y: 0, width: self.view.frame.width, height: _titleViewH))
         //_titleInput?.placeholder=_titlePlaceHold
         _titleInput?.attributedPlaceholder = NSAttributedString(string:_titlePlaceHold,
-            attributes:[NSForegroundColorAttributeName: MainAction._color_gray_description])
+            attributes:[NSForegroundColorAttributeName: Config._color_gray_description])
         _titleInput?.delegate=self
         _titleInput?.font = UIFont.systemFontOfSize(16)
-        _titleInput?.textColor = MainAction._color_black_title
+        _titleInput?.textColor = Config._color_black_title
         _titleView = UIView()
         
         _titleView?.backgroundColor=UIColor.whiteColor()
@@ -147,14 +147,14 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         _desPlaceHoldLabel = UILabel(frame: CGRect(x: _gap+2, y: _gap+1, width: self.view.frame.width-2*_gap, height: 15))
         _desPlaceHoldLabel?.text = _desPlaceHold
-        _desPlaceHoldLabel?.textColor = MainAction._color_gray_description
+        _desPlaceHoldLabel?.textColor = Config._color_gray_description
         _desPlaceHoldLabel?.font=UIFont.systemFontOfSize(16)
         
         _desView?.backgroundColor=UIColor.whiteColor()
         
         _desInput=UITextView(frame: CGRect(x: _gap, y: 6, width: self.view.frame.width-2*_gap, height: _desInputViewH-20))
         //_desInput?.text=_desPlaceHold
-       _desInput?.textColor = MainAction._color_black_title
+       _desInput?.textColor = Config._color_black_title
         _desInput?.backgroundColor = UIColor.clearColor()
         _desInput?.font=UIFont.systemFontOfSize(16)
         //_desInput?.keyboardAppearance=UIKeyboardAppearance.Dark
@@ -165,7 +165,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _desAlert=UILabel(frame:CGRect(x: _gap, y: _desInputViewH-19, width: self.view.frame.width-2*_gap, height: 12) )
         _desAlert?.text=String(0)+"/"+String(_maxNum)
         _desAlert?.font=UIFont.systemFontOfSize(14, weight: 0)
-        _desAlert?.textColor=MainAction._color_gray_description
+        _desAlert?.textColor=Config._color_gray_description
         _desAlert?.textAlignment=NSTextAlignment.Right
         
         _desView?.addSubview(_desPlaceHoldLabel!)
@@ -182,7 +182,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _imagesBox=UIView()
         _imagesBox?.backgroundColor=UIColor.whiteColor()
         _addButton=UIButton()
-        _addButton?.backgroundColor=MainAction._color_yellow
+        _addButton?.backgroundColor=Config._color_yellow
         _addButton?.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         _addButton?.imageView?.contentMode = UIViewContentMode.ScaleAspectFill
         _addButton?.setImage(UIImage(named: "addIcon.png"), forState: UIControlState.Normal)
@@ -271,10 +271,10 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         cell.layoutMargins = UIEdgeInsetsZero
         
         cell.textLabel?.font = UIFont.systemFontOfSize(16)
-        cell.textLabel?.textColor = MainAction._color_black_title
+        cell.textLabel?.textColor = Config._color_black_title
         
         cell.detailTextLabel?.font = UIFont.systemFontOfSize(15)
-        cell.detailTextLabel?.textColor = MainAction._color_gray_description
+        cell.detailTextLabel?.textColor = Config._color_gray_description
         switch indexPath.row{
         case 0:
             cell.textLabel?.text="标签"

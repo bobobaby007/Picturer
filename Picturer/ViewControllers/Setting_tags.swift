@@ -47,23 +47,23 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: 62))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 6, width: 40, height: 62))
-        _btn_cancel?.titleLabel?.font=MainAction._font_topButton
+        _btn_cancel?.titleLabel?.font=Config._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
-        _btn_cancel?.titleLabel?.font = MainAction._font_topButton
+        _btn_cancel?.titleLabel?.font = Config._font_topButton
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 6, width: 40, height: 62))
-        _btn_save?.titleLabel?.font=MainAction._font_topButton
+        _btn_save?.titleLabel?.font=Config._font_topButton
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
-        _btn_save?.setTitleColor(MainAction._color_yellow, forState: UIControlState.Normal)
-        _btn_save?.titleLabel?.font = MainAction._font_topButton
+        _btn_save?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
+        _btn_save?.titleLabel?.font = Config._font_topButton
         _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.textColor=UIColor.whiteColor()
-        _title_label?.font = MainAction._font_topbarTitle
+        _title_label?.font = Config._font_topbarTitle
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.text="标签"
         
@@ -79,8 +79,8 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
         
         _inputText?.backgroundColor=UIColor.whiteColor()
         _inputText?.attributedPlaceholder = NSAttributedString(string:"标签(请用逗号分开)",
-            attributes:[NSForegroundColorAttributeName: MainAction._color_gray_description])
-        _inputText?.font = MainAction._font_cell_title_normal
+            attributes:[NSForegroundColorAttributeName: Config._color_gray_description])
+        _inputText?.font = Config._font_cell_title_normal
         _inputText?.delegate=self
         
         _tagsIn()
@@ -126,7 +126,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
             
             let _text:UILabel = UILabel(frame: CGRectMake(_gap+CGFloat(i%5)*(_gapX+_width), 150+floor(CGFloat(i/5))*_gapY, _width, 30))
             _text.backgroundColor=UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
-            _text.textColor = MainAction._color_black_title
+            _text.textColor = Config._color_black_title
             _text.font = UIFont.systemFontOfSize(14, weight: 0)
             _text.textAlignment=NSTextAlignment.Center
             _text.layer.masksToBounds=true

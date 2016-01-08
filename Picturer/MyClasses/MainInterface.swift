@@ -29,6 +29,7 @@ class MainInterface: AnyObject {
     static let _URL_Pic_Create:String = "picture/create/"
     static let _URL_Pic_update:String = "picture/update/"
     static let _URL_Pic_list:String = "picture/list/"
+    static let _URL_User_Info:String = "user/info/"
     
     //-----注册
     static func _signup(__mob:String, __pass:String, __block:(NSDictionary)->Void){
@@ -45,6 +46,15 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
+    //-----获取我的个人信息
+    
+    static func _getUserInfo(__userId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_User_Info+"\(__userId)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
     //-----获取短信码
     static func _getSmscode(){
         
@@ -52,14 +62,28 @@ class MainInterface: AnyObject {
     //-----创建相册
     static func _createAlbum(__Str:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)"+__Str, __url: _basicDoman+_version+"/"+_URL_Album_Create) { (__dict) -> Void in
-            print(__dict)
+           // print(__dict)
             __block(__dict)
         }
     }
-    //-----获取相册列表
+    //-----获取我自己的相册列表
     static func _getMyAlbumList(__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_List+"\(_uid)/0/100") { (__dict) -> Void in
             //print(__dict)
+            __block(__dict)
+        }
+    }
+    //-----获取某用户相册列表
+    static func _getAlbumListOfUser(__userId:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_List+"\(__userId)/0/100") { (__dict) -> Void in
+            //print(__dict)
+            __block(__dict)
+        }
+    }
+    //----获取相册信息
+    static func _getAlbumInfo(__albumId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_Info+"\(__albumId)") { (__dict) -> Void in
+            print(__dict)
             __block(__dict)
         }
     }
@@ -218,4 +242,10 @@ class MainInterface: AnyObject {
         let _url:String = _basicDoman + "uploadDir/" + __str
         return _url
     }
+    
+    
+    //--------------------社交部分
+    
+    
+    
 }

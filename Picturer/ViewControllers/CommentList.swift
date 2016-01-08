@@ -48,7 +48,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=MainAction._color_black_bar
+        _topBar?.backgroundColor=Config._color_black_bar
         
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
@@ -58,7 +58,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.font = MainAction._font_topbarTitle
+        _title_label?.font = Config._font_topbarTitle
         _title_label?.text="评论"
         
         _tableView=UITableView()
@@ -122,7 +122,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         //_tableView?.reloadData()
         let _dict:NSDictionary = _dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary
         let _userId:String = _dict.objectForKey("from_userName") as! String
-        if _userId != MainAction._currentUser.objectForKey("userId") as! String{
+        if _userId != Social_Main._currentUser.objectForKey("userId") as! String{
              _selectedId=indexPath.row
             _inputer!._placeHold = "回复"+(_dict.objectForKey("from_userName") as! String)
         }else{
@@ -165,7 +165,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         }
        
         
-        let _d:NSDictionary = NSDictionary(objects: [MainAction._currentUser.objectForKey("userName") as! String,_to_userName,MainAction._currentUser.objectForKey("userId") as! String,_to_userId,__dict.objectForKey("text") as! String,MainAction._currentUser.objectForKey("profileImg") as! NSDictionary], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg"])
+        let _d:NSDictionary = NSDictionary(objects: [Social_Main._currentUser.objectForKey("userName") as! String,_to_userName,Social_Main._currentUser.objectForKey("userId") as! String,_to_userId,__dict.objectForKey("text") as! String,Social_Main._currentUser.objectForKey("profileImg") as! NSDictionary], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg"])
         
         
         
