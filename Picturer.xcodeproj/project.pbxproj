@@ -160,6 +160,7 @@
 		7AB251B51B7F4F5F0029ED80 /* ad_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7AB251B01B7F4F5F0029ED80 /* ad_3.jpg */; };
 		7AB251B61B7F4F5F0029ED80 /* ad_4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7AB251B11B7F4F5F0029ED80 /* ad_4.jpg */; };
 		7AB251B71B7F4F5F0029ED80 /* ad_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7AB251B21B7F4F5F0029ED80 /* ad_5.jpg */; };
+		7AB2BC511C3FB39000B152F2 /* moreAction_Social.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB2BC501C3FB39000B152F2 /* moreAction_Social.png */; };
 		7AC247471B4A669F00A5187B /* AlbumList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7AC247461B4A669F00A5187B /* AlbumList.plist */; };
 		7AC4DFA01C21B7EA009A88BF /* SyncActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */; };
 		7AC55DAE1B3E97EE00FDC851 /* SocialHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */; };
@@ -344,6 +345,7 @@
 		7AB251B01B7F4F5F0029ED80 /* ad_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ad_3.jpg; sourceTree = "<group>"; };
 		7AB251B11B7F4F5F0029ED80 /* ad_4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ad_4.jpg; sourceTree = "<group>"; };
 		7AB251B21B7F4F5F0029ED80 /* ad_5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ad_5.jpg; sourceTree = "<group>"; };
+		7AB2BC501C3FB39000B152F2 /* moreAction_Social.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moreAction_Social.png; sourceTree = "<group>"; };
 		7AC247461B4A669F00A5187B /* AlbumList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AlbumList.plist; sourceTree = "<group>"; };
 		7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncActionView.swift; path = ../MyClasses/SyncActionView.swift; sourceTree = "<group>"; };
 		7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialHomeCell.swift; sourceTree = "<group>"; };
@@ -534,6 +536,7 @@
 				7AB251821B7F4ADB0029ED80 /* photo */,
 				7AB251811B7F4ABE0029ED80 /* user */,
 				7AB2517F1B7F46690029ED80 /* message.png */,
+				7AB2BC501C3FB39000B152F2 /* moreAction_Social.png */,
 				7AB251791B7F3B2E0029ED80 /* logo_black.png */,
 				7AA7AEEF1B735B0F00FF7EBC /* back.png */,
 				7AA7AEF01B735B0F00FF7EBC /* edit.png */,
@@ -828,6 +831,7 @@
 				7ADD50111B2D402000E44F99 /* Main.storyboard in Resources */,
 				7AA7AEE51B73094F00FF7EBC /* picturer.png in Resources */,
 				7A23A96A1B3E7913009B2E53 /* icon_6.png in Resources */,
+				7AB2BC511C3FB39000B152F2 /* moreAction_Social.png in Resources */,
 				7AA26BAA1B4D8E69006CDC61 /* icon_unchoose.png in Resources */,
 				7AB251A31B7F4B0F0029ED80 /* user_1.jpg in Resources */,
 				7AB251B61B7F4F5F0029ED80 /* ad_4.jpg in Resources */,

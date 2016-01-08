@@ -11,7 +11,7 @@ import UIKit
 
 
 
-class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
+class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate{
     var _barH:CGFloat = 64
     var _myFrame:CGRect?
     var _userId:String = "000001"
@@ -32,7 +32,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _dataArray:NSArray=[]
     var _setuped:Bool = false
     
-    var _profileDict:NSDictionary?=NSDictionary()
+    var _profileDict:NSDictionary?
     
     var _profilePanel:UIView?
     var _profile_icon_img:PicView?
@@ -47,24 +47,28 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _line_profile:UIView?
     
     
-    var _btn_followed:UIButton?
-     var _btn_following:UIButton?
-     var _btn_album:UIButton?
+    var _label_sex_n_city:UILabel?
     
-    var _profileH:CGFloat = 152
+    
+    var _btn_followed:UIButton?
+    var _btn_following:UIButton?
+    var _btn_album:UIButton?
+    
+    var _profileH:CGFloat = 152//-----面板高度
+    var _buttonH:CGFloat = 30 //---按钮高度
+    var _buttonW:CGFloat = 125//---按钮宽度
+    var _buttonGap:CGFloat = 1 //---按钮间距
     
     var _scrollView:UIScrollView?
     
     
+    var _allDatasArray:NSMutableArray? //------其他信息，以相册id为锚点
     var _coverArray:NSMutableArray?
     var _imagesArray:NSMutableArray?//-----每个相册里的图片
     var _heighArray:NSMutableArray?
     var _commentsArray:NSMutableArray?
     var _likeArray:NSMutableArray?
-    
-    
-    
-    var _defaultH:CGFloat = 400
+    var _defaultH:CGFloat = 632
     
     var _scrollTopH:CGFloat = 0 //达到这个高度时向上移动
     
@@ -78,6 +82,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
     var _naviDelegate:Navi_Delegate?
+    
+    
+    var _alerter:MyAlerter?
+    var _currentEditeIndex:Int?
+    
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
@@ -96,7 +105,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _gapY = 0.06*_frameW!
         _imgW = 0.20*_frameW!
         //_profileH = _imgW! + 2*_gapY!
-        
+        _buttonW = (_myFrame!.width-2*_buttonGap)/3
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
@@ -132,7 +141,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _profile_icon_img?._imgView?.layer.cornerRadius = 0.5*_profile_icon_img!.frame.width
         
         _btn_edite = UIButton(frame: CGRect(x: 0.275*_frameW!,y: _gapY!+(_imgW!-30)/2,width: 2*0.33*(_frameW!-_gap!-0.275*_frameW!),height: 30))
-        _btn_edite?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        _btn_edite?.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
         _btn_edite?.backgroundColor = UIColor(white: 1, alpha: 1)
         _btn_edite?.layer.borderWidth = 1
         _btn_edite?.layer.borderColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1).CGColor
@@ -146,7 +155,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_edite?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_share = UIButton(frame: CGRect(x: _btn_edite!.frame.origin.x+_btn_edite!.frame.width+3,y: _btn_edite!.frame.origin.y,width: _frameW!-_btn_edite!.frame.origin.x-_btn_edite!.frame.width-3-_gap!,height: _btn_edite!.frame.height))
-        _btn_share?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        _btn_share?.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
         _btn_share?.backgroundColor = UIColor(white: 1, alpha: 1)
         _btn_share?.layer.borderWidth = 1
         _btn_share?.layer.borderColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1).CGColor
@@ -156,11 +165,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         attributedString = NSMutableAttributedString(string: "分享")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         _btn_share?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
-        _btn_share?.titleLabel?.font=UIFont.systemFontOfSize(12)
+        _btn_share?.titleLabel?.font=Config._font_social_button
         _btn_share?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_follow = UIButton(frame: _btn_edite!.frame)
-        _btn_follow?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        _btn_follow?.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
         _btn_follow?.backgroundColor = Config._color_yellow
         _btn_follow?.layer.masksToBounds = true
         _btn_follow?.layer.cornerRadius = 5
@@ -181,36 +190,39 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         attributedString = NSMutableAttributedString(string: "私信")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         _btn_message?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
-        _btn_message?.titleLabel?.font=UIFont.systemFontOfSize(12)
+        _btn_message?.titleLabel?.font=Config._font_social_button
         _btn_message?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
 
         
-        _btn_album = UIButton(frame: CGRect(x: _btn_edite!.frame.origin.x,y: 0.26*_imgW!+_gapY!+3,width: 0.5*_btn_edite!.frame.width,height: 15))
+        _btn_album = UIButton(frame: CGRect(x: 0,y: _profileH - _buttonH,width: _buttonW,height: _buttonH))
         _btn_album?.backgroundColor = Config._color_black_title
         _btn_album?.titleLabel?.textAlignment = NSTextAlignment.Center
         attributedString = NSMutableAttributedString(string: "图册")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         _btn_album?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
-        _btn_album?.titleLabel?.font=UIFont.systemFontOfSize(12)
+        _btn_followed?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
+        _btn_album?.titleLabel?.font=Config._font_social_button_2
         //_btn_album?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _btn_followed = UIButton(frame: CGRect(x: _btn_edite!.frame.origin.x+0.5*_btn_edite!.frame.width,y: _btn_album!.frame.origin.y,width: 0.5*_btn_edite!.frame.width,height: 15))
+        _btn_followed = UIButton(frame: CGRect(x: _btn_album!.frame.origin.x + _buttonW + _buttonGap,y: _btn_album!.frame.origin.y,width: _buttonW,height: _buttonH))
         _btn_followed?.backgroundColor = Config._color_black_title
         _btn_followed?.titleLabel?.textAlignment = NSTextAlignment.Center
         attributedString = NSMutableAttributedString(string: "被关注")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
-        _btn_followed?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
-        _btn_followed?.titleLabel?.font=UIFont.systemFontOfSize(12)
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_white_title, range: NSMakeRange(0, attributedString.length) )
+        _btn_followed?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
+        _btn_followed?.titleLabel?.font=Config._font_social_button_2
         _btn_followed?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
-        _btn_following = UIButton(frame: CGRect(x: _btn_share!.frame.origin.x,y: _btn_album!.frame.origin.y,width: _btn_share!.frame.width,height: 15))
+        _btn_following = UIButton(frame: CGRect(x: _btn_album!.frame.origin.x + 2*_buttonW + 2*_buttonGap,y: _btn_album!.frame.origin.y,width: _buttonW,height: _buttonH))
         _btn_following?.backgroundColor = Config._color_black_title
         _btn_following?.titleLabel?.textAlignment = NSTextAlignment.Center
         attributedString = NSMutableAttributedString(string: "关注")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         _btn_following?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
-        _btn_following?.titleLabel?.font=UIFont.systemFontOfSize(12)
+        _btn_followed?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
+        _btn_following?.titleLabel?.font=Config._font_social_button_2
         _btn_following?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
@@ -235,12 +247,23 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _following_label?.font = UIFont.systemFontOfSize(14)
         
         
+        _label_sex_n_city = UILabel(frame: CGRect(x: _btn_edite!.frame.origin.x, y: _profile_icon_img!.frame.origin.y, width: _myFrame!.width-_btn_edite!.frame.origin.x-_gap!,height: 20))
+        _label_sex_n_city?.textColor = Config._color_social_gray
+        _label_sex_n_city?.font = Config._font_social_sex_n_city
         
         
-        _sign_text = UITextView(frame: CGRect(x: _gap!,y: _imgW!+2*_gap!+3,width: _myFrame!.width-2*_gap!,height: 12))
-        _sign_text?.font = UIFont.systemFontOfSize(13)
+        _sign_text = UITextView(frame: CGRect(x: _btn_edite!.frame.origin.x,y: _btn_edite!.frame.origin.y+_btn_edite!.frame.height+4,width: _myFrame!.width-_btn_edite!.frame.origin.x-_gap!,height: 40))
+        _sign_text?.font = Config._font_social_sign
+        _sign_text?.contentInset = UIEdgeInsetsZero
+        _sign_text?.textContainerInset = UIEdgeInsetsZero
+        _sign_text?.textAlignment = NSTextAlignment.Left
+        _sign_text?.textContainer.lineFragmentPadding=0
+        
+        
+        _sign_text?.textColor = Config._color_social_gray
+        _sign_text?.backgroundColor = UIColor.clearColor()
         _sign_text?.editable=false
-        _sign_text?.alpha = 0
+        //_sign_text?.alpha = 0
         
         
         
@@ -258,6 +281,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _profilePanel?.addSubview(_btn_following!)
         
         _profilePanel?.addSubview(_sign_text!)
+        _profilePanel?.addSubview(_label_sex_n_city!)
         //----
         
         //---消息提醒----
@@ -284,7 +308,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _tableView?.backgroundColor=UIColor.clearColor()
         _tableView?.delegate=self
         _tableView?.dataSource=self
-        _tableView?.frame = CGRect(x: 0, y: _barH+_profileH+10, width: _myFrame!.width, height: _myFrame!.height-_barH-_profileH-10)
+        _tableView?.frame = CGRect(x: 0, y: _barH+_profileH+_gap!, width: _myFrame!.width, height: _myFrame!.height-_barH-_profileH-10)
         _tableView?.registerClass(PicAlbumMessageItem.self, forCellReuseIdentifier: "PicAlbumMessageItem")
         _tableView?.backgroundColor = UIColor.clearColor()
         _tableView?.separatorStyle = UITableViewCellSeparatorStyle.None
@@ -295,7 +319,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _scrollView = UIScrollView(frame: CGRect(x: 0, y: _barH, width: _myFrame!.width, height: _myFrame!.height-_barH))
         
         
-        self.view.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        self.view.backgroundColor = Config._color_social_gray_light
         
         _scrollView!.addSubview(_tableView!)
         //_scrollView?.scrollEnabled=true
@@ -339,12 +363,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _getAlbumList()
     }
     
-    //------获取相册
+    //------获取相册列表
     func _getAlbumList(){
         Social_Main._getAlbumListAtUser(_userId, __block: { (array) -> Void in
-            
             self._dataArray = array
-            
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self._refreshDatas()
                 self._getMessage()
@@ -354,50 +376,68 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         })
     }
     //------获取用户信息
-    
     func _getUserInfo(){
         Social_Main._getUserProfileAtId(_userId) { (__dict) -> Void in
             print(__dict)
             self._profileDict = __dict
+            self._tableView?.reloadData()
+            self._refreshView()
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self._title_label?.text=self._profileDict?.objectForKey("nickname") as? String
-                //self._albumNum_label?.text = String(self._profileDict?.objectForKey("albumNumber") as! Int)
-                //self._followed_label?.text=String(self._profileDict?.objectForKey("followNumber") as! Int)
-                //self._following_label?.text=String(self._profileDict?.objectForKey("followingNumber") as! Int)
-                self._setSign(self._profileDict?.objectForKey("signature") as! String)
-                
+                self._setAlbumNum(self._profileDict?.objectForKey("albumcounts") as! Int)
+                self._setFollowedNum(self._profileDict?.objectForKey("focuscounts") as! Int)
+                self._setFollowingNum(self._profileDict?.objectForKey("followcounts") as! Int)
+                self._label_sex_n_city?.text = "女，中国 北京"
+                //self._setSign(self._profileDict?.objectForKey("signature") as! String)
+                self._setSign("搭嘎的送给多少年广东省各地时光都是苹")
             })
         }
-        
-//        
-//        let _dict:NSDictionary = Social_Main._getUserProfileAtId(_userId)
-//        _profileDict = _dict
-//        _title_label?.text=_profileDict?.objectForKey("userName") as? String
-//        _albumNum_label?.text = String(_profileDict?.objectForKey("albumNumber") as! Int)
-//        _followed_label?.text=String(_profileDict?.objectForKey("followNumber") as! Int)
-//        _following_label?.text=String(_profileDict?.objectForKey("followingNumber") as! Int)
-//        //_setSign(_profileDict?.objectForKey("sign") as! String)
-//        print(_profileDict?.objectForKey("sign") as! String)
-//        
-//        
-//        _setIconImg(_profileDict?.objectForKey("profileImg") as! NSDictionary)
     }
     
+    //----图册数量
+    func _setAlbumNum(__num:Int){
+        let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "图册")
+        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_white_title, range: NSMakeRange(0, attributedString.length) )
+        let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
+        descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
+        attributedString.appendAttributedString(descString)
+        _btn_album?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+    }
+    //----被关注数量
+    func _setFollowedNum(__num:Int){
+        let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "被关注")
+        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_white_title, range: NSMakeRange(0, attributedString.length) )
+        let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
+        descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
+        attributedString.appendAttributedString(descString)
+        _btn_followed?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+    }
+    //-----关注数量
     
+    func _setFollowingNum(__num:Int){
+        let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "关注")
+        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_white_title, range: NSMakeRange(0, attributedString.length) )
+        let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
+        descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
+        attributedString.appendAttributedString(descString)
+        _btn_following?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+    }
     //----更新数据
-    
     func _refreshDatas(){
-       
-        
-        
-        
         //-----初始化数据
+        _allDatasArray = NSMutableArray()
         
         _heighArray=NSMutableArray()
         _commentsArray=NSMutableArray()
         _likeArray = NSMutableArray()
         for var i:Int=0; i<_dataArray.count;++i{
             let _album:NSDictionary = _dataArray.objectAtIndex(i) as! NSDictionary
+            
+            _allDatasArray?.addObject(NSDictionary(object: _album.objectForKey("_id") as! String, forKey: "_id"))
+            
             Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { (array) -> Void in
                 
             })
@@ -411,26 +451,14 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 self._likeArray?.addObject(array)
             })
         }
-       // _tableView?.reloadData()
-        
+        _tableView?.reloadData()
+        self._refreshView()
     }
     func _setSign(__str:String){
-        
         _sign_text!.text=__str
-        
-        //let _size:CGSize = _sign_text!.sizeThatFits(CGSize(width: _sign_text!.frame.width, height: CGFloat.max))
-        
-//        dispatch_async(dispatch_get_main_queue()){
-//           self._sign_text!.frame = CGRect(x: self._gap!,y: self._sign_text!.frame.origin.y,width: self._myFrame!.width-2*self._gap!,height:_size.height)
-//        }
-        
-        
-        //_sign_text?.frame = CGRect(x: _gap!,y: _imgW!+2*_gap!,width: _myFrame!.width-2*_gap!,height: _sign_text!.contentSize.height)
     }
     func _setIconImg(__pic:NSDictionary){
         _profile_icon_img?._setPic(__pic,__block: { (__dict) -> Void in
-            
-           // self._refreshView()
         })
     }
     
@@ -453,46 +481,20 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             _btn_message?.hidden=false
             _hasNewMessage = false
         }
-        
-        
-       // _sign_text?.text=
-        
-        if _sign_text!.text == ""{
-            _signH = 0
-        }else{
-            _signH = _sign_text!.frame.height
-        }
-        
-        
-        
-        UIView.beginAnimations("go", context: nil)
-        _sign_text?.frame = CGRect(x: _gap!,y: _sign_text!.frame.origin.y,width: _myFrame!.width-2*_gap!,height: _signH!)
-        _sign_text?.alpha=1
-        
-        //_profileH = _sign_text!.frame.origin.y + _sign_text!.frame.height + _gap!
-       
-        
-        
-        _profilePanel?.frame = CGRect(x: 0, y: 0, width: _myFrame!.width, height: _profileH)
-        _line_profile?.frame = CGRect(x: 0, y: _profileH, width: _myFrame!.width, height: 0.5)
-        
         if _hasNewMessage{
             _messageImg?.hidden=false
         }else{
             _messageImg?.hidden=true
         }
-        _tableView?.frame = CGRect(x: 0, y: _profileH+20, width:  _myFrame!.width, height: _tableView!.contentSize.height)
+        _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
         _tableView?.scrollEnabled = false
         _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
         UIView.commitAnimations()
     }
-    
     //----table 代理
-    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
     }
-    
     
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -517,37 +519,52 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         //println(_heighArray.objectAtIndex(indexPath.row))
         return 700
     }
+    
+//---------
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let _dict:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
+        //print(_dict)
+        
         var cell:PicAlbumMessageItem?
         //cell = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
         cell = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as? PicAlbumMessageItem
-        
-        
-//        cell!.setup(CGSize(width: self.view.frame.width, height: _defaultH))
-//        cell!._openPanel(false)
-//        
-//        cell!.separatorInset = UIEdgeInsetsZero
-//        cell!.preservesSuperviewLayoutMargins = false
-//        cell!.layoutMargins = UIEdgeInsetsZero
-//        //cell!.tag = 100+indexPath.row
-//        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
-//        cell!._setComments(_array, __allNum: _array.count)
-//        
-//        let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
-//        cell!._setLikes(_likeA,__allNum: _likeA.count)
-//        cell!._userId = _userId
-//        cell!._indexId = indexPath.row
-//        cell!._delegate=self
-   
+        cell!.setup(CGSize(width: self.view.frame.width, height: _heighArray?.objectAtIndex(indexPath.row) as! CGFloat))
+        cell!._openPanel(false)
+        cell!.separatorInset = UIEdgeInsetsZero
+        cell!.preservesSuperviewLayoutMargins = false
+        cell!.layoutMargins = UIEdgeInsetsZero
+        //cell!.tag = 100+indexPath.row
+        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
+        cell!._setComments(_array, __allNum: _array.count)
+        let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
+        cell!._setLikes(_likeA,__allNum: _likeA.count)
+        cell!._userId = _userId
+        cell!._indexId = indexPath.row
+        cell!._delegate=self
         //cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
+        //cell?._setPic(<#T##__pic: NSDictionary##NSDictionary#>)
         
-        
-        //cell!._setUserImge(_profileDict?.objectForKey("profileImg") as! NSDictionary)
-        //cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String)
-        
-        //cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
-        //cell!._setUpdateTime("下午 2:00 更新")
-        //cell!._setUserName(_profileDict!.objectForKey("userName") as! String)
+        if let _title:String = _dict.objectForKey("title") as? String{
+            cell!._setAlbumTitle(_title)
+        }else{
+            cell!._setAlbumTitle("")
+        }
+        if let _des:String = _dict.objectForKey("description") as? String{
+            cell!._setDescription(_des)
+        }else{
+            cell!._setDescription("")
+        }
+        if let _cover:NSDictionary = _dict.objectForKey("cover") as? NSDictionary{
+            cell!._setPic(_cover)
+        }else{
+            //cell!._setDescription("")
+        }
+        cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("last_update_at") as! String))
+        if _profileDict != nil{
+            
+            cell!._setUserImge(NSDictionary(objects: [ MainInterface._imageUrl(_profileDict?.objectForKey("avatar") as! String),"file"], forKeys: ["url","type"]))
+            cell!._setUserName(_profileDict!.objectForKey("nickname") as! String)
+        }
         //cell!._refreshView()
         return cell!
     }
@@ -568,7 +585,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
        // println(_heighArray)
     }
     func _viewAlbum(__albumIdex:Int) {
-        
         /*
         if _userId == Social_Main._userId{
             Social_Main._getPicsListAtal(__albumIdex, block: { (array) -> Void in
@@ -579,14 +595,16 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             })
             return
         }
+        
+        
 */
-        
-        
-        Social_Main._getPicsListAtAlbumId("00003", __block: { (array) -> Void in
-            let _controller:Social_pic = Social_pic()
-            _controller._showIndexAtPics(0, __array: array)
-             self.navigationController?.pushViewController(_controller, animated: true)
-            
+        let _album = _dataArray.objectAtIndex(__albumIdex) as! NSDictionary
+        Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { (array) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                let _controller:Social_pic = Social_pic()
+                _controller._showIndexAtPics(0, __array: array)
+                self.navigationController?.pushViewController(_controller, animated: true)
+            })
         })
         
        
@@ -655,11 +673,57 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 self.navigationController?.pushViewController(_controller, animated: true)
                 
             break
+            case "moreAction":
+                _currentEditeIndex = __dict.objectForKey("indexId") as? Int
+                _openMoreAction()
         default:
             break
         }
         
     }
+    //----打开更多的弹出框
+    
+    func _openMoreAction(){
+        if _alerter == nil{
+            _alerter = MyAlerter()
+            _alerter?._delegate = self
+        }
+        self.addChildViewController(_alerter!)
+        self.view.addSubview(_alerter!.view)
+        _alerter?._setMenus(["分享","举报"])
+        _alerter?._show()
+    }
+
+    //------弹出框代理
+    func _myAlerterClickAtMenuId(__id:Int){
+        switch __id{
+        case 0:
+            print(_currentEditeIndex)
+            //---分享
+            break
+        case 1:
+            //---举报
+            break
+        default:
+            break
+            
+        }
+    }
+    func _myAlerterStartToClose(){
+        
+    }
+    func _myAlerterDidClose(){
+        
+    }
+    func _myAlerterDidShow(){
+        
+    }
+    
+    
+    
+    
+    
+    
     
     func _hasUserInLikesAtIndex(__indexId:Int,__userId:String)->Bool{
         let _arr:NSArray = self._likeArray?.objectAtIndex(__indexId) as! NSArray
@@ -674,6 +738,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         return false
     }
+    
+    
     
     
     

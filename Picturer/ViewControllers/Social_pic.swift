@@ -22,6 +22,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     let _barH:CGFloat = 64
     let _gap:CGFloat=15
     let _space:CGFloat=5
+    var _titleBase:String = ""
     
     var _setuped:Bool=false
     var _topBar:UIView?
@@ -67,7 +68,6 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     var _frameH:CGFloat?
     
     var _showingBar:Bool=true{
-        
         didSet{
             UIView.beginAnimations("topA", context: nil)
             UIView.setAnimationDuration(0.2)
@@ -134,15 +134,15 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=Config._color_black_bar
         
-        _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 56))
-        _titleT?.font = UIFont.boldSystemFontOfSize(16)
+        _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 60))
+        _titleT?.editable = false
+        _titleT?.font = Config._font_topbarTitle_at_one_pic
+        _titleT?.textColor = Config._color_white_title
         _titleT?.backgroundColor = UIColor.clearColor()
         _titleT?.textColor=UIColor.whiteColor()
-        _titleT?.editable=false
-        _titleT?.selectable = false
         _titleT?.scrollEnabled = false
         _titleT?.textAlignment=NSTextAlignment.Center
-        _titleT?.text="6月2日\n2/28"
+        _titleT?.text=""
         
         
         _bottomBar=UIView(frame:CGRect(x: 0, y: self.view.frame.height-58, width: self.view.frame.width, height: 58))
@@ -221,9 +221,13 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     //-----根据排列顺序调出图片
     func _getPicAtIndex(__index:Int)->NSDictionary{
         var _dict:NSDictionary
-        _dict = _picsArray?.objectAtIndex(__index) as! NSDictionary
         
-        return _dict.objectForKey("pic") as! NSDictionary
+        if _range == 0{
+            _dict = _picsArray?.objectAtIndex(__index) as! NSDictionary
+        }else{
+            _dict = _picsArray?.objectAtIndex(_picsArray!.count-__index-1) as! NSDictionary
+        }
+        return _dict
     }
     //外部调用直接到达指定图片
     func _showIndexAtPics(__index:Int,__array:NSArray){
@@ -235,6 +239,27 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         }
         if _currentIndex < 0{
             _currentIndex = 0
+        }
+    }
+    
+    //----设置描述
+    func _setDescription(__str:String){
+        _desText?.text = __str
+        if  __str == ""{
+            _desView?.hidden = true
+        }else{
+            _desView?.hidden = false
+        }
+        let _size:CGSize = _desText!.sizeThatFits(CGSize(width: self.view.frame.width-2*_gap, height: CGFloat.max))
+        
+        _desText?.frame =  CGRect(x: _gap, y: _gap/2, width: self.view.frame.width-2*_gap, height: _size.height)
+        
+        _desH = (_desText?.frame.height)!+_gap/2+_gap
+        
+        if _showingBar{
+            _showingBar = true
+        }else{
+            _showingBar = false
         }
     }
     
@@ -258,17 +283,25 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         if (_currentIndex!>_picsArray!.count-1){
             _currentIndex=_picsArray!.count-1
         }
+        var _str:String = ""
+        if _titleBase == ""{
+            _str = _titleBase+"\n"+String(_currentIndex!+1)+"/"+String(_picsArray!.count)
+        }else{
+            _str = _titleBase+"\n"+String(_currentIndex!+1)+"/"+String(_picsArray!.count)
+        }
+        _titleT?.text = _str
         
-        _titleT?.text = "5月12日 12:33 \n"+String(_currentIndex!+1)+"/"+String(_picsArray!.count)
+        //print(_str)
         
         _pic = NSMutableDictionary(dictionary: (_getPicAtIndex(_currentIndex!)))
-        
+        if _pic!.objectForKey("description") != nil{
+            _setDescription(_pic!.objectForKey("description") as! String)
+        }else{
+            _setDescription("")
+        }
         _viewInAtIndex(__index)
-        
         _viewInAtIndex(__index+1)
         _viewInAtIndex(__index-1)
-        
-        
     }
     
     //---正在挪动的时候
@@ -300,31 +333,41 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     
     func _viewInAtIndex(__index:Int){
         
-        var _picV:PicView!
         if __index<0{
             return
         }
         if __index>_picsArray!.count-1{
             return
         }
+        var _picV:PicView!
         if (_scrollView?.viewWithTag(100+__index) != nil){
-            
             _picV=_scrollView?.viewWithTag(100+__index) as! PicView
+            
             //println(_picV.superview?.isEqual(self.view))
         }else{
-            
             _picV=PicView(frame: CGRect(x: CGFloat(__index)*_scrollView!.frame.width, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            _picV._scaleType = PicView._ScaleType_Fit
             _picV.tag=100+__index
-            
         }
-        _picV._setPic(_getPicAtIndex(__index),__block: { (__dict) -> Void in
-            
-        })
+        
+        
         if __index == _currentIndex{
             _picV.addGestureRecognizer(_tapG!)
             _currentPic = _picV
         }
         _scrollView!.addSubview(_picV)
+        
+        
+        let __pic:NSDictionary = _getPicAtIndex(__index)
+        
+        if let _url = __pic.objectForKey("link") as? String{
+            _picV!._setPic(NSDictionary(objects: [MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
+            })
+            return
+        }
+        _picV._setPic(__pic,__block: { (__dict) -> Void in
+            
+        })
     }
     //-----瀑布流代理
     
@@ -349,6 +392,9 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     func _getDatas(){
         
     }
+    
+    
+    
     
     func clickAction(sender:UIButton){
         switch sender{

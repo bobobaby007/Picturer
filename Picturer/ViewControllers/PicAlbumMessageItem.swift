@@ -24,6 +24,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _picsW:CGFloat = 0
     let _gapForPic:CGFloat = 2
     
+    var _alerter:MyAlerter?
+    
     var _bottomOfPic:CGFloat = 0 //---到图片底部的位置
     
     let _gap:CGFloat = 15
@@ -56,6 +58,11 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _toolsOpenButton:UIButton?
     
     var _likeIcon:UIImageView?
+    
+    var _btn_moreAction:UIButton?
+    
+    var _titleStr:String?
+    
     
     var _btn_like:UIButton = UIButton()
     var _btn_comment:UIButton = UIButton()
@@ -130,15 +137,19 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _userImg?.addGestureRecognizer(_buttonTap!)
         
         
-        _userName_label = UILabel(frame: CGRect(x: 59, y: 17, width: 200, height: 12))
-        _userName_label?.font = UIFont.boldSystemFontOfSize(14)
-        _userName_label?.textColor = UIColor(red: 44/255, green: 61/255, blue: 89/255, alpha: 1)
+        _userName_label = UILabel(frame: CGRect(x: 59, y: 7, width: 200, height: 12))
+        _userName_label?.font = Config._font_social_button
+        _userName_label?.textColor = Config._color_social_blue
         
-        _updateTime_label = UILabel(frame: CGRect(x: _defaultSize!.width-155, y: 17, width: 140, height: 12))
+        _updateTime_label = UILabel(frame: CGRect(x: 59, y: 25, width: 140, height: 12))
         
-        _updateTime_label?.textAlignment = NSTextAlignment.Right
-        _updateTime_label?.font = UIFont.systemFontOfSize(12)
+        _updateTime_label?.textAlignment = NSTextAlignment.Left
+        _updateTime_label?.font = Config._font_social_time
         
+        _btn_moreAction = UIButton(frame: CGRect(x: _defaultSize!.width-30, y: 0, width: 20, height: 44))
+        _btn_moreAction?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        _btn_moreAction?.setImage(UIImage(named: "moreAction_Social"), forState: UIControlState.Normal)
+        _btn_moreAction?.addTarget(self, action: "buttonAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
         
@@ -239,8 +250,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 _toolsButtonPanel?.addSubview(_btn_share)
                 _toolsButtonPanel?.addSubview(_btn_collect)
         
-            
-            
                 _picV = PicView(frame: CGRect(x: 0, y: 45, width: _defaultSize!.width, height: _defaultSize!.width))
                 _picV?._setImage("noPic.png")
                 _picV?.scrollEnabled=false
@@ -249,14 +258,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 _picV?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
                 _picV?.layer.masksToBounds = true
                 
-                
                 _bottomOfPic = _picV!.frame.origin.y + _picV!.frame.height
                 
                 let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
                 _picV?.addGestureRecognizer(_tapPic)
-            
-                
-                
                 _albumTitle_labelV = UIView(frame: CGRect(x: 0, y: _bottomOfPic-30, width: _defaultSize!.width, height: 30))
                 
                 _albumTitle_labelV?.backgroundColor = UIColor(white: 0, alpha: 0.8)
@@ -382,7 +387,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _toolsPanel = UIView(frame: CGRect(x: 0, y: _bottomOfPic+5, width: _defaultSize!.width, height: 36))
         _toolsPanel?.addSubview(_likeTextView!)
         _toolsPanel?.addSubview(_likeIcon!)
-        _toolsPanel?.addSubview(_toolsOpenButton!)
+        
+        
+        //_toolsPanel?.addSubview(_toolsOpenButton!)
+        
         _toolsPanel?.addSubview(_toolsButtonPanel_container!)
         
         _commentsPanel = UIView(frame: CGRect(x: 0, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width, height: 36))
@@ -418,6 +426,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         self.addSubview(_picsContainer)
         self.addSubview(_userImg!)
+        self.addSubview(_btn_moreAction!)
         self.addSubview(_userName_label!)
         self.addSubview(_updateTime_label!)
         self.addSubview(_albumTitle_labelV!)
@@ -438,19 +447,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     //-------------------------调整布局-----------------
     
     func _refreshView(){
-        
-        
-//        let _imgH:CGFloat! = _picV?._imgView?.image?.size.height
-//        let _imgW:CGFloat! = _picV?._imgView?.image?.size.width
-        
-//        var _h:CGFloat = 340
-//        if _imgH != nil{
-//         _h = _imgH*(self.frame.width/_imgW)
-//        }
-        //_picV?.frame = CGRect(x: 0, y: 50, width: self.frame.width, height: _h)
-        //_picV?._refreshView()
-        
-        //_albumTitle_labelV?.frame = CGRect(x: 0, y: 50+_picV!.frame.height-36, width: self.frame.width, height: 36)
         
         var _desH:CGFloat = 0
         
@@ -668,7 +664,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             _delegate?._viewAlbum(_indexId)
         default:
             let _picV:PicView = __tap.view! as! PicView
-            
             _delegate?._viewPicsAtIndex(_pics!, __index: _picV._id)
             
             return
@@ -754,12 +749,13 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 _openPanel(true)
                 self.superview?.addGestureRecognizer(_tapC!)
             }
-            
+        case _btn_moreAction!:
+            _delegate?._buttonAction("moreAction", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
+            break
         default:
             print("")
         }
     }
-    
     
     
     
@@ -771,13 +767,13 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _description?.text=__str
     }
     func _setAlbumTitle(__str:String){
+        if _albumTitle_label == nil{
+            return
+        }
         if __str==""{
-            //_albumTitle_label?.hidden=true
-            //_albumTitle_labelV?.hidden=true
             _albumTitle_label?.text="未命名图册"
         }else{
             _albumTitle_label?.text=__str
-            
         }
      
         //_albumTitle_label?.hidden=false
@@ -817,9 +813,16 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     func _setPic(__pic:NSDictionary){
         //println(__pic)
        //  _pic?.image = UIImage(named: __pic.objectForKey("url") as! String)
-        _picV?._setPic(__pic, __block: { (__dict) -> Void in
-           self._refreshView()
-        })
+        if let _url = __pic.objectForKey("thumbnail") as? String{
+            _picV!._setPic(NSDictionary(objects:[MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
+                 self._refreshView()
+            })
+            return
+        }else{
+            _picV!._setPic(__pic, __block:{_ in
+                 self._refreshView()
+            })
+        }
     }
     
     func _setPics(__pics:NSArray){

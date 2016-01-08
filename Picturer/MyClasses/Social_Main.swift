@@ -79,6 +79,9 @@ class Social_Main: AnyObject {
     static func _getPicsListAtAlbumId(__albumId:String?,__block:(NSArray)->Void){
         
         MainInterface._getImagesOfAlbum(__albumId!) { (__dict) -> Void in
+            print(__dict)
+            
+            
             if __dict.objectForKey("recode") as! Int == 200{
                 let images:NSArray = __dict.objectForKey("list") as! [NSDictionary]
                 __block(images)
@@ -133,6 +136,7 @@ class Social_Main: AnyObject {
               //print("用户信息：",__dict)
                  __block(__dict.objectForKey("userinfo") as! NSDictionary)
             }
+            // print("_getUserProfileAtId",__dict)
         }
         
         /*

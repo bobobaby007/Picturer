@@ -147,7 +147,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         _titleT?.textColor=UIColor.whiteColor()
         _titleT?.scrollEnabled = false
         _titleT?.textAlignment=NSTextAlignment.Center
-        _titleT?.text="6月2日\n2/28"
+        _titleT?.text=""
         
         
         _bottomBar=UIView(frame:CGRect(x: 0, y: self.view.frame.height-58, width: self.view.frame.width, height: 58))

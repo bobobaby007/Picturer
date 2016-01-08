@@ -18,12 +18,6 @@ class MainAction: AnyObject {
     static let _ALBUM_LIST = "ALBUM_LIST"
     static var _aList:NSMutableArray?
     static var _tempAlbum:NSMutableDictionary?
-    
-    
-    
-    
-   
-    
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{
@@ -46,25 +40,21 @@ class MainAction: AnyObject {
              //println(_ud.dictionaryRepresentation())
         }
     }
-    
     //-----重置
     static func _reset(){
         let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         _ud.setObject(nil, forKey: _ALBUM_LIST)
         _aList = nil
     }
-    
     //----从服务器更新图册列表
     static func _refreshAlbumListFromServer(__block:(NSDictionary)->Void){
        // _reset()
-        
-        
         MainInterface._getMyAlbumList { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
                // print(ablums)
                 for var i:Int = 0; i < ablums.count; ++i{
-                    let _album = ablums.objectAtIndex(i) as! NSDictionary
+                    let _album = ablums.objectAtIndex(ablums.count-1-i) as! NSDictionary
                     //print(_album)
                     
                     let _index = _getAlbumIndexOfId(_album.objectForKey("_id") as! String)
@@ -561,8 +551,6 @@ class MainAction: AnyObject {
     
     //------修改图片
     static func _changePic(dict:NSDictionary,__block:(NSDictionary)->Void){
-        
-        
             var _str:String = ""
             for (key,value) in dict{
                 //println(key,value)
