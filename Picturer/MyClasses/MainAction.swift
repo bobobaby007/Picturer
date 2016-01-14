@@ -18,6 +18,19 @@ class MainAction: AnyObject {
     static let _ALBUM_LIST = "ALBUM_LIST"
     static var _aList:NSMutableArray?
     static var _tempAlbum:NSMutableDictionary?
+    
+    
+    static func _checkLogOk()->Bool{
+        return MainInterface._isLogined()
+    }
+    
+    static func _showLogAt(__viewController:UIViewController){
+        let _logMain:Log_Main = Log_Main()
+        _logMain._delegate = __viewController as! Log_Main_delegate
+        __viewController.presentViewController(_logMain, animated: true, completion: nil)
+        
+    }
+    
     static var _albumList:NSMutableArray!{
         get{
             if _aList==nil{

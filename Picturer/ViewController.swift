@@ -13,12 +13,19 @@ class ViewController: UIViewController,Manage_home_delegate,Social_home_delegate
    
    weak var manage_home:Manage_home?
    weak var socail_home:Social_home?
+   weak var _log_main:Log_Main?
     var _navgationController:UINavigationController?
     var _setuped:Bool = false
+    static var _self:ViewController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        
+        
+        
         showManageHome()
+        
         //showSocialHome()
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -33,6 +40,9 @@ class ViewController: UIViewController,Manage_home_delegate,Social_home_delegate
         if _setuped{
             return
         }
+        
+        ViewController._self = self
+        
         if _navgationController == nil{
             _navgationController = UINavigationController()
         }

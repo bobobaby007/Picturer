@@ -125,21 +125,15 @@ class Inputer: UIView,UITextViewDelegate {
     }
     
     func keyboardWillAppear(notification:NSNotification) {
-        
         let userInfo = notification.userInfo!
-        
         //let animationDuration: NSTimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         //let animationCurve:UIViewAnimationCurve = (userInfo[UIKeyboardAnimationCurveUserInfoKey] as! NSString).
         //let keyboardScreenBeginFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
         let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
-        
         //println(keyboardScreenBeginFrame)
         //println(keyboardScreenBeginFrame)
-        
         _keboardFrame = keyboardScreenEndFrame
-        
         _refresshView()
-        
     }
         
     func keyboardWillHide() {

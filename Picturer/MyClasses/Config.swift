@@ -9,6 +9,18 @@
 import Foundation
 
 class Config:AnyObject {
+    
+    static let _barH:CGFloat = 64
+    static let _gap:CGFloat = 15
+    static let _gap_2:CGFloat = 11
+    static let _statusBarH:CGFloat = 20
+    
+    
+    static let _color_bg_gray:UIColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)//----背景灰色
+    
+    ///
+    
+    
     static let _color_white_title:UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)//----标题白色
     
     static let _color_yellow:UIColor = UIColor(red: 255/255, green: 221/255, blue: 23/255, alpha: 1)//----黄色
@@ -44,7 +56,7 @@ class Config:AnyObject {
     //---------------------社交
     
     static let _color_social_gray:UIColor = UIColor(red: 76/255, green: 76/255, blue: 76/255, alpha: 1)//----社交页面中灰色
-    static let _color_social_blue:UIColor = UIColor(red: 44/255, green: 60/255, blue: 120/255, alpha: 1)//----社交页面中灰色
+    static let _color_social_blue:UIColor = UIColor(red: 44/255, green: 60/255, blue: 120/255, alpha: 1)//----社交页面中蓝色
      static let _color_social_gray_light:UIColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)//----社交页面中浅灰
     
     
@@ -55,7 +67,13 @@ class Config:AnyObject {
     static let _font_social_sign:UIFont = UIFont(name: "PingFangSC-Regular", size: 13)!//社交页签名字体
     
     
-    static let _barH:CGFloat = 64
-    static let _gap:CGFloat = 15
-    static let _gap_2:CGFloat = 11
+    
+    
+    
+    //------登陆
+    
+    
+    
+    static let _font_loginButton:UIFont = UIFont(name: "PingFangSC-Regular", size: 24)!//----登陆按钮字体
+    
 }

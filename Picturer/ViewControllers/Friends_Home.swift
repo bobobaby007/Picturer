@@ -343,7 +343,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         
         cell!.setup(CGSize(width: self.view.frame.width, height: _defaultH))
-        cell!._openPanel(false)
+        
         
         cell!.separatorInset = UIEdgeInsetsZero
         cell!.preservesSuperviewLayoutMargins = false

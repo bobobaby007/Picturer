@@ -19,7 +19,7 @@ protocol Manage_home_delegate:NSObjectProtocol{
     func _manage_changeFinished()
 }
 
-class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MyAlerter_delegate,ShareAlert_delegate,SearchPage_delegate,NewFromWeb_delegate{
+class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Manage_newDelegate,Manage_show_delegate,ImagePickerDeletegate,Manage_PicsToAlbumDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MyAlerter_delegate,ShareAlert_delegate,SearchPage_delegate,NewFromWeb_delegate,Log_Main_delegate{
     var _alerter:MyAlerter?
     var _shareAlert:ShareAlert?
     var _cameraPicker:UIImagePickerController!
@@ -69,7 +69,16 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         //CoreAction._printAllFonts()
         
-        _refreshFromServer()
+        
+        
+        if MainAction._checkLogOk(){
+            _refreshFromServer()
+        }else{
+             MainAction._showLogAt(self)
+        }
+
+        
+        
         
         
 //        MainInterface._signup("18612438608", __pass: "123456") { (__dict) -> Void in
@@ -91,7 +100,17 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         // _tableView.separatorColor=UIColor.clearColor()
     }
+    //-------登录代理
+    
+    func _logHided() {        
+        print(MainInterface._token)
+        _refreshFromServer()
+        
+    }
+    
+    
     func _refreshFromServer(){
+        
         
         MainAction._refreshAlbumListFromServer { (__dict) -> Void in
             // self._refresh()
@@ -784,6 +803,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         
     }
+    
     
     
     override func viewDidAppear(animated: Bool) {

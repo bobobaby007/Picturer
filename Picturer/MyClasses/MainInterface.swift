@@ -13,8 +13,33 @@ import AVFoundation
 
 class MainInterface: AnyObject {
  
-    static let _token:String = "429e2476-7264-4fe9-b6ad-e1e502a4678f"//80d3897b-24af-42a9-af76-3bfdea569bba
-    static let _uid:String = "56557e228327cdfa7cfa192a"
+    static var _token:String = ""//80d3897b-24af-42a9-af76-3bfdea569bba
+    
+    
+    static var _uid_tem:String?
+    static var _uid:String!{
+        get{
+            if _uid_tem==nil{
+                let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                let _id:NSString?=_ud.valueForKey("uid") as? NSString
+                //println(_list)
+                    if _id==nil{
+                        _uid_tem = ""
+                        _ud.setObject(_uid_tem, forKey: "uid")
+                    }else{
+                        _uid_tem = _id! as String
+                    }
+            }
+            return _uid_tem
+        }
+        set{
+            //println("set")
+            _uid_tem=newValue
+            let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            _ud.setObject(_uid_tem, forKey: "uid")
+            //println(_ud.dictionaryRepresentation())
+        }
+    }
     static let _basicDoman:String = "http://120.27.54.180/"
     static let _version:String = "v1"
     static let _URL_Signup:String = "user/register/"
@@ -31,10 +56,36 @@ class MainInterface: AnyObject {
     static let _URL_Pic_list:String = "picture/list/"
     static let _URL_User_Info:String = "user/info/"
     
+    //-----判断是否登录
+    static func _isLogined()->Bool{
+        
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if let _tok:String = _ud.valueForKey("token") as? String {
+            _token = _tok
+            
+            if _token == ""{
+                return false
+            }else{
+                return true
+            }
+            
+        }else{
+            return false
+        }
+    }
+    static func _saveToken(__token:String){
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        _ud.setObject(__token, forKey: "token")
+        _token = __token
+    }
     //-----注册
-    static func _signup(__mob:String, __pass:String, __block:(NSDictionary)->Void){
-        CoreAction._sendToUrl("mobile=\(__mob)&password=\(__pass)", __url: _basicDoman+_version+"/"+_URL_Signup) { (__dict) -> Void in
-            print(__dict)
+    static func _signup(__mob:String, __pass:String,__nickname:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("mobile=\(__mob)&password=\(__pass)&nickname=\(__nickname)", __url: _basicDoman+_version+"/"+_URL_Signup) { (__dict) -> Void in
+        
+            if __dict.objectForKey("recode") as! Int == 200{
+                MainInterface._saveToken(__dict.objectForKey("token") as! String)
+            }
+            
             __block(__dict)
         }
     }
@@ -43,11 +94,22 @@ class MainInterface: AnyObject {
     static func _login(__mob:String, __pass:String, __block:(NSDictionary)->Void){
         CoreAction._sendToUrl("mobile=\(__mob)&password=\(__pass)", __url: _basicDoman+_version+"/"+_URL_Login ) { (__dict) -> Void in
             print(__dict)
+            if __dict.objectForKey("recode") as! Int == 200{
+                let _user:NSDictionary = __dict.objectForKey("userinfo") as! NSDictionary
+                MainInterface._saveToken(_user.objectForKey("token") as! String)
+                
+                _uid = _user.objectForKey("_id") as! String
+            }
             __block(__dict)
         }
     }
     //-----获取我的个人信息
-    
+    static func _getMyUserInfo(__userId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_User_Info+"\(__userId)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
     static func _getUserInfo(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_User_Info+"\(__userId)") { (__dict) -> Void in
             print(__dict)
@@ -118,15 +180,12 @@ class MainInterface: AnyObject {
             print("图片有问题:",__pic)
             return
         }
-        
         switch __pic.objectForKey("type") as! String{
         case "alasset":
             let _al:ALAssetsLibrary=ALAssetsLibrary()
-            
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 if asset != nil {
                     let __image:UIImage = UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
-                    
                     CoreAction._sendToUrl("token=\(_token)&&imagend=jpg&image=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
                        // print(__dict)
                         __block(__dict)

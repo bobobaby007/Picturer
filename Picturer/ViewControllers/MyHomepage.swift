@@ -529,7 +529,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         //cell = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
         cell = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as? PicAlbumMessageItem
         cell!.setup(CGSize(width: self.view.frame.width, height: _heighArray?.objectAtIndex(indexPath.row) as! CGFloat))
-        cell!._openPanel(false)
+        
         cell!.separatorInset = UIEdgeInsetsZero
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
