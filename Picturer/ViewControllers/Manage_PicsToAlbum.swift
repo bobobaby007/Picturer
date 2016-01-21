@@ -202,7 +202,7 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
             //let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
             //_pic=storyboard.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
             //_pic?._delegate=self
-            //_pic?._range = _album?.objectForKey("range") as! Int
+            //_pic?._range = _album?.objectForKey("sort") as! Int
             _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
             self.navigationController?.pushViewController(_pic!, animated: true)
             

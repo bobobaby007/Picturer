@@ -83,6 +83,11 @@ class AlbumListCell :  UITableViewCell{
         _desLable?.textColor=UIColor(white: 0, alpha: 1)
         _desLable?.font=UIFont(name: "Helvetica", size: 17)
     }
+    func _changeToNormal()->Void{
+        _desLable?.frame = CGRectMake(100, 51, _mySize!.width-100-61, 14)
+        _desLable?.textColor=Config._color_gray_subTitle
+        _desLable?.font=Config._font_cell_subTitle
+    }
     
     func _setPic(__pic:NSDictionary){
         if let _url = __pic.objectForKey("thumbnail") as? String{

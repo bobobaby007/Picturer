@@ -70,7 +70,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         //CoreAction._printAllFonts()
         
         
-        
+        //------判断登录，未登录则弹出登录或注册框
         if MainAction._checkLogOk(){
             _refreshFromServer()
         }else{
@@ -107,11 +107,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _refreshFromServer()
         
     }
-    
-    
     func _refreshFromServer(){
-        
-        
         MainAction._refreshAlbumListFromServer { (__dict) -> Void in
             // self._refresh()
             dispatch_async(dispatch_get_main_queue(), {
@@ -167,7 +163,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _setuped = true
     }
     func _refresh(){
-        
         _tableView.reloadData()
     }
     @IBAction func btnHander(btn:UIButton){
@@ -241,7 +236,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _show?._albumIndex=__index
         _show?._title = _album.objectForKey("title") as? String
         //_show?._setTitle(_album.objectForKey("title") as! String)
-        _show?._range = _album.objectForKey("range") as! Int
+        _show?._range = _album.objectForKey("sort") as! Int
         _show?._delegate=self
         self.navigationController?.pushViewController(_show!, animated: true)
     }
@@ -409,11 +404,12 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         if MainAction._albumList.count<1{
             cell._changeToNew()
         }else{
+            cell._changeToNormal()
             let _album:NSDictionary=MainAction._albumList[indexPath.row] as! NSDictionary
             cell.setTitle((_album.objectForKey("title") as? String)!)
             cell.setTime(CoreAction._dateDiff(_album.objectForKey("last_update_at") as! String))
             
-            cell.setDescription(String(stringInterpolationSegment: MainAction._getImagesOfAlbumIndex(indexPath.row)!.count)+"张")
+            cell.setDescription(String(stringInterpolationSegment: String(_album.objectForKey("counts") as! Int)+"张"))
             //cell.detailTextLabel?.text="ss"
             
             let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(indexPath.row)

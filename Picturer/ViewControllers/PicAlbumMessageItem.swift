@@ -166,7 +166,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _likeIcon = UIImageView(frame: CGRect(x: _defaultSize!.width - 40, y: 3, width: 12, height: 10))
         _likeIcon?.image = UIImage(named: "like_sign.png")
         
-        _likeNumLable = UILabel(frame: CGRect(x: _defaultSize!.width - 21, y: 3, width: 12, height: 20))
+        _likeNumLable = UILabel(frame: CGRect(x: _defaultSize!.width - 21, y: 2.5, width: 12, height: 10))
         _likeNumLable?.textColor = Config._color_social_blue
         _likeNumLable?.font = Config._font_social_button
         

@@ -65,7 +65,7 @@ class MainAction: AnyObject {
         MainInterface._getMyAlbumList { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
-               // print(ablums)
+                print(ablums)
                 for var i:Int = 0; i < ablums.count; ++i{
                     let _album = ablums.objectAtIndex(ablums.count-1-i) as! NSDictionary
                     //print(_album)
@@ -298,14 +298,18 @@ class MainAction: AnyObject {
         if _album.objectForKey("cover") == nil{
             _album.setObject(NSDictionary(), forKey: "cover")
         }
+        
+        if _album.objectForKey("counts") == nil{
+            _album.setObject(0, forKey: "counts")
+        }
         if _album.objectForKey("description") == nil{
             _album.setObject("", forKey: "description")
         }
         if _album.objectForKey("tags") == nil{
             _album.setObject([], forKey: "tags")
         }
-        if _album.objectForKey("range") == nil{//-------默认1，倒序
-            _album.setObject(1, forKey: "range")
+        if _album.objectForKey("sort") == nil{//-------默认1，倒序
+            _album.setObject(1, forKey: "sort")
         }
         if _album.objectForKey("powerType") == nil{
             _album.setObject(0, forKey: "powerType")
@@ -336,7 +340,10 @@ class MainAction: AnyObject {
     }
     //----获取封面
     static func _getCoverFromAlbumAtIndex(index:Int)->NSDictionary?{
-        let _album:NSMutableDictionary = NSMutableDictionary(dictionary: _getAlbumAtIndex(index)!)        
+        let _album:NSMutableDictionary = NSMutableDictionary(dictionary: _getAlbumAtIndex(index)!)
+        if let _cover:NSDictionary = _album.objectForKey("cover") as? NSDictionary{
+           return _cover
+        }
         _setDefault(_album)
         let _images:NSArray = _album.objectForKey("images") as! NSArray
         if _images.count<1{
@@ -351,7 +358,7 @@ class MainAction: AnyObject {
         }else{
             
         }
-        if _album.objectForKey("range") != nil && _album.objectForKey("range") as! Int == 0{
+        if _album.objectForKey("sort") != nil && _album.objectForKey("sort") as! Int == 0{
             return _images.objectAtIndex(0) as? NSDictionary
         }else{
             return _images.objectAtIndex(_images.count-1) as? NSDictionary
@@ -438,6 +445,8 @@ class MainAction: AnyObject {
         _list[index]=_album
         _albumList=_list
     }
+    
+    
     
     
     //------提交更新相册信息，除了所有的图片-----**废除使用

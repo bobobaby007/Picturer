@@ -130,7 +130,7 @@ class Setting_range: UIViewController, UITableViewDelegate,UITableViewDataSource
             _delegate?.canceld()
         case _btn_save!:
             let _dict:NSMutableDictionary=NSMutableDictionary()
-            _dict.setObject("range", forKey: "Action_Type")
+            _dict.setObject("sort", forKey: "Action_Type")
             _dict.setObject(_selectedId, forKey: "selectedId")
             _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)

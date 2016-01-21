@@ -12,6 +12,9 @@ import UIKit
 
 
 class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate{
+    
+    var _type:String = "my"//"friend/my" //类型，我的主页／朋友的主页
+    
     var _barH:CGFloat = 64
     var _myFrame:CGRect?
     var _userId:String = "000001"
@@ -338,6 +341,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
 //
 //
 //        
+        self._checkType()
+        
         _setuped=true
     }
     //提取数据
@@ -372,24 +377,39 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 self._getMessage()
             })
             
-            
         })
     }
     //------获取用户信息
     func _getUserInfo(){
         Social_Main._getUserProfileAtId(_userId) { (__dict) -> Void in
             print(__dict)
-            self._profileDict = __dict
-            self._tableView?.reloadData()
-            self._refreshView()
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self._profileDict = __dict
                 self._title_label?.text=self._profileDict?.objectForKey("nickname") as? String
                 self._setAlbumNum(self._profileDict?.objectForKey("albumcounts") as! Int)
                 self._setFollowedNum(self._profileDict?.objectForKey("focuscounts") as! Int)
                 self._setFollowingNum(self._profileDict?.objectForKey("followcounts") as! Int)
-                self._label_sex_n_city?.text = "女，中国 北京"
-                //self._setSign(self._profileDict?.objectForKey("signature") as! String)
-                self._setSign("搭嘎的送给多少年广东省各地时光都是苹")
+                
+                var _sexStr:String = ""
+                
+                if let _s:Int = self._profileDict?.objectForKey("sex") as? Int{
+                    switch _s{
+                    case 0:
+                        _sexStr = "女,"
+                    case 1:
+                        _sexStr = "男,"
+                    default:
+                        break
+                    }
+                }
+                self._label_sex_n_city?.text = "\(_sexStr)中国 北京"
+                
+                if let _str:String = self._profileDict?.objectForKey("signature") as? String{
+                    self._setSign(_str)
+                }
+                
+                
+                self._refreshView()
             })
         }
     }
@@ -465,22 +485,28 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _getListHander(__list:NSArray){
         
     }
-    //----------------刷新布局
-    func _refreshView(){
-        
+    
+    //--------类型判断并设定，个人主页
+    func _checkType(){
         if _userId == Social_Main._userId{
+            _type = "my"
             _btn_share?.hidden=false
             _btn_edite?.hidden=false
             _btn_follow?.hidden=true
             _btn_message?.hidden=true
-            
         }else{
+            _type = "friend"
             _btn_share?.hidden=true
             _btn_edite?.hidden=true
             _btn_follow?.hidden=false
             _btn_message?.hidden=false
-            _hasNewMessage = false
+            //_hasNewMessage = false
         }
+    }
+    
+    //----------------刷新布局
+    func _refreshView(){
+
         if _hasNewMessage{
             _messageImg?.hidden=false
         }else{
@@ -757,7 +783,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func btnHander(sender:UIButton){
         switch sender{
         case _btn_edite!:
-            print("")
+            let _setting:MySettings = MySettings()
+            self.navigationController?.pushViewController(_setting, animated: true)
+            
         default:
             print("")
         }

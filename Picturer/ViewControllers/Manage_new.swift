@@ -294,7 +294,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         case 1:
             cell.textLabel?.text="图片显示顺序"
             
-            switch _album!.objectForKey("range") as! Int{
+            switch _album!.objectForKey("sort") as! Int{
             case  0:
                 cell.detailTextLabel?.text="按上传时间顺序排列"
             case 1:
@@ -361,7 +361,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         case 1:
             let _controller:Setting_range=Setting_range()
             _controller._delegate=self
-            _controller._selectedId = _album?.objectForKey("range") as! Int
+            _controller._selectedId = _album?.objectForKey("sort") as! Int
             self.navigationController?.pushViewController(_controller, animated: true)
         case 2:
             let _controller:Setting_power=Setting_power()
@@ -383,8 +383,8 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         switch dict.objectForKey("Action_Type") as! String{
         case "tags":
             _album?.setObject(dict.objectForKey("tags")!, forKey:"tags")
-        case "range":
-            _album?.setObject(dict.objectForKey("selectedId")!, forKey:"range")
+        case "sort":
+            _album?.setObject(dict.objectForKey("selectedId")!, forKey:"sort")
             _imagesCollection?.reloadData()
             
         case "reply":
@@ -424,7 +424,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         //let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
         //_pic=storyboard.instantiateViewControllerWithIdentifier("Manage_pic") as? Manage_pic
         _pic?._delegate=self
-        _pic?._range = _album?.objectForKey("range") as! Int
+        _pic?._range = _album?.objectForKey("sort") as! Int
         _pic?._showIndexAtPics(indexPath.item, __array: _imagesArray)
         self.navigationController?.pushViewController(_pic!, animated: true)
         
@@ -458,7 +458,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     }
     //-----根据排序返回真实index
     func _realIndex(__index:Int)->Int{
-        if _album?.objectForKey("range")! as! Int == 1{
+        if _album?.objectForKey("sort")! as! Int == 1{
             return _imagesArray.count - __index - 1
         }else{
             return  __index

@@ -42,19 +42,24 @@ class MainInterface: AnyObject {
     }
     static let _basicDoman:String = "http://120.27.54.180/"
     static let _version:String = "v1"
-    static let _URL_Signup:String = "user/register/"
-    static let _URL_Login:String = "user/login/"
-    static let _URL_Smscode:String = "user/smscode/"
-    static let _URL_Album_Create:String = "album/create/"
-    static let _URL_Album_Update:String="album/update/"
-    static let _URL_Album_Delete:String = "album/delete/"
-    static let _URL_Album_Permission:String="album/permission/"
-    static let _URL_Album_List:String = "album/list/"
-    static let _URL_Album_Info:String="album/info/"
-    static let _URL_Pic_Create:String = "picture/create/"
-    static let _URL_Pic_update:String = "picture/update/"
-    static let _URL_Pic_list:String = "picture/list/"
-    static let _URL_User_Info:String = "user/info/"
+    static let _URL_Signup:String = "user/register/"//---注册
+    static let _URL_Login:String = "user/login/"//---登录
+    static let _URL_Smscode:String = "user/smscode/"//---获取验证码
+    static let _URL_Album_Create:String = "album/create/"//---新建相册
+    static let _URL_Album_Update:String="album/update/"//---更新相册
+    static let _URL_Album_Delete:String = "album/delete/"//---删除相册
+    static let _URL_Album_Permission:String="album/permission/"//---设置相册权限
+    static let _URL_Album_List:String = "album/list/"//---相册列表
+    static let _URL_Album_Info:String="album/info/"//---相册信息
+    static let _URL_Pic_Create:String = "picture/create/"//---新建图片
+    static let _URL_Pic_update:String = "picture/update/"//---图片更新
+    static let _URL_Pic_list:String = "picture/list/"//---相册里图片列表
+    static let _URL_User_Info:String = "user/info/"//---用户信息
+    static let _URL_Pic_like:String = "like/picture/"//---图片点赞
+    static let _URL_Album_like:String = "like/album/"//-----相册点赞
+    
+    
+    
     
     //-----判断是否登录
     static func _isLogined()->Bool{
@@ -274,7 +279,7 @@ class MainInterface: AnyObject {
             WXApi.sendReq(req);
         }
     }
-    
+    //-------有缩略图提取小图
     static func _getSmallPic(__pic:NSDictionary,__block:(UIImage)->Void){
         let _image:PicView = PicView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         if let _url = __pic.objectForKey("thumbnail") as? String{
@@ -289,7 +294,9 @@ class MainInterface: AnyObject {
         })
 
     }
-
+    
+    //--------＝＝＝＝＝＝＝＝＝＝＝社交部分＝＝＝＝＝＝＝＝＝
+    
     //----获取图册完整地址,用于分享
     static func _albumUrl(__albumId:String)->String{
         let _url:String = _basicDoman + _version + "/share/album/" + __albumId
