@@ -366,6 +366,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _getDatas(){
         _getUserInfo()
         _getAlbumList()
+        _FocusUser()
     }
     
     //------获取相册列表
@@ -382,7 +383,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     //------获取用户信息
     func _getUserInfo(){
         Social_Main._getUserProfileAtId(_userId) { (__dict) -> Void in
-            print(__dict)
+            //print(__dict)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self._profileDict = __dict
                 self._title_label?.text=self._profileDict?.objectForKey("nickname") as? String
@@ -411,6 +412,14 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 
                 self._refreshView()
             })
+        }
+    }
+    
+    //------关注用户
+    func _FocusUser(){        
+        Social_Main._focusToUser(_userId) { (__dict) -> Void in
+            print(__dict)
+            
         }
     }
     
@@ -784,6 +793,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         switch sender{
         case _btn_edite!:
             let _setting:MySettings = MySettings()
+            _setting._setDict(_profileDict!)
             self.navigationController?.pushViewController(_setting, animated: true)
             
         default:

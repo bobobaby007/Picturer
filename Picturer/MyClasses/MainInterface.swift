@@ -44,6 +44,11 @@ class MainInterface: AnyObject {
     static let _version:String = "v1"
     static let _URL_Signup:String = "user/register/"//---注册
     static let _URL_Login:String = "user/login/"//---登录
+    static let _URL_ForcusUser:String = "focus/to/"//---关注用户
+    static let _URL_FriendsList:String = "focus/to/"//---好友列表
+    static let _URL_FocusOnMeList:String = "focus/followers/"//---关注我的好友列表
+    static let _URL_MyFocusList:String = "follow/following/"//---我关注的用户列表
+    
     static let _URL_Smscode:String = "user/smscode/"//---获取验证码
     static let _URL_Album_Create:String = "album/create/"//---新建相册
     static let _URL_Album_Update:String="album/update/"//---更新相册
@@ -108,9 +113,23 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
-    //-----获取我的个人信息
+    //-----获取用户信息
     static func _getMyUserInfo(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_User_Info+"\(__userId)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    //-----关注用户
+    static func _focusToUser(__userId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_ForcusUser+"\(__userId)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    //-----我关注的用户列表
+    static func _myFocusList(__userId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_MyFocusList+"\(__userId)") { (__dict) -> Void in
             print(__dict)
             __block(__dict)
         }

@@ -133,7 +133,7 @@ class Social_Main: AnyObject {
     static func _getUserProfileAtId(__userId:String,__block:(NSDictionary)->Void){
        MainInterface._getUserInfo(__userId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
-              //print("用户信息：",__dict)
+              print("用户信息：",__dict)
                  __block(__dict.objectForKey("userinfo") as! NSDictionary)
             }
             // print("_getUserProfileAtId",__dict)
@@ -161,6 +161,28 @@ class Social_Main: AnyObject {
         
         return _dict
 */
+    }
+    //----关注用户
+    static func _focusToUser(__userId:String,__block:(NSDictionary)->Void){
+        MainInterface._focusToUser(__userId) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                print("关注用户成功：",__dict)
+                //__block(__dict.objectForKey("userinfo") as! NSDictionary)
+            }
+            // print("_getUserProfileAtId",__dict)
+        }
+    }
+    
+    //----获取我关注的用户列表
+    
+    static func _myFocusList(__userId:String,__block:(NSDictionary)->Void){
+        MainInterface._myFocusList(__userId) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                print("关注用户列表：",__dict)
+                //__block(__dict.objectForKey("userinfo") as! NSDictionary)
+            }
+            // print("_getUserProfileAtId",__dict)
+        }
     }
     //-------
     

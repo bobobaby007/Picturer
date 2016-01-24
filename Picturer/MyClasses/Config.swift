@@ -60,6 +60,7 @@ class Config:AnyObject {
      static let _color_social_gray_light:UIColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)//----社交页面中浅灰
     
     
+    
     static let _font_social_button:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交页面按钮文字
     static let _font_social_button_2:UIFont = UIFont(name: "PingFangSC-Regular", size: 15)!//社交页面图册、关注、被关注按钮文字
     static let _font_social_sex_n_city:UIFont = UIFont(name: "PingFangSC-Regular", size: 10)!//社交页性别和城市
