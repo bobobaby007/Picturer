@@ -40,6 +40,9 @@ class MainInterface: AnyObject {
             //println(_ud.dictionaryRepresentation())
         }
     }
+    
+    
+    
     static let _basicDoman:String = "http://120.27.54.180/"
     static let _version:String = "v1"
     static let _URL_Signup:String = "user/register/"//---注册
@@ -48,6 +51,9 @@ class MainInterface: AnyObject {
     static let _URL_FriendsList:String = "focus/to/"//---好友列表
     static let _URL_FocusOnMeList:String = "focus/followers/"//---关注我的好友列表
     static let _URL_MyFocusList:String = "follow/following/"//---我关注的用户列表
+    static let _URL_FriendsTimeline:String = "timeline/follow/"//---好友内容树（互相关注，朋友）
+    static let _URL_MyFocusTimeline:String = "timeline/followers/"//---我关注的内容树（妙人）
+    
     
     static let _URL_Smscode:String = "user/smscode/"//---获取验证码
     static let _URL_Album_Create:String = "album/create/"//---新建相册
@@ -60,10 +66,10 @@ class MainInterface: AnyObject {
     static let _URL_Pic_update:String = "picture/update/"//---图片更新
     static let _URL_Pic_list:String = "picture/list/"//---相册里图片列表
     static let _URL_User_Info:String = "user/info/"//---用户信息
+    static let _URL_User_Update:String = "user/update/"//---更新用户信息
+    static let _URL_User_Avatar:String = "user/avatar/"//---更新用户头像
     static let _URL_Pic_like:String = "like/picture/"//---图片点赞
     static let _URL_Album_like:String = "like/album/"//-----相册点赞
-    
-    
     
     
     //-----判断是否登录
@@ -99,7 +105,6 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
-    
     //-----登录
     static func _login(__mob:String, __pass:String, __block:(NSDictionary)->Void){
         CoreAction._sendToUrl("mobile=\(__mob)&password=\(__pass)", __url: _basicDoman+_version+"/"+_URL_Login ) { (__dict) -> Void in
@@ -120,9 +125,33 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
+    
+    //-----更新用户信息
+    static func _updateUserInfo(__dict:NSDictionary, __block:(NSDictionary)->Void){
+        var _str:String = ""
+        
+        _str = _str+"&nickname="+(__dict.objectForKey("nickname") as! String)
+        _str = _str+"&sex="+(String(__dict.objectForKey("sex") as! Int))
+        _str = _str+"&signature="+(__dict.objectForKey("signature") as! String)
+        //_str = _str+"&email="+(__dict.objectForKey("email") as! String)
+        //_str = _str+"&country="+(__dict.objectForKey("country") as! String)
+        
+        CoreAction._sendToUrl("token=\(_token)"+_str, __url: _basicDoman+_version+"/"+_URL_User_Update) { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
     //-----关注用户
     static func _focusToUser(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_ForcusUser+"\(__userId)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
+    //-----更新用户头像
+    static func _changeUserAvatar(__image:UIImage,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)&avatar=\(CoreAction._imageToString(__image))&imagend=jpg", __url: _basicDoman+_version+"/"+_URL_User_Avatar) { (__dict) -> Void in
             print(__dict)
             __block(__dict)
         }
@@ -134,6 +163,17 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
+    
+    
+    
+    //-----我关注的用户的时间树
+    static func _getMyFocusTimeLine(__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_MyFocusTimeline) { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
     static func _getUserInfo(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_User_Info+"\(__userId)") { (__dict) -> Void in
             print(__dict)
@@ -181,7 +221,6 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
-    
     //-----修改相册
     static func _changeAlbum(__albumId:String,__changeingStr:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)"+__changeingStr, __url: _basicDoman+_version+"/"+_URL_Album_Update+__albumId) { (__dict) -> Void in
@@ -316,6 +355,19 @@ class MainInterface: AnyObject {
     
     //--------＝＝＝＝＝＝＝＝＝＝＝社交部分＝＝＝＝＝＝＝＝＝
     
+    //---转换性别为文字
+    static func _sexStr(__i:Int)->String{
+        switch __i{
+        case 0:
+            return "男"
+            break
+        case 1:
+            return "女"
+            break
+        default:
+            return ""
+        }
+    }
     //----获取图册完整地址,用于分享
     static func _albumUrl(__albumId:String)->String{
         let _url:String = _basicDoman + _version + "/share/album/" + __albumId

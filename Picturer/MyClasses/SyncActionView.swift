@@ -79,14 +79,8 @@ class SyncActionView: UIViewController, UITableViewDataSource, UITableViewDelega
         _scrollView!.addSubview(_tableView!)
         //_scrollView?.scrollEnabled=true
         
-        
         self.view.addSubview(_scrollView!)
         self.view.addSubview(_topBar!)
-        
-        
-        
-        
-        
         
         _topBar?.addSubview(_btn_cancel!)
         
@@ -104,17 +98,11 @@ class SyncActionView: UIViewController, UITableViewDataSource, UITableViewDelega
     //----更新数据
     
     func _refreshDatas(){
-        
         _actionsArray = SyncAction._actions
-        
         //print(_actionsArray)
         _tableView?.reloadData()
-        
     }
-    
     //----table 代理
-    
-    
     func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return false
     }

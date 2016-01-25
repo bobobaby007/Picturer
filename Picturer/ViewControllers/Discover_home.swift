@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-class Discover_home: UIViewController,UITabBarControllerDelegate {
+class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDelegate {
     let _barH:CGFloat = 64
     var _topBar:UIView?
     var _btn_cancel:UIButton?
@@ -22,10 +22,13 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
     var _searchController:Discover_search?
     var _tab_controller:MyTabBarController?
     
-    var _tabBtnView:UIView?
-    var _tab_reference:UIButton?
-    var _tab_search:UIButton?
+    
     var _naviDelegate:Navi_Delegate?
+    
+    
+    var _searchBarH:CGFloat = 43
+    var _searchBar:UIView = UIView()
+    var _searchT:UITextField = UITextField()
     
     
     override func viewDidLoad() {
@@ -63,6 +66,32 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
         self.view.addSubview(_tab_controller!.view)
         
         
+        let _gap:CGFloat = Config._gap
+        
+        let _searchLableV:UIView = UIView(frame: CGRect(x: 44, y: 27, width: self.view.frame.width-56, height: _searchBarH-14))
+        _searchLableV.backgroundColor = UIColor(white: 1, alpha: 0.2)
+        _searchLableV.layer.cornerRadius=5
+        
+        let _icon:UIImageView = UIImageView(image: UIImage(named: "search_icon.png"))
+        _icon.frame=CGRect(x: _gap, y: 10, width: 13, height: 13)
+        
+        _searchT.frame = CGRect(x: _gap+13+5, y: 20, width: self.view.frame.width-2*_gap-_gap, height: _searchBarH-14)
+        _searchT.placeholder = "搜索"
+        _searchT.font = UIFont.systemFontOfSize(13)
+        _searchT.delegate = self
+        _searchT.returnKeyType = UIReturnKeyType.Search
+        
+        
+        _searchLableV.addSubview(_icon)
+        _searchLableV.addSubview(_searchT)
+        
+        
+        _topBar!.addSubview(_searchLableV)
+        
+        /*---
+        
+        
+        
         _tab_reference = UIButton()
         _tab_reference?.setTitle("发现", forState: UIControlState.Normal)
         _tab_reference?.titleLabel?.font = UIFont.systemFontOfSize(14)
@@ -85,9 +114,7 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
         _tabBtnView?.addSubview(_tab_reference!)
         _tabBtnView?.addSubview(_tab_search!)
         
-        
-        
-        _topBar?.addSubview(_tabBtnView!)
+        */
         self.view.addSubview(_topBar!)
         
         _topBar?.addSubview(_btn_cancel!)
@@ -98,21 +125,31 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
         _setuped=true
     }
     
+    
+    
+    //---
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        _switchTo(2)
+    }
+    func textFieldDidEndEditing(textField: UITextField) {
+        
+    }
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        //_showSearchResult(textField.text!)
+        
+        return true
+    }
+    //--
+    
+    
+    
     func _switchTo(__num:Int){
         switch __num{
         case 1:
-            _tab_reference?.backgroundColor=UIColor(red: 242/255, green: 206/255, blue: 53/255, alpha: 1)
-            _tab_reference?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            _tab_search?.backgroundColor = UIColor.blackColor()
-            _tab_search?.setTitleColor(UIColor(red: 242/255, green: 206/255, blue: 53/255, alpha: 1), forState: UIControlState.Normal)
             _tab_controller?.selectedIndex = 0
             return
         case 2:
-            
-            _tab_search?.backgroundColor=UIColor(red: 242/255, green: 206/255, blue: 53/255, alpha: 1)
-            _tab_search?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            _tab_reference?.backgroundColor = UIColor.blackColor()
-            _tab_reference?.setTitleColor(UIColor(red: 242/255, green: 206/255, blue: 53/255, alpha: 1), forState: UIControlState.Normal)
             _tab_controller?.selectedIndex = 1
             return
         default:
@@ -141,12 +178,12 @@ class Discover_home: UIViewController,UITabBarControllerDelegate {
             }
             self.navigationController?.popViewControllerAnimated(true)
         
-        case _tab_reference!:
-            _switchTo(1)
-            return
-        case _tab_search!:
-            _switchTo(2)
-            return
+//        case _tab_reference!:
+//            _switchTo(1)
+//            return
+//        case _tab_search!:
+//            _switchTo(2)
+//            return
         default:
             return
         }

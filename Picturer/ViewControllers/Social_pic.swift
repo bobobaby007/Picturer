@@ -67,17 +67,26 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     
     var _frameH:CGFloat?
     
+    var _btn_like:UIButton = UIButton()
+    var _btn_comment:UIButton = UIButton()
+    var _btn_toShare:UIButton = UIButton()
+    var _likeIcon:UIImageView?
+    var _likeNumLable:UILabel?
+    var _commentIcon:UIImageView?
+    var _commentNumLable:UILabel?
+    
     var _showingBar:Bool=true{
         didSet{
             UIView.beginAnimations("topA", context: nil)
             UIView.setAnimationDuration(0.2)
             if (_showingBar == true){
                 _topBar?.frame=CGRect(x: 0, y: 0, width: _topBar!.frame.width, height: _topBar!.frame.height)
-                _desView?.frame=CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH)
+                
+                _bottomBar?.frame=CGRect(x: 0, y: self.view.frame.height-_toolsBarH, width: self.view.frame.width, height: _desH)
                 UIApplication.sharedApplication().statusBarHidden=false
             }else{
                 _topBar?.frame=CGRect(x: 0, y: -_barH, width: _topBar!.frame.width, height: _topBar!.frame.height)
-                _desView?.frame=CGRect(x: 0, y: self.view.frame.height+0, width: self.view.frame.width, height: _desH)
+                _bottomBar?.frame=CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: _desH)
                 UIApplication.sharedApplication().statusBarHidden=true
             }
             
@@ -86,7 +95,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     }
     
     var _bottomBar:UIView?
-    
+    var _toolsBarH:CGFloat = 39
+    var _toolsBar:UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,20 +112,30 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         }
         self.view.backgroundColor=UIColor.blackColor()
         
-        _desView = UIView(frame: CGRect(x: 0, y: self.view.frame.height-_desH, width: self.view.frame.width, height: _desH))
+        _bottomBar=UIView(frame:CGRect(x: 0, y: self.view.frame.height-_toolsBarH, width: self.view.frame.width, height: 58))
+        _bottomBar?.clipsToBounds = false
+        _bottomBar?.backgroundColor=UIColor(white: 0.2, alpha: 0.6)
+        
+        _desView = UIView(frame: CGRect(x: 0, y: -_desH, width: self.view.frame.width, height: _desH))
+        
         _desView?.backgroundColor=UIColor(white: 0, alpha: 0.8)
         
         _desText=UITextView(frame: CGRect(x: 5, y: 5, width: self.view.frame.width-10, height: 0))
+        _desText?.textColor = UIColor.whiteColor()
         _desText?.backgroundColor=UIColor.clearColor()
         _desText?.textColor=UIColor.whiteColor()
+        _desText?.font = Config._font_social_button
+        
         
         _desView?.addSubview(_desText!)
+        
+        _bottomBar?.addSubview(_desView!)
         
         //self.view.addSubview(_desView!)
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=UIColor.blackColor()
+        _topBar?.backgroundColor=Config._color_black_bar
         
         
         
@@ -131,8 +151,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         
         
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
-        _topBar?.backgroundColor=Config._color_black_bar
+        
         
         _titleT=UITextView(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 60))
         _titleT?.editable = false
@@ -145,9 +164,51 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _titleT?.text=""
         
         
-        _bottomBar=UIView(frame:CGRect(x: 0, y: self.view.frame.height-58, width: self.view.frame.width, height: 58))
-        _bottomBar?.backgroundColor=UIColor(white: 0.2, alpha: 0.6)
         
+        _toolsBar = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: _toolsBarH))
+        _toolsBar?.backgroundColor = UIColor(white: 0.2, alpha: 0.6)
+        
+        _bottomBar?.addSubview(_toolsBar!)
+        
+        
+        _btn_like = UIButton(frame: CGRect(x: 14, y: 11, width: 22, height: 18))
+        
+        _btn_like.setImage(UIImage(named: "like_off"), forState: UIControlState.Normal)
+        _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        _btn_comment = UIButton(frame: CGRect(x: 58, y: 10, width: 24, height: 20))
+        _btn_comment.setImage(UIImage(named: "message_icon"), forState: UIControlState.Normal)
+        _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+        _btn_toShare = UIButton(frame: CGRect(x: 109, y: 10, width: 18, height: 17))
+        _btn_toShare.setImage(UIImage(named: "to_share_icon"), forState: UIControlState.Normal)
+        _btn_toShare.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+        _likeIcon = UIImageView(frame: CGRect(x: self.view.frame.width - 95, y: 15, width: 12, height: 10))
+        _likeIcon?.image = UIImage(named: "like_sign.png")
+        
+        _likeNumLable = UILabel(frame: CGRect(x: self.view.frame.width - 21, y: 2.5, width: 12, height: 10))
+        _likeNumLable?.textColor = Config._color_social_blue
+        _likeNumLable?.font = Config._font_social_button
+        
+        
+        _commentIcon = UIImageView(frame: CGRect(x: self.view.frame.width - 75, y: 15, width: 12, height: 10))
+        _commentIcon?.image = UIImage(named: "commentIcon.png")
+        
+        _commentNumLable = UILabel(frame: CGRect(x: self.view.frame.width - 21, y: 2.5, width: 12, height: 10))
+        _commentNumLable?.textColor = Config._color_social_blue
+        _commentNumLable?.font = Config._font_social_button
+        
+        
+        _toolsBar?.addSubview(_btn_like)
+        _toolsBar?.addSubview(_btn_comment)
+        _toolsBar?.addSubview(_btn_toShare)
+        _toolsBar?.addSubview(_likeIcon!)
+        _toolsBar?.addSubview(_likeNumLable!)
+        _toolsBar?.addSubview(_commentIcon!)
+        _toolsBar?.addSubview(_commentNumLable!)
         
         
         
@@ -179,7 +240,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
        // self.view.addSubview(_imagesCollection!)
         
         self.view.addSubview(_topBar!)
-        //self.view.addSubview(_bottomBar!)
+        self.view.addSubview(_bottomBar!)
         
         _topBar?.addSubview(_btn_cancel!)
         _topBar?.addSubview(_titleT!)
@@ -214,6 +275,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _moveToPicByIndex(_currentIndex!)
         
         
+        _setLikeNum(120)
+        _setComNum(130)
         
         _setuped=true
     }
@@ -242,9 +305,19 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         }
     }
     
+    func _setLikeNum(_num:Int){
+        _likeNumLable?.text = String(_num)
+    }
+    func _setComNum(_num:Int){
+        _commentNumLable?.text = String(_num)
+    }
+    
     //----设置描述
-    func _setDescription(__str:String){
+    func _setDescription(_str:String){
+        //_desText?.text = __str
+        var __str = "山东阿甘陪我难过的是谁的根是代购嗯孤收到两个色更难过的事都是个"
         _desText?.text = __str
+        print("设置描述")
         if  __str == ""{
             _desView?.hidden = true
         }else{
@@ -253,8 +326,9 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         let _size:CGSize = _desText!.sizeThatFits(CGSize(width: self.view.frame.width-2*_gap, height: CGFloat.max))
         
         _desText?.frame =  CGRect(x: _gap, y: _gap/2, width: self.view.frame.width-2*_gap, height: _size.height)
-        
         _desH = (_desText?.frame.height)!+_gap/2+_gap
+        
+        _desView?.frame = CGRect(x: 0, y: -_desH, width: self.view.frame.width, height: _desH)
         
         if _showingBar{
             _showingBar = true
@@ -332,7 +406,6 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     }
     
     func _viewInAtIndex(__index:Int){
-        
         if __index<0{
             return
         }
@@ -426,14 +499,11 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         case "pic":
             _imagesCollection?.removeFromSuperview()
             self.view.insertSubview(_scrollView, atIndex: 0)
-            
             _bottomBar?.hidden=false
             _titleT?.hidden=false
             _moveToPicByIndex(_currentIndex!)
             _scrollView.setContentOffset(CGPoint(x: CGFloat(_currentIndex!)*self.view.frame.width, y: 0), animated: false)
-            
             _btn_moreAction?.setImage(UIImage(named: "changeToCollect_icon.png"), forState: UIControlState.Normal)
-            
             return
         case "collection":
             _scrollView.removeFromSuperview()

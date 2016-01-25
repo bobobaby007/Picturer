@@ -63,6 +63,7 @@ class Config:AnyObject {
     
     static let _font_social_button:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交页面按钮文字
     static let _font_social_button_2:UIFont = UIFont(name: "PingFangSC-Regular", size: 15)!//社交页面图册、关注、被关注按钮文字
+    static let _font_social_album_title:UIFont = UIFont(name: "PingFangSC-Regular", size: 17)!//社交页面图册标题
     static let _font_social_sex_n_city:UIFont = UIFont(name: "PingFangSC-Regular", size: 10)!//社交页性别和城市
     static let _font_social_time:UIFont = UIFont(name: "PingFangSC-Regular", size: 10.5)!//社交页时间文字
     static let _font_social_sign:UIFont = UIFont(name: "PingFangSC-Regular", size: 13)!//社交页签名字体

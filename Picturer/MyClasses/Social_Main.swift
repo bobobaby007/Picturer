@@ -19,6 +19,7 @@ class Social_Main: AnyObject {
             return MainInterface._uid
         }
     }
+    
     static var _currentUser:NSDictionary{
         get{
             let _dict:NSMutableDictionary = NSMutableDictionary()
@@ -382,35 +383,14 @@ class Social_Main: AnyObject {
     }
     
     
-    //－－－－提取朋友更新图册列表
-    static func _getFriendsNewsList(block:(NSArray)->Void){
-        let _array:NSMutableArray = NSMutableArray()
-        let _n:Int = 10
-        for var i:Int = 0; i<_n;++i{
-            let _dict:NSMutableDictionary = NSMutableDictionary()
-            
-            let _pics:NSMutableArray = NSMutableArray()
-            
-            var _num:Int = i
-            if _num>8{
-                _num = 8
+    //－－－－提取妙人更新图册列表
+    static func _getMyFocusTimeLine(__block:(NSArray)->Void){
+        MainInterface._getMyFocusTimeLine { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                print("关注用户更新：",__dict)
+                __block(NSArray())
             }
-            
-            for t in 0..._num{
-                let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String((t+i)%6+3)+".JPG","file"], forKeys: ["url","type"])
-                _pics.addObject(_pic)
-            }
-            _dict.setObject(_pics, forKey: "pics")
-            
-            let _pic:NSDictionary = NSDictionary(objects: ["user_"+String(i%10+2)+".jpg","file"], forKeys: ["url","type"])
-            _dict.setObject(_pic, forKey: "userImg")
-            _dict.setObject(_testUserNames?.objectAtIndex(random()%31) as! String, forKey: "userName")
-            _dict.setObject("000002", forKey: "userId")
-            _dict.setObject("天边一朵云", forKey: "title")
-            _dict.setObject("个人欣赏", forKey: "description")
-            _array.addObject(_dict)
         }
-        block(_array)
     }
     //－－－－提取妙人更新图册列表
     static func _getLikesNewsList(block:(NSArray)->Void){

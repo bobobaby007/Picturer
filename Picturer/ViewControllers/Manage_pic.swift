@@ -101,6 +101,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
             return
         }
         
+        
         self.view.backgroundColor=UIColor.blackColor()
         self.view.clipsToBounds=true
         

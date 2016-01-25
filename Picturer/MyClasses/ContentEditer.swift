@@ -24,6 +24,8 @@ class ContentEditer: UIViewController,UITextViewDelegate {
     var _desInput:UITextView?
     var _desAlert:UILabel?
     
+    var _type:String = "text"//----text/selecter 类型，文字／选择
+    
     var _maxNum:Int=20
     var _titleStr:String = ""
     var _content:String = ""
@@ -35,6 +37,12 @@ class ContentEditer: UIViewController,UITextViewDelegate {
     
     var _setuped:Bool=false
     
+    var _whiteBg:UIView = UIView()
+    var _lineNum:CGFloat = 1
+    
+    var _selecterArray:NSArray?
+    var _selectedIndex:Int = 0
+    var _selectedTagFrom:Int = 100
     override func viewDidLoad() {
         setup()
     }
@@ -65,22 +73,39 @@ class ContentEditer: UIViewController,UITextViewDelegate {
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.text=_titleStr
         //_desPlaceHold =
-        
-        var _lineNum:CGFloat = 1
-        if _maxNum>20{
-            _lineNum = 2
+        _topBar?.addSubview(_btn_cancel!)
+        _topBar?.addSubview(_btn_save!)
+        _topBar?.addSubview(_title_label!)
+        self.view.addSubview(_topBar!)
+        switch _type{
+            case "text":
+                _setupForText()
+            break
+            case "selecter":
+                _setupForSelecter()
+            break
+        default:
+            break
         }
+        self.view.addSubview(_whiteBg)
         
-        let _whiteBg:UIView = UIView(frame: CGRect(x: 0, y: _topBar!.frame.height+_gap, width: self.view.frame.width, height: _lineNum*45))
-        var _line:UIView = UIView(frame: CGRect(x: 0, y: _topBar!.frame.height+_gap, width: self.view.frame.width, height: 0.5))
+        _setuped=true
+    }
+    
+    func _setupForText(){
+                
+        _whiteBg = UIView(frame: CGRect(x: 0, y: _topBar!.frame.height+_gap, width: self.view.frame.width, height: _lineNum*(45)))
+        _whiteBg.backgroundColor = UIColor.whiteColor()
+        var _line:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 0.3))
         _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
-       self.view.addSubview(_whiteBg)
+        _whiteBg.addSubview(_line)
         self.view.addSubview(_line)
-        _line = UIView(frame: CGRect(x: 0, y: _topBar!.frame.height+_gap+_lineNum*45, width: self.view.frame.width, height: 0.5))
+        _line = UIView(frame: CGRect(x: 0, y: _whiteBg.frame.height, width: self.view.frame.width, height: 0.5))
         _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
-        self.view.addSubview(_line)
+        _whiteBg.addSubview(_line)
         
-        _desInput=UITextView(frame: CGRect(x: 0, y: _topBar!.frame.height+_gap, width: self.view.frame.width, height: _lineNum*45))
+        _desInput=UITextView(frame: CGRect(x: _gap, y: _gap, width: self.view.frame.width-2*_gap, height: _lineNum*45))
+        //_desInput?.textAlignment = NSTextAlignment.Left
         if _desPlaceHold != nil{
             _desInput?.text=_desPlaceHold
         }
@@ -96,24 +121,87 @@ class ContentEditer: UIViewController,UITextViewDelegate {
         _desInput?.delegate=self
         _desInput?.becomeFirstResponder()
         
-        _desAlert=UILabel(frame:CGRect(x: _gap, y: _desInput!.frame.origin.y+_desInput!.frame.height, width: self.view.frame.width-2*_gap, height: 20) )
+        _whiteBg.addSubview(_desInput!)
+        
+        //----字数提示
+        _desAlert=UILabel(frame:CGRect(x: _gap, y: _whiteBg.frame.height-22.5, width: self.view.frame.width-2*_gap, height: 20) )
         _desAlert?.text=String(_maxNum)
         _desAlert?.font=UIFont(name: "Helvetica", size: 14)
         
         _desAlert?.textColor=UIColor(white: 0.3, alpha: 1)
         _desAlert?.textAlignment=NSTextAlignment.Right
         
+        if _lineNum>1{
+            _whiteBg.addSubview(_desAlert!)
+        }
+        //---
         
-        self.view.addSubview(_topBar!)
-        self.view.addSubview(_desInput!)
-        self.view.addSubview(_desAlert!)
         
-        _topBar?.addSubview(_btn_cancel!)
-        _topBar?.addSubview(_btn_save!)
-        _topBar?.addSubview(_title_label!)
+        
+        
         _tapRec=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
-        _setuped=true
     }
+    
+    func _setupForSelecter(){
+        _lineNum = CGFloat(_selecterArray!.count)
+        _whiteBg = UIView(frame: CGRect(x: 0, y: _topBar!.frame.height+_gap, width: self.view.frame.width, height: _lineNum*(45)))
+        _whiteBg.backgroundColor = UIColor.whiteColor()
+        
+        for var i:Int = 0;i<_selecterArray!.count+1; ++i{
+            let _line:UIView = UIView(frame: CGRect(x: 0, y: CGFloat(i)*45, width: self.view.frame.width, height: 0.5))
+            _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
+            _whiteBg.addSubview(_line)
+            if i<_selecterArray?.count{
+                let _btn:UIButton = UIButton(frame: CGRect(x: 0, y: CGFloat(i)*45, width: self.view.frame.width, height:45))
+                _btn.tag = i
+                _btn.backgroundColor = UIColor.clearColor()
+                _btn.addTarget(self, action: "_btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
+                _whiteBg.addSubview(_btn)
+                
+                let _label:UILabel = UILabel(frame: CGRect(x: Config._gap, y: CGFloat(i)*45, width: self.view.frame.width-Config._gap-26, height: 45))
+                
+                _label.font = Config._font_cell_title_normal
+                _label.backgroundColor = UIColor.clearColor()
+                _label.userInteractionEnabled = false
+                _label.textColor = Config._color_social_gray
+                _label.text = _selecterArray?.objectAtIndex(i) as! String
+                _whiteBg.addSubview(_label)
+                
+                let _sign:UIImageView = UIImageView(frame: CGRect(x: self.view.frame.width-26, y: CGFloat(i)*45+18, width: 12.5, height: 9.5))
+                _sign.tag = _selectedTagFrom+i
+                _sign.userInteractionEnabled = false
+                _sign.image = UIImage(named: "selected.png")
+                if i == _selectedIndex{
+                    _sign.hidden = false
+                }else{
+                    _sign.hidden = true
+                }
+                _whiteBg.addSubview(_sign)
+                
+            }
+            
+        }
+        
+    }
+    
+    
+    func _btnHander(sender:UIButton){
+        let _tag:Int = sender.tag
+        _selectedAt(_tag)
+    }
+    func _selectedAt(_tag:Int){
+        _selectedIndex = _tag
+        print(_selectedIndex)
+        for var i:Int = 0 ; i < _selecterArray!.count ; ++i{
+            
+            if i == _selectedIndex{
+                _whiteBg.viewWithTag(_selectedTagFrom+i)?.hidden = false
+            }else{
+                _whiteBg.viewWithTag(_selectedTagFrom+i)?.hidden = true
+            }
+        }
+    }
+    
     
     //----文字输入代理
     func textViewDidBeginEditing(textView: UITextView) {
@@ -164,11 +252,19 @@ class ContentEditer: UIViewController,UITextViewDelegate {
             _delegate?.canceld()
         case _btn_save!:
             let _dict:NSMutableDictionary=NSMutableDictionary()
-            if _desInput?.text != _desPlaceHold{
-                _dict.setObject(_desInput!.text, forKey: "description")
+            switch _type{
+                case "text":
+                    if _desInput?.text != _desPlaceHold{
+                        _dict.setObject(_desInput!.text, forKey: "content")
+                    }
+                    _dict.setObject(_desInput!.text, forKey: "")
+                break
+                case "selecter":
+                    _dict.setObject(_selectedIndex, forKey: "content")
+                break
+            default:
+                break
             }
-            
-            
             _delegate?.saved(_dict)
             self.navigationController?.popViewControllerAnimated(true)
         default:

@@ -149,7 +149,6 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
         case 0://主页
             let _contr:MyHomepage=MyHomepage()
             _contr._userId =  Social_Main._userId
-            _contr._userName = Social_Main._currentUser.objectForKey("userName") as? String
             _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
         case 1://朋友

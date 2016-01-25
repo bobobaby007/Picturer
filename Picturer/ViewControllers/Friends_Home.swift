@@ -9,13 +9,18 @@
 import Foundation
 import UIKit
 
-class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate{
+
+
+class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate{
     
-    var _type:String = "friends" //friends,likes
+    var _type:String = "friends"//"friends/likes" //类型，朋友/妙人
     
     var _barH:CGFloat = 64
     var _myFrame:CGRect?
+    var _userId:String = "000001"
+    var _userName:String?
     
+    var _signH:CGFloat?
     var _title_label:UILabel?
     var _frameW:CGFloat?
     var _gap:CGFloat?
@@ -24,20 +29,39 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     var _topBar:UIView?
     var _btn_cancel:UIButton?
-    var _btn_moreAction:UIButton?
     
     var _tableView:UITableView?
     
     var _dataArray:NSArray=[]
     var _setuped:Bool = false
-
+    
+    var _profileDict:NSDictionary?
+    
+    var _profile_icon_img:PicView?
+    var _btn_edite:UIButton?
+    var _btn_share:UIButton?
+    var _btn_follow:UIButton?
+    var _btn_message:UIButton?
+   
+    
+    
+    
+    
+    var _profileH:CGFloat = 0//-----面板高度
+    var _buttonH:CGFloat = 30 //---按钮高度
+    var _buttonW:CGFloat = 125//---按钮宽度
+    var _buttonGap:CGFloat = 1 //---按钮间距
+    
     var _scrollView:UIScrollView?
     
+    
+    var _allDatasArray:NSMutableArray? //------其他信息，以相册id为锚点
+    var _coverArray:NSMutableArray?
+    var _imagesArray:NSMutableArray?//-----每个相册里的图片
     var _heighArray:NSMutableArray?
     var _commentsArray:NSMutableArray?
     var _likeArray:NSMutableArray?
-    
-    var _defaultH:CGFloat = 400
+    var _defaultH:CGFloat = 632
     
     var _scrollTopH:CGFloat = 0 //达到这个高度时向上移动
     
@@ -45,16 +69,19 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     var _viewIned:Bool? = false
     
-    var _messageAlertView:UIView?
-    var _messageImg:PicView?
-    var _messageText:UILabel?
-    var _messageIcon:UIImageView?
-    var _messageH:CGFloat = 0
     var _messageTap:UITapGestureRecognizer?
+    var _messageImg:PicView?
     
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
     var _naviDelegate:Navi_Delegate?
+    
+    
+    var _alerter:MyAlerter?
+    var _currentEditeIndex:Int?
+    
+    
+    
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
@@ -71,20 +98,18 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _frameW = _myFrame!.width
         _gap = 0.04*_frameW!
         _gapY = 0.06*_frameW!
-        _imgW = 0.22*_frameW!
+        _imgW = 0.20*_frameW!
+        //_profileH = _imgW! + 2*_gapY!
+        _buttonW = (_myFrame!.width-2*_buttonGap)/3
         
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: _myFrame!.width, height: _barH))
         _topBar?.backgroundColor=Config._color_black_bar
         
+        
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        
-        
-        _btn_moreAction=UIButton(frame:CGRect(x: self.view.frame.width-50, y: _barH-44, width: 50, height: 44))
-        _btn_moreAction?.setImage(UIImage(named: "edit.png"), forState: UIControlState.Normal)
-        _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
@@ -92,53 +117,13 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _title_label?.textAlignment=NSTextAlignment.Center
         _title_label?.font = Config._font_topbarTitle
         
-        
-        
         _topBar?.addSubview(_title_label!)
-        _topBar?.addSubview(_btn_moreAction!)
         
         
-        
-        
-        switch _type{
-            case "likes":
-                _title_label?.text = "妙人"
-            break
-            case "friends":
-                _title_label?.text = "朋友"
-            break
-        default:
-            break
-        }
         
         //---消息提醒----
         
-        
-        
-        
-        _messageAlertView = UIView(frame: CGRect(x: 0, y: 10, width: 194, height: 40))
-        _messageAlertView?.layer.masksToBounds=true
-        _messageAlertView?.layer.cornerRadius = 10
-        _messageAlertView?.backgroundColor = UIColor(white: 0.2, alpha: 0.9)
-        
-        _messageIcon = UIImageView(frame: CGRect(x: 175, y: 15, width: 6, height: 10))
-        _messageIcon?.userInteractionEnabled=false
-        _messageIcon?.image = UIImage(named: "message_arrow.png")
-        _messageAlertView?.addSubview(_messageIcon!)
-        
-        _messageText = UILabel(frame: CGRect(x: 60, y: 13, width: 80, height: 12))
-        _messageText?.textAlignment = NSTextAlignment.Center
-        _messageText?.userInteractionEnabled=false
-        _messageText?.font = UIFont.systemFontOfSize(15)
-        _messageText?.textColor = UIColor.whiteColor()
-        _messageText?.text = "3条新消息"
-        _messageAlertView?.addSubview(_messageText!)
-        
-        _messageTap = UITapGestureRecognizer(target: self, action: Selector("messageTapHander:"))
-        _messageAlertView?.addGestureRecognizer(_messageTap!)
-        
-        
-        _messageImg = PicView(frame: CGRect(x: 8, y: 4.5, width: 32, height: 32))
+        _messageImg = PicView(frame: CGRect(x: self.view.frame.width - 25 - Config._gap, y: 30, width: 25, height: 25))
         _messageImg?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         _messageImg?.minimumZoomScale=1
         _messageImg?.userInteractionEnabled=false
@@ -146,21 +131,24 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _messageImg?._imgView?.layer.masksToBounds = true
         _messageImg?._imgView?.layer.cornerRadius = 16
         
-        _messageAlertView?.addSubview(_messageImg!)
         
+        _messageTap = UITapGestureRecognizer(target: self, action: Selector("messageTapHander:"))
+        _messageImg?.addGestureRecognizer(_messageTap!)
         
-        _messageAlertView?.hidden=true
+        _topBar?.addSubview(_messageImg!)
+        
         
         //----
         
         _tableView=UITableView()
         
-        _tableView?.backgroundColor=UIColor.whiteColor()
+        _tableView?.backgroundColor=UIColor.clearColor()
         _tableView?.delegate=self
         _tableView?.dataSource=self
-        _tableView?.frame = CGRect(x: 0, y: _barH+10, width: _myFrame!.width, height: _myFrame!.height-_barH-10)
+        _tableView?.frame = CGRect(x: 0, y: _barH+_profileH+_gap!, width: _myFrame!.width, height: _myFrame!.height-_barH-_profileH-10)
         _tableView?.registerClass(PicAlbumMessageItem.self, forCellReuseIdentifier: "PicAlbumMessageItem")
         _tableView?.backgroundColor = UIColor.clearColor()
+        _tableView?.separatorStyle = UITableViewCellSeparatorStyle.None
         //_tableView?.separatorColor=UIColor.clearColor()
         //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -400, bottom: 0, right: 0)
         _tableView?.tableFooterView = UIView()
@@ -168,147 +156,156 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _scrollView = UIScrollView(frame: CGRect(x: 0, y: _barH, width: _myFrame!.width, height: _myFrame!.height-_barH))
         
         
-        self.view.backgroundColor = UIColor(white: 0.9, alpha: 1)
+        self.view.backgroundColor = Config._color_social_gray_light
+        
         _scrollView!.addSubview(_tableView!)
         //_scrollView?.scrollEnabled=true
         
-        _scrollView!.addSubview(_messageAlertView!)
         
         self.view.addSubview(_scrollView!)
         self.view.addSubview(_topBar!)
-        
-        
         
         //-----评论输入框
         _inputer = Inputer(frame: _myFrame!)
         _inputer?.setup()
         // _inputer?.hidden=true
         
-        
-        
-        
-        
-        
         _topBar?.addSubview(_btn_cancel!)
         //
+        //
+        //
+        self._checkType()
         
-        //
-        //
         _setuped=true
     }
-    
-    
-    
     //提取数据
     func _getMessage(){
-        switch _type{
-            case "friends":
-                Social_Main._getMessages { (array) -> Void in
-                    self._messageIn(array)
-                }
-            break
-            case "likes":
-                Social_Main._getMessages { (array) -> Void in
-                    self._messageIn(array)
-            }
-        default:
-            break
-        }
-        
-    }
-    
-    func _messageIn(array:NSArray){
-        self._hasNewMessage = true
-        self._messageArray = array
-        
-        self._messageImg!._setPic((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as! NSDictionary, __block: { (__dict) -> Void in
+        Social_Main._getMessages { (array) -> Void in
+            self._hasNewMessage = true
+            self._messageArray = array
+            self._messageImg!._setPic((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary, __block: { (__dict) -> Void in
+            })
             
-        })
-        self._messageText!.text = String(array.count)+"条新消息"
-        self._refreshView()
+            self._refreshView()
+        }
     }
     //----消息按钮侦听
-    
     func messageTapHander(__sender:UITapGestureRecognizer){
         _hasNewMessage = false
         _refreshView()
         _openMessageList()
     }
     
-    
-    
     func _getDatas(){
-        switch _type{
-        case "friends":
-            Social_Main._getFriendsNewsList({ (array) -> Void in
-                self._datasIn(array)
-            })
-            break
-        case "likes":
-            Social_Main._getLikesNewsList({ (array) -> Void in
-                self._datasIn(array)
+       
+        _getAlbumList()
+        
+    }
+    
+    //------获取内容树列表
+    func _getAlbumList(){
+        Social_Main._getAlbumListAtUser(MainInterface._uid, __block: { (array) -> Void in
+            self._dataArray = array
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self._refreshDatas()
+                self._getMessage()
             })
             
+        })
+        
+        return
+            
+        switch _type{
+            case "friends":
+            break
+        case "likes":
+            Social_Main._getMyFocusTimeLine({ (array) -> Void in
+                self._dataArray = array
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self._refreshDatas()
+                    self._getMessage()
+                })
+                
+            })
+            break
         default:
             break
         }
     }
-    func _datasIn(__array:NSArray){
-        self._dataArray = __array
-        self._refreshDatas()
-        self._getMessage()
-    }
     
     
     //----更新数据
-    
     func _refreshDatas(){
-        
         //-----初始化数据
+        _allDatasArray = NSMutableArray()
         
         _heighArray=NSMutableArray()
         _commentsArray=NSMutableArray()
         _likeArray = NSMutableArray()
         for var i:Int=0; i<_dataArray.count;++i{
+            let _album:NSDictionary = _dataArray.objectAtIndex(i) as! NSDictionary
+            
+            _allDatasArray?.addObject(NSDictionary(object: _album.objectForKey("_id") as! String, forKey: "_id"))
+            
+            Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { (array) -> Void in
+                
+            })
             _heighArray?.addObject(_defaultH)
+            //-----获取评论列表
             Social_Main._getCommentsOfAlubm(String(i), block: { (array) -> Void in
                 self._commentsArray?.addObject(array)
             })
+            //-----获取点赞列表
             Social_Main._getLikesOfAlubm(String(i), block: { (array) -> Void in
                 self._likeArray?.addObject(array)
             })
         }
         _tableView?.reloadData()
-        
+        self._refreshView()
     }
-    
+    func _setIconImg(__pic:NSDictionary){
+        _profile_icon_img?._setPic(__pic,__block: { (__dict) -> Void in
+        })
+    }
     
     func _getListHander(__list:NSArray){
         
     }
+    
+    //--------类型判断并设定
+    func _checkType(){
+        switch _type{
+            case "friends":
+                _title_label?.text = "朋友"
+            break
+        case "likes":
+            _title_label?.text = "妙人"
+            break
+        default:
+            break
+            
+        }
+    }
+    
     //----------------刷新布局
     func _refreshView(){
-        UIView.beginAnimations("go", context: nil)
-        if _hasNewMessage{
-            _messageAlertView!.frame = CGRect(x: _myFrame!.width/2 - 194/2, y: 10, width: 194, height: 40)
-            _messageAlertView?.hidden=false
-            _messageH = 40+20
-        }else{
-            _messageAlertView?.hidden=true
-            _messageH = 0
-        }
-        _tableView?.frame = CGRect(x: 0, y: _messageH, width:  _myFrame!.width, height: _tableView!.contentSize.height)
         
+        if _hasNewMessage{
+            _messageImg?.hidden=false
+        }else{
+            _messageImg?.hidden=true
+        }
+        _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
         _tableView?.scrollEnabled = false
         _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
         UIView.commitAnimations()
     }
-    
     //----table 代理
-    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
     }
+    
+    
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         // println(scrollView.contentOffset)
         
@@ -329,21 +326,19 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             return CGFloat(_heighArray!.objectAtIndex(indexPath.row) as! NSNumber)
         }
         //println(_heighArray.objectAtIndex(indexPath.row))
-        return 100
+        return 700
     }
+    
+    //---------
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let _dict:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
+        //print(_dict)
+        
         var cell:PicAlbumMessageItem?
         //cell = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
-        
-        
         cell = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as? PicAlbumMessageItem
-        
-        cell!._type = "pics"
-        cell!._pics = (_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("pics") as? NSArray
-        
-        
-        cell!.setup(CGSize(width: self.view.frame.width, height: _defaultH))
-        
+        cell?._type = "status"
+        cell!.setup(CGSize(width: self.view.frame.width, height: _heighArray?.objectAtIndex(indexPath.row) as! CGFloat))
         
         cell!.separatorInset = UIEdgeInsetsZero
         cell!.preservesSuperviewLayoutMargins = false
@@ -351,25 +346,30 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         //cell!.tag = 100+indexPath.row
         let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
         cell!._setComments(_array, __allNum: _array.count)
-        
         let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
         cell!._setLikes(_likeA,__allNum: _likeA.count)
-        
+        cell!._userId = _userId
         cell!._indexId = indexPath.row
         cell!._delegate=self
+        //cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
+        //cell?._setPic(<#T##__pic: NSDictionary##NSDictionary#>)
         
-        
-        
-        cell!._userId = (_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userId") as? String
-    
-        cell!._setUserImge((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userImg") as! NSDictionary)
-        
-        
-        cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String)
-        //cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
-        cell!._setUpdateTime("下午 2:00 更新")
-        cell!._setUserName((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userName") as! String)
-        //cell!._refreshView()
+        if let _title:String = _dict.objectForKey("title") as? String{
+            cell!._setAlbumTitle(_title)
+        }else{
+            cell!._setAlbumTitle("")
+        }
+        if let _cover:NSDictionary = _dict.objectForKey("cover") as? NSDictionary{
+            cell!._setPic(_cover)
+        }else{
+            //cell!._setDescription("")
+        }
+        cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("last_update_at") as! String))
+        if _profileDict != nil{
+            
+            cell!._setUserImge(NSDictionary(objects: [ MainInterface._imageUrl(_profileDict?.objectForKey("avatar") as! String),"file"], forKeys: ["url","type"]))
+            cell!._setUserName(_profileDict!.objectForKey("nickname") as! String)
+        }
         //cell!._refreshView()
         return cell!
     }
@@ -381,9 +381,8 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         if _heighArray!.count>=__indexId+1{
             _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
         }
+        _heighArray![__indexId] = __height
         if _lastH != __height{
-            
-            _heighArray![__indexId] = __height
             _tableView?.reloadData()
             _refreshView()
         }
@@ -391,29 +390,30 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         // println(_heighArray)
     }
     func _viewAlbum(__albumIdex:Int) {
+        /*
+        if _userId == Social_Main._userId{
+        Social_Main._getPicsListAtal(__albumIdex, block: { (array) -> Void in
+        let _controller:Social_pic = Social_pic()
+        _controller._showIndexAtPics(0, __array: array)
+        self.navigationController?.pushViewController(_controller, animated: true)
+        
+        })
+        return
+        }
         
         
-        Social_Main._getPicsListAtAlbumId("00003", __block: { (array) -> Void in
-            let _controller:Social_pic = Social_pic()
-            
-            _controller._showIndexAtPics(0, __array: array)
-            self.navigationController?.pushViewController(_controller, animated: true)
-            
+        */
+        let _album = _dataArray.objectAtIndex(__albumIdex) as! NSDictionary
+        Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { (array) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                let _controller:Social_pic = Social_pic()
+                _controller._showIndexAtPics(0, __array: array)
+                self.navigationController?.pushViewController(_controller, animated: true)
+            })
         })
     }
-    func _viewPicsAtIndex(__array:NSArray,__index:Int){
-
-        let _controller:Social_pic = Social_pic()
+    func _viewPicsAtIndex(__array: NSArray, __index: Int) {
         
-        let _pics:NSMutableArray = NSMutableArray()
-        
-        for i in 0...__array.count-1{
-            _pics.addObject(NSDictionary(objects: [__array.objectAtIndex(i),3,5], forKeys: ["pic","likeNumber","commentNumber"]))
-           
-        }
-        _controller._showIndexAtPics(__index, __array: _pics)
-        self.navigationController?.pushViewController(_controller, animated: true)
-
     }
     func _moreComment(__indexId: Int) {
         let _controller:CommentList = CommentList()
@@ -427,7 +427,12 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     func _viewUser(__userId: String) {
         //println(__userId)
         let _contr:MyHomepage=MyHomepage()
-        _contr._userId = __userId
+        
+        
+        //_contr._userId = __userId
+        
+        _contr._userId = "5695f072109391cc5fcb553d"
+        
         self.navigationController?.pushViewController(_contr, animated: true)
     }
     func _buttonAction(__action: String, __dict: NSDictionary) {
@@ -475,11 +480,53 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             self.navigationController?.pushViewController(_controller, animated: true)
             
             break
+        case "moreAction":
+            _currentEditeIndex = __dict.objectForKey("indexId") as? Int
+            _openMoreAction()
         default:
             break
         }
         
     }
+    //----打开更多的弹出框
+    
+    func _openMoreAction(){
+        if _alerter == nil{
+            _alerter = MyAlerter()
+            _alerter?._delegate = self
+        }
+        self.addChildViewController(_alerter!)
+        self.view.addSubview(_alerter!.view)
+        _alerter?._setMenus(["举报"])
+        _alerter?._show()
+    }
+    
+    //------弹出框代理
+    func _myAlerterClickAtMenuId(__id:Int){
+        switch __id{
+        case 0:
+            //---举报
+            break
+        default:
+            break
+            
+        }
+    }
+    func _myAlerterStartToClose(){
+        
+    }
+    func _myAlerterDidClose(){
+        
+    }
+    func _myAlerterDidShow(){
+        
+    }
+    
+    
+    
+    
+    
+    
     
     func _hasUserInLikesAtIndex(__indexId:Int,__userId:String)->Bool{
         let _arr:NSArray = self._likeArray?.objectAtIndex(__indexId) as! NSArray
@@ -497,6 +544,8 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     
     
+    
+    
     //-----输入框代理
     
     func _inputer_send(__dict:NSDictionary) {
@@ -510,7 +559,11 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func btnHander(sender:UIButton){
         switch sender{
-       
+        case _btn_edite!:
+            let _setting:MySettings = MySettings()
+            _setting._setDict(_profileDict!)
+            self.navigationController?.pushViewController(_setting, animated: true)
+            
         default:
             print("")
         }
@@ -541,25 +594,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             }
             self.navigationController?.popViewControllerAnimated(true)
             return
-        case _btn_moreAction!:
-            let _alertController:UIAlertController = UIAlertController()
             
-            let _action:UIAlertAction = UIAlertAction(title: "消息列表", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-                self._hasNewMessage = false
-                self._refreshView()
-                self._openMessageList()
-            })
-            
-            let _actionCancel:UIAlertAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil)
-            _alertController.addAction(_action)
-            _alertController.addAction(_actionCancel)
-            
-            //            var _v:UIView = _alertController.view.subviews.first as! UIView
-            //            var _v1:UIView = _v.subviews.first as! UIView
-            //            _v1.backgroundColor = UIColor.redColor()
-            
-            self.navigationController?.presentViewController(_alertController, animated: true, completion: nil)
-            return
         default:
             return
         }
@@ -567,7 +602,6 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     //---打开消息列表
     func _openMessageList(){
-        
         let _controller:MessageList = MessageList()
         self.navigationController?.pushViewController(_controller, animated: true)
     }

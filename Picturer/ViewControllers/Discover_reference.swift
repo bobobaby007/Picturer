@@ -35,6 +35,7 @@ class Discover_search: UIViewController,ClickItemDelegate{
     
     
     
+    
     var _btn_more_hotAlbum:UIButton?
     var _btn_more_hotUser:UIButton?
     var _btn_referenceAlbum:UIButton?

@@ -163,6 +163,13 @@
 		7AB251B71B7F4F5F0029ED80 /* ad_5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7AB251B21B7F4F5F0029ED80 /* ad_5.jpg */; };
 		7AB2BC511C3FB39000B152F2 /* moreAction_Social.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB2BC501C3FB39000B152F2 /* moreAction_Social.png */; };
 		7AB3B1CA1C54F5B700F73C26 /* ContentEditer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3B1C91C54F5B700F73C26 /* ContentEditer.swift */; };
+		7AB9E3C81C55D12800D23CFA /* to_share_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3C71C55D12800D23CFA /* to_share_icon.png */; };
+		7AB9E3CA1C55D33900D23CFA /* commentIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3C91C55D33900D23CFA /* commentIcon.png */; };
+		7AB9E3CC1C55DF4F00D23CFA /* moreCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3CB1C55DF4F00D23CFA /* moreCircle.png */; };
+		7AB9E3CE1C55F9D800D23CFA /* selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3CD1C55F9D800D23CFA /* selected.png */; };
+		7AB9E3D01C561AF100D23CFA /* ImageInputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9E3CF1C561AF100D23CFA /* ImageInputer.swift */; };
+		7AB9E3D21C561B5100D23CFA /* carera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3D11C561B5100D23CFA /* carera_icon.png */; };
+		7AB9E3D41C561B6600D23CFA /* photo_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3D31C561B6600D23CFA /* photo_icon.png */; };
 		7AC247471B4A669F00A5187B /* AlbumList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7AC247461B4A669F00A5187B /* AlbumList.plist */; };
 		7AC4DFA01C21B7EA009A88BF /* SyncActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */; };
 		7AC55DAE1B3E97EE00FDC851 /* SocialHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */; };
@@ -360,6 +367,13 @@
 		7AB251B21B7F4F5F0029ED80 /* ad_5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ad_5.jpg; sourceTree = "<group>"; };
 		7AB2BC501C3FB39000B152F2 /* moreAction_Social.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moreAction_Social.png; sourceTree = "<group>"; };
 		7AB3B1C91C54F5B700F73C26 /* ContentEditer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentEditer.swift; sourceTree = "<group>"; };
+		7AB9E3C71C55D12800D23CFA /* to_share_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = to_share_icon.png; sourceTree = "<group>"; };
+		7AB9E3C91C55D33900D23CFA /* commentIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = commentIcon.png; sourceTree = "<group>"; };
+		7AB9E3CB1C55DF4F00D23CFA /* moreCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moreCircle.png; sourceTree = "<group>"; };
+		7AB9E3CD1C55F9D800D23CFA /* selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selected.png; sourceTree = "<group>"; };
+		7AB9E3CF1C561AF100D23CFA /* ImageInputer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageInputer.swift; sourceTree = "<group>"; };
+		7AB9E3D11C561B5100D23CFA /* carera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carera_icon.png; sourceTree = "<group>"; };
+		7AB9E3D31C561B6600D23CFA /* photo_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_icon.png; sourceTree = "<group>"; };
 		7AC247461B4A669F00A5187B /* AlbumList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AlbumList.plist; sourceTree = "<group>"; };
 		7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncActionView.swift; path = ../MyClasses/SyncActionView.swift; sourceTree = "<group>"; };
 		7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialHomeCell.swift; sourceTree = "<group>"; };
@@ -518,6 +532,7 @@
 				7A2925761BF9C21F00A71EB4 /* ImportImageFromWeb */,
 				7A0A15D41B5E2D0B00A8C6F6 /* SwiftImageLoader-master */,
 				7AEE316D1C0A04CB000F2100 /* DoubanApis.swift */,
+				7AB9E3CF1C561AF100D23CFA /* ImageInputer.swift */,
 				7AA0E1AF1B46779E0070538F /* CoreAction.swift */,
 				7AA188FF1C0BC665009A50FA /* CoreDataLite.swift */,
 			);
@@ -555,8 +570,13 @@
 		7A9C86B81B32D52D0051D067 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				7AB9E3D31C561B6600D23CFA /* photo_icon.png */,
+				7AB9E3D11C561B5100D23CFA /* carera_icon.png */,
+				7AB9E3C91C55D33900D23CFA /* commentIcon.png */,
 				7AF02A071C4328D30009B2BC /* collect_on.png */,
+				7AB9E3CB1C55DF4F00D23CFA /* moreCircle.png */,
 				7AF02A111C432A190009B2BC /* like_sign.png */,
+				7AB9E3C71C55D12800D23CFA /* to_share_icon.png */,
 				7AF02A081C4328D30009B2BC /* collect_off.png */,
 				7AF02A091C4328D30009B2BC /* message_icon.png */,
 				7AF02A0A1C4328D30009B2BC /* like_off.png */,
@@ -572,6 +592,7 @@
 				7AB2BC501C3FB39000B152F2 /* moreAction_Social.png */,
 				7AB251791B7F3B2E0029ED80 /* logo_black.png */,
 				7AA7AEEF1B735B0F00FF7EBC /* back.png */,
+				7AB9E3CD1C55F9D800D23CFA /* selected.png */,
 				7AA7AEF01B735B0F00FF7EBC /* edit.png */,
 				7AA7AEEC1B732C4700FF7EBC /* blank.png */,
 				7AA7AEE91B7315B700FF7EBC /* list_arrow.png */,
@@ -883,6 +904,7 @@
 				7A96A0A31B6A4C7700184EFF /* moreAction_icon.png in Resources */,
 				7AA7AEE71B73094F00FF7EBC /* search.png in Resources */,
 				7AB251A11B7F4B0F0029ED80 /* user_5.jpg in Resources */,
+				7AB9E3D21C561B5100D23CFA /* carera_icon.png in Resources */,
 				7AA7AEE11B73094F00FF7EBC /* add02.png in Resources */,
 				7A2021D31B3C41CF0048AD7C /* camara.png in Resources */,
 				7AB251A01B7F4B0F0029ED80 /* user_4.jpg in Resources */,
@@ -906,6 +928,7 @@
 				7A23A9661B3E7913009B2E53 /* icon_2.png in Resources */,
 				7AA7AEE31B73094F00FF7EBC /* camera.png in Resources */,
 				7AB251911B7F4B010029ED80 /* pic_4.JPG in Resources */,
+				7AB9E3CE1C55F9D800D23CFA /* selected.png in Resources */,
 				7AB251A71B7F4B0F0029ED80 /* user_8.jpg in Resources */,
 				7A23A9681B3E7913009B2E53 /* icon_4.png in Resources */,
 				7AC9B1241B70B1AC00D05787 /* search_icon.png in Resources */,
@@ -916,10 +939,13 @@
 				7AB251931B7F4B010029ED80 /* pic_2.JPG in Resources */,
 				7A49DC9A1B354DB4004FAF14 /* pic_selected.png in Resources */,
 				7A1987BF1C29863900458675 /* icon_close.png in Resources */,
+				7AB9E3CA1C55D33900D23CFA /* commentIcon.png in Resources */,
 				7AB2518D1B7F4B010029ED80 /* pic_8.JPG in Resources */,
+				7AB9E3D41C561B6600D23CFA /* photo_icon.png in Resources */,
 				7AB251A41B7F4B0F0029ED80 /* user_2.jpg in Resources */,
 				7AAD76011B84BE28007C0CB1 /* shareIcons.png in Resources */,
 				7A23A9691B3E7913009B2E53 /* icon_5.png in Resources */,
+				7AB9E3C81C55D12800D23CFA /* to_share_icon.png in Resources */,
 				7AA6B3E71B6BDC5E00904344 /* changeToPic.png in Resources */,
 				7AAD75EF1B845D6D007C0CB1 /* startScreen.png in Resources */,
 				7AB251A21B7F4B0F0029ED80 /* user_3.jpg in Resources */,
@@ -939,6 +965,7 @@
 				7AA7AEF11B735B0F00FF7EBC /* back.png in Resources */,
 				7AB2518C1B7F4B010029ED80 /* pic_9.JPG in Resources */,
 				7AAEA34D1B83510000DB5F54 /* logo_triangle.png in Resources */,
+				7AB9E3CC1C55DF4F00D23CFA /* moreCircle.png in Resources */,
 				7AB2518E1B7F4B010029ED80 /* pic_7.JPG in Resources */,
 				7ADD50161B2D402000E44F99 /* LaunchScreen.xib in Resources */,
 				7AA7AEDF1B73094F00FF7EBC /* add01.png in Resources */,
@@ -1028,6 +1055,7 @@
 				7A9C86C81B32DD490051D067 /* AlbumListCell.swift in Sources */,
 				7A39E9B41BECB37A007C0381 /* PicsShowCellOfCamera.swift in Sources */,
 				7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */,
+				7AB9E3D01C561AF100D23CFA /* ImageInputer.swift in Sources */,
 				7A6F8A8C1B62AF14007F949A /* Discover_reference.swift in Sources */,
 				7A2925781BF9C24400A71EB4 /* ImportImageFromWebController.swift in Sources */,
 				7AFE77241B6B9A940021E35E /* Social_pic.swift in Sources */,

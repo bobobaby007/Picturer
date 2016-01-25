@@ -273,7 +273,7 @@ class CoreAction {
     }
     //----发送参数到url
     static func _sendToUrl(__postString:String,__url:String,__block:(NSDictionary)->Void){
-        //print("sending====",__url,__postString)
+        print("sending====",__url,__postString)
         let request = NSMutableURLRequest(URL: NSURL(string:__url)!)
         request.HTTPMethod = "POST"
         request.HTTPBody = __postString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
