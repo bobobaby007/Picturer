@@ -100,37 +100,37 @@ class CoreAction {
         var timeAgo = ""
         if (sec > 0){
             if (sec > 1) {
-                timeAgo = "\(sec)秒前"// Seconds Ago"
+                timeAgo = "\(sec)秒"// Seconds Ago"
             } else {
-                timeAgo = "\(sec)秒前"// Seconds Ago"
+                timeAgo = "\(sec)秒"// Seconds Ago"
             }
         }
         if (min > 0){
             if (min > 1) {
-                timeAgo = "\(min)分钟前"// Minutes Ago"
+                timeAgo = "\(min)分钟"// Minutes Ago"
             } else {
-                timeAgo = "\(min)分钟前"// Minute Ago"
+                timeAgo = "\(min)分钟"// Minute Ago"
             }
         }
         if(hours > 0){
             if (hours > 1) {
-                timeAgo = "\(hours)小时前"// Hours Ago"
+                timeAgo = "\(hours)小时"// Hours Ago"
             } else {
-                timeAgo = "\(hours)小时前"// Hour Ago"
+                timeAgo = "\(hours)小时"// Hour Ago"
             }
         }
         if (days > 0) {
             if (days > 1) {
-                timeAgo = "\(days)天前"// Days Ago"
+                timeAgo = "\(days)天"// Days Ago"
             } else {
-                timeAgo = "\(days)天前"// Day Ago"
+                timeAgo = "\(days)天"// Day Ago"
             }
         }
         if(weeks > 0){
             if (weeks > 1) {
-                timeAgo = "\(weeks)周前"// Weeks Ago"
+                timeAgo = "\(weeks)周"// Weeks Ago"
             } else {
-                timeAgo = "\(weeks)周前"// Week Ago"
+                timeAgo = "\(weeks)周"// Week Ago"
             }
         }
         return timeAgo;

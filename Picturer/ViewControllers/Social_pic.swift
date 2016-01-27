@@ -314,8 +314,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     
     //----设置描述
     func _setDescription(_str:String){
-        //_desText?.text = __str
-        var __str = "山东阿甘陪我难过的是谁的根是代购嗯孤收到两个色更难过的事都是个"
+        let __str = _str
+        //var __str = "山东阿甘陪我难过的是谁的根是代购嗯孤收到两个色更难过的事都是个"
         _desText?.text = __str
         print("设置描述")
         if  __str == ""{

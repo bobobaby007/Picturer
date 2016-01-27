@@ -55,18 +55,24 @@ class Config:AnyObject {
     
     //---------------------社交
     
-    static let _color_social_gray:UIColor = UIColor(red: 76/255, green: 76/255, blue: 76/255, alpha: 1)//----社交页面中灰色
+    static let _color_social_gray:UIColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)//----社交页面中灰色
     static let _color_social_blue:UIColor = UIColor(red: 44/255, green: 60/255, blue: 120/255, alpha: 1)//----社交页面中蓝色
+
      static let _color_social_gray_light:UIColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)//----社交页面中浅灰
     
+    static let _color_social_albumTitle_over:UIColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.7)//----社交页面
     
     
-    static let _font_social_button:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交页面按钮文字
+    static let _font_social_button:UIFont = UIFont(name: "PingFangSC-Regular", size: 12)!//社交页面按钮文字
+    static let _font_social_cell_name:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交页面列表用户名
+    
     static let _font_social_button_2:UIFont = UIFont(name: "PingFangSC-Regular", size: 15)!//社交页面图册、关注、被关注按钮文字
     static let _font_social_album_title:UIFont = UIFont(name: "PingFangSC-Regular", size: 17)!//社交页面图册标题
-    static let _font_social_sex_n_city:UIFont = UIFont(name: "PingFangSC-Regular", size: 10)!//社交页性别和城市
+    static let _font_social_album_description:UIFont = UIFont(name: "PingFangSC-Regular", size: 15)!//社交页面图册描述
+    static let _font_social_sex_n_city:UIFont = UIFont(name: "PingFangSC-Regular", size: 10.5)!//社交页性别和城市
     static let _font_social_time:UIFont = UIFont(name: "PingFangSC-Regular", size: 10.5)!//社交页时间文字
-    static let _font_social_sign:UIFont = UIFont(name: "PingFangSC-Regular", size: 13)!//社交页签名字体
+    static let _font_social_sign:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交页签名字体
+    static let _font_social_likeNum:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交点赞数
     
     
     

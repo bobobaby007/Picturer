@@ -8,12 +8,20 @@
 
 import Foundation
 import UIKit
+
+protocol MySettings_delegate:NSObjectProtocol{
+    func _setting_saved()
+    func _setting_back()
+}
+
 class MySettings: UIViewController,ContentEditer_delegate,ImageInputerDelegate{
     let _gap:CGFloat=15
     var _setuped:Bool=false
     var _topBar:UIView?
     var _btn_cancel:UIButton?
     var _title_label:UILabel?
+    
+    weak var _delegate:MySettings_delegate?
     
     let _tableCellH:CGFloat=40
     
@@ -301,7 +309,9 @@ class MySettings: UIViewController,ContentEditer_delegate,ImageInputerDelegate{
         self._setDict(_userInfo!)
         
         MainInterface._updateUserInfo(_userInfo!) { (__dict) -> Void in
-            
+            if self._delegate != nil{
+                self._delegate?._setting_saved()
+            }
         }
     }
     
@@ -351,8 +361,9 @@ class MySettings: UIViewController,ContentEditer_delegate,ImageInputerDelegate{
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
+            _delegate?._setting_back()
             self.navigationController?.popViewControllerAnimated(true)
-        
+            
         default:
             print(sender)
         }

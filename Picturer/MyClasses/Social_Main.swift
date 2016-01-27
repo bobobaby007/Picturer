@@ -176,8 +176,8 @@ class Social_Main: AnyObject {
     
     //----获取我关注的用户列表
     
-    static func _myFocusList(__userId:String,__block:(NSDictionary)->Void){
-        MainInterface._myFocusList(__userId) { (__dict) -> Void in
+    static func _getMyFocusList(__userId:String,__block:(NSDictionary)->Void){
+        MainInterface._getMyFocusList(__userId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 print("关注用户列表：",__dict)
                 //__block(__dict.objectForKey("userinfo") as! NSDictionary)

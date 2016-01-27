@@ -274,6 +274,9 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         //print(_str)
         
         _pic = NSMutableDictionary(dictionary: (_getPicAtIndex(_currentIndex!)))
+        
+        
+        
         if _pic!.objectForKey("description") != nil{
             _setDescription(_pic!.objectForKey("description") as! String)
         }else{

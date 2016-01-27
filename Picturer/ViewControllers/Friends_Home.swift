@@ -214,7 +214,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         })
         
         return
-            
+        
         switch _type{
             case "friends":
             break
@@ -367,7 +367,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("last_update_at") as! String))
         if _profileDict != nil{
             
-            cell!._setUserImge(NSDictionary(objects: [ MainInterface._imageUrl(_profileDict?.objectForKey("avatar") as! String),"file"], forKeys: ["url","type"]))
+            cell!._setUserImge(MainInterface._userAvatar(_profileDict!))
             cell!._setUserName(_profileDict!.objectForKey("nickname") as! String)
         }
         //cell!._refreshView()

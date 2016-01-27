@@ -11,7 +11,7 @@ import UIKit
 
 
 
-class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate{
+class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate,MySettings_delegate{
     
     var _type:String = "my"//"friend/my" //类型，我的主页／朋友的主页
     
@@ -38,12 +38,12 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     
     var _profilePanel:UIView?
-    var _profile_icon_img:PicView?
+    var _user_img:PicView?
     var _btn_edite:UIButton?
     var _btn_share:UIButton?
     var _btn_follow:UIButton?
     var _btn_message:UIButton?
-    var _sign_text:UITextView?
+    var _sign_text:UILabel?
     var _line_profile:UIView?
     
     
@@ -54,10 +54,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _btn_following:UIButton?
     var _btn_album:UIButton?
     
-    var _profileH:CGFloat = 152//-----面板高度
+    var _profileH:CGFloat = 153//-----面板高度
     var _buttonH:CGFloat = 30 //---按钮高度
     var _buttonW:CGFloat = 125//---按钮宽度
-    var _buttonGap:CGFloat = 1 //---按钮间距
+    var _buttonGap:CGFloat = 0.5 //---按钮间距
     
     var _scrollView:UIScrollView?
     
@@ -87,6 +87,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _alerter:MyAlerter?
     var _currentEditeIndex:Int?
     
+    var _allLikeIcon:UIImageView?
+    var _allLikeLabel:UILabel?
+    
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
@@ -101,9 +104,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         }
         _myFrame = __frame
         _frameW = _myFrame!.width
-        _gap = 0.04*_frameW!
+        _gap = 15
         _gapY = 0.06*_frameW!
-        _imgW = 0.20*_frameW!
+        _imgW = 75//0.20*_frameW!
         //_profileH = _imgW! + 2*_gapY!
         _buttonW = (_myFrame!.width-2*_buttonGap)/3
         
@@ -132,16 +135,15 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _line_profile?.backgroundColor = UIColor(white: 0.8, alpha: 1)
         _profilePanel?.addSubview(_line_profile!)
         
-        _profile_icon_img = PicView(frame: CGRect(x: _gap!, y: _gapY!, width: _imgW!, height: _imgW!))
-        _profile_icon_img?.scrollEnabled=false
-        _profile_icon_img?.minimumZoomScale=1
-        _profile_icon_img?.maximumZoomScale=1
-        _profile_icon_img?._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
-        _profile_icon_img?._imgView?.layer.masksToBounds=true
-        _profile_icon_img?._imgView?.layer.cornerRadius = 0.5*_profile_icon_img!.frame.width
+        _user_img = PicView(frame: CGRect(x: _gap!, y: _gapY!, width: _imgW!, height: _imgW!))
+        _user_img?.scrollEnabled=false
+        _user_img?.minimumZoomScale=1
+        _user_img?.maximumZoomScale=1
+        _user_img?._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
+        _user_img?._imgView?.layer.masksToBounds=true
+        _user_img?._imgView?.layer.cornerRadius = 0.5*_user_img!.frame.width
         
-        _btn_edite = UIButton(frame: CGRect(x: 0.275*_frameW!,y: _gapY!+(_imgW!-30)/2,width: 2*0.33*(_frameW!-_gap!-0.275*_frameW!),height: 30))
-        _btn_edite?.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
+        _btn_edite = UIButton(frame: CGRect(x: _gap!+_user_img!.frame.width+_gap!,y: _user_img!.frame.origin.y+20,width: 2*0.33*(_frameW!-_gap!-_gap!-_imgW!),height: 30))
         _btn_edite?.backgroundColor = UIColor(white: 1, alpha: 1)
         _btn_edite?.layer.borderWidth = 1
         _btn_edite?.layer.borderColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1).CGColor
@@ -149,13 +151,14 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_edite?.layer.cornerRadius = 5
         var attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "编辑个人主页")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_social_gray, range: NSMakeRange(0, attributedString.length))
         _btn_edite?.titleLabel?.textAlignment = NSTextAlignment.Center
         _btn_edite?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
         _btn_edite?.titleLabel?.font=Config._font_social_button
         _btn_edite?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_share = UIButton(frame: CGRect(x: _btn_edite!.frame.origin.x+_btn_edite!.frame.width+3,y: _btn_edite!.frame.origin.y,width: _frameW!-_btn_edite!.frame.origin.x-_btn_edite!.frame.width-3-_gap!,height: _btn_edite!.frame.height))
-        _btn_share?.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
+        
         _btn_share?.backgroundColor = UIColor(white: 1, alpha: 1)
         _btn_share?.layer.borderWidth = 1
         _btn_share?.layer.borderColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1).CGColor
@@ -164,6 +167,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_share?.titleLabel?.textAlignment = NSTextAlignment.Center
         attributedString = NSMutableAttributedString(string: "分享")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_social_gray, range: NSMakeRange(0, attributedString.length))
         _btn_share?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
         _btn_share?.titleLabel?.font=Config._font_social_button
         _btn_share?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -203,7 +207,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_album?.backgroundColor = Config._color_black_title
         _btn_album?.titleLabel?.textAlignment = NSTextAlignment.Center
         attributedString = NSMutableAttributedString(string: "图册")
-        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+       // attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         _btn_album?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
         _btn_album?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
         _btn_album?.titleLabel?.font=Config._font_social_button_2
@@ -233,27 +237,26 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         
-        _label_sex_n_city = UILabel(frame: CGRect(x: _btn_edite!.frame.origin.x, y: _profile_icon_img!.frame.origin.y, width: _myFrame!.width-_btn_edite!.frame.origin.x-_gap!,height: 20))
+        _label_sex_n_city = UILabel(frame: CGRect(x: _btn_edite!.frame.origin.x, y: _user_img!.frame.origin.y-3, width: _myFrame!.width-_btn_edite!.frame.origin.x-_gap!,height: 20))
         _label_sex_n_city?.textColor = Config._color_social_gray
         _label_sex_n_city?.font = Config._font_social_sex_n_city
         
         
-        _sign_text = UITextView(frame: CGRect(x: _btn_edite!.frame.origin.x,y: _btn_edite!.frame.origin.y+_btn_edite!.frame.height+4,width: _myFrame!.width-_btn_edite!.frame.origin.x-_gap!,height: 40))
-        _sign_text?.font = Config._font_social_sign
-        _sign_text?.contentInset = UIEdgeInsetsZero
-        _sign_text?.textContainerInset = UIEdgeInsetsZero
+        _sign_text = UILabel(frame: CGRect(x: _btn_edite!.frame.origin.x,y: _btn_edite!.frame.origin.y+_btn_edite!.frame.height+2,width: _myFrame!.width-_btn_edite!.frame.origin.x-_gap!,height: 30))
+        
+        
+       // _sign_text?.contentInset = UIEdgeInsetsZero
+        //_sign_text?.textContainerInset = UIEdgeInsetsZero
+        
         _sign_text?.textAlignment = NSTextAlignment.Left
-        _sign_text?.textContainer.lineFragmentPadding=0
-        
-        
-        _sign_text?.textColor = Config._color_social_gray
+        //_sign_text?.textContainer.lineFragmentPadding=0
         _sign_text?.backgroundColor = UIColor.clearColor()
-        _sign_text?.editable=false
+        //_sign_text?.editable=false
         //_sign_text?.alpha = 0
         
         
         
-        _profilePanel?.addSubview(_profile_icon_img!)
+        _profilePanel?.addSubview(_user_img!)
         _profilePanel?.addSubview(_btn_edite!)
         _profilePanel?.addSubview(_btn_share!)
         _profilePanel?.addSubview(_btn_follow!)
@@ -276,7 +279,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _messageImg?.userInteractionEnabled=false
         _messageImg?.maximumZoomScale=1
         _messageImg?._imgView?.layer.masksToBounds = true
-        _messageImg?._imgView?.layer.cornerRadius = 16
+        _messageImg?._imgView?.layer.cornerRadius = 12.5
         
         
         _messageTap = UITapGestureRecognizer(target: self, action: Selector("messageTapHander:"))
@@ -343,13 +346,18 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _refreshView()
         _openMessageList()
     }
-    
     func _getDatas(){
         _getUserInfo()
         _getAlbumList()
         //_FocusUser()
+//        Social_Main._focusToUser("569602ec30765c8f0c3909d8") { (__dict) -> Void in
+//            print(__dict)
+//        }
+        
+        Social_Main._getMyFocusList(_userId, __block: { (__dict) -> Void in
+            print("_getMyFocusList：",__dict)
+        })
     }
-    
     //------获取相册列表
     func _getAlbumList(){
         Social_Main._getAlbumListAtUser(_userId, __block: { (array) -> Void in
@@ -358,7 +366,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 self._refreshDatas()
                 self._getMessage()
             })
-            
         })
     }
     //------获取用户信息
@@ -369,28 +376,19 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
                 self._userInfo = __dict
                 self._title_label?.text=self._userInfo?.objectForKey("nickname") as? String
                 self._setAlbumNum(self._userInfo?.objectForKey("albumcounts") as! Int)
-                self._setFollowedNum(self._userInfo?.objectForKey("focuscounts") as! Int)
-                self._setFollowingNum(self._userInfo?.objectForKey("followcounts") as! Int)
-                
+                self._setFollowedNum(self._userInfo?.objectForKey("followcounts") as! Int)
+                self._setFollowingNum(self._userInfo?.objectForKey("focuscounts") as! Int)
+                self._setIconImg(MainInterface._userAvatar(self._userInfo!))
                 var _sexStr:String = ""
-                
                 if let _s:Int = self._userInfo?.objectForKey("sex") as? Int{
-                    switch _s{
-                    case 0:
-                        _sexStr = "女,"
-                    case 1:
-                        _sexStr = "男,"
-                    default:
-                        break
+                    if _sexStr != ""{
+                        _sexStr = MainInterface._sexStr(_s)+"，"
                     }
                 }
                 self._label_sex_n_city?.text = "\(_sexStr)中国 北京"
-                
                 if let _str:String = self._userInfo?.objectForKey("signature") as? String{
                     self._setSign(_str)
                 }
-                
-                
                 self._refreshView()
             })
         }
@@ -403,35 +401,42 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         }
     }
     
+    
     //----图册数量
     func _setAlbumNum(__num:Int){
         let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "图册")
-        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        //attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_white_title, range: NSMakeRange(0, attributedString.length) )
-        let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
-        descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
-        attributedString.appendAttributedString(descString)
+        if __num > 0{
+            let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
+            descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
+            attributedString.appendAttributedString(descString)
+        }
         _btn_album?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
     }
     //----被关注数量
     func _setFollowedNum(__num:Int){
         let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "被关注")
-        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        //attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_white_title, range: NSMakeRange(0, attributedString.length) )
-        let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
-        descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
-        attributedString.appendAttributedString(descString)
+        if __num > 0{
+            let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
+            descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
+            attributedString.appendAttributedString(descString)
+        }
         _btn_followed?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
     }
     //-----关注数量
     
     func _setFollowingNum(__num:Int){
         let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "关注")
-        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        //attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_white_title, range: NSMakeRange(0, attributedString.length) )
-        let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
-        descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
-        attributedString.appendAttributedString(descString)
+        if __num > 0{
+            let descString: NSMutableAttributedString = NSMutableAttributedString(string:  " "+String(__num))
+            descString.addAttribute(NSForegroundColorAttributeName, value: Config._color_yellow, range: NSMakeRange(0, descString.length))
+            attributedString.appendAttributedString(descString)
+        }
         _btn_following?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
     }
     //----更新数据
@@ -464,10 +469,26 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         self._refreshView()
     }
     func _setSign(__str:String){
-        _sign_text!.text=__str
+        
+        
+        let attributedString = NSMutableAttributedString(string: __str)
+        
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_social_gray, range: NSMakeRange(0, attributedString.length))
+        
+        attributedString.addAttribute(NSKernAttributeName, value: 0.25, range: NSMakeRange(0, attributedString.length) )
+        attributedString.addAttribute(NSFontAttributeName, value: Config._font_social_sign, range: NSMakeRange(0, attributedString.length))
+        
+        _sign_text!.attributedText = attributedString
+        
+//        _sign_text?.font = Config._font_social_sign
+//        _sign_text?.textColor = Config._color_social_gray
+//        _sign_text?.text = __str
     }
+    
+    //---用户头像
+    
     func _setIconImg(__pic:NSDictionary){
-        _profile_icon_img?._setPic(__pic,__block: { (__dict) -> Void in
+        _user_img?._setPic(__pic,__block: { (__dict) -> Void in
         })
     }
     
@@ -475,6 +496,14 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
     }
     
+    //----编辑代理
+    func _setting_saved() {
+        //_getUserInfo()
+        _getDatas()
+    }
+    func _setting_back(){
+        //_getUserInfo()
+    }
     //--------类型判断并设定，个人主页
     func _checkType(){
         if _userId == Social_Main._userId{
@@ -577,7 +606,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("last_update_at") as! String))
         if _userInfo != nil{
             
-            cell!._setUserImge(NSDictionary(objects: [ MainInterface._imageUrl(_userInfo?.objectForKey("avatar") as! String),"file"], forKeys: ["url","type"]))
+            cell!._setUserImge(MainInterface._userAvatar(_userInfo!))
             cell!._setUserName(_userInfo!.objectForKey("nickname") as! String)
         }
         //cell!._refreshView()
@@ -767,6 +796,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         switch sender{
         case _btn_edite!:
             let _setting:MySettings = MySettings()
+            _setting._delegate=self
             _setting._userInfo = _userInfo!
             self.navigationController?.pushViewController(_setting, animated: true)
             
@@ -800,7 +830,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             }
             self.navigationController?.popViewControllerAnimated(true)
             return
-        
+        case _btn_follow!:
+            _FocusUser()
+            break
         default:
             return
         }

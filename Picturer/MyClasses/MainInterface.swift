@@ -157,7 +157,7 @@ class MainInterface: AnyObject {
         }
     }
     //-----我关注的用户列表
-    static func _myFocusList(__userId:String,__block:(NSDictionary)->Void){
+    static func _getMyFocusList(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_MyFocusList+"\(__userId)") { (__dict) -> Void in
             print(__dict)
             __block(__dict)
@@ -297,7 +297,7 @@ class MainInterface: AnyObject {
     //-----修改图片
     static func _changePic(__picId:String,__changeingStr:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)"+__changeingStr, __url: _basicDoman+_version+"/"+_URL_Pic_update+__picId) { (__dict) -> Void in
-            //print(__dict)
+            print("修改图片成功：",__dict)
             __block(__dict)
         }
     }
@@ -367,6 +367,19 @@ class MainInterface: AnyObject {
         default:
             return ""
         }
+    }
+    static func _userAvatar(__userInfo:NSDictionary)->NSDictionary{
+        var _dict:NSDictionary
+        
+        if let _avatar = __userInfo.objectForKey("avatar") as? String{
+            _dict = NSDictionary(objects: [ MainInterface._imageUrl(_avatar),"file"], forKeys: ["url","type"])
+        }else{
+           _dict = NSDictionary(objects: ["","file"], forKeys: ["url","type"])
+        }
+        
+        return _dict
+        
+        
     }
     //----获取图册完整地址,用于分享
     static func _albumUrl(__albumId:String)->String{
