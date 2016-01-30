@@ -174,9 +174,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         
         
-        
-        _btn_follow = UIButton(frame: CGRect(x: 0.275*_frameW!,y: _gapY!+(_imgW!-30)/2,width: 2*0.33*(_frameW!-_gap!-0.275*_frameW!),height: 30))
-        _btn_follow?.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
+        _btn_follow = UIButton(frame: CGRect(x: _gap!+_user_img!.frame.width+_gap!,y: _user_img!.frame.origin.y+20,width: 2*0.33*(_frameW!-_gap!-_gap!-_imgW!),height: 30))
         _btn_follow?.backgroundColor = UIColor(white: 1, alpha: 1)
         _btn_follow?.layer.borderWidth = 1
         _btn_follow?.layer.borderColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1).CGColor
@@ -184,6 +182,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_follow?.layer.cornerRadius = 5
         attributedString = NSMutableAttributedString(string: "＋关注")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_social_gray, range: NSMakeRange(0, attributedString.length))
         _btn_follow?.titleLabel?.textAlignment = NSTextAlignment.Center
         _btn_follow?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
         _btn_follow?.titleLabel?.font=Config._font_social_button
@@ -427,7 +426,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_followed?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
     }
     //-----关注数量
-    
     func _setFollowingNum(__num:Int){
         let attributedString:NSMutableAttributedString = NSMutableAttributedString(string: "关注")
         //attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
@@ -443,7 +441,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _refreshDatas(){
         //-----初始化数据
         _allDatasArray = NSMutableArray()
-        
         _heighArray=NSMutableArray()
         _commentsArray=NSMutableArray()
         _likeArray = NSMutableArray()
@@ -605,7 +602,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         }
         cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("last_update_at") as! String))
         if _userInfo != nil{
-            
             cell!._setUserImge(MainInterface._userAvatar(_userInfo!))
             cell!._setUserName(_userInfo!.objectForKey("nickname") as! String)
         }

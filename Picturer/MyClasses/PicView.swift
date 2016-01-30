@@ -153,22 +153,26 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         //self.addSubview(_imgView!)
     }
     func _setImageByImage(_img:UIImage){
+        if _imgView == nil{
+            return
+        }
+        
+        _imgView?.image=_img
+        
         
         switch _scaleType{
         case PicView._ScaleType_Fit:
             _imgView?.contentMode = UIViewContentMode.ScaleAspectFit
             break
         case PicView._ScaleType_Full:
+            
             _imgView?.contentMode = UIViewContentMode.ScaleAspectFill
             break
         default:
             
             break
         }
-        
-        _imgView?.image=_img
-        
-        
+
         
         
         return

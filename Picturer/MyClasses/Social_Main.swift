@@ -227,14 +227,14 @@ class Social_Main: AnyObject {
         if _n < 1{
             _n = 1
         }
-        if _n < 4{
+        if _n < 2{
             block(_array)
             return
         }
         //_n = 0
         for var i:Int = 0; i <= (_n-1);++i{
             let _comment:String = _testComments?.objectAtIndex(random()%31) as! String
-            let _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(random()%31) as! String,_testToUserNames?.objectAtIndex(i) as! String,"111111","123456",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
+            let _commentDict:NSMutableDictionary = NSMutableDictionary(objects: ["骑士","小小白","569601da109391cc5fcb5548","569602ec30765c8f0c3909d8",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
             //            if i==0{
             //                _commentDict.setValue("", forKey: "comment")
             //                _commentDict.setValue("", forKey: "to_userName")
@@ -388,7 +388,9 @@ class Social_Main: AnyObject {
         MainInterface._getMyFocusTimeLine { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 print("关注用户更新：",__dict)
-                __block(NSArray())
+                __block(__dict.objectForKey("list") as! NSArray)
+            }else{
+                print("关注用户更新失败：",__dict)
             }
         }
     }

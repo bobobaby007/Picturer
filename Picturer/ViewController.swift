@@ -22,8 +22,6 @@ class ViewController: UIViewController,Manage_home_delegate,Social_home_delegate
         super.viewDidLoad()
         setup()
         
-        
-        
         showManageHome()
         
         //showSocialHome()

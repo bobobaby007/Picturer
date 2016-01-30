@@ -35,7 +35,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     var _dataArray:NSArray=[]
     var _setuped:Bool = false
     
-    var _profileDict:NSDictionary?
+    var _userInfo:NSDictionary?
     
     var _profile_icon_img:PicView?
     var _btn_edite:UIButton?
@@ -129,7 +129,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _messageImg?.userInteractionEnabled=false
         _messageImg?.maximumZoomScale=1
         _messageImg?._imgView?.layer.masksToBounds = true
-        _messageImg?._imgView?.layer.cornerRadius = 16
+        _messageImg?._imgView?.layer.cornerRadius = 12.5
         
         
         _messageTap = UITapGestureRecognizer(target: self, action: Selector("messageTapHander:"))
@@ -198,7 +198,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func _getDatas(){
        
-        _getAlbumList()
+       // _getAlbumList()
         
     }
     
@@ -279,14 +279,12 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
                 _title_label?.text = "朋友"
             break
         case "likes":
-            _title_label?.text = "妙人"
+               _title_label?.text = "妙人"
             break
         default:
             break
-            
         }
     }
-    
     //----------------刷新布局
     func _refreshView(){
         
@@ -295,7 +293,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         }else{
             _messageImg?.hidden=true
         }
-        _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
+        _tableView?.frame = CGRect(x: 0, y: _profileH, width:  _myFrame!.width, height: _tableView!.contentSize.height)
         _tableView?.scrollEnabled = false
         _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
         UIView.commitAnimations()
@@ -332,7 +330,18 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     //---------
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let _dict:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
+        let _user:NSDictionary = _dict.objectForKey("author") as! NSDictionary
+        let _pics:NSArray = _dict.objectForKey("ids") as! NSArray
+        
+        
+        print("pics:sssdf",_pics)
+        
+        
+        let _comments:NSArray = _dict.objectForKey("comments") as! NSArray
+        let likes:NSArray = _dict.objectForKey("likes") as! NSArray
         //print(_dict)
+        
+        
         
         var cell:PicAlbumMessageItem?
         //cell = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
@@ -340,36 +349,36 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell?._type = "status"
         cell!.setup(CGSize(width: self.view.frame.width, height: _heighArray?.objectAtIndex(indexPath.row) as! CGFloat))
         
+        
         cell!.separatorInset = UIEdgeInsetsZero
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
+        
         //cell!.tag = 100+indexPath.row
-        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
-        cell!._setComments(_array, __allNum: _array.count)
-        let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
-        cell!._setLikes(_likeA,__allNum: _likeA.count)
-        cell!._userId = _userId
+        //let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
+        //cell!._setComments(_array, __allNum: _array.count)
+        //let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
+        //cell!._setLikes(_likeA,__allNum: _likeA.count)
+        cell!._userId = _user.objectForKey("_id") as? String
+        cell!._setUserImge(MainInterface._userAvatar(_user))
+        cell!._setUserName(_user.objectForKey("nickname") as! String)
         cell!._indexId = indexPath.row
         cell!._delegate=self
         //cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
         //cell?._setPic(<#T##__pic: NSDictionary##NSDictionary#>)
         
-        if let _title:String = _dict.objectForKey("title") as? String{
-            cell!._setAlbumTitle(_title)
-        }else{
-            cell!._setAlbumTitle("")
-        }
-        if let _cover:NSDictionary = _dict.objectForKey("cover") as? NSDictionary{
-            cell!._setPic(_cover)
+        if let _cover:NSDictionary = _pics.objectAtIndex(0) as? NSDictionary{
+            
+            let _pic:NSDictionary = NSDictionary(objects: [MainInterface._imageUrl(_cover.objectForKey("thumbnail") as! String),"file"], forKeys: ["url","type"])
+            
+            
+            cell!._setPic(_pic)
         }else{
             //cell!._setDescription("")
         }
-        cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("last_update_at") as! String))
-        if _profileDict != nil{
-            
-            cell!._setUserImge(MainInterface._userAvatar(_profileDict!))
-            cell!._setUserName(_profileDict!.objectForKey("nickname") as! String)
-        }
+        cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("create_at") as! String))
+        
+        
         //cell!._refreshView()
         return cell!
     }
@@ -561,7 +570,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         switch sender{
         case _btn_edite!:
             let _setting:MySettings = MySettings()
-            _setting._setDict(_profileDict!)
+            _setting._setDict(_userInfo!)
             self.navigationController?.pushViewController(_setting, animated: true)
             
         default:
@@ -574,8 +583,8 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         //setup(<#__frame: CGRect#>)
         
         
-        //_setSign(_profileDict!.objectForKey("sign") as! String)
-        //_setIconImg(_profileDict!.objectForKey("profileImg") as! NSDictionary)
+        //_setSign(_userInfo!.objectForKey("sign") as! String)
+        //_setIconImg(_userInfo!.objectForKey("profileImg") as! NSDictionary)
     }
     override func viewDidAppear(animated: Bool) {
         if _viewIned!{
