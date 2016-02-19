@@ -36,7 +36,6 @@ class Config:AnyObject {
     
     
     
-    
     //-----Font Names = [["PingFangSC-Ultralight", "PingFangSC-Regular", "PingFangSC-Semibold", "PingFangSC-Thin", "PingFangSC-Light", "PingFangSC-Medium"]]
     
     
@@ -54,14 +53,23 @@ class Config:AnyObject {
     static let _font_description_at_bottom:UIFont = UIFont(name: "PingFangSC-Light", size: 14)!//----单张图片底部描述字体
     
     //---------------------社交
+    static let _color_social_gray_bg:UIColor = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1)//----社交页面中背景灰色
     
     static let _color_social_gray:UIColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)//----社交页面中灰色
     static let _color_social_blue:UIColor = UIColor(red: 44/255, green: 60/255, blue: 120/255, alpha: 1)//----社交页面中蓝色
 
      static let _color_social_gray_light:UIColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)//----社交页面中浅灰
+
+    static let _color_social_gray_line:UIColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)//----社交页面通讯录按钮下划线灰色
     
-    static let _color_social_albumTitle_over:UIColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.7)//----社交页面
+    static let _color_social_black_title:UIColor = UIColor(red: 25/255, green: 25/255, blue: 25/255, alpha: 0.98)//----社交页面cell标题文字颜色
     
+    
+    
+    static let _color_social_albumTitle_over:UIColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.7)//----
+    
+    static let _color_social_orange:UIColor = UIColor(red: 239/255, green: 83/255, blue: 42/255, alpha: 1)//----社交页面橘色
+    static let _color_social_purple:UIColor = UIColor(red: 64/255, green: 0/255, blue: 144/255, alpha: 1)//----社交页面紫色
     
     static let _font_social_button:UIFont = UIFont(name: "PingFangSC-Regular", size: 12)!//社交页面按钮文字
     static let _font_social_cell_name:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交页面列表用户名

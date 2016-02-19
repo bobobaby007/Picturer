@@ -175,8 +175,14 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
             self.navigationController?.pushViewController(_contr, animated: true)
             return
         case 5://通讯录
+            let _contr:AddressList_Home=AddressList_Home()
+            _contr._naviDelegate = self
+            self.navigationController?.pushViewController(_contr, animated: true)
             return
         case 6://设置
+            let _contr:Social_Setting_Home=Social_Setting_Home()
+            _contr._naviDelegate = self
+            self.navigationController?.pushViewController(_contr, animated: true)
             return
         default:
             print("22")

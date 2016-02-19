@@ -26,6 +26,7 @@ class AlbumListCell :  UITableViewCell{
         _mySize = __size
        // _imageView=UIImageView(frame: CGRectMake(10, 5, self.bounds.height-10, self.bounds.height-10))
         _image=PicView(frame: CGRectMake(10, 8, 75, 75))
+        _image?._isThumb = true
         _image?._scaleType = PicView._ScaleType_Full
         //_image!._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
 //        _image!._imgView?.layer.cornerRadius=5

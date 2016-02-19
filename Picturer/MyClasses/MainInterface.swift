@@ -48,9 +48,10 @@ class MainInterface: AnyObject {
     static let _URL_Signup:String = "user/register/"//---注册
     static let _URL_Login:String = "user/login/"//---登录
     static let _URL_ForcusUser:String = "focus/to/"//---关注用户
-    static let _URL_FriendsList:String = "focus/to/"//---好友列表
-    static let _URL_FocusOnMeList:String = "focus/followers/"//---关注我的好友列表
+    static let _URL_FriendsList:String = "follow/follow/"//---我的好友列表
+    static let _URL_FocusOnMeList:String = "follow/followers/"//---关注我的用户列表
     static let _URL_MyFocusList:String = "follow/following/"//---我关注的用户列表
+    
     static let _URL_FriendsTimeline:String = "timeline/follow/"//---好友内容树（互相关注，朋友）
     static let _URL_MyFocusTimeline:String = "timeline/followers/"//---我关注的内容树（妙人）
     
@@ -70,6 +71,7 @@ class MainInterface: AnyObject {
     static let _URL_User_Avatar:String = "user/avatar/"//---更新用户头像
     static let _URL_Pic_like:String = "like/picture/"//---图片点赞
     static let _URL_Album_like:String = "like/album/"//-----相册点赞
+    
     
     
     //-----判断是否登录
@@ -169,6 +171,15 @@ class MainInterface: AnyObject {
     //-----我关注的用户的时间树
     static func _getMyFocusTimeLine(__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_MyFocusTimeline) { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
+    
+    //---获取我的好友列表
+    static func _getFriendsList(__uid:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_FriendsList+"\(__uid)") { (__dict) -> Void in
             print(__dict)
             __block(__dict)
         }
@@ -370,11 +381,15 @@ class MainInterface: AnyObject {
     }
     static func _userAvatar(__userInfo:NSDictionary)->NSDictionary{
         var _dict:NSDictionary
-        
+        _dict = NSDictionary(objects: ["icon_1","file"], forKeys: ["url","type"])
         if let _avatar = __userInfo.objectForKey("avatar") as? String{
-            _dict = NSDictionary(objects: [ MainInterface._imageUrl(_avatar),"file"], forKeys: ["url","type"])
+            if _avatar == ""{
+                
+            }else{
+                _dict = NSDictionary(objects: [ MainInterface._imageUrl(_avatar),"file"], forKeys: ["url","type"])
+            }
         }else{
-           _dict = NSDictionary(objects: ["","file"], forKeys: ["url","type"])
+            
         }
         
         return _dict

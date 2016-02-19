@@ -60,8 +60,9 @@ class CoreAction {
         //let timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
         let formatter = NSDateFormatter()
         //formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        //print("所有时区：",NSTimeZone.knownTimeZoneNames())
         formatter.dateFormat = "yyyy-M-dd'T'HH:mm:ss.SSSZZZ"
-        formatter.timeZone = NSTimeZone.localTimeZone()
+        formatter.timeZone = NSTimeZone(name: "Asia/Shanghai") //.localTimeZone()
         //let _date:NSDate = formatter.dateFromString(__timeStr)!
         let timestamp = formatter.stringFromDate(NSDate())
         //let timestamp = formatter.stringFromDate(_date)
@@ -73,8 +74,9 @@ class CoreAction {
         //let timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
         let formatter = NSDateFormatter()
         //formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        //print("所有时区：",NSTimeZone.knownTimeZoneNames())
         formatter.dateFormat = "yyyy-M-dd'T'HH:mm:ss.SSSZZZ"
-        formatter.timeZone = NSTimeZone.localTimeZone()
+        formatter.timeZone = NSTimeZone(name: "Asia/Shanghai") //.localTimeZone()
         //let _date:NSDate = formatter.dateFromString(__timeStr)!
         //let timestamp = formatter.stringFromDate(NSDate())
         let timestamp = formatter.stringFromDate(_date)
@@ -84,53 +86,58 @@ class CoreAction {
     //-----返回相距当前时间
     static func _dateDiff(dateStr:String) -> String {
         let f:NSDateFormatter = NSDateFormatter()
-        f.timeZone = NSTimeZone.localTimeZone()
+        
+        //print("所有时区：",NSTimeZone.knownTimeZoneNames())
+        f.timeZone = NSTimeZone(name: "Asia/Shanghai") //.localTimeZone()
         f.dateFormat = "yyyy-M-dd'T'HH:mm:ss.SSSZZZ"
-        let now = f.stringFromDate(NSDate())
+        let now = f.stringFromDate(NSDate().dateByAddingTimeInterval(-60*4-7))//减4分钟
         let startDate = f.dateFromString(dateStr)
         let endDate = f.dateFromString(now)
         let calendar: NSCalendar = NSCalendar.currentCalendar()
         //let calendarUnits =
+        
         let dateComponents = calendar.components([NSCalendarUnit.WeekOfMonth,NSCalendarUnit.Day,NSCalendarUnit.Hour,NSCalendarUnit.Minute,NSCalendarUnit.Second], fromDate: startDate!, toDate: endDate!, options: NSCalendarOptions.init(rawValue: 0))
+        
         let weeks = abs(dateComponents.weekOfMonth)
         let days = abs(dateComponents.day)
         let hours = abs(dateComponents.hour)
         let min = abs(dateComponents.minute)
-        let sec = abs(dateComponents.second)        
+        let sec = abs(dateComponents.second)
+        
         var timeAgo = ""
         if (sec > 0){
             if (sec > 1) {
-                timeAgo = "\(sec)秒"// Seconds Ago"
+                timeAgo = "\(sec)秒前"// Seconds Ago"
             } else {
-                timeAgo = "\(sec)秒"// Seconds Ago"
+                timeAgo = "\(sec)秒前"// Seconds Ago"
             }
         }
         if (min > 0){
             if (min > 1) {
-                timeAgo = "\(min)分钟"// Minutes Ago"
+                timeAgo = "\(min)分钟前"// Minutes Ago"
             } else {
-                timeAgo = "\(min)分钟"// Minute Ago"
+                timeAgo = "\(min)分钟前"// Minute Ago"
             }
         }
         if(hours > 0){
             if (hours > 1) {
-                timeAgo = "\(hours)小时"// Hours Ago"
+                timeAgo = "\(hours)小时前"// Hours Ago"
             } else {
-                timeAgo = "\(hours)小时"// Hour Ago"
+                timeAgo = "\(hours)小时前"// Hour Ago"
             }
         }
         if (days > 0) {
             if (days > 1) {
-                timeAgo = "\(days)天"// Days Ago"
+                timeAgo = "\(days)天前"// Days Ago"
             } else {
-                timeAgo = "\(days)天"// Day Ago"
+                timeAgo = "\(days)天前"// Day Ago"
             }
         }
         if(weeks > 0){
             if (weeks > 1) {
-                timeAgo = "\(weeks)周"// Weeks Ago"
+                timeAgo = "\(weeks)周前"// Weeks Ago"
             } else {
-                timeAgo = "\(weeks)周"// Week Ago"
+                timeAgo = "\(weeks)周前"// Week Ago"
             }
         }
         return timeAgo;
@@ -168,6 +175,18 @@ class CoreAction {
     static func _captureImage(__view:UIView)->UIImage{
         UIGraphicsBeginImageContextWithOptions(__view.frame.size,false, 0.0);
         __view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let img:UIImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return img;
+    }
+    //----限制图片大小
+    static func _fixImage(__image:UIImage,__toSize:CGSize)->UIImage{
+        //var _scale:CGFloat = 1
+        let _wScale:CGFloat = __toSize.width/__image.size.width
+        let _hScale:CGFloat = __toSize.height/__image.size.height
+        let _scale = min(1, min(_wScale, _hScale) )
+        UIGraphicsBeginImageContextWithOptions(__image.size,false,_scale);
+        __image.drawAtPoint(CGPoint(x: 0, y: 0))
         let img:UIImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         return img;

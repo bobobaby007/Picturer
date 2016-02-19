@@ -357,8 +357,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 let size:CGSize = _description!.sizeThatFits(CGSize(width: _defaultSize!.width-_gap*2, height: CGFloat.max))
                 _desH = size.height+_gap-3
             }
-            
-            
         }
         switch _type{
             case "myHome":

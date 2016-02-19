@@ -176,16 +176,30 @@ class Social_Main: AnyObject {
     
     //----获取我关注的用户列表
     
-    static func _getMyFocusList(__userId:String,__block:(NSDictionary)->Void){
+    static func _getMyFocusList(__userId:String,__block:(NSArray)->Void){
         MainInterface._getMyFocusList(__userId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 print("关注用户列表：",__dict)
-                //__block(__dict.objectForKey("userinfo") as! NSDictionary)
+                __block(__dict.objectForKey("list") as! NSArray)
+            }else{
+                print("关注用户列表失败：",__dict.objectForKey("reason"))
+            }
+        }
+    }
+    //-------
+    
+    //----获取好友列表
+    static func _getFriendsList(__userId:String,__block:(NSArray)->Void){
+        MainInterface._getFriendsList(__userId) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                print("好友列表：",__dict)
+                __block(__dict.objectForKey("list") as! NSArray)
+            }else{
+                print("关注好友列表失败：",__dict.objectForKey("reason"))
             }
             // print("_getUserProfileAtId",__dict)
         }
     }
-    //-------
     
     //------消息列表
     static func _getMessages(block:(NSArray)->Void){

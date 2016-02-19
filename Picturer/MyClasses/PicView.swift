@@ -9,17 +9,23 @@
 import Foundation
 import UIKit
 import AssetsLibrary
+import Haneke
 
 class PicView: UIScrollView,UIScrollViewDelegate{
     var _imgView:UIImageView?
     var _id:Int = 0
     static var _ScaleType_Fit:String = "Fit" //----显示全部
     static var _ScaleType_Full:String = "Full"//----满屏显示
+    
+    var _isThumb:Bool = false
+    
     var _scaleType:String = "Full"
     
-    var _myFrame:CGRect?
+    var _myUrl:String = ""
+    
+    //let cache = Shared.imageCache
+    
     override init(frame: CGRect) {
-        _myFrame = frame
         super.init(frame: frame)
         self.maximumZoomScale = 5
         self.minimumZoomScale = 1
@@ -30,80 +36,122 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         self.showsHorizontalScrollIndicator=false
         self.showsVerticalScrollIndicator=false
         _imgView=UIImageView(frame: self.bounds)
-        _imgView?.backgroundColor = UIColor(white: 0.8, alpha: 0.1)
         //_imgView?.layer.minificationFilter = kCAFilterTrilinear
         //_imgView?.alpha = 0.3
         _imgView?.contentMode=UIViewContentMode.ScaleAspectFit
+        
+        
+        
+        
         self.addSubview(_imgView!)
         self.delegate=self
         
         //self.clipsToBounds = false
     }
-    func _refreshView(){
-        //_imgView?.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
-    }
-    func _setPic(__pic:NSDictionary?,__block:(NSDictionary)->Void){
+    func _setPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
+        let _url:String = __pic.objectForKey("url") as! String
         
-        if __pic == nil{
-            print("图片错误: found nil")
+        if _myUrl == _url{
             return
+        }else{
+            _myUrl = _url
         }
         
-        
-        switch __pic!.objectForKey("type") as! String{
+        switch __pic.objectForKey("type") as! String{
         case "alasset":
             let _al:ALAssetsLibrary=ALAssetsLibrary()
             
-            _al.assetForURL(NSURL(string: __pic!.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
+            _al.assetForURL(NSURL(string: _myUrl)!, resultBlock: { (asset:ALAsset!) -> Void in
                 if asset != nil {
-                    self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
-                    
-                                        
+                    if self._isThumb{
+                        if asset.thumbnail() != nil{
+                            self._setImageByImage(UIImage(CGImage:asset.thumbnail().takeUnretainedValue()))
+                        }else{
+                            print("缩略图还没成功：",asset)
+                        }
+                    }else{
+                        self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
+                    }
                 }else{
                     self._setImage("entroLogo")//----用户删除时
                 }
-                
                 //self._setImageByImage(UIImage(CGImage: asset.thumbnail().takeUnretainedValue())!)
                 // self._setImageByImage(UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
                 __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
                 }, failureBlock: { (error:NSError!) -> Void in
                     __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
             })
+            
         case "file":
-            let _str = __pic!.objectForKey("url") as! String
-            let _range = _str.rangeOfString("http")
+            
+            let _range = _myUrl.rangeOfString("http")
             if _range?.count != nil{
-                _imgView?.image = nil
-                ImageLoader.sharedLoader.imageForUrl(__pic!.objectForKey("url") as! String, completionHandler: { (image, url) -> () in
+                
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                
+                
+                
+                
+//                let iconFormat = Format<UIImage>(name: "icons", diskCapacity: 10 * 1024 * 1024) { image in
+//                    return imageByRoundingCornersOfImage(image)
+//                }
+//                cache.addFormat(iconFormat)
+                
+                
+//                _imgView?.hnk_setImageFromURL(NSURL(string: _myUrl)!, placeholder: UIImage(named: "noPic.jpg"), format: nil, failure: { (err) -> () in
+//                    print("图片加载失败:",self._myUrl)
+//                    __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
+//                    return
+//                    }, success: { (image) -> () in
+//                        
+//                        if self._imgView != nil{
+//                            self._setImageByImage(image)
+//                            //self._imgView?.image=image
+//                            __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
+//                        }else{
+//                            print("out")
+//                        }
+//                })
+                
+                
+                
+               /*
+                _imgView?.image = UIImage(named: "noPic.jpg")
+                
+                ImageLoader.sharedLoader.imageForUrl(_myUrl, completionHandler: { (image, url) -> () in
                     // _setImage(image)
                     //println("")
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    
                     if image==nil{
                         //--加载失败
-                        print("图片加载失败:",__pic!.objectForKey("url"))
+                        print("图片加载失败:",self._myUrl)
                         __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
                         return
                     }
                     if self._imgView != nil{
                         self._setImageByImage(image!)
                         //self._imgView?.image=image
-                        
                         __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
                     }else{
                         print("out")
                     }
                     
                 })
+                
+                */
             }else{
-                self._setImage(__pic!.objectForKey("url") as! String)
+                self._setImage(_myUrl)
                 __block(NSDictionary())
             }
-            
+
         default:
             print("")
         }
     }
     
     func _loadImage(__picUrl:String){
+        
         _setPic(NSDictionary(objects: [__picUrl,"file"], forKeys: ["url","type"])) { (_dict) -> Void in
             
         }
@@ -153,38 +201,20 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         //self.addSubview(_imgView!)
     }
     func _setImageByImage(_img:UIImage){
-        if _imgView == nil{
-            return
-        }
         
         _imgView?.image=_img
         
+        _refreshView()
+    }
+    
+    
+    func _refreshView(){
         
-        switch _scaleType{
-        case PicView._ScaleType_Fit:
-            _imgView?.contentMode = UIViewContentMode.ScaleAspectFit
-            break
-        case PicView._ScaleType_Full:
-            
-            _imgView?.contentMode = UIViewContentMode.ScaleAspectFill
-            break
-        default:
-            
-            break
-        }
-
-        
-        
-        return
-        
-        
-        
-        
-        let _scaleW = _myFrame!.width/_img.size.width
-        let _scaleH = _myFrame!.height/_img.size.height
+        let _scaleW = self.bounds.width/self._imgView!.image!.size.width
+        let _scaleH = self.bounds.height/self._imgView!.image!.size.height
         
         var _scale = max(_scaleW,_scaleH)
-        switch _scaleType{
+        switch self._scaleType{
         case PicView._ScaleType_Fit:
             _scale =  min(_scaleW,_scaleH)
             break
@@ -196,31 +226,46 @@ class PicView: UIScrollView,UIScrollViewDelegate{
             break
         }
         
-        let _w:CGFloat = _img.size.width*_scale
-        let _h:CGFloat = _img.size.height*_scale
+        //print("刷新图片：",self._scaleType,_scale,_scaleW,_scaleH)
+        self.zoomScale = 1
+        self._imgView!.frame = CGRect(x: 0, y: 0, width:self._imgView!.image!.size.width*_scale, height: self._imgView!.image!.size.height*_scale)
         
-        _imgView?.image=_img
+        self.contentSize = self._imgView!.frame.size
         
-        _imgView?.frame = CGRect(x: 0, y: 0, width:_w, height:_h )
-        
-        //_imgView?.center = CGPoint(x: self.frame.width/2, y: self.frame.height/2)
-        self.setContentOffset(CGPoint(x: (_w-_myFrame!.width)/2, y: (_h-_myFrame!.height)/2), animated: false)
-        
-        
-        //print(self.frame)
-        
-        
-        
-        // print(_imgView?.frame,self.frame)
-        
-        //self.contentSize = _imgView!.frame.size
-        
-        
+        self.setContentOffset(CGPoint(x: (self._imgView!.frame.width-self.frame.width)/2, y: (self._imgView!.frame.height-self.frame.height)/2), animated: false)
+        //_imgView?.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
     }
+    
+    
+    //------
+    
+    func _move(__fromView:UIView,__fromRect:CGRect,__toView:UIView,__toRect:CGRect,__then:()->Void){
+        let _fromP:CGPoint = __toView.convertPoint(__fromRect.origin, fromView: __fromView)
+        self.frame.origin = _fromP
+        __toView.addSubview(self)
+        UIImageView.animateWithDuration(0.3, animations: { () -> Void in
+            self.frame = __toRect
+            self._refreshView()
+            }) { (Comparable) -> Void in
+                self._refreshView()
+                __then()
+        }
+    }
+    func _back(__fromView:UIView,__toView:UIView,__toRect:CGRect,__then:()->Void){
+        let _toP:CGPoint = __fromView.convertPoint(__toRect.origin, fromView: __toView)
+        UIImageView.animateWithDuration(0.3, animations: { () -> Void in
+            self.frame = CGRect(origin: _toP, size: __toRect.size)
+            self._refreshView()
+            }) { (Comparable) -> Void in
+                self.frame = __toRect
+                self._refreshView()
+                __toView.addSubview(self)
+                __then()
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
     
 }

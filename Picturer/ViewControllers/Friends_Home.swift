@@ -183,7 +183,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         Social_Main._getMessages { (array) -> Void in
             self._hasNewMessage = true
             self._messageArray = array
-            self._messageImg!._setPic((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary, __block: { (__dict) -> Void in
+            self._messageImg!._setPic(((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary)!, __block: { (__dict) -> Void in
             })
             
             self._refreshView()
@@ -198,22 +198,22 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func _getDatas(){
        
-       // _getAlbumList()
+        _getAlbumList()
         
     }
     
     //------获取内容树列表
     func _getAlbumList(){
-        Social_Main._getAlbumListAtUser(MainInterface._uid, __block: { (array) -> Void in
-            self._dataArray = array
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self._refreshDatas()
-                self._getMessage()
-            })
-            
-        })
-        
-        return
+//        Social_Main._getAlbumListAtUser(MainInterface._uid, __block: { (array) -> Void in
+//            self._dataArray = array
+//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                self._refreshDatas()
+//                self._getMessage()
+//            })
+//            
+//        })
+//        
+//        return
         
         switch _type{
             case "friends":
@@ -242,23 +242,18 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _heighArray=NSMutableArray()
         _commentsArray=NSMutableArray()
         _likeArray = NSMutableArray()
+        //---解析获取到的数据
         for var i:Int=0; i<_dataArray.count;++i{
-            let _album:NSDictionary = _dataArray.objectAtIndex(i) as! NSDictionary
+            let _dict:NSDictionary = _dataArray.objectAtIndex(i) as! NSDictionary
             
-            _allDatasArray?.addObject(NSDictionary(object: _album.objectForKey("_id") as! String, forKey: "_id"))
-            
-            Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { (array) -> Void in
-                
-            })
+            _allDatasArray?.addObject(NSDictionary(object: _dict.objectForKey("_id") as! String, forKey: "_id"))
             _heighArray?.addObject(_defaultH)
-            //-----获取评论列表
-            Social_Main._getCommentsOfAlubm(String(i), block: { (array) -> Void in
-                self._commentsArray?.addObject(array)
-            })
+            //-----评论列表
+            
+            self._commentsArray?.addObject(_dict.objectForKey("comments") as! NSArray)
+            
             //-----获取点赞列表
-            Social_Main._getLikesOfAlubm(String(i), block: { (array) -> Void in
-                self._likeArray?.addObject(array)
-            })
+            self._likeArray?.addObject(_dict.objectForKey("likes") as! NSArray)
         }
         _tableView?.reloadData()
         self._refreshView()
@@ -367,15 +362,21 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         //cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
         //cell?._setPic(<#T##__pic: NSDictionary##NSDictionary#>)
         
-        if let _cover:NSDictionary = _pics.objectAtIndex(0) as? NSDictionary{
-            
-            let _pic:NSDictionary = NSDictionary(objects: [MainInterface._imageUrl(_cover.objectForKey("thumbnail") as! String),"file"], forKeys: ["url","type"])
-            
-            
-            cell!._setPic(_pic)
-        }else{
-            //cell!._setDescription("")
+        
+        if _pics.count > 0{
+            if let _cover:NSDictionary = _pics.objectAtIndex(0) as? NSDictionary{
+                //print("封面：",_cover,"====")
+                
+                let _pic:NSDictionary = NSDictionary(objects: [MainInterface._imageUrl(_cover.objectForKey("thumbnail") as! String),"file"], forKeys: ["url","type"])
+                
+                cell!._setPic(_pic)
+            }else{
+               
+                //cell!._setDescription("")
+            }
+            print("图片错误：",_dict)
         }
+        
         cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("create_at") as! String))
         
         

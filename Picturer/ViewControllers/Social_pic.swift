@@ -174,16 +174,16 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _btn_like = UIButton(frame: CGRect(x: 14, y: 11, width: 22, height: 18))
         
         _btn_like.setImage(UIImage(named: "like_off"), forState: UIControlState.Normal)
-        _btn_like.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_like.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_comment = UIButton(frame: CGRect(x: 58, y: 10, width: 24, height: 20))
         _btn_comment.setImage(UIImage(named: "message_icon"), forState: UIControlState.Normal)
-        _btn_comment.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_comment.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         _btn_toShare = UIButton(frame: CGRect(x: 109, y: 10, width: 18, height: 17))
         _btn_toShare.setImage(UIImage(named: "to_share_icon"), forState: UIControlState.Normal)
-        _btn_toShare.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_toShare.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         _likeIcon = UIImageView(frame: CGRect(x: self.view.frame.width - 95, y: 15, width: 12, height: 10))
@@ -290,6 +290,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         }else{
             _dict = _picsArray?.objectAtIndex(_picsArray!.count-__index-1) as! NSDictionary
         }
+        
+        print("调出图片:",_dict)
         return _dict
     }
     //外部调用直接到达指定图片
@@ -317,7 +319,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         let __str = _str
         //var __str = "山东阿甘陪我难过的是谁的根是代购嗯孤收到两个色更难过的事都是个"
         _desText?.text = __str
-        print("设置描述")
+        //print("设置描述：",__str)
         if  __str == ""{
             _desView?.hidden = true
         }else{
@@ -486,12 +488,13 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
                 return
                 
             }
+        
         default:
             print(sender)
         }
         
     }
-    
+    //-----切换查看模式，瀑布流或滑动
     func _changeTo(__type:String){
         
         _showType = __type

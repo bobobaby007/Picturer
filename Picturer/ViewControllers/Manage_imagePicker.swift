@@ -252,6 +252,8 @@ class Manage_imagePicker:UIViewController, UICollectionViewDelegate, UICollectio
         let cell:AlbumListCell=tableView.dequeueReusableCellWithIdentifier("AlbumListCell", forIndexPath: indexPath) as! AlbumListCell
         let _group:DKAssetGroup=_groups[indexPath.row] as! DKAssetGroup
         
+        cell.setUp(CGSize(width: self.view.frame.width, height: 91))
+        
         cell._image?._setImageByImage(_group.thumbnail)
         
         

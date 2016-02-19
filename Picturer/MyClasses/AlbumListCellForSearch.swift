@@ -29,6 +29,7 @@ class AlbumListCellForSearch :  UITableViewCell{
         _mySize = __size
         // _imageView=UIImageView(frame: CGRectMake(10, 5, self.bounds.height-10, self.bounds.height-10))
         _image=PicView(frame: CGRectMake(10, 7.5, 60, 60))
+        _image?._isThumb = true
         _image?._scaleType = PicView._ScaleType_Full
         //_image!._imgView?.contentMode=UIViewContentMode.ScaleAspectFill
         //        _image!._imgView?.layer.cornerRadius=5

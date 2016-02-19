@@ -333,7 +333,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         Social_Main._getMessages { (array) -> Void in
             self._hasNewMessage = true            
             self._messageArray = array
-            self._messageImg!._setPic((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary, __block: { (__dict) -> Void in
+            self._messageImg!._setPic(((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary)!, __block: { (__dict) -> Void in
             })
             
             self._refreshView()
