@@ -47,6 +47,8 @@
 		7A49DC9B1B354DB4004FAF14 /* pic_unSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A49DC991B354DB4004FAF14 /* pic_unSelected.png */; };
 		7A508EF61B65E4D5000FCA87 /* CommentList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A508EF51B65E4D5000FCA87 /* CommentList.swift */; };
 		7A508EFB1B65F6F0000FCA87 /* CommentList_Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A508EFA1B65F6F0000FCA87 /* CommentList_Cell.swift */; };
+		7A5DFF351C76C3AB00FF254C /* Haneke.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A5DFF241C76C36100FF254C /* Haneke.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7A5DFF371C76C58C00FF254C /* PicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA9ACB21B5133C0006B41FE /* PicView.swift */; };
 		7A65D6F71C7379170077C5B5 /* Social_Setting_Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65D6F61C7379170077C5B5 /* Social_Setting_Home.swift */; };
 		7A65D6F91C7432B10077C5B5 /* Social_Setting_passw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65D6F81C7432B10077C5B5 /* Social_Setting_passw.swift */; };
 		7A65D6FB1C7449430077C5B5 /* Social_Setting_bg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65D6FA1C7449430077C5B5 /* Social_Setting_bg.swift */; };
@@ -80,6 +82,8 @@
 		7AA4E9AE1B76F2B700B641B5 /* Friends_Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4E9AD1B76F2B700B641B5 /* Friends_Home.swift */; };
 		7AA6A8CB1B4777C200D9E604 /* MainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA6A8CA1B4777C200D9E604 /* MainInterface.swift */; };
 		7AA6B3E71B6BDC5E00904344 /* changeToPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AA6B3E61B6BDC5E00904344 /* changeToPic.png */; };
+		7AA71CC61C788F2B0073C062 /* LikeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA71CC51C788F2B0073C062 /* LikeList.swift */; };
+		7AA71CCB1C7897880073C062 /* LikeList_Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA71CCA1C7897880073C062 /* LikeList_Cell.swift */; };
 		7AA72EC01C6C151300BECCC6 /* AddressList_List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA72EBF1C6C151300BECCC6 /* AddressList_List.swift */; };
 		7AA740A61B347D690064C9C9 /* Manage_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA740A51B347D690064C9C9 /* Manage_new.swift */; };
 		7AA7AED61B72730800FF7EBC /* UserListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7AED51B72730800FF7EBC /* UserListCell.swift */; };
@@ -93,7 +97,6 @@
 		7AA7AEF11B735B0F00FF7EBC /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AA7AEEF1B735B0F00FF7EBC /* back.png */; };
 		7AA7AEF31B735B0F00FF7EBC /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AA7AEF01B735B0F00FF7EBC /* edit.png */; };
 		7AA887C51B3F963B006BC338 /* icon_alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AA887C41B3F963B006BC338 /* icon_alert.png */; };
-		7AA9ACB31B5133C0006B41FE /* PicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA9ACB21B5133C0006B41FE /* PicView.swift */; };
 		7AAA54E61B60B41100B304EE /* Inputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAA54E51B60B41100B304EE /* Inputer.swift */; };
 		7AAD75E81B843459007C0CB1 /* MyAlerter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAD75E71B843459007C0CB1 /* MyAlerter.swift */; };
 		7AAD75EF1B845D6D007C0CB1 /* startScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD75EE1B845D6D007C0CB1 /* startScreen.png */; };
@@ -136,8 +139,6 @@
 		7AB3B1CA1C54F5B700F73C26 /* ContentEditer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3B1C91C54F5B700F73C26 /* ContentEditer.swift */; };
 		7AB56DFC1C6A4252008DAE77 /* AddressList_Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB56DFB1C6A4252008DAE77 /* AddressList_Home.swift */; };
 		7AB56DFE1C6A4416008DAE77 /* MyTransitioningObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB56DFD1C6A4416008DAE77 /* MyTransitioningObject.swift */; };
-		7AB5A8991C76A557007D05ED /* Haneke.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7AB5A88F1C76A461007D05ED /* Haneke.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7AB5A89B1C76AB43007D05ED /* Haneke.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB5A88F1C76A461007D05ED /* Haneke.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7AB9E3C81C55D12800D23CFA /* to_share_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3C71C55D12800D23CFA /* to_share_icon.png */; };
 		7AB9E3CA1C55D33900D23CFA /* commentIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3C91C55D33900D23CFA /* commentIcon.png */; };
 		7AB9E3CC1C55DF4F00D23CFA /* moreCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3CB1C55DF4F00D23CFA /* moreCircle.png */; };
@@ -192,37 +193,37 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7AB5A88E1C76A461007D05ED /* PBXContainerItemProxy */ = {
+		7A5DFF231C76C36100FF254C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 7AB5A8871C76A461007D05ED /* Haneke.xcodeproj */;
+			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A095C9561980418C00CD0F4C;
 			remoteInfo = "Haneke-iOS";
 		};
-		7AB5A8901C76A461007D05ED /* PBXContainerItemProxy */ = {
+		7A5DFF251C76C36100FF254C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 7AB5A8871C76A461007D05ED /* Haneke.xcodeproj */;
+			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 6393C5F71C3B229200EB1FD8;
 			remoteInfo = "Haneke-tvOS";
 		};
-		7AB5A8921C76A461007D05ED /* PBXContainerItemProxy */ = {
+		7A5DFF271C76C36100FF254C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 7AB5A8871C76A461007D05ED /* Haneke.xcodeproj */;
+			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A095C9611980418C00CD0F4C;
 			remoteInfo = HanekeTests;
 		};
-		7AB5A8941C76A461007D05ED /* PBXContainerItemProxy */ = {
+		7A5DFF291C76C36100FF254C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 7AB5A8871C76A461007D05ED /* Haneke.xcodeproj */;
+			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A0026E9A19C9BFBC004DE0C6;
 			remoteInfo = HanekeDemo;
 		};
-		7AB5A8961C76A4F4007D05ED /* PBXContainerItemProxy */ = {
+		7A5DFF2B1C76C37700FF254C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 7AB5A8871C76A461007D05ED /* Haneke.xcodeproj */;
+			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = A095C9551980418C00CD0F4C;
 			remoteInfo = "Haneke-iOS";
@@ -232,24 +233,23 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		7A2FCA701B5D596E00033925 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7AB5A89B1C76AB43007D05ED /* Haneke.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 		7AB5A8981C76A519007D05ED /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7AB5A8991C76A557007D05ED /* Haneke.framework in CopyFiles */,
+				7A5DFF351C76C3AB00FF254C /* Haneke.framework in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -297,6 +297,7 @@
 		7A49DC991B354DB4004FAF14 /* pic_unSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic_unSelected.png; sourceTree = "<group>"; };
 		7A508EF51B65E4D5000FCA87 /* CommentList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentList.swift; sourceTree = "<group>"; };
 		7A508EFA1B65F6F0000FCA87 /* CommentList_Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentList_Cell.swift; sourceTree = "<group>"; };
+		7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Haneke.xcodeproj; path = "../../../xcode_components/HanekeSwift-master/Haneke.xcodeproj"; sourceTree = "<group>"; };
 		7A65D6F61C7379170077C5B5 /* Social_Setting_Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Social_Setting_Home.swift; sourceTree = "<group>"; };
 		7A65D6F81C7432B10077C5B5 /* Social_Setting_passw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Social_Setting_passw.swift; sourceTree = "<group>"; };
 		7A65D6FA1C7449430077C5B5 /* Social_Setting_bg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Social_Setting_bg.swift; sourceTree = "<group>"; };
@@ -330,6 +331,8 @@
 		7AA4E9AD1B76F2B700B641B5 /* Friends_Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Friends_Home.swift; sourceTree = "<group>"; };
 		7AA6A8CA1B4777C200D9E604 /* MainInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainInterface.swift; sourceTree = "<group>"; };
 		7AA6B3E61B6BDC5E00904344 /* changeToPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = changeToPic.png; sourceTree = "<group>"; };
+		7AA71CC51C788F2B0073C062 /* LikeList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikeList.swift; sourceTree = "<group>"; };
+		7AA71CCA1C7897880073C062 /* LikeList_Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikeList_Cell.swift; sourceTree = "<group>"; };
 		7AA72EBF1C6C151300BECCC6 /* AddressList_List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressList_List.swift; sourceTree = "<group>"; };
 		7AA740A51B347D690064C9C9 /* Manage_new.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_new.swift; sourceTree = "<group>"; };
 		7AA7AED51B72730800FF7EBC /* UserListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserListCell.swift; sourceTree = "<group>"; };
@@ -386,7 +389,6 @@
 		7AB3B1C91C54F5B700F73C26 /* ContentEditer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentEditer.swift; sourceTree = "<group>"; };
 		7AB56DFB1C6A4252008DAE77 /* AddressList_Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressList_Home.swift; sourceTree = "<group>"; };
 		7AB56DFD1C6A4416008DAE77 /* MyTransitioningObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTransitioningObject.swift; sourceTree = "<group>"; };
-		7AB5A8871C76A461007D05ED /* Haneke.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Haneke.xcodeproj; path = "../../../xcode_components/HanekeSwift-master/Haneke.xcodeproj"; sourceTree = "<group>"; };
 		7AB9E3C71C55D12800D23CFA /* to_share_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = to_share_icon.png; sourceTree = "<group>"; };
 		7AB9E3C91C55D33900D23CFA /* commentIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = commentIcon.png; sourceTree = "<group>"; };
 		7AB9E3CB1C55DF4F00D23CFA /* moreCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moreCircle.png; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 				7AC783821B405B6A00A75214 /* MyHomepage.swift */,
 				7AA4E9AD1B76F2B700B641B5 /* Friends_Home.swift */,
 				7A508EF51B65E4D5000FCA87 /* CommentList.swift */,
+				7AA71CC51C788F2B0073C062 /* LikeList.swift */,
 				7AFE77231B6B9A940021E35E /* Social_pic.swift */,
 				7A2922B11B6A66AB0031B2F2 /* MessageList.swift */,
 				7AEC21271B3D9CE800D19D22 /* Social_home.swift */,
@@ -535,6 +538,7 @@
 				7AAA54E51B60B41100B304EE /* Inputer.swift */,
 				7A6F8A8F1B62C1C4007F949A /* CustomPresentationAnimationController.swift */,
 				7A508EFA1B65F6F0000FCA87 /* CommentList_Cell.swift */,
+				7AA71CCA1C7897880073C062 /* LikeList_Cell.swift */,
 				7A1D94F91B6A7B12009CCE10 /* MessageList_Cell.swift */,
 				7AA07E131B6C55F200220D88 /* SliderShower.swift */,
 				7AA7AED51B72730800FF7EBC /* UserListCell.swift */,
@@ -556,6 +560,17 @@
 				7AA188FF1C0BC665009A50FA /* CoreDataLite.swift */,
 			);
 			path = components;
+			sourceTree = "<group>";
+		};
+		7A5DFF1D1C76C36100FF254C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7A5DFF241C76C36100FF254C /* Haneke.framework */,
+				7A5DFF261C76C36100FF254C /* Haneke.framework */,
+				7A5DFF281C76C36100FF254C /* HanekeTests.xctest */,
+				7A5DFF2A1C76C36100FF254C /* HanekeDemo.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		7A9C86B51B324F060051D067 /* MyClasses */ = {
@@ -724,17 +739,6 @@
 			path = ad;
 			sourceTree = "<group>";
 		};
-		7AB5A8881C76A461007D05ED /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7AB5A88F1C76A461007D05ED /* Haneke.framework */,
-				7AB5A8911C76A461007D05ED /* Haneke.framework */,
-				7AB5A8931C76A461007D05ED /* HanekeTests.xctest */,
-				7AB5A8951C76A461007D05ED /* HanekeDemo.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		7AC247451B4A669000A5187B /* resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -746,7 +750,7 @@
 		7ADD4FFA1B2D402000E44F99 = {
 			isa = PBXGroup;
 			children = (
-				7AB5A8871C76A461007D05ED /* Haneke.xcodeproj */,
+				7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */,
 				7AE929681C0DF52E00EA4FBE /* Album+CoreDataProperties.swift */,
 				7AE929691C0DF52E00EA4FBE /* Album.swift */,
 				7AE9296A1C0DF52E00EA4FBE /* Image+CoreDataProperties.swift */,
@@ -846,7 +850,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7AB5A8971C76A4F4007D05ED /* PBXTargetDependency */,
+				7A5DFF2C1C76C37700FF254C /* PBXTargetDependency */,
 			);
 			name = Picturer;
 			productName = Picturers;
@@ -883,8 +887,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 7AB5A8881C76A461007D05ED /* Products */;
-					ProjectRef = 7AB5A8871C76A461007D05ED /* Haneke.xcodeproj */;
+					ProductGroup = 7A5DFF1D1C76C36100FF254C /* Products */;
+					ProjectRef = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -895,32 +899,32 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		7AB5A88F1C76A461007D05ED /* Haneke.framework */ = {
+		7A5DFF241C76C36100FF254C /* Haneke.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Haneke.framework;
-			remoteRef = 7AB5A88E1C76A461007D05ED /* PBXContainerItemProxy */;
+			remoteRef = 7A5DFF231C76C36100FF254C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7AB5A8911C76A461007D05ED /* Haneke.framework */ = {
+		7A5DFF261C76C36100FF254C /* Haneke.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Haneke.framework;
-			remoteRef = 7AB5A8901C76A461007D05ED /* PBXContainerItemProxy */;
+			remoteRef = 7A5DFF251C76C36100FF254C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7AB5A8931C76A461007D05ED /* HanekeTests.xctest */ = {
+		7A5DFF281C76C36100FF254C /* HanekeTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = HanekeTests.xctest;
-			remoteRef = 7AB5A8921C76A461007D05ED /* PBXContainerItemProxy */;
+			remoteRef = 7A5DFF271C76C36100FF254C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		7AB5A8951C76A461007D05ED /* HanekeDemo.app */ = {
+		7A5DFF2A1C76C36100FF254C /* HanekeDemo.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
 			path = HanekeDemo.app;
-			remoteRef = 7AB5A8941C76A461007D05ED /* PBXContainerItemProxy */;
+			remoteRef = 7A5DFF291C76C36100FF254C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1061,7 +1065,9 @@
 				7A39E9B41BECB37A007C0381 /* PicsShowCellOfCamera.swift in Sources */,
 				7A49DC971B3544A7004FAF14 /* Manage_imagePicker.swift in Sources */,
 				7AB9E3D01C561AF100D23CFA /* ImageInputer.swift in Sources */,
+				7AA71CCB1C7897880073C062 /* LikeList_Cell.swift in Sources */,
 				7A6F8A8C1B62AF14007F949A /* Discover_reference.swift in Sources */,
+				7AA71CC61C788F2B0073C062 /* LikeList.swift in Sources */,
 				7A2925781BF9C24400A71EB4 /* ImportImageFromWebController.swift in Sources */,
 				7A65D6F71C7379170077C5B5 /* Social_Setting_Home.swift in Sources */,
 				7AFE77241B6B9A940021E35E /* Social_pic.swift in Sources */,
@@ -1074,6 +1080,7 @@
 				7AE9295B1C0C114800EA4FBE /* Picturer.xcdatamodeld in Sources */,
 				7AE185141BFF3B8300C4D6CF /* SearchPage.swift in Sources */,
 				7ADE1CBE1C3EBF85002B7A90 /* Config.swift in Sources */,
+				7A5DFF371C76C58C00FF254C /* PicView.swift in Sources */,
 				7AAA54E61B60B41100B304EE /* Inputer.swift in Sources */,
 				7A2922B21B6A66AB0031B2F2 /* MessageList.swift in Sources */,
 				7A023B2B1C4A98DB0047FC4E /* MySettings.swift in Sources */,
@@ -1095,7 +1102,6 @@
 				7ADEE5101C24F7C40040AB29 /* AlbumListCellForSearch.swift in Sources */,
 				7A65D6FD1C7449CA0077C5B5 /* Social_Setting_about.swift in Sources */,
 				7A65D6FB1C7449430077C5B5 /* Social_Setting_bg.swift in Sources */,
-				7AA9ACB31B5133C0006B41FE /* PicView.swift in Sources */,
 				7ADE72D51C07D77600BB6DBB /* SyncAction.swift in Sources */,
 				7AA0E1B01B46779E0070538F /* CoreAction.swift in Sources */,
 				7A65D6FF1C7450ED0077C5B5 /* Social_Setting_push.swift in Sources */,
@@ -1117,10 +1123,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7AB5A8971C76A4F4007D05ED /* PBXTargetDependency */ = {
+		7A5DFF2C1C76C37700FF254C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Haneke-iOS";
-			targetProxy = 7AB5A8961C76A4F4007D05ED /* PBXContainerItemProxy */;
+			targetProxy = 7A5DFF2B1C76C37700FF254C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1242,6 +1248,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Picturer/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -1267,6 +1277,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = "$(SRCROOT)/Picturer/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;

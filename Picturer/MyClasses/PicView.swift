@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import AssetsLibrary
-import Haneke
+//import Haneke
 
 class PicView: UIScrollView,UIScrollViewDelegate{
     var _imgView:UIImageView?
@@ -115,7 +115,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                 
                 
                 
-               /*
+               
                 _imgView?.image = UIImage(named: "noPic.jpg")
                 
                 ImageLoader.sharedLoader.imageForUrl(_myUrl, completionHandler: { (image, url) -> () in
@@ -139,7 +139,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                     
                 })
                 
-                */
+                
             }else{
                 self._setImage(_myUrl)
                 __block(NSDictionary())
@@ -201,10 +201,10 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         //self.addSubview(_imgView!)
     }
     func _setImageByImage(_img:UIImage){
-        
-        _imgView?.image=_img
-        
-        _refreshView()
+        do{
+             self._imgView?.image=_img
+             self._refreshView()
+        }
     }
     
     

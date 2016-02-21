@@ -398,8 +398,9 @@ class Social_Main: AnyObject {
     
     
     //－－－－提取妙人更新图册列表
-    static func _getMyFocusTimeLine(__block:(NSArray)->Void){
-        MainInterface._getMyFocusTimeLine { (__dict) -> Void in
+    static func _getMyFocusTimeLine(__fromId:String,__block:(NSArray)->Void){
+       
+        MainInterface._getMyFocusTimeLine(__fromId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 print("关注用户更新：",__dict)
                 __block(__dict.objectForKey("list") as! NSArray)
@@ -408,7 +409,19 @@ class Social_Main: AnyObject {
             }
         }
     }
-    //－－－－提取妙人更新图册列表
+    //－－－－提取朋友更新图册列表
+    static func _getMyFriendsTimeLine(__fromId:String,__block:(NSArray)->Void){
+       
+        MainInterface._getMyFriendsTimeLine(__fromId) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                print("关注用户更新：",__dict)
+                __block(__dict.objectForKey("list") as! NSArray)
+            }else{
+                print("关注用户更新失败：",__dict)
+            }
+        }
+    }
+    //－－－－提取妙人更新图册列表---取消
     static func _getLikesNewsList(block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
         let _n:Int = 10

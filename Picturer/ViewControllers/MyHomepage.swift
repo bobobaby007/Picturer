@@ -645,7 +645,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             })
         })
         
-       
         
     }
     func _viewPicsAtIndex(__array: NSArray, __index: Int) {
@@ -656,9 +655,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         //println(__dict)
         _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(__indexId) as? NSArray)!)
         self.navigationController?.pushViewController(_controller, animated: true)
-    }
-    func _moreLike(__indexId: Int) {
-        print(__indexId)
     }
     func _viewUser(__userId: String) {
         //println(__userId)
@@ -714,6 +710,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             case "moreAction":
                 _currentEditeIndex = __dict.objectForKey("indexId") as? Int
                 _openMoreAction()
+            case "moreLike":
+                let _controller:LikeList = LikeList()
+                //println(__dict)
+                _controller._dataArray = NSMutableArray(array: (_likeArray!.objectAtIndex(__dict.objectForKey("indexId") as! Int) as? NSArray)!)
+                self.navigationController?.pushViewController(_controller, animated: true)
         default:
             break
         }

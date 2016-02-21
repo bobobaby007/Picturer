@@ -169,13 +169,20 @@ class MainInterface: AnyObject {
     
     
     //-----我关注的用户的时间树
-    static func _getMyFocusTimeLine(__block:(NSDictionary)->Void){
-        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_MyFocusTimeline) { (__dict) -> Void in
+    static func _getMyFocusTimeLine(__fromId:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)&id="+"\(__fromId)&size=20", __url: _basicDoman+_version+"/"+_URL_MyFocusTimeline) { (__dict) -> Void in
             print(__dict)
             __block(__dict)
         }
     }
     
+    //-----我的好友的内容树
+    static func _getMyFriendsTimeLine(__fromId:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)&id="+"\(__fromId)&size=20", __url: _basicDoman+_version+"/"+_URL_FriendsTimeline) { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
     
     //---获取我的好友列表
     static func _getFriendsList(__uid:String, __block:(NSDictionary)->Void){
@@ -185,12 +192,31 @@ class MainInterface: AnyObject {
         }
     }
     
+    //----相册点赞
+    static func _likeAlbum(__id:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_like+"\(__id)") { (__dict) -> Void in
+            __block(__dict)
+        }
+    }
+    //----图片点赞
+    static func _likePic(__id:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Pic_like+"\(__id)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
+    
     static func _getUserInfo(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_User_Info+"\(__userId)") { (__dict) -> Void in
             print(__dict)
             __block(__dict)
         }
     }
+    
+    
+    
+    
     
     //-----获取短信码
     static func _getSmscode(){

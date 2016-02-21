@@ -80,7 +80,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     var _alerter:MyAlerter?
     var _currentEditeIndex:Int?
     
-    
+    var _lastId:String = ""
     
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
@@ -217,25 +217,48 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         switch _type{
             case "friends":
+                Social_Main._getMyFriendsTimeLine(""){ (array) -> Void in
+                    self._dataArray = self._formatData(array)
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self._refreshDatas()
+                        self._getMessage()
+                    })
+                }
             break
         case "likes":
-            Social_Main._getMyFocusTimeLine({ (array) -> Void in
-                self._dataArray = array
+            Social_Main._getMyFocusTimeLine(""){ (array) -> Void in
+                self._dataArray = self._formatData(array)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self._refreshDatas()
                     self._getMessage()
                 })
-                
-            })
+            }
             break
         default:
             break
         }
     }
     
+    func _formatData(__array:NSArray)->NSArray{
+        let _array:NSMutableArray = []
+        for var i:Int=0; i<__array.count;++i{
+            if let _dict = __array.objectAtIndex(i) as? NSDictionary{
+                if let _type = _dict.objectForKey("type") as? String{
+                    if _type == "Pics"{//-----过滤出只看多图的 Album 不显示
+                        _array.addObject(__array.objectAtIndex(i))
+                    }
+                }
+                
+            }
+        }
+        return _array
+    }
     
     //----更新数据
     func _refreshDatas(){
+        //---
+        print("内容树：",_dataArray)
+        
         //-----初始化数据
         _allDatasArray = NSMutableArray()
         
@@ -246,6 +269,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         for var i:Int=0; i<_dataArray.count;++i{
             let _dict:NSDictionary = _dataArray.objectAtIndex(i) as! NSDictionary
             
+            
             _allDatasArray?.addObject(NSDictionary(object: _dict.objectForKey("_id") as! String, forKey: "_id"))
             _heighArray?.addObject(_defaultH)
             //-----评论列表
@@ -255,6 +279,8 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             //-----获取点赞列表
             self._likeArray?.addObject(_dict.objectForKey("likes") as! NSArray)
         }
+        
+        
         _tableView?.reloadData()
         self._refreshView()
     }
@@ -282,7 +308,6 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     //----------------刷新布局
     func _refreshView(){
-        
         if _hasNewMessage{
             _messageImg?.hidden=false
         }else{
@@ -293,11 +318,11 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
         UIView.commitAnimations()
     }
+    
     //----table 代理
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
     }
-    
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         // println(scrollView.contentOffset)
@@ -329,16 +354,23 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         let _pics:NSArray = _dict.objectForKey("ids") as! NSArray
         
         
+        
+        
         print("pics:sssdf",_pics)
         
         
         let _comments:NSArray = _dict.objectForKey("comments") as! NSArray
-        let likes:NSArray = _dict.objectForKey("likes") as! NSArray
+        let likes:NSArray = self._likeArray?.objectAtIndex(indexPath.row) as! NSArray //_dict.objectForKey("likes") as! NSArray
         //print(_dict)
         
         
         
         var cell:PicAlbumMessageItem?
+        
+        
+        
+        
+        
         //cell = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
         cell = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as? PicAlbumMessageItem
         cell?._type = "status"
@@ -350,10 +382,9 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell!.layoutMargins = UIEdgeInsetsZero
         
         //cell!.tag = 100+indexPath.row
-        //let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
-        //cell!._setComments(_array, __allNum: _array.count)
-        //let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
-        //cell!._setLikes(_likeA,__allNum: _likeA.count)
+        
+        cell!._setComments(_comments, __allNum: _comments.count)
+        cell!._setLikes(likes,__allNum: likes.count)
         cell!._userId = _user.objectForKey("_id") as? String
         cell!._setUserImge(MainInterface._userAvatar(_user))
         cell!._setUserName(_user.objectForKey("nickname") as! String)
@@ -362,19 +393,25 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         //cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
         //cell?._setPic(<#T##__pic: NSDictionary##NSDictionary#>)
         
-        
         if _pics.count > 0{
             if let _cover:NSDictionary = _pics.objectAtIndex(0) as? NSDictionary{
-                //print("封面：",_cover,"====")
+                print("封面：",_cover,"====")
                 
                 let _pic:NSDictionary = NSDictionary(objects: [MainInterface._imageUrl(_cover.objectForKey("thumbnail") as! String),"file"], forKeys: ["url","type"])
                 
                 cell!._setPic(_pic)
             }else{
-               
+               print("图片错误：",_dict)
                 //cell!._setDescription("")
             }
-            print("图片错误：",_dict)
+            
+        }
+        
+        
+        if let _album = _dict.objectForKey("allbum") as? NSDictionary{
+            cell?._setStatusString(_pics.count, __albumName: _album.objectForKey("title") as! String, __albumId: _album.objectForKey("_id") as! String)
+        }else{
+            cell?._setStatusString(_pics.count, __albumName: "相册", __albumId: "")
         }
         
         cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("create_at") as! String))
@@ -431,36 +468,19 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(__indexId) as? NSArray)!)
         self.navigationController?.pushViewController(_controller, animated: true)
     }
-    func _moreLike(__indexId: Int) {
-        print(__indexId)
-    }
     func _viewUser(__userId: String) {
         //println(__userId)
         let _contr:MyHomepage=MyHomepage()
-        
-        
-        //_contr._userId = __userId
-        
-        _contr._userId = "5695f072109391cc5fcb553d"
-        
+        _contr._userId = __userId
         self.navigationController?.pushViewController(_contr, animated: true)
     }
     func _buttonAction(__action: String, __dict: NSDictionary) {
+        
         switch __action{
         case  "like":
-            if _hasUserInLikesAtIndex(__dict.objectForKey("indexId") as! Int, __userId: Social_Main._currentUser.objectForKey("userId") as! String){
-                return
+            do{
+              _addLikeAtIndex(__dict.objectForKey("indexId") as! Int)
             }
-            let _arr:NSMutableArray = NSMutableArray(array: self._likeArray!)
-            let _dict:NSMutableArray = NSMutableArray(array:_arr.objectAtIndex(__dict.objectForKey("indexId") as! Int) as! NSArray)
-            let _user:NSDictionary = Social_Main._currentUser as NSDictionary
-            _dict.addObject(NSDictionary(objects: [_user.objectForKey("userName") as! String,_user.objectForKey("userId") as! String], forKeys: ["userName","userId"]))
-            _arr[__dict.objectForKey("indexId") as! Int] = _dict
-            self._likeArray = _arr
-            Social_Main._postLike(NSDictionary())
-            
-            _tableView?.reloadData() //--------使用在线接口时全部请求信息后侦听里面再重新加载
-            
             break
         case "comment":
             let _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
@@ -493,11 +513,47 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         case "moreAction":
             _currentEditeIndex = __dict.objectForKey("indexId") as? Int
             _openMoreAction()
+        case "moreLike":
+            let _controller:LikeList = LikeList()
+            //println(__dict)
+            _controller._dataArray = NSMutableArray(array: (_likeArray!.objectAtIndex(__dict.objectForKey("indexId") as! Int) as? NSArray)!)
+            self.navigationController?.pushViewController(_controller, animated: true)
         default:
             break
         }
         
     }
+    
+    //----添加点赞
+    
+    func _addLikeAtIndex(__index:Int){
+        if _hasUserInLikesAtIndex(__index, __userId: Social_Main._currentUser.objectForKey("userId") as! String){
+            return
+        }
+        let _arr:NSMutableArray = NSMutableArray(array: self._likeArray!)
+        let _dict:NSMutableArray = NSMutableArray(array:_arr.objectAtIndex(__index) as! NSArray)
+        let _user:NSDictionary = Social_Main._currentUser as NSDictionary
+        _dict.addObject(NSDictionary(objects: [_user.objectForKey("userName") as! String,_user.objectForKey("userId") as! String], forKeys: ["userName","userId"]))
+        _arr[__index] = _dict
+        self._likeArray = _arr
+        
+        
+        do{
+            let _dict:NSDictionary = _dataArray.objectAtIndex(__index) as! NSDictionary
+            let _pics:NSArray = _dict.objectForKey("ids") as! NSArray
+            MainInterface._likeAlbum((_pics.objectAtIndex(0) as! NSDictionary).objectForKey("album") as! String, __block: { (__dict) -> Void in
+                print("成功：",__dict)
+            })
+            
+        }
+        
+       //
+        
+       // Social_Main._postLike(NSDictionary())
+        
+        _tableView?.reloadData() //--------使用在线接口时全部请求信息后侦听里面再重新加载
+    }
+    
     //----打开更多的弹出框
     
     func _openMoreAction(){

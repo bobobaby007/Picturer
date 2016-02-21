@@ -11,11 +11,10 @@ import UIKit
 
 protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
     func _resized(__indexId:Int,__height:CGFloat)
-    func _moreComment(__indexId:Int)
+    func _moreComment(__indexId:Int)//----查看更多评论
     func _viewUser(__userId:String)
     func _viewAlbum(__albumIndex:Int)
     func _viewPicsAtIndex(__array:NSArray,__index:Int)
-    func _moreLike(__indexId:Int)
     func _buttonAction(__action:String,__dict:NSDictionary)
 }
 
@@ -57,6 +56,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     var _likeIcon:UIImageView?
     var _likeNumLable:UILabel?
+    var _btn_moreLike:UIButton?
     
     var _btn_moreAction:UIButton?
     
@@ -178,13 +178,17 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _likeIcon?.image = UIImage(named: "like_sign.png")
         
         
+        _btn_moreLike = UIButton(frame: CGRect(x: _defaultSize!.width - 13 - Config._gap, y: -10, width: 50, height: 30))
+        _btn_moreLike?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
         _toolsOpenButton = UIButton(frame: CGRect(x: _defaultSize!.width-27.5-_gap, y: _gap, width: 27.5, height: 15))
         _toolsOpenButton?.setImage(UIImage(named: "toolsBtn.png"), forState: UIControlState.Normal)
         _toolsOpenButton?.addTarget(self, action: Selector("buttonAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         //----工具条
         _toolsGap = (_defaultSize!.width-80)/4
-        _toolsButtonPanel = UIView()
+        _toolsButtonPanel = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 20))
         
         switch _type{
             case "myHome":
@@ -200,6 +204,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _toolsPanel?.backgroundColor = UIColor.clearColor()
         _toolsPanel?.addSubview(_likeIcon!)
         _toolsPanel?.addSubview(_likeNumLable!)
+        _toolsPanel?.addSubview(_btn_moreLike!)
         _toolsPanel?.addSubview(_toolsButtonPanel!)
         
         
@@ -337,7 +342,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         
         addSubview(_statusText!)
-        _setStatusString(3, __albumName: "时光的舒服的沙发电视柜第三个第三个第四个大帅哥的是非得失个大", __albumId: "3465rtdhfhdfg")
+       // _setStatusString(3, __albumName: "时光的舒服的沙发电视柜第三个第三个第四个大帅哥的是非得失个大", __albumId: "3465rtdhfhdfg")
     }
     
     
@@ -502,7 +507,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             //println("hahahah")
             _delegate?._moreComment(_indexId)
         case "moreLike":
-            _delegate?._moreLike(_indexId)
+            break
+            //_delegate?._moreLike(_indexId)
         case "album":
             //_delegate?._moreLike(_indexId)
             break
@@ -520,7 +526,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         switch __tap.view!{
         case _userImg!:
             _delegate?._viewUser(_userId!)
-            
             return
         case _picV!:
             _delegate?._viewAlbum(_indexId)
@@ -534,34 +539,27 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         //print("out")
         self.superview?.removeGestureRecognizer(_tapC!)
     }
-    
     //-------点赞人
     func _setLikes(__likes:NSArray,__allNum:Int){
         if __likes.count<1{
             _likeIcon?.hidden = true
+            _btn_moreLike?.hidden = true
             return
         }else{
             _likeIcon?.hidden=false
+            _btn_moreLike?.hidden = false
         }
-        
-        _likeNumLable?.text = String(__likes.count+23)
+        _likeNumLable?.text = String(__likes.count)
         let size:CGSize =  _likeNumLable!.sizeThatFits(CGSize(width: CGFloat.max, height: 17))
-        
         _likeNumLable?.frame = CGRect(x:  _defaultSize!.width - Config._gap - size.width, y: 0, width: size.width, height: 17)
-        
-        
-        
         _likeIcon!.frame.origin.x = _likeNumLable!.frame.origin.x - 13 - 5
-        
-        
-        
-        
+        _btn_moreLike?.frame = CGRect(x: _likeIcon!.frame.origin.x, y: _likeIcon!.frame.origin.y-5, width: _likeIcon!.frame.width+5+size.width, height: 17+10)
     }
     
     //-----－－－－－－－－－－－按钮侦听
-    
-    
     func buttonAction(__button:UIButton){
+        
+        
         switch __button{
         case _btn_like:
             _delegate?._buttonAction("like", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
@@ -571,9 +569,12 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
 //            _delegate?._buttonAction("share", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
         case _btn_collect:
             _delegate?._buttonAction("collect", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
-       
         case _btn_moreAction!:
             _delegate?._buttonAction("moreAction", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
+            break
+        case _btn_moreLike!:
+            print("sssss")
+            _delegate?._buttonAction("moreLike", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
             break
         default:
             print("")

@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6D88DBCC11FDE8CF9DD0604470D3493C1A47452E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "6D88DBCC11FDE8CF9DD0604470D3493C1A47452E" : 0,
+    "F26508F60EB715F8B44BA3DB809332C51BED3907" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "58A95DFA-14AC-4F8F-99B4-CA240D466060",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "6D88DBCC11FDE8CF9DD0604470D3493C1A47452E" : "Picturer",
+    "F26508F60EB715F8B44BA3DB809332C51BED3907" : "PicturerPicturer"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Picturer",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Picturer.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/bobobaby007\/Picturer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6D88DBCC11FDE8CF9DD0604470D3493C1A47452E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/bobobaby007\/Picturers.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F26508F60EB715F8B44BA3DB809332C51BED3907"
+    }
+  ]
+}

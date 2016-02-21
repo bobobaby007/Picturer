@@ -130,6 +130,10 @@ class AddressList_List:UIViewController, UITableViewDelegate,UITableViewDataSour
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        if let _dict = _dataArray.objectAtIndex(indexPath.row) as? NSDictionary{
+            let _user:NSDictionary = _dict.objectForKey("follow") as! NSDictionary
+            _viewUser(_user.objectForKey("_id") as! String)
+        }
         
         //cell.selected = false
         
