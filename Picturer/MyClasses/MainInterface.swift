@@ -405,9 +405,11 @@ class MainInterface: AnyObject {
             return ""
         }
     }
+    
+    //---获取头像
     static func _userAvatar(__userInfo:NSDictionary)->NSDictionary{
         var _dict:NSDictionary
-        _dict = NSDictionary(objects: ["icon_1","file"], forKeys: ["url","type"])
+        _dict = NSDictionary(objects: ["nonAvatar","file"], forKeys: ["url","type"])
         if let _avatar = __userInfo.objectForKey("avatar") as? String{
             if _avatar == ""{
                 

@@ -30,7 +30,6 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
     var _tapG:UITapGestureRecognizer?
     var _likeIcon:UIImageView?
     var _collectIcon:UIImageView?
-    var _cellH:CGFloat?=0
     
     override func didMoveToSuperview() {
         _refreshView()
@@ -100,7 +99,7 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         _imageView!._setPic(__dict.objectForKey("userImg") as! NSDictionary, __block: { (_dict) -> Void in
             
         })
-        _titleT!.attributedText = linkString((__dict.objectForKey("from_userName") as! String) , withURLString: "user:" + (__dict.objectForKey("from_userId") as! String))
+        _titleT!.attributedText = MessageList_Cell.linkString((__dict.objectForKey("from_userName") as! String) , withURLString: "user:" + (__dict.objectForKey("from_userId") as! String))
         
         
         _titleT?.sizeToFit()
@@ -108,18 +107,17 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         _timeLable?.frame = CGRect(x:_titleT!.frame.origin.x+_titleT!.frame.width+10,y: _titleT!.frame.origin.y,width: 100,height: 30)
         _timeLable?.text = __dict.objectForKey("time") as? String
         
-        _cellH = 72
         
         switch __dict.objectForKey("type") as! String{
             case "comment":
-                _desT?.attributedText = commentString(__dict)
+                _desT?.attributedText = MessageList_Cell.commentString(__dict)
                 let _size:CGSize = _desT!.sizeThatFits(CGSize(width: _desT!.frame.width,height: CGFloat.max))
                 _desT!.frame = CGRect(x: _desT!.frame.origin.x, y: _desT!.frame.origin.y, width: _desT!.frame.width, height: _size.height)
                 _desT?.hidden=false
                 _likeIcon?.hidden=true
                 _collectIcon?.hidden=true
                 
-                _cellH = _size.height+42
+                
                 
                 break
             case "like":
@@ -145,7 +143,7 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         
     }
     
-    func commentString(_commentDict:NSDictionary) -> NSAttributedString {
+    static func commentString(_commentDict:NSDictionary) -> NSAttributedString {
         //let boldFont = UIFont.boldSystemFontOfSize(UIFont.systemFontSize())
         //var boldAttr = [NSFontAttributeName: boldFont]
         //let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),
@@ -180,7 +178,7 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         
         return astr
     }
-    func linkString(string:String, withURLString:String) -> NSAttributedString {
+    static func linkString(string:String, withURLString:String) -> NSAttributedString {
         let attrString = NSMutableAttributedString(string: string )
         // the entire string
         let range:NSRange = NSMakeRange(0, attrString.length)
@@ -230,11 +228,24 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         }
     }
     
-    func _Height()->CGFloat{
+    static func _getHeihtWidthComment(__dict:NSDictionary,_defaultWidth:CGFloat)->CGFloat{
+        var _h:CGFloat = 72
         
-       // let _size:CGSize = _desT!.sizeThatFits(CGSize(width: _desT!.frame.width,height: CGFloat.max))
-        //print(_size)
-        //return _size.height+50
-        return _cellH!
+        switch __dict.objectForKey("type") as! String{
+        case "comment":
+            let _desT=UITextView(frame: CGRectMake(60, 22, _defaultWidth-140, 0))
+            //_desT?.textColor=UIColor(white: 0.5, alpha: 1)
+            _desT.font=UIFont(name: "Helvetica", size: 12)
+            _desT.attributedText = commentString(__dict)
+            let _size:CGSize = _desT.sizeThatFits(CGSize(width: _desT.frame.width,height: CGFloat.max))
+            
+            _h = _size.height+42
+            
+            break
+        default:
+            break
+        }
+        
+        return _h
     }
 }

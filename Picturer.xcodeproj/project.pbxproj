@@ -12,6 +12,8 @@
 		7A0A15DA1B5E2D0B00A8C6F6 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */; };
 		7A0A15E11B5E998F00A8C6F6 /* noPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0A15E01B5E998F00A8C6F6 /* noPic.png */; };
 		7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */; };
+		7A12EB2C1C7D9A8B00C579BF /* nonAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A12EB2B1C7D9A8B00C579BF /* nonAvatar.png */; };
+		7A12EB311C7D9AFB00C579BF /* messageBtnIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A12EB301C7D9AFB00C579BF /* messageBtnIcon.png */; };
 		7A1987BF1C29863900458675 /* icon_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1987BE1C29863900458675 /* icon_close.png */; };
 		7A1D94FA1B6A7B12009CCE10 /* MessageList_Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1D94F91B6A7B12009CCE10 /* MessageList_Cell.swift */; };
 		7A1D94FF1B6B26E9009CCE10 /* collect.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A1D94FE1B6B26E9009CCE10 /* collect.png */; };
@@ -146,6 +148,8 @@
 		7AB9E3D01C561AF100D23CFA /* ImageInputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9E3CF1C561AF100D23CFA /* ImageInputer.swift */; };
 		7AB9E3D21C561B5100D23CFA /* carera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3D11C561B5100D23CFA /* carera_icon.png */; };
 		7AB9E3D41C561B6600D23CFA /* photo_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AB9E3D31C561B6600D23CFA /* photo_icon.png */; };
+		7ABBECD81C7C97220070076F /* NewsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABBECD71C7C97220070076F /* NewsListCell.swift */; };
+		7ABBECDD1C7C981C0070076F /* NewsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABBECDC1C7C981C0070076F /* NewsList.swift */; };
 		7AC247471B4A669F00A5187B /* AlbumList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7AC247461B4A669F00A5187B /* AlbumList.plist */; };
 		7AC4DFA01C21B7EA009A88BF /* SyncActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */; };
 		7AC55DAE1B3E97EE00FDC851 /* SocialHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */; };
@@ -259,6 +263,8 @@
 		7A0A15D61B5E2D0B00A8C6F6 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		7A0A15E01B5E998F00A8C6F6 /* noPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noPic.png; sourceTree = "<group>"; };
 		7A0C1DBE1B307AF900C52A5D /* Manage_home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_home.swift; sourceTree = "<group>"; };
+		7A12EB2B1C7D9A8B00C579BF /* nonAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nonAvatar.png; sourceTree = "<group>"; };
+		7A12EB301C7D9AFB00C579BF /* messageBtnIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = messageBtnIcon.png; sourceTree = "<group>"; };
 		7A1987BE1C29863900458675 /* icon_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_close.png; sourceTree = "<group>"; };
 		7A1D94F91B6A7B12009CCE10 /* MessageList_Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageList_Cell.swift; sourceTree = "<group>"; };
 		7A1D94FE1B6B26E9009CCE10 /* collect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = collect.png; sourceTree = "<group>"; };
@@ -396,6 +402,8 @@
 		7AB9E3CF1C561AF100D23CFA /* ImageInputer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageInputer.swift; sourceTree = "<group>"; };
 		7AB9E3D11C561B5100D23CFA /* carera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carera_icon.png; sourceTree = "<group>"; };
 		7AB9E3D31C561B6600D23CFA /* photo_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_icon.png; sourceTree = "<group>"; };
+		7ABBECD71C7C97220070076F /* NewsListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsListCell.swift; sourceTree = "<group>"; };
+		7ABBECDC1C7C981C0070076F /* NewsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsList.swift; sourceTree = "<group>"; };
 		7AC247461B4A669F00A5187B /* AlbumList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AlbumList.plist; sourceTree = "<group>"; };
 		7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncActionView.swift; path = ../MyClasses/SyncActionView.swift; sourceTree = "<group>"; };
 		7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialHomeCell.swift; sourceTree = "<group>"; };
@@ -511,6 +519,7 @@
 				7AA4E9AD1B76F2B700B641B5 /* Friends_Home.swift */,
 				7A508EF51B65E4D5000FCA87 /* CommentList.swift */,
 				7AA71CC51C788F2B0073C062 /* LikeList.swift */,
+				7ABBECDC1C7C981C0070076F /* NewsList.swift */,
 				7AFE77231B6B9A940021E35E /* Social_pic.swift */,
 				7A2922B11B6A66AB0031B2F2 /* MessageList.swift */,
 				7AEC21271B3D9CE800D19D22 /* Social_home.swift */,
@@ -542,6 +551,7 @@
 				7A1D94F91B6A7B12009CCE10 /* MessageList_Cell.swift */,
 				7AA07E131B6C55F200220D88 /* SliderShower.swift */,
 				7AA7AED51B72730800FF7EBC /* UserListCell.swift */,
+				7ABBECD71C7C97220070076F /* NewsListCell.swift */,
 				7A9CD0AA1B7EFE7300152C61 /* CollectItem.swift */,
 				7AAD75F21B846CAD007C0CB1 /* SearchResult_user_Cell.swift */,
 				7AB56DFD1C6A4416008DAE77 /* MyTransitioningObject.swift */,
@@ -606,7 +616,9 @@
 			children = (
 				7AB9E3D31C561B6600D23CFA /* photo_icon.png */,
 				7AB9E3D11C561B5100D23CFA /* carera_icon.png */,
+				7A12EB301C7D9AFB00C579BF /* messageBtnIcon.png */,
 				7AB9E3C91C55D33900D23CFA /* commentIcon.png */,
+				7A12EB2B1C7D9A8B00C579BF /* nonAvatar.png */,
 				7AF02A071C4328D30009B2BC /* collect_on.png */,
 				7AB9E3CB1C55DF4F00D23CFA /* moreCircle.png */,
 				7AF02A111C432A190009B2BC /* like_sign.png */,
@@ -937,6 +949,7 @@
 				7AA7AEF31B735B0F00FF7EBC /* edit.png in Resources */,
 				7AAEA3461B833A4300DB5F54 /* blurBg.jpg in Resources */,
 				7A21C44E1B5FF5E700AC99DB /* like.png in Resources */,
+				7A12EB311C7D9AFB00C579BF /* messageBtnIcon.png in Resources */,
 				7A8E3E041B4B9A7200243FA5 /* addIcon.png in Resources */,
 				7AB251801B7F46690029ED80 /* message.png in Resources */,
 				7AB251B31B7F4F5F0029ED80 /* ad_1.jpg in Resources */,
@@ -952,6 +965,7 @@
 				7AB251B61B7F4F5F0029ED80 /* ad_4.jpg in Resources */,
 				7A1D94FF1B6B26E9009CCE10 /* collect.png in Resources */,
 				7A96A0A31B6A4C7700184EFF /* moreAction_icon.png in Resources */,
+				7A12EB2C1C7D9A8B00C579BF /* nonAvatar.png in Resources */,
 				7AA7AEE71B73094F00FF7EBC /* search.png in Resources */,
 				7AB251A11B7F4B0F0029ED80 /* user_5.jpg in Resources */,
 				7AB9E3D21C561B5100D23CFA /* carera_icon.png in Resources */,
@@ -1057,6 +1071,7 @@
 				7A0C1DBF1B307AF900C52A5D /* Manage_home.swift in Sources */,
 				7AC55DB01B3E9C7D00FDC851 /* LayoutForSocailHome.swift in Sources */,
 				7AB56DFE1C6A4416008DAE77 /* MyTransitioningObject.swift in Sources */,
+				7ABBECDD1C7C981C0070076F /* NewsList.swift in Sources */,
 				7AC783831B405B6A00A75214 /* MyHomepage.swift in Sources */,
 				7A0A15DA1B5E2D0B00A8C6F6 /* ImageLoader.swift in Sources */,
 				7A6F8A871B62AC29007F949A /* Discover_home.swift in Sources */,
@@ -1094,6 +1109,7 @@
 				7A9C86CA1B3348700051D067 /* Manage_show.swift in Sources */,
 				7AC9B12D1B72437000D05787 /* SearchResult.swift in Sources */,
 				7AAD75E81B843459007C0CB1 /* MyAlerter.swift in Sources */,
+				7ABBECD81C7C97220070076F /* NewsListCell.swift in Sources */,
 				7AB3B1CA1C54F5B700F73C26 /* ContentEditer.swift in Sources */,
 				7ADE1CBC1C3E363E002B7A90 /* Social_Main.swift in Sources */,
 				7AEBE2CD1B54C76A00FC6E9D /* Manage_description.swift in Sources */,

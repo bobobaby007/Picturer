@@ -203,14 +203,18 @@ class Social_Main: AnyObject {
     
     //------消息列表
     static func _getMessages(block:(NSArray)->Void){
+        
+        
+        
+        
         let _array:NSMutableArray = NSMutableArray()
-        let _n:Int = 1
+        let _n:Int = 12
         for var i:Int = 0; i<_n;++i{
             let _comment:String = _testComments?.objectAtIndex(random()%31) as! String
             let _commentDict:NSMutableDictionary = NSMutableDictionary(objects: [_testUserNames?.objectAtIndex(random()%31) as! String,_testComments?.objectAtIndex(random()%31) as! String,"111111","123456",_comment,"下午1:00","comment","333333"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time","type","albumId"])
             
             if i==0||i==5||i==6{
-                _commentDict.setValue("好喜欢这个哈", forKey: "comment")
+                _commentDict.setValue("好喜欢这个哈加字加字加字加字加字加字加字加字加字加字加字加字加字加字加字加字加字加字加字", forKey: "comment")
                 _commentDict.setValue("", forKey: "to_userName")
                 _commentDict.setValue("", forKey: "to_userId")
             }

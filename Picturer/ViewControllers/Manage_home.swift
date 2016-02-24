@@ -387,10 +387,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath:NSIndexPath) -> UITableViewCell{
         
-        
-        
         let cell:AlbumListCell=_tableView.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
-        
         
         cell.setUp(CGSize(width: self.view.frame.width, height: 91))
         
@@ -439,8 +436,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         if MainAction._albumList.count<1{
             return []
         }
-        
-        
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "删除", handler: actionHander)
         let shareAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "分享", handler: actionHander)
        // var editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "编辑" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in

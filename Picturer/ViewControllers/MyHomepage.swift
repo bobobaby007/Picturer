@@ -275,7 +275,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _messageImg = PicView(frame: CGRect(x: self.view.frame.width - 25 - Config._gap, y: 30, width: 25, height: 25))
         _messageImg?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         _messageImg?.minimumZoomScale=1
-        _messageImg?.userInteractionEnabled=false
+        
         _messageImg?.maximumZoomScale=1
         _messageImg?._imgView?.layer.masksToBounds = true
         _messageImg?._imgView?.layer.cornerRadius = 12.5
@@ -333,14 +333,20 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         Social_Main._getMessages { (array) -> Void in
             self._hasNewMessage = true            
             self._messageArray = array
-            self._messageImg!._setPic(((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary)!, __block: { (__dict) -> Void in
-            })
+           
+            do{
+                
+              self._messageImg!._setPic(((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary)!, __block: { (__dict) -> Void in
+                })
+            }
+            
             
             self._refreshView()
         }
     }
     //----消息按钮侦听
     func messageTapHander(__sender:UITapGestureRecognizer){
+        print("点击")
         _hasNewMessage = false
         _refreshView()
         _openMessageList()
@@ -521,11 +527,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     //----------------刷新布局
     func _refreshView(){
-
         if _hasNewMessage{
-            _messageImg?.hidden=false
         }else{
-            _messageImg?.hidden=true
+            self._messageImg?._setImage("messageBtnIcon")
         }
         _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
         _tableView?.scrollEnabled = false
@@ -837,7 +841,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     //---打开消息列表
     func _openMessageList(){
-        
         let _controller:MessageList = MessageList()
         self.navigationController?.pushViewController(_controller, animated: true)
     }

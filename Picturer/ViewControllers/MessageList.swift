@@ -27,7 +27,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
     
     
     var _dataArray:NSMutableArray?=NSMutableArray()
-    
+    var _heightArray:NSMutableArray? = NSMutableArray()
     
     override func viewDidLoad() {
         setup()
@@ -45,23 +45,31 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=Config._color_black_bar
-        _btn_cancel=UIButton(frame:CGRect(x: 6, y: 30, width: 40, height: 22))
+        
+        
+        _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
-        _btn_cancel!.imageView!.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        _btn_deleteAll=UIButton(frame:CGRect(x: self.view.frame.width - 60, y: 30, width: 60, height: 22))
+        
+        _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
+        _title_label?.textColor=UIColor.whiteColor()
+        _title_label?.textAlignment=NSTextAlignment.Center
+        _title_label?.font = Config._font_topbarTitle
+        _title_label?.text="消息"
+        
+        _topBar?.addSubview(_title_label!)
+        
+        
+        _btn_deleteAll=UIButton(frame:CGRect(x: self.view.frame.width - 60, y: 20, width: 60, height: 22))
         _btn_deleteAll?.setTitle("清空", forState: UIControlState.Normal)
+        _btn_deleteAll?.titleLabel?.font = Config._font_topbarTitle
         _btn_deleteAll?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         _topBar?.addSubview(_btn_deleteAll!)
         
         
         
-        _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: _barH))
-        _title_label?.font = Config._font_topbarTitle
-        _title_label?.textColor=UIColor.whiteColor()
-        _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.text="消息列表"
+       
         
         _tableView=UITableView()
         _tableView?.delegate=self
@@ -101,15 +109,9 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         return 1
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+       
         
-        // var cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell", forIndexPath: indexPath) as! MessageList_Cell
-        
-        
-        let cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell") as! MessageList_Cell
-        cell.setUp(self.view.frame.width)
-        cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
-        
-        return cell._Height()
+        return _heightArray?.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! CGFloat
         
         
         //return CGFloat(((_dataArray!.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("comment") as! String).lengthOfBytesUsingEncoding(NSUnicodeStringEncoding))
@@ -139,11 +141,23 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
     
     func _getDatas(){
         Social_Main._getMessages { (array) -> Void in
-            self._dataArray = NSMutableArray(array: array)
-            self._tableView?.reloadData()
-        }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self._dealWidthDatas(array)
+            })
+            
+                   }
     }
-    
+    func _dealWidthDatas(__array:NSArray){
+        self._dataArray = NSMutableArray(array: __array)
+        self._heightArray = NSMutableArray()
+        for var i:Int = 0 ;i < __array.count; ++i{
+            _heightArray?.addObject(MessageList_Cell._getHeihtWidthComment(_dataArray!.objectAtIndex(i) as! NSDictionary,_defaultWidth: self.view.frame.width))
+        }
+        
+        self._tableView?.reloadData()
+
+    }
     func clickAction(sender:UIButton){
         switch sender{
         case _btn_cancel!:
