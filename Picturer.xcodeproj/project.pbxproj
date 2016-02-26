@@ -151,6 +151,8 @@
 		7ABBECD81C7C97220070076F /* NewsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABBECD71C7C97220070076F /* NewsListCell.swift */; };
 		7ABBECDD1C7C981C0070076F /* NewsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABBECDC1C7C981C0070076F /* NewsList.swift */; };
 		7AC247471B4A669F00A5187B /* AlbumList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7AC247461B4A669F00A5187B /* AlbumList.plist */; };
+		7AC257D61C7E9675000C81AD /* ReferenceAlbumItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC257D51C7E9675000C81AD /* ReferenceAlbumItem.swift */; };
+		7AC257D81C7EB842000C81AD /* changeToCollect_icon_yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AC257D71C7EB842000C81AD /* changeToCollect_icon_yellow.png */; };
 		7AC4DFA01C21B7EA009A88BF /* SyncActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */; };
 		7AC55DAE1B3E97EE00FDC851 /* SocialHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */; };
 		7AC55DB01B3E9C7D00FDC851 /* LayoutForSocailHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */; };
@@ -405,6 +407,8 @@
 		7ABBECD71C7C97220070076F /* NewsListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsListCell.swift; sourceTree = "<group>"; };
 		7ABBECDC1C7C981C0070076F /* NewsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsList.swift; sourceTree = "<group>"; };
 		7AC247461B4A669F00A5187B /* AlbumList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AlbumList.plist; sourceTree = "<group>"; };
+		7AC257D51C7E9675000C81AD /* ReferenceAlbumItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceAlbumItem.swift; sourceTree = "<group>"; };
+		7AC257D71C7EB842000C81AD /* changeToCollect_icon_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = changeToCollect_icon_yellow.png; sourceTree = "<group>"; };
 		7AC4DF9F1C21B7EA009A88BF /* SyncActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncActionView.swift; path = ../MyClasses/SyncActionView.swift; sourceTree = "<group>"; };
 		7AC55DAD1B3E97EE00FDC851 /* SocialHomeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialHomeCell.swift; sourceTree = "<group>"; };
 		7AC55DAF1B3E9C7D00FDC851 /* LayoutForSocailHome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutForSocailHome.swift; sourceTree = "<group>"; };
@@ -544,6 +548,7 @@
 			isa = PBXGroup;
 			children = (
 				7A45766C1B5CA11500DDE09A /* PicAlbumMessageItem.swift */,
+				7AC257D51C7E9675000C81AD /* ReferenceAlbumItem.swift */,
 				7AAA54E51B60B41100B304EE /* Inputer.swift */,
 				7A6F8A8F1B62C1C4007F949A /* CustomPresentationAnimationController.swift */,
 				7A508EFA1B65F6F0000FCA87 /* CommentList_Cell.swift */,
@@ -618,6 +623,7 @@
 				7AB9E3D11C561B5100D23CFA /* carera_icon.png */,
 				7A12EB301C7D9AFB00C579BF /* messageBtnIcon.png */,
 				7AB9E3C91C55D33900D23CFA /* commentIcon.png */,
+				7AC257D71C7EB842000C81AD /* changeToCollect_icon_yellow.png */,
 				7A12EB2B1C7D9A8B00C579BF /* nonAvatar.png */,
 				7AF02A071C4328D30009B2BC /* collect_on.png */,
 				7AB9E3CB1C55DF4F00D23CFA /* moreCircle.png */,
@@ -1024,6 +1030,7 @@
 				7A96A0A11B6A4C7700184EFF /* back_icon.png in Resources */,
 				7AA887C51B3F963B006BC338 /* icon_alert.png in Resources */,
 				7AF02A0D1C4328D30009B2BC /* collect_off.png in Resources */,
+				7AC257D81C7EB842000C81AD /* changeToCollect_icon_yellow.png in Resources */,
 				7AA7AEEA1B7315B700FF7EBC /* list_arrow.png in Resources */,
 				7AA26BA71B4D8C56006CDC61 /* icon_choose.png in Resources */,
 				7AA7AEF11B735B0F00FF7EBC /* back.png in Resources */,
@@ -1082,6 +1089,7 @@
 				7AB9E3D01C561AF100D23CFA /* ImageInputer.swift in Sources */,
 				7AA71CCB1C7897880073C062 /* LikeList_Cell.swift in Sources */,
 				7A6F8A8C1B62AF14007F949A /* Discover_reference.swift in Sources */,
+				7AC257D61C7E9675000C81AD /* ReferenceAlbumItem.swift in Sources */,
 				7AA71CC61C788F2B0073C062 /* LikeList.swift in Sources */,
 				7A2925781BF9C24400A71EB4 /* ImportImageFromWebController.swift in Sources */,
 				7A65D6F71C7379170077C5B5 /* Social_Setting_Home.swift in Sources */,

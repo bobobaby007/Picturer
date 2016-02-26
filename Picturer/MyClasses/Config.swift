@@ -82,7 +82,7 @@ class Config:AnyObject {
     static let _font_social_sign:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交页签名字体
     static let _font_social_likeNum:UIFont = UIFont(name: "PingFangSC-Regular", size: 13)!//社交点赞数
     
-    
+    static let _font_social_reference_albumTitle:UIFont = UIFont(name: "PingFangSC-Regular", size: 24)!//推荐相册标题
     
     
     

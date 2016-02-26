@@ -20,7 +20,7 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
     var _userId:String?
     var _defaultWidth:CGFloat?
     var _imageView:PicView?
-    var _titleT:UITextView?
+    var _titleT:UILabel?
     var _desT:UITextView?
     var _timeLable:UILabel?
     var _setuped:Bool=false
@@ -43,44 +43,51 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         }
         _defaultWidth=__width
         
-        _imageView=PicView(frame: CGRectMake(10, 5, 40, 40))
+        _imageView=PicView(frame: CGRectMake(10, 11.5, 32.5, 32.5))
         _imageView!._imgView!.contentMode=UIViewContentMode.ScaleAspectFill
-        _imageView!._imgView!.layer.cornerRadius=20
+        _imageView!._imgView!.layer.cornerRadius=32.5/2
         _imageView!._imgView!.layer.masksToBounds=true
         self.addSubview(_imageView!)
         
-        _titleT=UITextView(frame: CGRectMake(60, 0, _defaultWidth!-26, 25))
-        _titleT?.editable=false
-        _titleT?.scrollEnabled = false
+        _titleT=UILabel(frame: CGRectMake(53.5, 8, _defaultWidth!-26, 10))
+        _titleT?.font = Config._font_cell_subTitle
+        _titleT?.textColor = Config._color_social_blue
+        
         self.addSubview(_titleT!)
         
         
-        _desT=UITextView(frame: CGRectMake(60, 22, _defaultWidth!-140, 0))
-        //_desT?.textColor=UIColor(white: 0.5, alpha: 1)
-        _desT?.font=UIFont(name: "Helvetica", size: 12)
+        _desT=UITextView(frame: CGRectMake(53.5, 31, _defaultWidth!-140, 0))
+        _desT?.textColor=Config._color_social_gray
+        _desT?.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        _desT?.textContainer.lineFragmentPadding = 0
+        _desT?.font=Config._font_social_cell_name
         _desT?.selectable=false
         _desT?.editable=false
         _desT?.userInteractionEnabled = false
+        
+        
+        _desT?.linkTextAttributes = [NSForegroundColorAttributeName:Config._color_social_blue]
+        
         self.addSubview(_desT!)
         
-        _timeLable=UILabel(frame: CGRectMake(_defaultWidth!-80, self.bounds.height/2-10, 60, 30))
-        _timeLable?.textColor=UIColor(white: 0.5, alpha: 1)
-        _timeLable?.font=UIFont(name: "Helvetica", size: 12)
+        _timeLable=UILabel(frame: CGRectMake(_defaultWidth!-80, 15, 60, 9))
+        _timeLable?.textColor=Config._color_gray_time
+        _timeLable?.font=Config._font_social_time
         self.addSubview(_timeLable!)
         
         
-        _alumPicV = PicView(frame: CGRect(x: _defaultWidth!-60, y: 6, width: 50, height: 50))
+        _alumPicV = PicView(frame: CGRect(x: _defaultWidth!-42.5, y: 11.5, width: 32.5, height: 32.5))
         _alumPicV!._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         
         self.addSubview(_alumPicV!)
         
         _likeIcon = UIImageView(image: UIImage(named: "like.png"))
-        _likeIcon?.frame = CGRect(x: 65, y: 32, width: 19, height: 16)
+        _likeIcon?.frame = CGRect(x: 54, y: 33.5, width: 12.5, height: 10.5)
         _likeIcon?.hidden = true
         self.addSubview(_likeIcon!)
         
         _collectIcon = UIImageView(image: UIImage(named: "collect.png"))
-        _collectIcon?.frame = CGRect(x: 65, y: 32, width: 12, height: 18)
+        _collectIcon?.frame = CGRect(x: 54, y: 34, width: 10.5, height: 10.5)
          _collectIcon?.hidden = true
         self.addSubview(_collectIcon!)
         
@@ -93,18 +100,19 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         _setuped=true
     }
     
-    func _setComment(__dict:NSDictionary){
+    func _setDict(__dict:NSDictionary){
         //setUp()
         
         _imageView!._setPic(__dict.objectForKey("userImg") as! NSDictionary, __block: { (_dict) -> Void in
             
         })
-        _titleT!.attributedText = MessageList_Cell.linkString((__dict.objectForKey("from_userName") as! String) , withURLString: "user:" + (__dict.objectForKey("from_userId") as! String))
+        //_titleT!.attributedText = MessageList_Cell.linkString((__dict.objectForKey("from_userName") as! String) , withURLString: "user:" + (__dict.objectForKey("from_userId") as! String))
         
+        _titleT?.text = (__dict.objectForKey("from_userName") as! String)
         
         _titleT?.sizeToFit()
         
-        _timeLable?.frame = CGRect(x:_titleT!.frame.origin.x+_titleT!.frame.width+10,y: _titleT!.frame.origin.y,width: 100,height: 30)
+        _timeLable?.frame = CGRect(x:_titleT!.frame.origin.x+_titleT!.frame.width+11,y:15.5,width: 100,height: 9)
         _timeLable?.text = __dict.objectForKey("time") as? String
         
         
@@ -148,7 +156,7 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         //var boldAttr = [NSFontAttributeName: boldFont]
         //let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),
         //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
-        let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor()]
+        let normalAttr = [NSForegroundColorAttributeName : Config._color_social_gray,NSFontAttributeName: Config._font_social_cell_name]
         
         let astr:NSMutableAttributedString = NSMutableAttributedString()
         
@@ -174,6 +182,12 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         
         // println(attrString)
         attrString = NSAttributedString(string: _commentDict.objectForKey("comment") as! String, attributes:normalAttr)
+        
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 1
+        astr.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, astr.length))
+        
         astr.appendAttributedString(attrString)
         
         return astr
@@ -183,8 +197,9 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         // the entire string
         let range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
+        attrString.addAttribute(NSFontAttributeName, value:Config._font_social_album_description, range:range)
+        attrString.addAttribute(NSForegroundColorAttributeName, value:Config._color_social_blue, range:range)
         attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
-        attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor.blueColor(), range:range)
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
         attrString.endEditing()
         return attrString
@@ -228,18 +243,23 @@ class MessageList_Cell :  UITableViewCell,UITextViewDelegate{
         }
     }
     
-    static func _getHeihtWidthComment(__dict:NSDictionary,_defaultWidth:CGFloat)->CGFloat{
-        var _h:CGFloat = 72
+    static func _getHeihtWidthDict(__dict:NSDictionary,_defaultWidth:CGFloat)->CGFloat{
+        var _h:CGFloat = 55
         
         switch __dict.objectForKey("type") as! String{
         case "comment":
-            let _desT=UITextView(frame: CGRectMake(60, 22, _defaultWidth-140, 0))
-            //_desT?.textColor=UIColor(white: 0.5, alpha: 1)
-            _desT.font=UIFont(name: "Helvetica", size: 12)
+            let _desT=UITextView(frame: CGRectMake(53.5, 31, _defaultWidth-140, 0))
+            
             _desT.attributedText = commentString(__dict)
+            
+            _desT.textColor=Config._color_social_gray
+            _desT.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0)
+            _desT.textContainer.lineFragmentPadding = 0
+            _desT.font=Config._font_social_cell_name
+            
             let _size:CGSize = _desT.sizeThatFits(CGSize(width: _desT.frame.width,height: CGFloat.max))
             
-            _h = _size.height+42
+            _h = _size.height+38
             
             break
         default:

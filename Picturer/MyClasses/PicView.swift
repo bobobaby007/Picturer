@@ -201,15 +201,18 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         //self.addSubview(_imgView!)
     }
     func _setImageByImage(_img:UIImage){
-        do{
-             self._imgView?.image=_img
-             self._refreshView()
+        if self._imgView == nil{
+            return
         }
+        self._imgView?.image=_img
+        self._refreshView()
     }
     
     
     func _refreshView(){
-        
+        if self._imgView!.image == nil{
+            return
+        }
         let _scaleW = self.bounds.width/self._imgView!.image!.size.width
         let _scaleH = self.bounds.height/self._imgView!.image!.size.height
         

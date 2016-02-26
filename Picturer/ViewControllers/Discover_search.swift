@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate{
+class Discover_search: UIViewController,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate{
     let _barH:CGFloat = 64
     //var _topBar:UIView?
     //var _btn_cancel:UIButton?
@@ -74,18 +74,19 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         
         
         
-        _searchResult = SearchResult(frame: CGRect(x: 0, y: _barH+_searchBarH, width: self.view.frame.width, height: self.view.frame.height-_barH-_searchBarH))
+        _searchResult = SearchResult(frame: CGRect(x: 0, y: _barH, width: self.view.frame.width, height: self.view.frame.height-_barH))
         
         
-        self.view.addSubview(_searchBar)
+        //self.view.addSubview(_searchBar)
         //self.view.addSubview(_topBar!)
-        _referenceTableH = self.view.frame.height-_barH-_searchBarH
-        _referenceTable.frame = CGRect(x: 0, y: _barH+_searchBarH, width: self.view.frame.width, height: _referenceTableH)
+        
+        _referenceTableH = self.view.frame.height-_barH
+        _referenceTable.frame = CGRect(x: 0, y: _barH, width: self.view.frame.width, height: _referenceTableH)
         _referenceTable.delegate=self
         _referenceTable.dataSource = self
         _referenceTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "table_cell")
        
-        _searchResult = SearchResult(frame: CGRect(x: 0, y: _barH+_searchBarH, width: self.view.frame.width, height: self.view.frame.height-_barH-_searchBarH))
+        _searchResult = SearchResult(frame: CGRect(x: 0, y: _barH, width: self.view.frame.width, height: self.view.frame.height-_barH))
         
         _showSearchReference()
         //_showSearchResult("")
@@ -95,7 +96,6 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         _setuped=true
     }
     func _showSearchReference(){
-        
         _searchResult!.removeFromSuperview()
         self.view.addSubview(_referenceTable)
     }
@@ -121,7 +121,7 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
     
     //---
     func textFieldDidBeginEditing(textField: UITextField) {
-        _referenceTable.frame = CGRect(x: 0, y: _barH+_searchBarH, width: _referenceTable.frame.width, height:_referenceTableH-256)
+        _referenceTable.frame = CGRect(x: 0, y: _barH, width: _referenceTable.frame.width, height:_referenceTableH-256)
         _showSearchReference()
     }
     func textFieldDidEndEditing(textField: UITextField) {
@@ -221,7 +221,7 @@ class Discover_reference: UIViewController,UITableViewDataSource,UITableViewDele
         
     }
     override func viewWillAppear(animated: Bool) {
-        _referenceTable.frame = CGRect(x: 0, y: _barH+_searchBarH, width: _referenceTable.frame.width, height:_referenceTableH)
+        _referenceTable.frame = CGRect(x: 0, y: _barH, width: _referenceTable.frame.width, height:_referenceTableH)
     }
 }
 

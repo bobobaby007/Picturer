@@ -484,10 +484,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         let range:NSRange = NSMakeRange(0, attrString.length)
         attrString.beginEditing()
         
-            attrString.addAttribute(NSFontAttributeName, value:Config._font_social_album_description, range:range)
-        
-        attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
+        attrString.addAttribute(NSFontAttributeName, value:Config._font_social_album_description, range:range)
         attrString.addAttribute(NSForegroundColorAttributeName, value:Config._color_social_blue, range:range)
+        attrString.addAttribute(NSLinkAttributeName, value:withURLString, range:range)
+        
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
         attrString.endEditing()
         return attrString

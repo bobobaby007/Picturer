@@ -333,14 +333,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         Social_Main._getMessages { (array) -> Void in
             self._hasNewMessage = true            
             self._messageArray = array
-           
             do{
-                
               self._messageImg!._setPic(((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary)!, __block: { (__dict) -> Void in
                 })
             }
-            
-            
             self._refreshView()
         }
     }
@@ -358,7 +354,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
 //        Social_Main._focusToUser("569602ec30765c8f0c3909d8") { (__dict) -> Void in
 //            print(__dict)
 //        }
-        
         Social_Main._getMyFocusList(_userId, __block: { (__dict) -> Void in
             print("_getMyFocusList：",__dict)
         })

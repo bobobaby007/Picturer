@@ -49,6 +49,8 @@ class CommentList_Cell :  UITableViewCell,UITextViewDelegate{
         
         _desT=UITextView(frame: CGRectMake(60, 22, _defaultWidth!-100, 30))
         //_desT?.textColor=UIColor(white: 0.5, alpha: 1)
+        _desT?.textContainerInset = UIEdgeInsetsMake(-3, 0, 0, 0)
+        _desT?.textContainer.lineFragmentPadding = 0
         _desT?.font=UIFont(name: "Helvetica", size: 12)
         _desT?.selectable=false
         _desT?.editable=false

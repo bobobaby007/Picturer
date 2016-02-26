@@ -14,9 +14,9 @@ import AVFoundation
 class MainInterface: AnyObject {
  
     static var _token:String = ""//80d3897b-24af-42a9-af76-3bfdea569bba
-    
-    
     static var _uid_tem:String?
+    static var _userInfo:NSDictionary?
+    
     static var _uid:String!{
         get{
             if _uid_tem==nil{
@@ -114,7 +114,7 @@ class MainInterface: AnyObject {
             if __dict.objectForKey("recode") as! Int == 200{
                 let _user:NSDictionary = __dict.objectForKey("userinfo") as! NSDictionary
                 MainInterface._saveToken(_user.objectForKey("token") as! String)
-                
+                _userInfo = _user
                 _uid = _user.objectForKey("_id") as! String
             }
             __block(__dict)
@@ -124,6 +124,11 @@ class MainInterface: AnyObject {
     static func _getMyUserInfo(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_User_Info+"\(__userId)") { (__dict) -> Void in
             print(__dict)
+            if __dict.objectForKey("recode") as! Int == 200{
+                let _user:NSDictionary = __dict.objectForKey("userinfo") as! NSDictionary
+                _userInfo = _user
+            }
+            
             __block(__dict)
         }
     }

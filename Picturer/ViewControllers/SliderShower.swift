@@ -47,7 +47,7 @@ class SliderShower: UIView,UIScrollViewDelegate{
     
     func _setup(__images:NSArray){
         _imagesArray = __images
-        _pageController?.center = CGPoint(x: self.bounds.width/2, y: self.bounds.height-10)
+        _pageController?.center = CGPoint(x: self.bounds.width/2, y: self.bounds.height-16.5)
         _pageController?.numberOfPages = _imagesArray!.count
         
         self.addSubview(_pageController!)

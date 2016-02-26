@@ -30,7 +30,10 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
     var _searchBar:UIView = UIView()
     var _searchT:UITextField = UITextField()
     
+    var _messageTap:UITapGestureRecognizer?
+    var _messageImg:PicView?
     
+    var _btn_close:UIButton?
     override func viewDidLoad() {
         setup()
     }
@@ -43,11 +46,33 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=Config._color_black_bar
         
+        //---消息提醒----
+        
+        _messageImg = PicView(frame: CGRect(x: self.view.frame.width - 25 - Config._gap, y: 30, width: 25, height: 25))
+        _messageImg?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
+        _messageImg?.minimumZoomScale=1
+        
+        _messageImg?.maximumZoomScale=1
+        _messageImg?._imgView?.layer.masksToBounds = true
+        _messageImg?._imgView?.layer.cornerRadius = 12.5
+        
+        
+        _messageTap = UITapGestureRecognizer(target: self, action: Selector("messageTapHander:"))
+        _messageImg?.addGestureRecognizer(_messageTap!)
+        
+        _topBar?.addSubview(_messageImg!)
+        
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
+        
+        _btn_close=UIButton(frame: CGRect(x: self.view.frame.width - 25 - Config._gap, y: 29, width: 24, height: 24))
+        _btn_close?.setImage(UIImage(named: "icon_close.png"), forState: UIControlState.Normal)
+        _btn_close?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        _topBar?.addSubview(_btn_close!)
         
         _referenceController = Discover_reference()
         _searchController = Discover_search()
@@ -57,7 +82,7 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         
         
         
-        _tab_controller!.viewControllers = [_searchController!,_referenceController!]
+        _tab_controller!.viewControllers = [_referenceController!,_searchController!]
         
         _tab_controller!.delegate = self
         _tab_controller?.tabBar.hidden = true
@@ -66,20 +91,26 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         self.view.addSubview(_tab_controller!.view)
         
         
-        let _gap:CGFloat = Config._gap
+       
         
-        let _searchLableV:UIView = UIView(frame: CGRect(x: 44, y: 27, width: self.view.frame.width-56, height: _searchBarH-14))
+        let _searchLableV:UIView = UIView(frame: CGRect(x: 44, y: 27, width: self.view.frame.width-100, height: _searchBarH-14))
         _searchLableV.backgroundColor = UIColor(white: 1, alpha: 0.2)
         _searchLableV.layer.cornerRadius=5
         
         let _icon:UIImageView = UIImageView(image: UIImage(named: "search_icon.png"))
-        _icon.frame=CGRect(x: _gap, y: 10, width: 13, height: 13)
+        _icon.frame=CGRect(x: 9, y: 6, width: 14.5, height: 14.5)
         
-        _searchT.frame = CGRect(x: _gap+13+5, y: 20, width: self.view.frame.width-2*_gap-_gap, height: _searchBarH-14)
-        _searchT.placeholder = "搜索"
+        _searchT.frame = CGRect(x: 9+14.5+5, y: 0, width: _searchLableV.frame.width-9-14.5-5-5, height: _searchBarH-14)
+        
+        
+        
+        _searchT.attributedPlaceholder =
+            NSAttributedString(string: "搜索", attributes: [NSForegroundColorAttributeName : UIColor(white: 1, alpha: 0.7)])
+        _searchT.textColor = UIColor.whiteColor()
         _searchT.font = UIFont.systemFontOfSize(13)
         _searchT.delegate = self
         _searchT.returnKeyType = UIReturnKeyType.Search
+        _searchT.addTarget(self, action: "textHander:", forControlEvents: UIControlEvents.EditingChanged)
         
         
         _searchLableV.addSubview(_icon)
@@ -127,30 +158,49 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
     
     
     
-    //---
+    //-----文字侦听
     
-    func textFieldDidBeginEditing(textField: UITextField) {
-        _switchTo(2)
+    func textHander(__text:UITextField){
+        print(_searchT.text)
     }
-    func textFieldDidEndEditing(textField: UITextField) {
-        
-    }
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        //_showSearchResult(textField.text!)
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         return true
     }
+    func textFieldDidBeginEditing(textField: UITextField) {
+        _switchTo(2)
+        _searchController!._showSearchReference()
+        
+//        _switchTo(2)
+//        if _searchT.text == ""{
+//            _switchTo(1)
+//        }else{
+//            _switchTo(2)
+//        }
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+       
+    }
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        //_showSearchResult(textField.text!)
+        _searchController!._showSearchResult(textField.text!)
+        _searchT.resignFirstResponder()
+        return true
+    }
     //--
-    
-    
-    
     func _switchTo(__num:Int){
         switch __num{
         case 1:
             _tab_controller?.selectedIndex = 0
+            _btn_close?.hidden = true
+            _searchT.text = ""
+            _searchT.resignFirstResponder()
             return
         case 2:
             _tab_controller?.selectedIndex = 1
+            _btn_close?.hidden = false
             return
         default:
             return
@@ -178,9 +228,9 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
             }
             self.navigationController?.popViewControllerAnimated(true)
         
-//        case _tab_reference!:
-//            _switchTo(1)
-//            return
+        case _btn_close!:
+            _switchTo(1)
+            return
 //        case _tab_search!:
 //            _switchTo(2)
 //            return

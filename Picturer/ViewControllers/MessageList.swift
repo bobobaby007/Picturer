@@ -61,7 +61,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         _topBar?.addSubview(_title_label!)
         
         
-        _btn_deleteAll=UIButton(frame:CGRect(x: self.view.frame.width - 60, y: 20, width: 60, height: 22))
+        _btn_deleteAll=UIButton(frame:CGRect(x: self.view.frame.width - 60, y: 20, width: 60, height: 44))
         _btn_deleteAll?.setTitle("清空", forState: UIControlState.Normal)
         _btn_deleteAll?.titleLabel?.font = Config._font_topbarTitle
         _btn_deleteAll?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -76,7 +76,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         _tableView?.dataSource=self
         _tableView?.registerClass(MessageList_Cell.self, forCellReuseIdentifier: "MessageList_Cell")
         //_tableView?.scrollEnabled=false
-        _tableView?.separatorColor = UIColor.clearColor()
+        //_tableView?.separatorColor = UIColor.clearColor()
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
         
@@ -89,14 +89,12 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         
         _setuped=true
     }
-    
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
         let cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell", forIndexPath: indexPath) as! MessageList_Cell
         cell.setUp(self.view.frame.width)
-        cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
+        cell._setDict(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
         cell._delegate = self
         return cell
     }
@@ -152,7 +150,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         self._dataArray = NSMutableArray(array: __array)
         self._heightArray = NSMutableArray()
         for var i:Int = 0 ;i < __array.count; ++i{
-            _heightArray?.addObject(MessageList_Cell._getHeihtWidthComment(_dataArray!.objectAtIndex(i) as! NSDictionary,_defaultWidth: self.view.frame.width))
+            _heightArray?.addObject(MessageList_Cell._getHeihtWidthDict(_dataArray!.objectAtIndex(i) as! NSDictionary,_defaultWidth: self.view.frame.width))
         }
         
         self._tableView?.reloadData()

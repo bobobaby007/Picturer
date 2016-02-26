@@ -222,7 +222,7 @@ class Social_Main: AnyObject {
             if i==3||i==10||i==29||i==20{
                 _commentDict.setValue("like", forKey: "type")
             }
-            if i==12{
+            if i==6{
                 _commentDict.setValue("collect", forKey: "type")
             }
             
@@ -299,20 +299,13 @@ class Social_Main: AnyObject {
         
     }
     //-----提取热门图册
-    static func _getHotAlbums(block:(NSArray)->Void){
-        let _array:NSMutableArray = NSMutableArray()
-        let _n:Int = 10
-        
-        for var i:Int = 0; i<_n;++i{
-            let _dict:NSMutableDictionary = NSMutableDictionary()
-            let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%6+2)+".JPG","file"], forKeys: ["url","type"])
-            _dict.setObject(_pic, forKey: "pic")
-            _dict.setObject("000001", forKey: "albumId")
-            
-            _array.addObject(_dict)
+    static func _getHotAlbums(__block:(NSArray)->Void){
+        MainInterface._getAlbumListOfUser(MainInterface._uid) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
+                __block(ablums)
+            }
         }
-        // println(response.text)
-        block(_array)
     }
     //------提取热门用户
     static func _getHotUsers(block:(NSArray)->Void){
