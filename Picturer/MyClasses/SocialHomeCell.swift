@@ -151,12 +151,8 @@ class SocailHomeCell:UICollectionViewCell {
         _imgView.image=UIImage(named: _img as String)
     }
     func _setImageByImage(_img:UIImage)->Void{
-        
         _imgView.image=_img
-        
-        
     }
-    
     func _setTagHidden(__set:Bool)->Void{
         if _tag_view==nil{
             

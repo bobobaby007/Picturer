@@ -23,7 +23,7 @@ class Social_Setting_push: UIViewController,ContentEditer_delegate{
     let _buttonH:CGFloat = 45
     
     
-    var _naviDelegate:Navi_Delegate?
+    weak var _naviDelegate:Navi_Delegate?
     
     var _scroller:UIScrollView?
     

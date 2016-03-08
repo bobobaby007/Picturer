@@ -30,7 +30,6 @@ class Log_Main: UIViewController {
         _init()
         _showLogHome()
     }
-    
     func _init(){
         if _inited{
             return
@@ -41,17 +40,14 @@ class Log_Main: UIViewController {
         self.view.addSubview(_navigateController!.view)
         _inited = true
     }
-    
-    
     func _showLogHome(){
         if _log_home == nil{
             _log_home = Log_home()
         }
         //_navigateController?.addChildViewController(_log_home!)
-        
         _navigateController?.pushViewController(_log_home!, animated: false)
-        
     }
+    
     func _hide(){
         if _delegate != nil{
             _delegate?._logHided()
@@ -60,4 +56,5 @@ class Log_Main: UIViewController {
             
         }
     }
+    
 }

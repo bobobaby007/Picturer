@@ -137,7 +137,6 @@ class AddressList_List:UIViewController, UITableViewDelegate,UITableViewDataSour
         
         //cell.selected = false
         
-        
     }
     func _viewUser(__userId: String) {
         let _controller:MyHomepage = MyHomepage()

@@ -219,8 +219,6 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         if _currentIndex < 0{
             _currentIndex = 0
         }
-        
-        
     }
     
     //----设置描述
@@ -233,9 +231,9 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         }
         let _size:CGSize = _desText!.sizeThatFits(CGSize(width: self.view.frame.width-2*_gap, height: CGFloat.max))
         
-        _desText?.frame =  CGRect(x: _gap, y: _gap/2, width: self.view.frame.width-2*_gap, height: _size.height)
+        _desText?.frame =  CGRect(x: _gap, y: 4, width: self.view.frame.width-2*_gap, height: _size.height)
         
-        _desH = (_desText?.frame.height)!+_gap/2+_gap
+        _desH = (_desText?.frame.height)!+2+_gap
         
         if _showingBar{
             _showingBar = true

@@ -32,17 +32,11 @@ class Config:AnyObject {
     static let _color_gray_subTitle:UIColor = UIColor(red: 102/255, green: 102/255, blue: 102/255, alpha: 1)//----灰色副标题标题
     static let _color_gray_time:UIColor = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1)//----时间灰色
     static let _color_gray_description:UIColor = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1)//----描述性文字灰色
-    
-    
-    
-    
     //-----Font Names = [["PingFangSC-Ultralight", "PingFangSC-Regular", "PingFangSC-Semibold", "PingFangSC-Thin", "PingFangSC-Light", "PingFangSC-Medium"]]
     
     
     static let _font_cell_title:UIFont = UIFont(name: "PingFangSC-Regular", size: 17)! //UIFont.systemFontOfSize(17, weight: 0)//---首页相册条标题字体
     static let _font_cell_title_normal:UIFont = UIFont(name: "PingFangSC-Regular", size: 16)!//UIFont.systemFontOfSize(16, weight: 0)//---一般的cell标题字体
-    
-    
     static let _font_cell_subTitle:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!// UIFont.systemFontOfSize(14, weight: 0)//---首页相册条副标题字体
     static let _font_cell_time:UIFont = UIFont(name: "PingFangSC-Regular", size: 12)!// UIFont.systemFontOfSize(12, weight: 0)//---首页相册条时间字体
     static let _font_topbarTitle:UIFont = UIFont(name: "PingFangSC-Medium", size: 17)!// UIFont.systemFontOfSize(17, weight: 1)//----标题字体
@@ -54,20 +48,14 @@ class Config:AnyObject {
     
     //---------------------社交
     static let _color_social_gray_bg:UIColor = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1)//----社交页面中背景灰色
-    
+    static let _color_social_black:UIColor = UIColor(red: 229/255, green: 229/255, blue: 229/255, alpha: 1)//----社交页面中背景灰色
     static let _color_social_gray:UIColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)//----社交页面中灰色
     static let _color_social_blue:UIColor = UIColor(red: 44/255, green: 60/255, blue: 120/255, alpha: 1)//----社交页面中蓝色
-
-     static let _color_social_gray_light:UIColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)//----社交页面中浅灰
-
+    static let _color_social_gray_light:UIColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)//----社交页面中浅灰
+    static let _color_social_gray_border:UIColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1)//----社交页面中边框浅灰色
     static let _color_social_gray_line:UIColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)//----社交页面通讯录按钮下划线灰色
-    
     static let _color_social_black_title:UIColor = UIColor(red: 25/255, green: 25/255, blue: 25/255, alpha: 0.98)//----社交页面cell标题文字颜色
-    
-    
-    
     static let _color_social_albumTitle_over:UIColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.7)//----
-    
     static let _color_social_orange:UIColor = UIColor(red: 239/255, green: 83/255, blue: 42/255, alpha: 1)//----社交页面橘色
     static let _color_social_purple:UIColor = UIColor(red: 64/255, green: 0/255, blue: 144/255, alpha: 1)//----社交页面紫色
     
@@ -83,8 +71,6 @@ class Config:AnyObject {
     static let _font_social_likeNum:UIFont = UIFont(name: "PingFangSC-Regular", size: 13)!//社交点赞数
     
     static let _font_social_reference_albumTitle:UIFont = UIFont(name: "PingFangSC-Regular", size: 24)!//推荐相册标题
-    
-    
     
     //------登陆
     

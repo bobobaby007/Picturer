@@ -23,7 +23,7 @@ class Social_Setting_passw: UIViewController,ContentEditer_delegate{
     let _buttonH:CGFloat = 45
     
     
-    var _naviDelegate:Navi_Delegate?
+    weak var _naviDelegate:Navi_Delegate?
     
     
     let _setion_1_titles:NSArray = ["当前","新密码","确定密码"]

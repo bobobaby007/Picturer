@@ -160,6 +160,7 @@ class MainAction: AnyObject {
     }
     //----从本地添加图片到相册通过index
     static func _insertPicsToAlbumByIndex(__pics:NSArray,__albumIndex:Int){
+        print("新加的图片们:",__pics)
         let _album:NSDictionary = MainAction._getAlbumAtIndex(__albumIndex)!
         let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
         
@@ -170,7 +171,6 @@ class MainAction: AnyObject {
                 continue
             }
             let _newPic:NSDictionary = SyncAction._uploadPicToAlbum(_pic, _album: _album)
-            
             _images.insertObject(_newPic, atIndex: 0)
         }
         _changeAlbumAtIndex(__albumIndex,dict:NSDictionary(object: _images, forKey: "images"))
@@ -556,15 +556,20 @@ class MainAction: AnyObject {
             if String(key) == "description"{
                 _str = _str + "&description=" + String(value)
             }
-            
-            
             _img.setObject(value, forKey: key as! String)
-            
-            
         }
+        
+        
         if _str != ""{
-            if let _picId = _album.objectForKey("_id") as? String {
-                SyncAction._addAction(SyncAction._Type_updatePic, __content: NSDictionary(objects: [_picId,_str], forKeys: ["_id","changeingStr"]))
+            if let _picId = _img.objectForKey("_id") as? String {
+            /*---**废除使用
+                //SyncAction._addAction(SyncAction._Type_updatePic, __content: NSDictionary(objects: [_picId,_str], forKeys: ["_id","changeingStr"]))
+            */
+                MainInterface._changePic(_picId, __changeingStr:_str, __block: { (__dict) -> Void in
+                    
+                })
+              
+                
             }
         }
         _images[index] = _img
@@ -599,12 +604,14 @@ class MainAction: AnyObject {
                 }
             }
             if let _picId:String = dict.objectForKey("_id") as? String {
-                MainInterface._changePic(_picId, __changeingStr: _str, __block: { (__dict) -> Void in
-                    __block(__dict)
-                })
+                __block(dict)
+//                MainInterface._changePic(_picId, __changeingStr: _str, __block: { (__dict) -> Void in
+//                    __block(__dict)
+//                })
             }else{
                 __block(NSDictionary(objects: [-10], forKeys: ["recode"]))
             }
+        
         
         
     }

@@ -17,7 +17,7 @@ class Discover_reference: UIViewController,UICollectionViewDataSource,UICollecti
     let _barH:CGFloat = 64
     var _sliderH:CGFloat = 184.5
     var _sliderGapH:CGFloat = 12
-    let _space:CGFloat=5
+    let _space:CGFloat=3
     var _sliderShower:SliderShower?
     
     var _picW:CGFloat = 20

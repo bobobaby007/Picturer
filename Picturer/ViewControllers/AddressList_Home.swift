@@ -23,7 +23,7 @@ class AddressList_Home: UIViewController,UITabBarControllerDelegate,UITextFieldD
     var _tab_controller:UITabBarController?
     
     
-    var _naviDelegate:Navi_Delegate?
+    weak var _naviDelegate:Navi_Delegate?
     
     let _btnBarH:CGFloat = 42.5
     var _btn_friends:UIButton?

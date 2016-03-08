@@ -20,19 +20,19 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     var _title_label:UILabel?
     
     var _tableView:UITableView?
-    let _tableCellH:CGFloat=40
     var _selectedId:Int = -1
     
     
     
-    var _dataArray:NSMutableArray?
+    var _dataArray:NSMutableArray?=NSMutableArray()
+    
+    var _heightArray:NSMutableArray? = NSMutableArray()
     
     var _inputer:Inputer?
     
     
     override func viewDidLoad() {
         setup()
-        refreshView()
     }
     func setup(){
         if _setuped{
@@ -61,33 +61,70 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         _title_label?.font = Config._font_topbarTitle
         _title_label?.text="评论"
         
+        self.view.addSubview(_topBar!)
+        
+        
+        
+        _dealWidthDatas(_dataArray!)
+        
+        
+        _topBar?.addSubview(_btn_cancel!)
+        _topBar?.addSubview(_title_label!)
+        
         _tableView=UITableView()
         _tableView?.delegate=self
         _tableView?.dataSource=self
         _tableView?.registerClass(CommentList_Cell.self, forCellReuseIdentifier: "CommentList_Cell")
         //_tableView?.scrollEnabled=false
-        _tableView?.separatorColor = UIColor.clearColor()
+        //_tableView?.separatorColor = UIColor.clearColor()
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
         
-        self.view.addSubview(_topBar!)
-        
-        _topBar?.addSubview(_btn_cancel!)
-        _topBar?.addSubview(_title_label!)
-        
+        refreshView()
+//
+//        
+//        
         self.view.addSubview(_tableView!)
         self.view.addSubview(_inputer!)
         
         _setuped=true
     }
     
+    
+    func _getDatas(){
+//        Social_Main._getMessages { (array) -> Void in
+//            
+//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                self._dealWidthDatas(array)
+//            })
+//            
+//        }
+    }
+    func _dealWidthDatas(__array:NSArray){
+        
+        self._dataArray = NSMutableArray(array: __array)
+        self._heightArray = NSMutableArray()
+        for var i:Int = 0 ;i < __array.count; ++i{
+            _heightArray?.addObject(CommentList_Cell._getHeihtWidthDict(_dataArray!.objectAtIndex(i) as! NSDictionary,_defaultWidth: self.view.frame.width))
+        }
+        //self._tableView?.reloadData()
+        
+    }
    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
         let cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell", forIndexPath: indexPath) as! CommentList_Cell
         cell.setUp(self.view.frame.width)
-        cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
+        
+        let _dict:NSDictionary = _dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary
+        print("评论：",_dict)
+        cell._setDict(_dict)
+        
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        cell.preservesSuperviewLayoutMargins = false
+        cell.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        
         cell._delegate = self
         return cell
     }
@@ -101,18 +138,13 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-       // var cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell", forIndexPath: indexPath) as! CommentList_Cell
         
-        
-        let cell:CommentList_Cell = _tableView!.dequeueReusableCellWithIdentifier("CommentList_Cell") as! CommentList_Cell
-        cell.setUp(self.view.frame.width)
-        cell._setComment(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
-        
-        return cell._Height()
+        return _heightArray?.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! CGFloat
         
         
         //return CGFloat(((_dataArray!.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("comment") as! String).lengthOfBytesUsingEncoding(NSUnicodeStringEncoding))
     }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
        
         
@@ -130,6 +162,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
             _inputer!._placeHold = "添加评论..."
         }
     }
+    
     //----cell 代理
     
     func _viewUser(__userId: String) {
@@ -171,12 +204,17 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         
         _dataArray?.addObject(_d)
         
+        _dealWidthDatas(_dataArray!)
         _tableView?.reloadData()
+        refreshView()
+        
     }
     //----设置位置
     func refreshView(){
         _tableView?.frame = CGRect(x: 0, y: _barH, width: self.view.frame.width, height: self.view.frame.height-_barH-40)
     }
+    
+    
     
     func clickAction(sender:UIButton){
         switch sender{

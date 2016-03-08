@@ -39,7 +39,7 @@ class Inputer: UIView,UITextViewDelegate {
     
     var _tapC:UITapGestureRecognizer?
     
-    var _heightOfClosed:CGFloat? = 40
+    var _heightOfClosed:CGFloat? = 45
     
     var _btn_send:UIButton?
     
@@ -63,35 +63,40 @@ class Inputer: UIView,UITextViewDelegate {
         _tapC = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
         
         _barView = UIView(frame: CGRect(x: 0, y: self.frame.height-_heightOfClosed!, width: self.frame.width, height: _heightOfClosed!))
-        _barView?.backgroundColor = UIColor(white: 0.9, alpha: 1)
+        _barView?.backgroundColor = Config._color_bg_gray
         
         
         
-        _placeHoldText = UILabel(frame: CGRect(x: 5+5, y: 5, width: self.frame.width-90-10, height: 30))
-        _placeHoldText?.font = UIFont.systemFontOfSize(15)
+        _placeHoldText = UILabel(frame: CGRect(x: 10+5, y: 8.5, width: self.frame.width-65-10-10, height: 30))
+        _placeHoldText?.font = Config._font_cell_time
         _placeHoldText?.text=_placeHold
         _placeHoldText?.textColor = UIColor(white: 0.8, alpha: 1)
         _placeHoldText?.backgroundColor = UIColor.clearColor()
         
         
-        _inputText = UITextView(frame: CGRect(x: 5, y: 5, width: self.frame.width-90, height: 30))
+        _inputText = UITextView(frame: CGRect(x: 10+5, y: 8.5+5, width: self.frame.width-65-10-10, height: 28))
+        _inputText?.pagingEnabled=false
+        _inputText?.textContainer.lineFragmentPadding=0
+        _inputText?.textContainerInset = UIEdgeInsetsZero
+        _inputText?.font = Config._font_cell_time
         _inputText?.delegate = self
         _inputText?.backgroundColor = UIColor.clearColor()
-        _inputBg = UIView(frame: CGRect(x: 5, y: 5, width: self.frame.width-90, height: 30))
+        _inputBg = UIView(frame: CGRect(x: 10, y: 8.5, width: self.frame.width-65-10, height: 28))
         _inputBg?.backgroundColor = UIColor.whiteColor()
         _inputBg?.layer.masksToBounds = true
         _inputBg?.layer.cornerRadius = 5
-        _inputBg?.layer.borderWidth = 1
-        _inputBg?.layer.borderColor = UIColor.lightGrayColor().CGColor
+        _inputBg?.layer.borderWidth = 0.5
+        _inputBg?.layer.borderColor = Config._color_social_gray_line.CGColor
         
         
-        _btn_send = UIButton(frame:  CGRect(x: self.frame.width-80, y: 5, width: 70, height: 30))
-        _btn_send?.backgroundColor = UIColor(red: 254/255, green: 221/255, blue: 62/255, alpha: 1)
+        _btn_send = UIButton(frame:  CGRect(x: self.frame.width-60, y: 8.5, width: 50, height: 28))
+        _btn_send?.backgroundColor = Config._color_yellow
         _btn_send?.layer.cornerRadius = 5
         _btn_send?.layer.masksToBounds = true
-        _btn_send?.layer.borderWidth = 1
-        _btn_send?.layer.borderColor = UIColor.lightGrayColor().CGColor
+        _btn_send?.layer.borderWidth = 0.5
+        _btn_send?.layer.borderColor = Config._color_social_gray_line.CGColor
         _btn_send?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_send?.titleLabel?.font = Config._font_cell_time
         _btn_send?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         _btn_send?.setTitle("发送", forState: UIControlState.Normal)
         
@@ -141,26 +146,27 @@ class Inputer: UIView,UITextViewDelegate {
     }
     
     func _refresshView(){
-        var _h:CGFloat = _inputText!.contentSize.height
-        
-        if _h < _heightOfClosed!-10{
-            _h = _heightOfClosed!-10
+        let _h:CGFloat = _inputText!.contentSize.height
+        var _txtBgH:CGFloat = _h + 10
+        if _txtBgH < _heightOfClosed!-2*8.5{
+            _txtBgH = _heightOfClosed!-2*8.5
         }
         
-        if _h>200{
-            _h = 200
+        if _txtBgH>200{
+            _txtBgH = 200
         }
         
         UIView.beginAnimations("open", context: nil)
         UIView.setAnimationDuration(0.35)
-        _barView?.frame = CGRect(x: 0, y: _keboardFrame!.origin.y-_h-10, width: self.frame.width, height: _h+10)
+        _barView?.frame = CGRect(x: 0, y: _keboardFrame!.origin.y-_txtBgH-2*8.5, width: self.frame.width, height: _txtBgH+2*8.5)
         //UIView.setAnimationCurve(UIViewAnimationCurve.EaseOut)
         //self.hidden=false
         
         
-        _inputText!.frame = CGRect(x: 5, y: 5, width: self.frame.width-90, height: _h)
-       
-        _inputBg!.frame = CGRect(x: 5, y: 5, width: self.frame.width-90, height: _inputText!.frame.height)
+        _inputText!.frame.size.height =  _txtBgH
+        
+        _inputBg!.frame.size.height = _inputText!.frame.height
+        
         
         UIView.commitAnimations()
 

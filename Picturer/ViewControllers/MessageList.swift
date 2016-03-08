@@ -43,6 +43,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         self.view.backgroundColor=UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
         
+        
         _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
         _topBar?.backgroundColor=Config._color_black_bar
         
@@ -80,6 +81,8 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
         
+        //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        
         self.view.addSubview(_topBar!)
         
         _topBar?.addSubview(_btn_cancel!)
@@ -95,6 +98,13 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         let cell:MessageList_Cell = _tableView!.dequeueReusableCellWithIdentifier("MessageList_Cell", forIndexPath: indexPath) as! MessageList_Cell
         cell.setUp(self.view.frame.width)
         cell._setDict(_dataArray!.objectAtIndex(_dataArray!.count - 1 - indexPath.row) as! NSDictionary)
+        
+        
+        
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        cell.preservesSuperviewLayoutMargins = false
+        //cell.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        
         cell._delegate = self
         return cell
     }
@@ -144,7 +154,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
                 self._dealWidthDatas(array)
             })
             
-                   }
+        }
     }
     func _dealWidthDatas(__array:NSArray){
         self._dataArray = NSMutableArray(array: __array)

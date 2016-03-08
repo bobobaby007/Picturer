@@ -69,9 +69,7 @@ class MySettings: UIViewController,ContentEditer_delegate,ImageInputerDelegate{
             let _line:UIView = UIView(frame: CGRect(x: 0, y: Config._barH+_gap+CGFloat(i)*_buttonH-0.5, width: self.view.frame.width, height: 0.3))
             _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
             self.view.addSubview(_line)
-            
             if i<_setion_1_titles.count{
-                
                 let _button:UIButton = UIButton(frame: CGRect(x: 0, y: Config._barH+_gap+CGFloat(i)*_buttonH, width: self.view.frame.width, height: _buttonH))
                 _button.tag = i
                 _button.backgroundColor = UIColor.whiteColor()

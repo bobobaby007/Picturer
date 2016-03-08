@@ -31,7 +31,8 @@ class NewsList:UIViewController, UITableViewDelegate,UITableViewDataSource{
         _tableView?.registerClass(NewsListCell.self, forCellReuseIdentifier: "NewsListCell")
         //_tableView?.scrollEnabled=false
         _tableView?.separatorColor = Config._color_social_gray_line
-        //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
+        _tableView?.separatorInset = UIEdgeInsets(top: 0, left: -200, bottom: 200, right: 200)
+        
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
         self.view.addSubview(_tableView!)
@@ -57,13 +58,13 @@ class NewsList:UIViewController, UITableViewDelegate,UITableViewDataSource{
         
         let cell:NewsListCell = _tableView!.dequeueReusableCellWithIdentifier("NewsListCell", forIndexPath: indexPath) as! NewsListCell
         //if cell.respondsToSelector("setSeparatorInset:") {
-        cell.separatorInset = UIEdgeInsetsZero
+        //cell.separatorInset = UIEdgeInsetsZero
         //}
         //if cell.respondsToSelector("setLayoutMargins:") {
-        cell.layoutMargins = UIEdgeInsetsZero
+        //cell.layoutMargins = UIEdgeInsetsZero
         //}
         //if cell.respondsToSelector("setPreservesSuperviewLayoutMargins:") {
-        cell.preservesSuperviewLayoutMargins = false
+        //cell.preservesSuperviewLayoutMargins = false
         //}
         
         if let _dict = _dataArray.objectAtIndex(indexPath.row) as? NSDictionary{

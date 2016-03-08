@@ -1,0 +1,412 @@
+//
+//  MyHomepage.swift
+//  Picturer
+//
+//  Created by Bob Huang on 15/6/29.
+//  Copyright (c) 2015年 4view. All rights reserved.
+//
+
+import Foundation
+import UIKit
+
+
+
+class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate{
+    
+    
+    var _barH:CGFloat = 64
+    var _title_label:UILabel?
+    var _topBar:UIView?
+    var _btn_cancel:UIButton?
+    
+    var _tableView:UITableView?
+    
+    var _dataArray:NSArray=[]
+    var _setuped:Bool = false
+    var _alerter:MyAlerter?
+    
+    var _currentEditeIndex:Int? = 0
+    
+    
+    var _allDatasArray:NSMutableArray? //------其他信息，以相册id为锚点
+    var _coverArray:NSMutableArray?
+    var _imagesArray:NSMutableArray?//-----每个相册里的图片
+    var _heighArray:NSMutableArray?
+    var _commentsArray:NSMutableArray?
+    var _likeArray:NSMutableArray?
+    var _defaultH:CGFloat = 632
+    
+    
+    var _inputer:Inputer?
+    
+    var _messageTap:UITapGestureRecognizer?
+    var _messageImg:PicView?
+    
+    var _hasNewMessage:Bool = false
+    var _messageArray:NSArray?
+    weak var _naviDelegate:Navi_Delegate?
+    
+    override func viewDidLoad() {
+        self.automaticallyAdjustsScrollViewInsets=false
+        UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
+        
+        setup()
+        _getDatas()
+    }
+    
+    func setup(){
+        if _setuped {
+            return
+        }
+        
+        
+        
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH))
+        _topBar?.backgroundColor=Config._color_black_bar
+        
+        
+        _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
+        _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
+        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+        _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
+        _title_label?.textColor=UIColor.whiteColor()
+        _title_label?.textAlignment=NSTextAlignment.Center
+        _title_label?.font = Config._font_topbarTitle
+        
+        _topBar?.addSubview(_title_label!)
+       
+        
+        
+        //----
+        
+        _tableView=UITableView()
+        
+        _tableView?.backgroundColor=UIColor.clearColor()
+        _tableView?.delegate=self
+        _tableView?.dataSource=self
+        _tableView?.frame = CGRect(x: 0, y: _barH, width: self.view.frame.width, height: self.view.frame.height-_barH)
+        _tableView?.registerClass(PicAlbumMessageItem.self, forCellReuseIdentifier: "PicAlbumMessageItem")
+        _tableView?.backgroundColor = UIColor.clearColor()
+        _tableView?.separatorStyle = UITableViewCellSeparatorStyle.None
+        //_tableView?.separatorColor=UIColor.clearColor()
+        //_tableView?.separatorInset = UIEdgeInsets(top: 0, left: -400, bottom: 0, right: 0)
+        _tableView?.tableFooterView = UIView()
+        _tableView?.tableHeaderView = UIView()
+        
+        
+        self.view.backgroundColor = Config._color_social_gray_light
+        
+        self.view.addSubview(_tableView!)
+        //_scrollView?.scrollEnabled=true
+        self.view.addSubview(_topBar!)
+        
+        //-----评论输入框
+        _inputer = Inputer(frame: self.view.frame)
+        _inputer?.setup()
+        // _inputer?.hidden=true
+        
+        _topBar?.addSubview(_btn_cancel!)
+        //
+        //
+        //
+        
+        _setuped=true
+    }
+    
+    func _getDatas(){
+       
+    }
+    //----更新数据
+    func _refreshDatas(){
+        //-----初始化数据
+        _allDatasArray = NSMutableArray()
+        _heighArray=NSMutableArray()
+        _commentsArray=NSMutableArray()
+        _likeArray = NSMutableArray()
+        for var i:Int=0; i<_dataArray.count;++i{
+            let _album:NSDictionary = _dataArray.objectAtIndex(i) as! NSDictionary
+            _allDatasArray?.addObject(NSDictionary(object: _album.objectForKey("_id") as! String, forKey: "_id"))
+            Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { (array) -> Void in
+                
+            })
+            _heighArray?.addObject(_defaultH)
+            //-----获取评论列表
+            Social_Main._getCommentsOfAlubm(String(i), block: { (array) -> Void in
+                self._commentsArray?.addObject(array)
+            })
+            //-----获取点赞列表
+            Social_Main._getLikesOfAlubm(String(i), block: { (array) -> Void in
+                self._likeArray?.addObject(array)
+            })
+        }
+        _tableView?.reloadData()
+    }
+    
+    //---table代理
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return _dataArray.count
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        //var cell:PicAlbumMessageItem? = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
+        //var cell:PicAlbumMessageItem = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as! PicAlbumMessageItem
+        // println(_heighArray?.count)
+        if _heighArray!.count>=indexPath.row+1{
+            return CGFloat(_heighArray!.objectAtIndex(indexPath.row) as! NSNumber)
+        }
+        //println(_heighArray.objectAtIndex(indexPath.row))
+        return 700
+    }
+    
+    //---------
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let _dict:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
+        print("图册详情：",_dict)
+        
+        var cell:PicAlbumMessageItem?
+        //cell = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
+        cell = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as? PicAlbumMessageItem
+        cell!.setup(CGSize(width: self.view.frame.width, height: _heighArray?.objectAtIndex(indexPath.row) as! CGFloat))
+        
+        cell!.separatorInset = UIEdgeInsetsZero
+        cell!.preservesSuperviewLayoutMargins = false
+        cell!.layoutMargins = UIEdgeInsetsZero
+        //cell!.tag = 100+indexPath.row
+        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
+        cell!._setComments(_array, __allNum: _array.count)
+        let _likeA:NSArray = _likeArray?.objectAtIndex(indexPath.row) as! NSArray
+        cell!._setLikes(_likeA,__allNum: _likeA.count)
+        //cell!._userId = _userId
+        cell!._indexId = indexPath.row
+        cell!._delegate=self
+        //cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
+        //cell?._setPic(<#T##__pic: NSDictionary##NSDictionary#>)
+        
+        if let _title:String = _dict.objectForKey("title") as? String{
+            cell!._setAlbumTitle(_title,__num: 19)
+        }else{
+            cell!._setAlbumTitle("",__num: 0)
+        }
+        if let _des:String = _dict.objectForKey("description") as? String{
+            cell!._setDescription(_des)
+        }else{
+            cell!._setDescription("")
+        }
+        if let _cover:NSDictionary = _dict.objectForKey("cover") as? NSDictionary{
+            cell!._setPic(_cover)
+        }else{
+            //cell!._setDescription("")
+        }
+        cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("last_update_at") as! String))
+//        if _userInfo != nil{
+//            cell!._setUserImge(MainInterface._userAvatar(_userInfo!))
+//            cell!._setUserName(_userInfo!.objectForKey("nickname") as! String)
+//        }
+        //cell!._refreshView()
+        return cell!
+    }
+    //------相册单元代理
+    func _resized(__indexId: Int, __height: CGFloat) {
+        //println("changeH")
+        
+        var _lastH:CGFloat? = -10
+        if _heighArray!.count>=__indexId+1{
+            _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
+        }
+        _heighArray![__indexId] = __height
+        if _lastH != __height{
+            _tableView?.reloadData()
+        }
+        
+        // println(_heighArray)
+    }
+    func _viewAlbum(__albumIdex:Int) {
+        /*
+        if _userId == Social_Main._userId{
+        Social_Main._getPicsListAtal(__albumIdex, block: { (array) -> Void in
+        let _controller:Social_pic = Social_pic()
+        _controller._showIndexAtPics(0, __array: array)
+        self.navigationController?.pushViewController(_controller, animated: true)
+        
+        })
+        return
+        }
+        */
+        let _album = _dataArray.objectAtIndex(__albumIdex) as! NSDictionary
+        Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { (array) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                let _controller:Social_pic = Social_pic()
+                _controller._showIndexAtPics(0, __array: array)
+                self.navigationController?.pushViewController(_controller, animated: true)
+            })
+        })
+        
+        
+    }
+    func _viewPicsAtIndex(__array: NSArray, __index: Int) {
+        
+    }
+    func _moreComment(__indexId: Int) {
+        let _controller:CommentList = CommentList()
+        //println(__dict)
+        _controller._dealWidthDatas(_commentsArray!.objectAtIndex(__indexId) as! NSArray)
+        self.navigationController?.pushViewController(_controller, animated: true)
+    }
+    func _viewUser(__userId: String) {
+        //println(__userId)
+        let _contr:MyHomepage=MyHomepage()
+        _contr._userId = __userId
+        self.navigationController?.pushViewController(_contr, animated: true)
+    }
+    func _buttonAction(__action: String, __dict: NSDictionary) {
+        switch __action{
+        case  "like":
+            if _hasUserInLikesAtIndex(__dict.objectForKey("indexId") as! Int, __userId: Social_Main._currentUser.objectForKey("userId") as! String){
+                return
+            }
+            let _arr:NSMutableArray = NSMutableArray(array: self._likeArray!)
+            let _dict:NSMutableArray = NSMutableArray(array:_arr.objectAtIndex(__dict.objectForKey("indexId") as! Int) as! NSArray)
+            let _user:NSDictionary = Social_Main._currentUser as NSDictionary
+            _dict.addObject(NSDictionary(objects: [_user.objectForKey("userName") as! String,_user.objectForKey("userId") as! String], forKeys: ["userName","userId"]))
+            _arr[__dict.objectForKey("indexId") as! Int] = _dict
+            self._likeArray = _arr
+            Social_Main._postLike(NSDictionary())
+            
+            _tableView?.reloadData() //--------使用在线接口时全部请求信息后侦听里面再重新加载
+            
+            break
+        case "comment":
+            let _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
+            //println(_cell.frame.origin.y)
+            //UIView.beginAnimations("offset", context: nil)
+            /*-----在当前页打开输入框
+            var _offY:CGFloat=_cell.frame.origin.y+_cell.frame.height-(self.view.frame.height-258)
+            if _offY<0.8*(_barH+_profileH+10){
+            _offY = 0.8*(_barH+_profileH+10)
+            }
+            
+            _tableView?.setContentOffset(CGPoint(x: 0, y: _offY), animated: true)
+            
+            UIView.commitAnimations()
+            _inputer =  Inputer(frame: self.view.frame)
+            _inputer?.setup()
+            
+            self.view.addSubview(_inputer!)
+            _inputer?._delegate = self
+            _inputer?._open()
+            */
+            
+            let _controller:CommentList = CommentList()
+            //println(__dict)
+            _controller._dealWidthDatas(_commentsArray!.objectAtIndex(_cell._indexId) as! NSArray)
+            
+            self.navigationController?.pushViewController(_controller, animated: true)
+            
+            break
+        case "moreAction":
+            _currentEditeIndex = __dict.objectForKey("indexId") as? Int
+            _openMoreAction()
+        case "moreLike":
+            let _controller:LikeList = LikeList()
+            //println(__dict)
+            _controller._dataArray = NSMutableArray(array: (_likeArray!.objectAtIndex(__dict.objectForKey("indexId") as! Int) as? NSArray)!)
+            self.navigationController?.pushViewController(_controller, animated: true)
+        default:
+            break
+        }
+        
+    }
+    //----打开更多的弹出框
+    
+    func _openMoreAction(){
+        if _alerter == nil{
+            _alerter = MyAlerter()
+            _alerter?._delegate = self
+        }
+        self.addChildViewController(_alerter!)
+        self.view.addSubview(_alerter!.view)
+        _alerter?._setMenus(["分享","举报"])
+        _alerter?._show()
+    }
+    
+    //------弹出框代理
+    func _myAlerterClickAtMenuId(__id:Int){
+        switch __id{
+        case 0:
+            print(_currentEditeIndex)
+            //---分享
+            break
+        case 1:
+            //---举报
+            break
+        default:
+            break
+            
+        }
+    }
+    func _myAlerterStartToClose(){
+        
+    }
+    func _myAlerterDidClose(){
+        
+    }
+    func _myAlerterDidShow(){
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    func _hasUserInLikesAtIndex(__indexId:Int,__userId:String)->Bool{
+        let _arr:NSArray = self._likeArray?.objectAtIndex(__indexId) as! NSArray
+        let _n:Int = _arr.count
+        
+        for var i:Int = 0 ; i<_n ;++i{
+            if (_arr[i] as! NSDictionary).objectForKey("userId") as! String == __userId {
+                return true
+            }
+        }
+        
+        
+        return false
+    }
+    
+    //-----输入框代理
+    
+    func _inputer_send(__dict:NSDictionary) {
+        print(__dict.objectForKey("text"))
+        _inputer?._close()
+    }
+    func _inputer_changed(__dict: NSDictionary) {
+        print(__dict.objectForKey("text"))
+    }
+    
+    
+    
+    override func didMoveToParentViewController(parent: UIViewController?) {
+        
+    }
+    override func viewDidAppear(animated: Bool) {
+        
+        
+    }
+    func clickAction(sender:UIButton){
+        switch sender{
+        case _btn_cancel!:
+            if _naviDelegate != nil{
+                _naviDelegate?._cancel()
+            }
+            self.navigationController?.popViewControllerAnimated(true)
+            break
+        default:
+            return
+        }
+    }
+}
+

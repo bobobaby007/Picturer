@@ -53,7 +53,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
-    var _naviDelegate:Navi_Delegate?
+    weak var _naviDelegate:Navi_Delegate?
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets=false
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
@@ -91,20 +91,9 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _title_label?.font = Config._font_topbarTitle
         _title_label?.text = "收藏"
         
-        
         _topBar?.addSubview(_title_label!)
         //_topBar?.addSubview(_btn_moreAction!)
-        
-        
-        
-        
-        
-        
         //---消息提醒----
-        
-        
-        
-        
         _messageAlertView = UIView(frame: CGRect(x: 0, y: 10, width: 194, height: 40))
         _messageAlertView?.layer.masksToBounds=true
         _messageAlertView?.layer.cornerRadius = 10
@@ -255,20 +244,10 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     //----------------刷新布局
     func _refreshView(){
-        UIView.beginAnimations("go", context: nil)
-        if _hasNewMessage{
-            _messageAlertView!.frame = CGRect(x: _myFrame!.width/2 - 194/2, y: 10, width: 194, height: 40)
-            _messageAlertView?.hidden=false
-            _messageH = 40+20
-        }else{
-            _messageAlertView?.hidden=true
-            _messageH = 0
-        }
         _tableView?.frame = CGRect(x: 0, y: _messageH, width:  _myFrame!.width, height: _tableView!.contentSize.height)
-        
         _tableView?.scrollEnabled = false
         _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height+_gap)
-        UIView.commitAnimations()
+       
     }
     
     //----table 代理
@@ -318,9 +297,9 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
         cell!._userId = (_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userId") as? String
         cell!._setUserImge((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userImg") as! NSDictionary)
-        cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String)
+        cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String,__num: 19)
         cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
-        cell!._setUpdateTime("下午 2:00 更新")
+        cell!._setUpdateTime("1小时")
         cell!._setUserName((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userName") as! String)
         //cell!._refreshView()
         //cell!._refreshView()
@@ -359,7 +338,8 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
     func _moreComment(__indexId: Int) {
         let _controller:CommentList = CommentList()
         //println(__dict)
-        _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(__indexId) as? NSArray)!)
+        
+        _controller._dealWidthDatas(_commentsArray!.objectAtIndex(__indexId) as! NSArray)
         self.navigationController?.pushViewController(_controller, animated: true)
     }
     func _moreLike(__indexId: Int) {
@@ -411,7 +391,7 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
             
             let _controller:CommentList = CommentList()
             //println(__dict)
-            _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(_cell._indexId) as? NSArray)!)
+            _controller._dealWidthDatas(_commentsArray!.objectAtIndex(_cell._indexId) as! NSArray)
             
             self.navigationController?.pushViewController(_controller, animated: true)
             

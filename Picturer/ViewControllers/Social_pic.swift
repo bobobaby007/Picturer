@@ -21,8 +21,8 @@ protocol Social_pic_delegate:NSObjectProtocol{
 class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate{
     let _barH:CGFloat = 64
     let _gap:CGFloat=15
-    let _space:CGFloat=5
-    var _titleBase:String = ""
+    let _space:CGFloat=2
+    var _titleBase:String = "" //----标题文字
     
     var _setuped:Bool=false
     var _topBar:UIView?
@@ -30,7 +30,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     var _btn_moreAction:UIButton?
     var _titleT:UITextView?
     
-    var _dataArray:NSMutableArray?=NSMutableArray()
+    
     
     var _tapG:UITapGestureRecognizer?
     
@@ -38,6 +38,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     
     var _picsArray:NSMutableArray?
     var _pic:NSMutableDictionary?
+    
+    var _likedArray:NSMutableArray?
     
     weak var _delegate:Social_pic_delegate?
     var _scrollView:UIScrollView!
@@ -57,11 +59,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     
     var _showType:String = "pic" // collection
     
-    
-    var _like_iconT:UILabel = UILabel()
-    var _comment_iconT:UILabel = UILabel()
-    var _like_numT:UILabel = UILabel()
-    var _comment_numT:UILabel = UILabel()
+
     
     var _currentPic:PicView?
     
@@ -71,9 +69,9 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     var _btn_comment:UIButton = UIButton()
     var _btn_toShare:UIButton = UIButton()
     var _likeIcon:UIImageView?
-    var _likeNumLable:UILabel?
+    var _likeNumLable:UILabel?//---点赞数字
     var _commentIcon:UIImageView?
-    var _commentNumLable:UILabel?
+    var _commentNumLable:UILabel?//--消息数字
     
     var _showingBar:Bool=true{
         didSet{
@@ -114,17 +112,22 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         _bottomBar=UIView(frame:CGRect(x: 0, y: self.view.frame.height-_toolsBarH, width: self.view.frame.width, height: 58))
         _bottomBar?.clipsToBounds = false
-        _bottomBar?.backgroundColor=UIColor(white: 0.2, alpha: 0.6)
+        _bottomBar?.backgroundColor=UIColor.clearColor()
         
         _desView = UIView(frame: CGRect(x: 0, y: -_desH, width: self.view.frame.width, height: _desH))
         
-        _desView?.backgroundColor=UIColor(white: 0, alpha: 0.8)
+        _desView?.backgroundColor=UIColor(white: 0, alpha: 0.5)
         
-        _desText=UITextView(frame: CGRect(x: 5, y: 5, width: self.view.frame.width-10, height: 0))
-        _desText?.textColor = UIColor.whiteColor()
+        _desText=UITextView(frame: CGRect(x: 5, y: 4, width: self.view.frame.width-10, height: _desH))
+        _desText?.textContainer.lineFragmentPadding = 0
+        _desText?.textContainerInset = UIEdgeInsetsZero
+        
+        _desText?.textAlignment = NSTextAlignment.Justified
         _desText?.backgroundColor=UIColor.clearColor()
         _desText?.textColor=UIColor.whiteColor()
-        _desText?.font = Config._font_social_button
+        _desText?.editable = false
+        _desText?.selectable = false
+        _desText?.font = Config._font_description_at_bottom
         
         
         _desView?.addSubview(_desText!)
@@ -166,40 +169,40 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         
         _toolsBar = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: _toolsBarH))
-        _toolsBar?.backgroundColor = UIColor(white: 0.2, alpha: 0.6)
+        _toolsBar?.backgroundColor = Config._color_black_bar
         
         _bottomBar?.addSubview(_toolsBar!)
         
         
-        _btn_like = UIButton(frame: CGRect(x: 14, y: 11, width: 22, height: 18))
+        _btn_like = UIButton(frame: CGRect(x: 15, y: 9.5, width: 23, height: 20))
         
         _btn_like.setImage(UIImage(named: "like_off"), forState: UIControlState.Normal)
         _btn_like.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
-        _btn_comment = UIButton(frame: CGRect(x: 58, y: 10, width: 24, height: 20))
+        _btn_comment = UIButton(frame: CGRect(x: 59, y: 9.5, width: 26, height: 20))
         _btn_comment.setImage(UIImage(named: "message_icon"), forState: UIControlState.Normal)
         _btn_comment.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _btn_toShare = UIButton(frame: CGRect(x: 109, y: 10, width: 18, height: 17))
+        _btn_toShare = UIButton(frame: CGRect(x: 108, y: 11, width: 18, height: 17))
         _btn_toShare.setImage(UIImage(named: "to_share_icon"), forState: UIControlState.Normal)
         _btn_toShare.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _likeIcon = UIImageView(frame: CGRect(x: self.view.frame.width - 95, y: 15, width: 12, height: 10))
+        _likeIcon = UIImageView(frame: CGRect(x: self.view.frame.width - 95, y: 11, width: 13, height: 20))
         _likeIcon?.image = UIImage(named: "like_sign.png")
         
-        _likeNumLable = UILabel(frame: CGRect(x: self.view.frame.width - 21, y: 2.5, width: 12, height: 10))
-        _likeNumLable?.textColor = Config._color_social_blue
-        _likeNumLable?.font = Config._font_social_button
+        _likeNumLable = UILabel()
+        _likeNumLable?.textColor = Config._color_social_gray_border
+        _likeNumLable?.font =  Config._font_cell_subTitle
         
         
-        _commentIcon = UIImageView(frame: CGRect(x: self.view.frame.width - 75, y: 15, width: 12, height: 10))
+        _commentIcon = UIImageView(frame: CGRect(x: self.view.frame.width - 75, y: 11+4, width: 13, height: 11))
         _commentIcon?.image = UIImage(named: "commentIcon.png")
         
-        _commentNumLable = UILabel(frame: CGRect(x: self.view.frame.width - 21, y: 2.5, width: 12, height: 10))
-        _commentNumLable?.textColor = Config._color_social_blue
-        _commentNumLable?.font = Config._font_social_button
+        _commentNumLable = UILabel()
+        _commentNumLable?.textColor = Config._color_social_gray_border
+        _commentNumLable?.font = Config._font_cell_subTitle
         
         
         _toolsBar?.addSubview(_btn_like)
@@ -217,7 +220,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         
         _collectionLayout=UICollectionViewFlowLayout()
-        let _imagesW:CGFloat=(self.view.frame.width-2*_space)/3
+        let _imagesW:CGFloat=(self.view.frame.width-3*_space)/4
         //let _imagesH:CGFloat=ceil(CGFloat(_picsArray!.count)/4)*(_imagesW+_space)
         
         
@@ -275,8 +278,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _moveToPicByIndex(_currentIndex!)
         
         
-        _setLikeNum(120)
-        _setComNum(130)
+        _setComNumAndLikeNum(40502, __LikeNum: 3000)
         
         _setuped=true
     }
@@ -284,13 +286,11 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     //-----根据排列顺序调出图片
     func _getPicAtIndex(__index:Int)->NSDictionary{
         var _dict:NSDictionary
-        
         if _range == 0{
             _dict = _picsArray?.objectAtIndex(__index) as! NSDictionary
         }else{
             _dict = _picsArray?.objectAtIndex(_picsArray!.count-__index-1) as! NSDictionary
         }
-        
         print("调出图片:",_dict)
         return _dict
     }
@@ -298,26 +298,76 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     func _showIndexAtPics(__index:Int,__array:NSArray){
         _picsArray=NSMutableArray(array: __array)
         _currentIndex=__index
-        
         if _currentIndex > _picsArray!.count-1{
             _currentIndex = _picsArray!.count-1
         }
         if _currentIndex < 0{
             _currentIndex = 0
         }
+        
+        
+        _likedArray = []
+        
+        for var i:Int = 0 ; i<_picsArray?.count ; ++i{
+            _likedArray?.addObject(false)
+        }
+        
     }
-    
-    func _setLikeNum(_num:Int){
-        _likeNumLable?.text = String(_num)
+    //---消息数字//---点赞数字
+    func _setComNumAndLikeNum(__comNum:Int,__LikeNum:Int){
+        var _comX:CGFloat
+        if __comNum<1{
+            _commentIcon?.hidden = true
+            _commentNumLable?.hidden = true
+            _comX = self.view.frame.width - Config._gap
+        }else{
+            _commentIcon?.hidden=false
+            _commentNumLable?.hidden = false
+            
+            if __comNum<10000{
+                _commentNumLable?.text = String(__comNum)
+            }else{
+                _commentNumLable?.text = String(Int(__comNum/10000))+"万"
+            }
+            
+            let size:CGSize =  _commentNumLable!.sizeThatFits(CGSize(width: CGFloat.max, height: 17))
+            _commentNumLable?.frame = CGRect(x: self.view.frame.width - Config._gap - size.width, y: 10, width: size.width, height: size.height)
+            _commentIcon!.frame.origin.x = _commentNumLable!.frame.origin.x - _commentIcon!.frame.width - 5
+            _comX = _commentIcon!.frame.origin.x - 13
+        }
+        
+        if __LikeNum<1{
+            _likeNumLable?.hidden = true
+            _likeIcon?.hidden = true
+        }else{
+            _likeNumLable?.hidden = false
+            _likeIcon?.hidden=false
+            
+            if __LikeNum<10000{
+                _likeNumLable?.text = String(__LikeNum)
+            }else{
+                _likeNumLable?.text = String(Int(__LikeNum/10000))+"万"
+            }
+            let size:CGSize =  _likeNumLable!.sizeThatFits(CGSize(width: CGFloat.max, height: 17))
+            _likeNumLable?.frame = CGRect(x:_comX - size.width , y: 10, width: size.width, height: size.height)
+            _likeIcon!.frame.origin.x = _likeNumLable!.frame.origin.x - _likeIcon!.frame.width - 5
+           
+        }
+        
+        
     }
-    func _setComNum(_num:Int){
-        _commentNumLable?.text = String(_num)
+    //---设置是否点赞
+    func _setLiked(__set:Bool){
+        if __set{
+            _btn_like.setImage(UIImage(named: "like_on"), forState: UIControlState.Normal)
+        }else{
+            _btn_like.setImage(UIImage(named: "like_off"), forState: UIControlState.Normal)
+        }
     }
     
     //----设置描述
     func _setDescription(_str:String){
         let __str = _str
-        //var __str = "山东阿甘陪我难过的是谁的根是代购嗯孤收到两个色更难过的事都是个"
         _desText?.text = __str
         //print("设置描述：",__str)
         if  __str == ""{
@@ -327,8 +377,9 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         }
         let _size:CGSize = _desText!.sizeThatFits(CGSize(width: self.view.frame.width-2*_gap, height: CGFloat.max))
         
-        _desText?.frame =  CGRect(x: _gap, y: _gap/2, width: self.view.frame.width-2*_gap, height: _size.height)
-        _desH = (_desText?.frame.height)!+_gap/2+_gap
+        _desText?.frame =  CGRect(x: _gap, y: 4, width: self.view.frame.width-2*_gap, height: _size.height)
+        
+        _desH = (_desText?.frame.height)!+2+_gap
         
         _desView?.frame = CGRect(x: 0, y: -_desH, width: self.view.frame.width, height: _desH)
         
@@ -375,6 +426,11 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         }else{
             _setDescription("")
         }
+        
+        _setLiked(_likedArray?.objectAtIndex(_currentIndex!) as! Bool)
+        
+        
+        
         _viewInAtIndex(__index)
         _viewInAtIndex(__index+1)
         _viewInAtIndex(__index-1)
@@ -424,15 +480,11 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
             _picV._scaleType = PicView._ScaleType_Fit
             _picV.tag=100+__index
         }
-        
-        
         if __index == _currentIndex{
             _picV.addGestureRecognizer(_tapG!)
             _currentPic = _picV
         }
         _scrollView!.addSubview(_picV)
-        
-        
         let __pic:NSDictionary = _getPicAtIndex(__index)
         
         if let _url = __pic.objectForKey("link") as? String{
@@ -488,22 +540,77 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
                 return
                 
             }
-        
+        case  _btn_like:
+            if _hasLikedAtIndex(_currentIndex!){
+                _removeLikeAtIndex(_currentIndex!)
+            }else{
+                _addLikeAtIndex(_currentIndex!)
+            }
+            
+            _setLiked(_likedArray?.objectAtIndex(_currentIndex!) as! Bool)
+
+            break
+        case _btn_comment:
+            let _controller:CommentList = CommentList()
+            
+            
+            _controller._dealWidthDatas(NSArray())
+            
+            self.navigationController?.pushViewController(_controller, animated: true)
         default:
             print(sender)
         }
         
     }
+    
+    
+    //----判断是否已经有点过赞
+    
+    func _hasLikedAtIndex(__indexId:Int)->Bool{
+        
+        if __indexId>=self._likedArray?.count{
+            return false
+        }
+        
+        if (self._likedArray![__indexId] as? Bool) ==  true {
+            return true
+        }
+        return false
+    }
+    //----添加点赞
+    
+    func _addLikeAtIndex(__index:Int){
+        if _hasLikedAtIndex(__index){
+            return
+        }
+        let _arr:NSMutableArray = NSMutableArray(array: self._likedArray!)
+        _arr[__index] = true
+        self._likedArray = _arr
+        
+    }
+    //----取消点赞
+    
+    func _removeLikeAtIndex(__index:Int){
+        if _hasLikedAtIndex(__index){
+            
+        }else{
+            return
+        }
+        let _arr:NSMutableArray = NSMutableArray(array: self._likedArray!)
+        _arr[__index] = false
+        self._likedArray = _arr
+    }
     //-----切换查看模式，瀑布流或滑动
     func _changeTo(__type:String){
-        
         _showType = __type
         switch _showType{
         case "pic":
             _imagesCollection?.removeFromSuperview()
             self.view.insertSubview(_scrollView, atIndex: 0)
             _bottomBar?.hidden=false
-            _titleT?.hidden=false
+            
+            _titleT?.frame.origin.y = 10
+            
             _moveToPicByIndex(_currentIndex!)
             _scrollView.setContentOffset(CGPoint(x: CGFloat(_currentIndex!)*self.view.frame.width, y: 0), animated: false)
             _btn_moreAction?.setImage(UIImage(named: "changeToCollect_icon.png"), forState: UIControlState.Normal)
@@ -511,11 +618,12 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         case "collection":
             _scrollView.removeFromSuperview()
             _bottomBar?.hidden=true
-            _titleT?.hidden=true
+            _titleT?.frame.origin.y = 20
+            _titleT?.text = _titleBase
             self.view.insertSubview(_imagesCollection!, atIndex: 0)
             //_imagesCollection?.reloadData()
             _imagesCollection?.scrollToItemAtIndexPath(NSIndexPath(forItem: _currentIndex!, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Left, animated: true)
-            _btn_moreAction?.setImage(UIImage(named: "changeToPic.png"), forState: UIControlState.Normal)
+            _btn_moreAction?.setImage(UIImage(named: "changeToPic_white"), forState: UIControlState.Normal)
             //_showingBar = true
             return
         default:

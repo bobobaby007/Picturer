@@ -21,7 +21,7 @@ class Social_Setting_about: UIViewController,ContentEditer_delegate{
     
     let _buttonH:CGFloat = 45
     
-    var _naviDelegate:Navi_Delegate?
+    weak var _naviDelegate:Navi_Delegate?
     
     let _setion_1_titles:NSArray = ["去评分","用户协议"]
     

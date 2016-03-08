@@ -92,59 +92,58 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                 
                 
                 
-//                let iconFormat = Format<UIImage>(name: "icons", diskCapacity: 10 * 1024 * 1024) { image in
-//                    return imageByRoundingCornersOfImage(image)
-//                }
-//                cache.addFormat(iconFormat)
+                //                let iconFormat = Format<UIImage>(name: "icons", diskCapacity: 10 * 1024 * 1024) { image in
+                //                    return imageByRoundingCornersOfImage(image)
+                //                }
+                //                cache.addFormat(iconFormat)
                 
                 
-//                _imgView?.hnk_setImageFromURL(NSURL(string: _myUrl)!, placeholder: UIImage(named: "noPic.jpg"), format: nil, failure: { (err) -> () in
-//                    print("图片加载失败:",self._myUrl)
-//                    __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
-//                    return
-//                    }, success: { (image) -> () in
-//                        
-//                        if self._imgView != nil{
-//                            self._setImageByImage(image)
-//                            //self._imgView?.image=image
-//                            __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
-//                        }else{
-//                            print("out")
-//                        }
-//                })
+                //                _imgView?.hnk_setImageFromURL(NSURL(string: _myUrl)!, placeholder: UIImage(named: "noPic.jpg"), format: nil, failure: { (err) -> () in
+                //                    print("图片加载失败:",self._myUrl)
+                //                    __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
+                //                    return
+                //                    }, success: { (image) -> () in
+                //
+                //                        if self._imgView != nil{
+                //                            self._setImageByImage(image)
+                //                            //self._imgView?.image=image
+                //                            __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
+                //                        }else{
+                //                            print("out")
+                //                        }
+                //                })
                 
                 
                 
-               
-                _imgView?.image = UIImage(named: "noPic.jpg")
                 
-                ImageLoader.sharedLoader.imageForUrl(_myUrl, completionHandler: { (image, url) -> () in
+                //_imgView?.image = UIImage(named: "noPic.jpg")
+                
+                ImageLoader.sharedLoader.imageForUrl(_myUrl, completionHandler: {[weak self] (image, url) -> () in
                     // _setImage(image)
                     //println("")
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                    
                     if image==nil{
                         //--加载失败
-                        print("图片加载失败:",self._myUrl)
+                        print("图片加载失败:",self?._myUrl)
                         __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
                         return
                     }
-                    if self._imgView != nil{
-                        self._setImageByImage(image!)
+                    if self?._imgView != nil{
+                        
+                        self?._setImageByImage(image!)
                         //self._imgView?.image=image
                         __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
                     }else{
-                        print("out")
+                        print("self out")
+                        __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
                     }
                     
-                })
-                
-                
+                    })                
             }else{
                 self._setImage(_myUrl)
                 __block(NSDictionary())
             }
-
+            
         default:
             print("")
         }
@@ -204,8 +203,11 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         if self._imgView == nil{
             return
         }
-        self._imgView?.image=_img
-        self._refreshView()
+        if let _imageV = self._imgView{
+            _imageV.image = _img
+            self._refreshView()
+        }
+        
     }
     
     

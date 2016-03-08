@@ -38,9 +38,7 @@ class UploadingList:NSObject {
                 print(__dict)
             }
         })
-        
         return _localId
-        
     }
     func _removeFrom(__localId:Int,var __atArray:NSMutableArray){
         let _a:NSMutableArray = NSMutableArray(array: __atArray)

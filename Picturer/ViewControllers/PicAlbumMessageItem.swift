@@ -18,7 +18,6 @@ protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
     func _buttonAction(__action:String,__dict:NSDictionary)
 }
 
-
 class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _picsW:CGFloat = 0
     let _gapForPic:CGFloat = 2
@@ -92,6 +91,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     var _statusText:UITextView?//----显示为状态时文字
     
+    var _liked:Bool = false //----点过赞
+    var _collected:Bool = false //---收藏过
     override func willMoveToSuperview(newSuperview: UIView?) {
         //setup()
     }
@@ -213,8 +214,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         _attributeStr = NSMutableAttributedString()
         
-        _commentText = UITextView()
-        
+        _commentText = UITextView(frame: CGRect(x: 0, y: 0, width: _defaultSize!.width-_gap*2, height: 200))
         _commentText?.textContainerInset =  UIEdgeInsetsMake(-3, 0, 0, 0)  //{{-10,-5},{0,0}} // UIEdgeInsetsZero
         _commentText?.textContainer.lineFragmentPadding = 0
         _commentText?.font = Config._font_social_album_description  //UIFont.systemFontOfSize(14)
@@ -314,7 +314,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _albumTitle_label?.textColor = UIColor.whiteColor()
         self.addSubview(_albumTitle_labelV!)
     }
-    
+    //----作为主页时设定
     func _setUpForMyHome(){
         setupToolsBar()
         setupPic()
@@ -366,15 +366,17 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         switch _type{
             case "myHome":
                 _description?.frame = CGRect(x: _gap, y: _bottomOfPic+_gap, width: _defaultSize!.width-_gap*2, height: _desH)
-                _toolsPanel!.frame = CGRect(x: 0, y: _bottomOfPic+_gap+_desH, width: _defaultSize!.width, height: 20)
+                _toolsPanel?.frame = CGRect(x: 0, y: _bottomOfPic+_gap+_desH, width: _defaultSize!.width, height: 20)
             break
             case "status":
-                _toolsPanel!.frame = CGRect(x: 0, y: _bottomOfPic+43, width: _defaultSize!.width, height: 20)
+                _toolsPanel?.frame = CGRect(x: 0, y: _bottomOfPic+43, width: _defaultSize!.width, height: 20)
             break
         default:
             break
         }
-        _commentText?.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width - Config._gap, height: _commentText!.contentSize.height)
+        
+        let _commH:CGFloat = _commentText!.contentSize.height
+        _commentText?.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width-_gap*2, height: _commH)
         
         var _moreComentH:CGFloat = 0
         
@@ -386,24 +388,26 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         let _moreCommentGap:CGFloat = 5
         
-        _moreCommentText?.frame = CGRect(x: 0, y: _commentText!.contentSize.height+_moreCommentGap , width: _defaultSize!.width-2*Config._gap, height: _moreComentH)
+        _moreCommentText?.frame = CGRect(x: 0, y: _commH+_moreCommentGap , width: _defaultSize!.width-2*Config._gap, height: _moreComentH)
         
         var _bgH:CGFloat = 0
         
         _bgH = _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height+_gap
         
-        
+        _commentsPanel?.clipsToBounds = false
+        _commentText?.clipsToBounds = false
         
         if _commentText?.text==""{
-        _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height+Config._gap, width: _defaultSize!.width-2*_gap, height: 0)
+        _commentsPanel?.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height+Config._gap, width: _defaultSize!.width-2*_gap, height: 0)
         }else{
             if _moreComentH == 0{//----如果没有更多评论
-                _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height+Config._gap, width: _defaultSize!.width-2*_gap, height: _commentText!.contentSize.height-3)
+                _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height+Config._gap, width: _defaultSize!.width-2*_gap, height: _commH)
+                _bgH = _commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+_gap-3
             }else{//----有更多评论
-                _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height+Config._gap, width: _defaultSize!.width-2*_gap, height: _commentText!.contentSize.height+_moreCommentGap+_moreComentH)
-                
+                _commentsPanel!.frame = CGRect(x: _gap, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height+Config._gap, width: _defaultSize!.width-2*_gap, height: _commH+_moreCommentGap+_moreComentH)
+               _bgH = _commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+_gap
             }
-            _bgH = _commentsPanel!.frame.origin.y+_commentsPanel!.frame.height+_gap
+            
         }
         _bgV!.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width, height:_bgH )
         
@@ -417,19 +421,23 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     func _setComments(__comments:NSArray,__allNum:Int){
         //let _lineH:CGFloat = 20
         //var _h:CGFloat
+       // print("评论：",__comments)
+        
+        
         let _n:Int = __comments.count
+        
         
         _attributeStr = NSMutableAttributedString(string: "")
         
         for var i:Int = 0 ; i<_n; ++i{
+            if i>2 {
+                break
+            }
             if i>0 {
                 _attributeStr?.appendAttributedString(NSAttributedString(string: "\n"))
             }
             let _commentDict:NSDictionary = __comments.objectAtIndex(__comments.count - 1 - i) as! NSDictionary
             _attributeStr?.appendAttributedString(commentString(_commentDict))
-            if i>1 {
-                break
-            }
         }
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 1
@@ -446,10 +454,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             _moreCommentText?.text = ""
         }
         
-        
     }
-    
-    
     //-----评论文字设置
     
     func commentString(_commentDict:NSDictionary) -> NSAttributedString {
@@ -539,7 +544,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         //print("out")
         self.superview?.removeGestureRecognizer(_tapC!)
     }
-    //-------点赞人
+    //-------点赞人----取消
     func _setLikes(__likes:NSArray,__allNum:Int){
         if __likes.count<1{
             _likeIcon?.hidden = true
@@ -556,10 +561,44 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _btn_moreLike?.frame = CGRect(x: _likeIcon!.frame.origin.x, y: _likeIcon!.frame.origin.y-5, width: _likeIcon!.frame.width+5+size.width, height: 17+10)
     }
     
+    //----点赞数量
+    func _setLikeNum(__num:Int){
+        if __num<1{
+            _likeIcon?.hidden = true
+            _btn_moreLike?.hidden = true
+            return
+        }else{
+            _likeIcon?.hidden=false
+            _btn_moreLike?.hidden = false
+        }
+        _likeNumLable?.text = String(__num)
+        let size:CGSize =  _likeNumLable!.sizeThatFits(CGSize(width: CGFloat.max, height: 17))
+        _likeNumLable?.frame = CGRect(x:  _defaultSize!.width - Config._gap - size.width, y: 0, width: size.width, height: 17)
+        _likeIcon!.frame.origin.x = _likeNumLable!.frame.origin.x - 13 - 5
+        _btn_moreLike?.frame = CGRect(x: _likeIcon!.frame.origin.x, y: _likeIcon!.frame.origin.y-5, width: _likeIcon!.frame.width+5+size.width, height: 17+10)
+    }
+    
+    //---是否点过赞
+    func _setLiked(__set:Bool){
+        _liked = __set
+        if _liked{
+            _btn_like.setImage(UIImage(named: "like_on"), forState: UIControlState.Normal)
+        }else{
+            _btn_like.setImage(UIImage(named: "like_off"), forState: UIControlState.Normal)
+        }
+    }
+    
+    //---是否收藏过
+    func _setCollected(__set:Bool){
+        _collected = __set
+        if _collected{
+            _btn_collect.setImage(UIImage(named: "collect_on"), forState: UIControlState.Normal)
+        }else{
+            _btn_collect.setImage(UIImage(named: "collect_off"), forState: UIControlState.Normal)
+        }
+    }
     //-----－－－－－－－－－－－按钮侦听
     func buttonAction(__button:UIButton){
-        
-        
         switch __button{
         case _btn_like:
             _delegate?._buttonAction("like", __dict: NSDictionary(objects: [_indexId], forKeys: ["indexId"]))
@@ -596,7 +635,6 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         //_description?.font = Config._font_social_album_description
         //_description?.textColor = Config._color_social_gray
         
-        
         _description?.attributedText = NSAttributedString(string: __str, attributes:attributes)
         
         
@@ -606,15 +644,38 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     //----设定相册标题--目前只有主页有这个设定
     
-    func _setAlbumTitle(__str:String){
+    func _setAlbumTitle(__str:String,__num:Int){
         if _albumTitle_label == nil{
             return
         }
+        var _str:String
         if __str==""{
-            _albumTitle_label?.text="未命名图册"
+            _str="未命名图册"
         }else{
-            _albumTitle_label?.text=__str
+            _str=__str
+            
         }
+        
+        let attrString = NSMutableAttributedString(string: _str )
+        // the entire string
+        let range:NSRange = NSMakeRange(0, attrString.length)
+        attrString.beginEditing()
+        
+        attrString.addAttribute(NSFontAttributeName, value:Config._font_cell_title, range:range)
+        attrString.addAttribute(NSForegroundColorAttributeName, value:UIColor.whiteColor(), range:range)
+        attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
+        attrString.endEditing()
+        
+        let _numString = NSMutableAttributedString(string: "   "+String(__num)+"张")
+        let _numRange = NSMakeRange(0,_numString.length)
+        _numString.addAttribute(NSFontAttributeName, value: Config._font_social_album_description, range: _numRange)
+        _numString.addAttribute(NSForegroundColorAttributeName, value: Config._color_gray_description, range: _numRange)
+        
+        attrString.appendAttributedString(_numString)
+        
+        _albumTitle_label?.attributedText = attrString
+        
+        
         let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap, height: CGFloat.max))
         var _lineNum:CGFloat = 1
         if _size.height>24{
@@ -648,8 +709,11 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _updateTime_label?.text=__str
     }
     func _setUserImge(__pic:NSDictionary){
-        _userImg?._setPic(__pic, __block: { (__dict) -> Void in
-            self._refreshView()
+        _userImg?._setPic(__pic, __block: {[weak self](__dict) -> Void in
+            if let strongSelf = self {
+                //print("strongSelf",strongSelf)
+                strongSelf._refreshView()
+            }
         })
     }
     
@@ -657,13 +721,13 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         //println(__pic)
        //  _pic?.image = UIImage(named: __pic.objectForKey("url") as! String)
         if let _url = __pic.objectForKey("thumbnail") as? String{
-            _picV!._setPic(NSDictionary(objects:[MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
-                 self._refreshView()
+            _picV!._setPic(NSDictionary(objects:[MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{[weak self] _ in
+                 self?._refreshView()
             })
             return
         }else{
-            _picV!._setPic(__pic, __block:{_ in
-                 self._refreshView()
+            _picV!._setPic(__pic, __block:{[weak self] _ in
+                 self?._refreshView()
             })
         }
     }

@@ -23,7 +23,7 @@ class Social_Setting_Home: UIViewController,ContentEditer_delegate{
     let _buttonH:CGFloat = 45
     
     
-    var _naviDelegate:Navi_Delegate?
+    weak var _naviDelegate:Navi_Delegate?
     
     
     
@@ -67,7 +67,7 @@ class Social_Setting_Home: UIViewController,ContentEditer_delegate{
                 _label.userInteractionEnabled = false
                 self.view.addSubview(_label)
             }
-            if i > 0  {
+            if i > 0  && i < _setion_1_titles.count {
                 let _arrowV:UIImageView = UIImageView(image: UIImage(named: "list_arrow.png"))
                 _arrowV.frame = CGRect(x: self.view.frame.width-24, y: Config._barH+_gap+CGFloat(i)*_buttonH+16, width: 7.5, height: 12.72)
                 

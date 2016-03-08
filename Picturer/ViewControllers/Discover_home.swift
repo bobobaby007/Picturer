@@ -23,8 +23,7 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
     var _tab_controller:MyTabBarController?
     
     
-    var _naviDelegate:Navi_Delegate?
-    
+    weak var _naviDelegate:Navi_Delegate?
     
     var _searchBarH:CGFloat = 43
     var _searchBar:UIView = UIView()

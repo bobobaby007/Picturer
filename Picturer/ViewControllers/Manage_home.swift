@@ -395,9 +395,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         cell.preservesSuperviewLayoutMargins = false
         cell.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         
-        
         //cell.textLabel?.text=_albumArray[indexPath.row] as? String
-        
         if MainAction._albumList.count<1{
             cell._changeToNew()
         }else{
@@ -405,22 +403,17 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             let _album:NSDictionary=MainAction._albumList[indexPath.row] as! NSDictionary
             cell.setTitle((_album.objectForKey("title") as? String)!)
             cell.setTime(CoreAction._dateDiff(_album.objectForKey("last_update_at") as! String))
-            
-            cell.setDescription(String(stringInterpolationSegment: String(_album.objectForKey("counts") as! Int)+"张"))
+            //cell.setDescription(String(stringInterpolationSegment: String(_album.objectForKey("counts") as! Int)+"张"))
             //cell.detailTextLabel?.text="ss"
-            
+            let _pics:NSArray = MainAction._getImagesOfAlbumIndex(indexPath.row)!
+            cell.setDescription(String(stringInterpolationSegment: String(_pics.count)+"张"))
             let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(indexPath.row)
-            
             if _pic != nil{
                 cell._setPic(_pic)
             }else{
                 cell._setPic(NSDictionary(objects: ["blank.png","file"], forKeys: ["url","type"]))
             }
-            
         }
-        
-        
-       
         //cell.imageView?.image=UIImage(named: _albumArray[indexPath.row] as! String)
         
         
@@ -633,9 +626,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
                 
             break
             case "edite_album":
+                
             MainAction._changeAlbumInfoAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
-            
-            //MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
+            MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
             break
             case "pics_to_album"://选择图片到指定相册
             //    MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
@@ -651,9 +644,11 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             print("")
         }
         //_tableView.reloadData()
+        //-----从服务器获取图列 ＊作废
+        //_refreshFromServer()
         
         
-        _refreshFromServer()
+        self._refresh()
     }
     func canceld() {
         _tableView.reloadData()

@@ -186,13 +186,25 @@ class Social_Main: AnyObject {
             }
         }
     }
+    //----获取关注我的用户列表
+    
+    static func _getFocusMeList(__userId:String,__block:(NSArray)->Void){
+        MainInterface._getFocusMeList(__userId) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                print("关注用户列表：",__dict)
+                __block(__dict.objectForKey("list") as! NSArray)
+            }else{
+                print("关注用户列表失败：",__dict.objectForKey("reason"))
+            }
+        }
+    }
     //-------
     
     //----获取好友列表
     static func _getFriendsList(__userId:String,__block:(NSArray)->Void){
         MainInterface._getFriendsList(__userId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
-                print("好友列表：",__dict)
+                //print("好友列表：",__dict)
                 __block(__dict.objectForKey("list") as! NSArray)
             }else{
                 print("关注好友列表失败：",__dict.objectForKey("reason"))
@@ -201,12 +213,9 @@ class Social_Main: AnyObject {
         }
     }
     
+    
     //------消息列表
     static func _getMessages(block:(NSArray)->Void){
-        
-        
-        
-        
         let _array:NSMutableArray = NSMutableArray()
         let _n:Int = 12
         for var i:Int = 0; i<_n;++i{
@@ -226,7 +235,7 @@ class Social_Main: AnyObject {
                 _commentDict.setValue("collect", forKey: "type")
             }
             
-            let _pic:NSDictionary = NSDictionary(objects: ["user_11.jpg","file"], forKeys: ["url","type"])
+            let _pic:NSDictionary = NSDictionary(objects: ["user_2.jpg","file"], forKeys: ["url","type"])
             _commentDict.setValue(_pic, forKey: "userImg")
             
             let _albumPic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%6+1)+".JPG","file"], forKeys: ["url","type"])
@@ -244,10 +253,6 @@ class Social_Main: AnyObject {
         var _n:Int = Int(__albumId!)!
         if _n < 1{
             _n = 1
-        }
-        if _n < 2{
-            block(_array)
-            return
         }
         //_n = 0
         for var i:Int = 0; i <= (_n-1);++i{
@@ -268,6 +273,8 @@ class Social_Main: AnyObject {
         // println(response.text)
         block(_array)
     }
+    
+    //----获取点赞列表－－－取消
     static func _getLikesOfAlubm(__albumId:String?,block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
         var _n:Int = Int(__albumId!)!

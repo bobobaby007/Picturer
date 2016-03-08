@@ -71,8 +71,10 @@ class MainInterface: AnyObject {
     static let _URL_User_Avatar:String = "user/avatar/"//---更新用户头像
     static let _URL_Pic_like:String = "like/picture/"//---图片点赞
     static let _URL_Album_like:String = "like/album/"//-----相册点赞
+    static let _URL_Album_unlike:String = "like/remove_album/"//-----相册点赞
     
-    
+    static let _URL_Sms:String = "user/smscode/"//获取验证码
+    static let _URL_changePassword:String = "sign/changePassword/"//修改密码
     
     //-----判断是否登录
     static func _isLogined()->Bool{
@@ -132,7 +134,21 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
+    //-----获取验证码
+    static func _getSms(__mob:String,__type:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("mobile=\(__mob)&type=\(__type)", __url: _basicDoman+_version+"/"+_URL_Sms ) { (__dict) -> Void in
+            print("获取验证码：",__dict)
+            __block(__dict)
+        }
+    }
     
+    //-----修改密码
+    static func _changePassword(__mob:String,__code:String, __pass:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("type=default&mobile=\(__mob)&password=\(__pass)&code=\(__code)", __url: _basicDoman+_version+"/"+_URL_changePassword) { (__dict) -> Void in
+            print("修改密码:",__dict)
+            __block(__dict)
+        }
+    }
     //-----更新用户信息
     static func _updateUserInfo(__dict:NSDictionary, __block:(NSDictionary)->Void){
         var _str:String = ""
@@ -171,6 +187,14 @@ class MainInterface: AnyObject {
         }
     }
     
+    //-----关注我的用户列表
+    static func _getFocusMeList(__userId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_FocusOnMeList+"\(__userId)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+
     
     
     //-----我关注的用户的时间树
@@ -203,6 +227,13 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
+    //----取消相册点赞
+    static func _unlikeAlbum(__id:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_unlike+"\(__id)") { (__dict) -> Void in
+            __block(__dict)
+        }
+    }
+    
     //----图片点赞
     static func _likePic(__id:String, __block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Pic_like+"\(__id)") { (__dict) -> Void in
@@ -338,8 +369,9 @@ class MainInterface: AnyObject {
     }
     //-----修改图片
     static func _changePic(__picId:String,__changeingStr:String,__block:(NSDictionary)->Void){
+        
         CoreAction._sendToUrl("token=\(_token)"+__changeingStr, __url: _basicDoman+_version+"/"+_URL_Pic_update+__picId) { (__dict) -> Void in
-            print("修改图片成功：",__dict)
+            print("修改图片结果：",__dict.objectForKey("reason") as! String)
             __block(__dict)
         }
     }

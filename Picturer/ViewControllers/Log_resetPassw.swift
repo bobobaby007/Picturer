@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Log_signin: UIViewController{
+class Log_resetPassw: UIViewController{
     let _gap:CGFloat=15
     var _setuped:Bool=false
     var _topBar:UIView?
@@ -21,7 +21,6 @@ class Log_signin: UIViewController{
     let _buttonH:CGFloat = 45
     var _txt_mobile:UITextField?
     var _txt_smscode:UITextField?
-    var _txt_nickname:UITextField?
     var _txt_password:UITextField?
     
     var _keyboardPointY:CGFloat = 0
@@ -30,118 +29,108 @@ class Log_signin: UIViewController{
     var _btn_Contenter:UIView?
     var _btn_getSmscode:UIButton?
     
-    var _btn_rule:UIButton?
-    
     var _timer:NSTimer?
     var _currentSecond:Int = 0
+    
+    var _barH:CGFloat = 64
     override func viewDidLoad() {
+        
         setup()
     }
     func setup(){
         if _setuped{
             return
         }
-        self.view.backgroundColor=Config._color_bg_gray
-        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: Config._barH ))
-        _topBar?.backgroundColor=Config._color_black_bar
+        let _bgView = UIImageView(image: UIImage(named: "bg.jpg"))
+        _bgView.contentMode = UIViewContentMode.ScaleToFill
+        _bgView.frame = self.view.bounds
+        self.view.addSubview(_bgView)
         
-        let _white:UIView = UIView(frame: CGRect(x: 0, y: Config._barH+_gap , width: self.view.frame.width, height: 4*_buttonH))
-        _white.backgroundColor = UIColor.whiteColor()
-        self.view.addSubview(_white)
+        _topBar=UIView(frame:CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH ))
+        //_topBar?.backgroundColor=UIColor(white: 0, alpha: 0.2)
         
-        for var i:Int = 0;i<5; ++i{
-            let _line:UIView = UIView(frame: CGRect(x: 0, y: Config._barH+_gap+CGFloat(i)*_buttonH-0.5, width: self.view.frame.width, height: 0.3))
-            _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        let _blurV = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
+        //_blurV?.alpha = 0.5
+        _blurV.frame = _topBar!.bounds
+        _topBar?.addSubview(_blurV)
+        _btn_cancel=UIButton(frame: CGRect(x: 10, y: 22, width: 30, height: 30))
+        _btn_cancel?.center = CGPoint(x: 30, y: _barH/2+8)
+        _btn_cancel?.setImage(UIImage(named: "icon_back"), forState: UIControlState.Normal)
+        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        //        let _white:UIView = UIView(frame: CGRect(x: 0, y: _barH+_gap , width: self.view.frame.width, height: 4*_buttonH))
+        //        _white.backgroundColor = UIColor(white: 1, alpha: 0.1)
+        
+        //self.view.addSubview(_white)
+        
+        for var i:Int = 0;i<3; ++i{
+            let _line:UIView = UIView(frame: CGRect(x: _gap, y: _barH+_gap+CGFloat(i+1)*_buttonH-0.5, width: self.view.frame.width-2*_gap, height: 0.3))
+            _line.backgroundColor = UIColor(white: 0, alpha: 0.2)
             self.view.addSubview(_line)
         }
         
-        _txt_mobile = UITextField(frame: CGRect(x: _gap, y: Config._barH+_gap, width: self.view.frame.width-2*_gap, height: _buttonH))
+        
+        
+        _txt_mobile = UITextField(frame: CGRect(x: _gap, y: _barH+_gap, width: self.view.frame.width-2*_gap, height: _buttonH))
         _txt_mobile?.keyboardType = UIKeyboardType.PhonePad
-        _txt_mobile?.textColor = Config._color_black_title
-        _txt_mobile?.font = Config._font_cell_title_normal
+        _txt_mobile?.textColor = UIColor.whiteColor()
+        //_txt_mobile?.font = _font_cell_title_normal
         _txt_mobile?.placeholder = "手机号码"
         _txt_mobile?.addTarget(self, action: "textHander:", forControlEvents: UIControlEvents.EditingChanged)
         self.view.addSubview(_txt_mobile!)
         
         
-        _txt_smscode = UITextField(frame: CGRect(x: _gap, y: Config._barH+_gap+_buttonH, width: self.view.frame.width-_gap-112.5, height: _buttonH))
+        _txt_smscode = UITextField(frame: CGRect(x: _gap, y: _barH+_gap+_buttonH, width: self.view.frame.width-_gap-112.5, height: _buttonH))
         _txt_smscode?.keyboardType = UIKeyboardType.NumberPad
-        _txt_smscode?.textColor = Config._color_black_title
-        _txt_smscode?.font = Config._font_cell_title_normal
+        _txt_smscode?.textColor = UIColor.whiteColor()
+        //_txt_smscode?.font = _font_cell_title_normal
         _txt_smscode?.placeholder = "验证码"
         _txt_smscode?.addTarget(self, action: "textHander:", forControlEvents: UIControlEvents.EditingChanged)
         self.view.addSubview(_txt_smscode!)
         
-        let _line:UIView = UIView(frame: CGRect(x: self.view.frame.width-_gap-100, y: Config._barH+_gap+_buttonH+7.5, width: 0.3, height: _buttonH-15))
-        _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
-        self.view.addSubview(_line)
         
-        _btn_getSmscode = UIButton(frame: CGRect(x: self.view.frame.width-_gap-94, y: Config._barH+_gap+_buttonH+1, width: 100, height: _buttonH-2))
-        _btn_getSmscode?.titleLabel?.font = Config._font_cell_title_normal
-        _btn_getSmscode?.setTitleColor(Config._color_black_title, forState: UIControlState.Normal)
+        
+        _btn_getSmscode = UIButton(frame: CGRect(x: self.view.frame.width-_gap-94, y: _barH+_gap+_buttonH+(_buttonH-30)/2, width: 94, height: 30))
+        _btn_getSmscode?.titleLabel?.font = UIFont.systemFontOfSize(12)
+        //_btn_getSmscode?.setTitleColor(_color_black_title, forState: UIControlState.Normal)
         
         _btn_getSmscode?.setTitle("获取验证码", forState: UIControlState.Normal)
+        
+        _btn_getSmscode!.layer.borderColor = UIColor.whiteColor().CGColor
+        _btn_getSmscode!.layer.borderWidth = 1
+        _btn_getSmscode!.layer.cornerRadius = 15
         _btn_getSmscode?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         self.view.addSubview(_btn_getSmscode!)
         
         
-        _txt_nickname = UITextField(frame: CGRect(x: _gap, y: Config._barH+_gap+2*_buttonH, width: self.view.frame.width-2*_gap, height: _buttonH))
-        _txt_nickname?.textColor = Config._color_black_title
-        _txt_nickname?.font = Config._font_cell_title_normal
-        _txt_nickname?.placeholder = "昵称"
-        _txt_nickname?.addTarget(self, action: "textHander:", forControlEvents: UIControlEvents.EditingChanged)
-        self.view.addSubview(_txt_nickname!)
-        
-        
-        _txt_password = UITextField(frame: CGRect(x: _gap, y: Config._barH+_gap+3*_buttonH, width: self.view.frame.width-2*_gap, height: _buttonH))
-        _txt_password?.textColor = Config._color_black_title
-        _txt_password?.font = Config._font_cell_title_normal
+        _txt_password = UITextField(frame: CGRect(x: _gap, y: _barH+_gap+2*_buttonH, width: self.view.frame.width-2*_gap, height: _buttonH))
+        _txt_password?.textColor = UIColor.whiteColor()
+        //_txt_password?.font = _font_cell_title_normal
         _txt_password?.secureTextEntry = true
-        _txt_password?.placeholder = "设置密码"
+        _txt_password?.placeholder = "输入新密码"
         _txt_password?.addTarget(self, action: "textHander:", forControlEvents: UIControlEvents.EditingChanged)
         self.view.addSubview(_txt_password!)
         
         
-        _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
-        _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
-        
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        
         _title_label=UILabel(frame:CGRect(x: 50, y: 12, width: self.view.frame.width-100, height: 60))
         _title_label?.textColor=UIColor.whiteColor()
-        _title_label?.font = Config._font_topbarTitle
+        //        _title_label?.font = _font_topbarTitle
         _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.text="注册"
+        _title_label?.text="重设密码"
         self.view.addSubview(_topBar!)
-        
         
         _btn_Contenter = UIView(frame: CGRect(x: 0, y: self.view.frame.height-_buttonH, width: 0, height: _buttonH))
         _btn_Contenter?.clipsToBounds = true
+        _btn_Contenter?.backgroundColor = UIColor(white: 0, alpha: 0.2)
         
         _btn_go = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: _buttonH))
-        _btn_go?.backgroundColor = Config._color_yellow
-        _btn_go?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
-        _btn_go?.titleLabel?.font = Config._font_cell_title
+        //        _btn_go?.backgroundColor = _color_yellow
+        //        _btn_go?.setTitleColor(_color_white_title, forState: UIControlState.Normal)
+        //        _btn_go?.titleLabel?.font = _font_cell_title
         _btn_go?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        _btn_go?.setTitle("注册", forState: UIControlState.Normal)
+        _btn_go?.setTitle("重设", forState: UIControlState.Normal)
         _btn_go?.clipsToBounds = true
-        
-        let _label:UILabel = UILabel(frame: CGRect(x: _gap, y: Config._barH+_gap+4*_buttonH, width:170, height: _buttonH))
-        _label.font = Config._font_cell_time
-        _label.textAlignment = NSTextAlignment.Left
-        _label.textColor = UIColor(white: 0.5, alpha: 1)
-        _label.text = "点击“注册”，即表示你同意遵守"
-        self.view.addSubview(_label)
-        
-        _btn_rule = UIButton(frame: CGRect(x: _gap+173, y: Config._barH+_gap+4*_buttonH, width: 300, height: _buttonH))
-        _btn_rule?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
-        _btn_rule?.titleLabel?.font = UIFont.systemFontOfSize(12)
-        _btn_rule?.titleLabel?.textAlignment = NSTextAlignment.Left
-        _btn_rule?.setTitleColor(Config._color_social_blue, forState: UIControlState.Normal)
-        _btn_rule?.setTitle("用户协议。", forState: UIControlState.Normal)
-        _btn_rule?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(_btn_rule!)
         
         self.view.addSubview(_btn_Contenter!)
         _btn_Contenter!.addSubview(_btn_go!)
@@ -172,9 +161,6 @@ class Log_signin: UIViewController{
     func _checkAllIn()->Bool{
         
         if _txt_mobile?.text == ""{
-            return false
-        }
-        if _txt_nickname?.text == ""{
             return false
         }
         if _txt_password?.text == ""{
@@ -208,15 +194,22 @@ class Log_signin: UIViewController{
             break
         }
         _refreshView()
-       // print(_info)
+        // print(_info)
     }
     //-----倒计时
     func timerHander(timer:NSTimer){
-       // print(timer)
+        // print(timer)
         _currentSecond += 1
         _btn_getSmscode?.setTitle(String(60-_currentSecond)+"s", forState: UIControlState.Normal)
         if _currentSecond>=60{
-            _stopTimer()
+            //            _btn_getSmscode?.titleLabel?.font = _font_cell_title_normal
+            _btn_getSmscode?.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+            _btn_getSmscode?.setTitle("获取验证码", forState: UIControlState.Normal)
+            _btn_getSmscode?.enabled = true
+            _btn_getSmscode?.layer.borderColor = UIColor.whiteColor().CGColor
+            _currentSecond = 0
+            _timer?.invalidate()
+            _timer = nil
         }
     }
     func _checkPhone()->Bool{
@@ -226,36 +219,17 @@ class Log_signin: UIViewController{
         }
         return true
     }
+    
     //----注册
     func _go(){
-        MainInterface._signup(_txt_mobile!.text!, __pass: _txt_password!.text!,__nickname: _txt_nickname!.text!) { (__dict) -> Void in
+        MainInterface._changePassword(_txt_mobile!.text!,__code: _txt_smscode!.text!, __pass: _txt_password!.text!) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
-               Log_Main._self?._hide()
-            }else{
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    let _alerter:UIAlertView = UIAlertView(title: "", message: __dict.objectForKey("reason") as? String, delegate: nil, cancelButtonTitle: "确定")
+                    self.navigationController?.popViewControllerAnimated(true)
+                    let _alerter:UIAlertView = UIAlertView(title: "", message: "修改密码成功，请重新登录", delegate: nil, cancelButtonTitle: "确定")
                     _alerter.show()
-
                 })
-                
-            }
-        }
-    }
-    //----发送验证码
-    func _sendSmscode(){
-        _btn_getSmscode?.setTitleColor(Config._color_gray_description, forState: UIControlState.Normal)
-        _btn_getSmscode?.enabled = false
-        
-        if _timer == nil{
-            _timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerHander:", userInfo: nil, repeats: true)
-            _timer?.fire()
-        }
-        
-        MainInterface._getSms(_txt_mobile!.text!,__type: "register") { (__dict) -> Void in
-            if __dict.objectForKey("recode") as! Int == 200{
-                
             }else{
-                self._stopTimer()
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     let _alerter:UIAlertView = UIAlertView(title: "", message: __dict.objectForKey("reason") as? String, delegate: nil, cancelButtonTitle: "确定")
                     _alerter.show()
@@ -263,28 +237,28 @@ class Log_signin: UIViewController{
                 })
             }
         }
-        
     }
-    
-    
-    func _stopTimer(){
-        //            _btn_getSmscode?.titleLabel?.font = _font_cell_title_normal
-        _btn_getSmscode?.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        _btn_getSmscode?.setTitle("获取验证码", forState: UIControlState.Normal)
-        _btn_getSmscode?.enabled = true
-        _btn_getSmscode?.layer.borderColor = UIColor.whiteColor().CGColor
-        _currentSecond = 0
-        _timer?.invalidate()
-        _timer = nil
+    //----发送验证码
+    func _sendSmscode(){
+        _btn_getSmscode?.enabled = false
         
-    }
-    
-    //----展示协议
-    
-    func _showEULA(){
-        let _controller:EULA = EULA()
-        self.presentViewController(_controller, animated: true) { () -> Void in
-            
+        _btn_getSmscode?.setTitleColor(UIColor(white: 0, alpha: 0.2), forState: UIControlState.Normal)
+        _btn_getSmscode?.layer.borderColor = UIColor(white: 0, alpha: 0.2).CGColor
+        
+        if _timer == nil{
+            _timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerHander:", userInfo: nil, repeats: true)
+            _timer?.fire()
+        }
+        MainInterface._getSms(_txt_mobile!.text!,__type: "changepassword") { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                
+            }else{
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    let _alerter:UIAlertView = UIAlertView(title: "", message: __dict.objectForKey("reason") as? String, delegate: nil, cancelButtonTitle: "确定")
+                    _alerter.show()
+                    
+                })
+            }
         }
     }
     
@@ -316,9 +290,6 @@ class Log_signin: UIViewController{
             break
         case _btn_go!:
             _go()
-            break
-        case _btn_rule!:
-            _showEULA()
             break
         default:
             print(sender)

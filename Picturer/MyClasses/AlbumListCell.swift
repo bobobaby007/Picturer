@@ -51,7 +51,6 @@ class AlbumListCell :  UITableViewCell{
         
         self.addSubview(_titleLable!)
         
-        
         //_desLable=UILabel(frame: CGRectMake(self.bounds.height+10, self.bounds.height/2-2, self.bounds.width-26, 30))
         _desLable=UILabel(frame: CGRectMake(100, 51, _mySize!.width-100-61, 14))
         _desLable?.textAlignment = NSTextAlignment.Left
@@ -67,11 +66,9 @@ class AlbumListCell :  UITableViewCell{
         _arrowV = UIImageView(image: UIImage(named: "list_arrow.png"))
         _arrowV?.frame = CGRect(x: _mySize!.width-21.5, y: 51, width: 7.5, height: 12.72)
         self.addSubview(_arrowV!)
-         self.addSubview(_timeLable!)
-        
+        self.addSubview(_timeLable!)
         _setuped=true
-        
-        print(self.bounds)
+        //print(self.bounds)
     }
     
     func _changeToNew()->Void{

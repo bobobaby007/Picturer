@@ -32,7 +32,6 @@ class SyncAction: NSObject{
                 }
                 if let _arr:NSArray = CoreAction._getArrayFromFile(_listName+".plist"){
                 _aList = NSMutableArray(array: _arr)
-                    
                 }
             }
             return _aList
@@ -51,19 +50,15 @@ class SyncAction: NSObject{
         _saveActionsToFile()
         _doActionAtIndex(_currentIndex)
     }
-    
-    
-    
-    
     //-----上传图片到相册,返回带着默认值的pic字典
     static func _uploadPicToAlbum(__pic:NSDictionary,_album:NSDictionary)->NSDictionary{
         let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: __pic)
-        
         if _pic.objectForKey("_id") == nil{
             _pic.setObject("", forKey: "_id")
         }else{
             
         }
+        
         if _pic.objectForKey("last_update_at") == nil{
             _pic.setObject(CoreAction._timeStrOfCurrent(), forKey: "last_update_at")
         }
@@ -121,7 +116,6 @@ class SyncAction: NSObject{
             }
         }
     }
-    
     static func _doActionAtIndex(__index:Int){
         if __index<0||__index>=_actions.count{
             return
@@ -175,6 +169,7 @@ class SyncAction: NSObject{
                         SyncAction._nextAction()
                     }
                 })
+                
                 break
             case _Type_updatePic:
                 MainInterface._changePic(_content.objectForKey("_id") as! String, __changeingStr: _content.objectForKey("changeingStr") as! String, __block: { (__dict) -> Void in
@@ -214,7 +209,6 @@ class SyncAction: NSObject{
                     print("图片传成功：",__dict,_content)
                     let _newPic:NSDictionary = __dict.objectForKey("info") as! NSDictionary
                     
-                    
                     break
                 case _Type_newAlbum:
                     let _newAlbum:NSDictionary = __dict.objectForKey("albuminfo") as! NSDictionary
@@ -223,15 +217,10 @@ class SyncAction: NSObject{
                 default:
                     break
                 }
-                
-                
                 _actions.removeObjectAtIndex(i)
                 _saveActionsToFile()
-                
             }
         }
-        
-        
         SyncAction._removeActionById(__id)
         _nextAction()
         

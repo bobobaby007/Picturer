@@ -450,10 +450,6 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         }else{
             cell._isUploading(false)
         }
-        
-        
-        
-        
         return cell
     }
     //-----根据排序返回真实index
@@ -546,8 +542,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: images.objectAtIndex(i) as! NSDictionary)
             _pic.setObject(Int(NSDate().timeIntervalSince1970)+i+10000*random(), forKey: "localId")
             _imagesArray.addObject(_pic)
-            _uploadingList?._addNewPic(_pic)
             
+            //------*作废使用
+            //_uploadingList?._addNewPic(_pic)
         }
         
         
@@ -557,21 +554,16 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         //println(images)
     }
-    
-    
-    //-----图片上传代理
+    //-----图片上传代理-----上传成功标记----*作废使用
     func _uploadOk(__oldPic: NSDictionary, __newPic: NSDictionary) {
         for var i:Int = 0; i<_imagesArray.count; ++i{
             let _pic:NSDictionary = _imagesArray.objectAtIndex(i) as! NSDictionary
-            
             if let _localId = _pic.objectForKey("localId") as? Int{
                 
                 if _localId == __oldPic.objectForKey("localId") as! Int{
                     let _newPic:NSMutableDictionary = NSMutableDictionary(dictionary: __newPic)
                     _newPic.setObject("uploaded", forKey: "status")
                     _imagesArray[i] = _newPic
-                    
-                    
                     //_imagesArray.objectAtIndex(i) = _newPic
                 }
             }
@@ -584,17 +576,12 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     
     func refreshView(){
-        
-        
         let _imagesW:CGFloat=(self.view.frame.width-2*_gap-3*_space)/4
         let _imagesH:CGFloat=ceil(CGFloat(_imagesArray.count)/4)*(_imagesW+_space)
-        
         _collectionLayout?.minimumInteritemSpacing=_space
         _collectionLayout?.minimumLineSpacing=_space
         _collectionLayout!.itemSize=CGSize(width: _imagesW, height: _imagesW)
         _imagesCollection?.frame=CGRect(x: _gap, y: _buttonH+2*_gap, width: self.view.frame.width-2*_gap, height: _imagesH)
-       
-       
         
         var _imageBoxH:CGFloat!
         if _imagesArray.count<1{
@@ -602,9 +589,6 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         }else{
             _imageBoxH=_imagesH+_buttonH+3*_gap-_space
         }
-        
-        
-        
         _addButton?.frame=CGRect(x: _gap, y: _gap, width: self.view.frame.width-2*_gap, height: _buttonH)
         
         _imagesBox?.frame=CGRect(x: 0, y: 0, width: self.view.frame.width, height:_imageBoxH)
@@ -662,23 +646,31 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         }else{
             _savingDict?.setObject("", forKey: "cover")//----设置相册封面
         }
-        
         if (_albumIndex != nil){//------不是新建相册
+            self._checkPicsToChange()
+            
             _savingDict?.setObject(_albumIndex!, forKey: "albumIndex")
             _savingDict?.setObject("edite_album", forKey: "Action_Type")
+            _savingDict?.setObject(_changedPics!, forKey: "images")
+
+           
             print(_album?.objectForKey("_id"))
-            MainAction._changeAlbumOfId(_album?.objectForKey("_id") as! String, dict: self._savingDict!, __block: { (__dict) -> Void in
-                
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self._checkPicsToChange()
-                })
+            
+            //----
+            
+            
+            MainAction._changeAlbumOfId(_album?.objectForKey("_id") as! String, dict: self._savingDict!, __block: {[weak self] (__dict) -> Void in
+                //----*作废
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    self?._checkPicsToChange()
+//                })
             })
             
         }else{
             _savingDict?.setObject("new_album", forKey: "Action_Type")
             _newAlbum()
         }
+        
     }
     
     func _newAlbum(){
@@ -706,13 +698,16 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         let _a:NSMutableArray = []
         for var i:Int = 0; i<_imagesArray.count; ++i{
             let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: _imagesArray.objectAtIndex(i) as! NSDictionary)
-            if let status:String = _pic.objectForKey("status") as? String{
-                if status == "uploaded"{
-                    _pic.setObject(_album!.objectForKey("_id") as! String, forKey: "album")
-                    _a.addObject(_pic)
-                }
-                
-            }
+            
+            
+//            if let status:String = _pic.objectForKey("status") as? String{
+//                if status == "uploaded"{
+//                    _pic.setObject(_album!.objectForKey("_id") as! String, forKey: "album")
+//                    _a.addObject(_pic)
+//                }
+//            }
+            
+            _a.addObject(_pic)
             //print(_pic)
         }
         _changedPics = _a
@@ -723,7 +718,6 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     func _changePicAtIndex(__index:Int){
         _currentChangingIndex = __index
-        
         if _currentChangingIndex >= _changedPics!.count{
             _saveOk()
             return
@@ -735,15 +729,11 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
                     self._currentChangingIndex = self._currentChangingIndex+1
                     self._changePicAtIndex(self._currentChangingIndex)
                 })
-                
-                
             })
         }else{
             _saveOk()
         }
     }
-    
-    
     
     func _saveOk(){
         //_btn_save?.userInteractionEnabled = true
