@@ -96,8 +96,8 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         _userImg?.addGestureRecognizer(_buttonTap!)
         
-        _btn_collect = UIButton(frame: CGRect(x:_defaultSize!.width -  _gap - _gap - 17, y: 14+_gap, width: 17, height: 17))
-        _btn_collect?.setImage(UIImage(named: "collect"), forState: UIControlState.Normal)
+        _btn_collect = UIButton(frame: CGRect(x:_defaultSize!.width -  _gap - _gap - 22, y: 13+_gap, width: 22, height: 20))
+        _btn_collect?.setImage(UIImage(named: "collect_on"), forState: UIControlState.Normal)
         
         
         _userName_label = UILabel(frame: CGRect(x: 55+_gap, y: 10+_gap, width: _defaultSize!.width -  2*_gap - 2*55, height: 12))
@@ -110,7 +110,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         //_updateTime_label?.textAlignment = NSTextAlignment.Right
         _updateTime_label?.font = Config._font_social_time
    
-        _picV = PicView(frame: CGRect(x: _gap+0.5, y: _gap+45, width: _defaultSize!.width-2*_gap-2, height:_defaultSize!.width-2*_gap-1))
+        _picV = PicView(frame: CGRect(x: _gap, y: _gap+45, width: _defaultSize!.width-2*_gap-2, height:_defaultSize!.width-2*_gap-2))
         _picV?._setImage("noPic.png")
         _picV?.scrollEnabled=false
         _picV?.maximumZoomScale = 1
@@ -123,7 +123,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
         _picV?.addGestureRecognizer(_tapPic)
         
-        _albumTitle_labelV = UIView(frame: CGRect(x: _gap, y: _bottomOfPic-30, width: _defaultSize!.width-2*_gap-2, height: 30))
+        _albumTitle_labelV = UIView(frame: CGRect(x: _gap-1, y: _bottomOfPic-30, width: _defaultSize!.width-2*_gap-2, height: 30))
         
         _albumTitle_labelV?.backgroundColor = UIColor(white: 0, alpha: 0.8)
         _albumTitle_labelV?.userInteractionEnabled=false
@@ -138,6 +138,10 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         
         _description = UITextView()
+        _description?.frame = CGRect(x: _gap, y: _bottomOfPic+_gap, width: _defaultSize!.width-_gap*2, height: 40)
+        
+        //_description?.backgroundColor = Config._color_social_blue
+        
         _description?.textContainerInset =  UIEdgeInsetsMake(-3, 0, 0, 0)  //{{-10,-5},{0,0}} // UIEdgeInsetsZero
         
         _description?.textContainer.lineFragmentPadding = 0
@@ -151,7 +155,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         _bgV = UIView()
         _bgV?.layer.cornerRadius = 5
-        _bgV?.layer.borderColor = UIColor(white: 0.5, alpha: 1).CGColor
+        _bgV?.layer.borderColor = Config._color_social_gray_border.CGColor
         _bgV?.layer.borderWidth=0.5
         _bgV?.backgroundColor=UIColor.whiteColor()
         
@@ -171,31 +175,24 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
 //        self.addSubview(_toolsPanel!)
 //        self.addSubview(_commentsPanel!)
-        
-        
         _albumTitle_labelV?.addSubview(_albumTitle_label!)
-        
-        
-        
         _setuped=true
-        
-        
     }
-    
     //-------------------------调整布局-----------------
-    
     func _refreshView(){
         var _desH:CGFloat = 0
         if _description!.text == ""{
             
         }else{
             let size:CGSize = _description!.sizeThatFits(CGSize(width: _defaultSize!.width-_gap*2, height: CGFloat.max))
-            _desH = size.height+_gap-3
+            _desH = size.height
         }
         
-        _description?.frame = CGRect(x: _gap, y: _bottomOfPic+_gap, width: _defaultSize!.width-_gap*2, height: _desH)
+        //_desH = 100
         
-        _bgV!.frame = CGRect(x: _gap, y: _gap, width: _picV!.frame.width, height: _description!.frame.origin.y + _description!.frame.height + _gap)
+        _description?.frame = CGRect(x: _gap+_gap, y: _bottomOfPic+_gap, width: _defaultSize!.width-_gap*2-_gap*2, height: _desH)
+        
+        _bgV!.frame = CGRect(x: _gap, y: _gap, width: _picV!.frame.width, height: _description!.frame.origin.y + _description!.frame.height)
         
         _delegate?._resized(_indexId, __height:_bgV!.frame.height+_gap)
     }
@@ -354,16 +351,13 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     
     
     func _setDescription(__str:String){
+        print("描述：",__str)
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 1
         let attributes = [NSParagraphStyleAttributeName : style,NSFontAttributeName:Config._font_social_album_description,NSForegroundColorAttributeName:Config._color_social_gray]
-        
         //_description?.font = Config._font_social_album_description
         //_description?.textColor = Config._color_social_gray
-        
         _description?.attributedText = NSAttributedString(string: __str, attributes:attributes)
-        
-        
     }
     func _setAlbumTitle(__str:String,__num:Int){
         var _str:String
@@ -400,8 +394,8 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap-2*10-1, height: CGFloat.max))
         
-        _albumTitle_label?.frame = CGRect(x: 10, y: 6, width: _size.width, height: _size.height)
-        _albumTitle_labelV?.frame = CGRect(x: _gap+1, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width-2*_gap-2, height: _size.height+12)
+        _albumTitle_label?.frame = CGRect(x: 15, y: 6, width: _size.width, height: _size.height)
+        _albumTitle_labelV?.frame = CGRect(x: _gap, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width-2*_gap-3, height: _size.height+12)
     }
     func _setUserName(__str:String){
         _userName_label?.text=__str

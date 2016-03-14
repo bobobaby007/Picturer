@@ -137,6 +137,11 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
        
         MainAction._changeAlbumAtIndex(_albumIndex!, dict: _dict)
     }
+    
+    func _changed(__picIndex:Int,__changingDict:NSDictionary, __toDict:NSDictionary){
+        MainAction._changePicAtAlbum(__picIndex, albumIndex: _albumIndex!, dict: __toDict)
+    }
+    
     //---瀑布流时图片cell选择代理
     func PicDidSelected(pic: PicsShowCell) {
         let _pic:NSMutableDictionary=NSMutableDictionary(dictionary: _imagesArray[pic._index!] as! NSDictionary)

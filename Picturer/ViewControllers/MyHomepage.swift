@@ -341,7 +341,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
               self._messageImg!._setPic(((array.objectAtIndex(0) as! NSDictionary).objectForKey("userImg") as? NSDictionary)!, __block: { (__dict) -> Void in
                 })
             }
-            self._refreshView()
+            //self._refreshView()
         }
     }
     //----消息按钮侦听
@@ -354,10 +354,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _getDatas(){
         _getUserInfo()
         _getAlbumList()
+        
         //_FocusUser()
-        Social_Main._focusToUser("56dae76f3949ed957b28d9f1") { (__dict) -> Void in
-            print("关注成功",__dict)
-        }
+//        Social_Main._focusToUser("56dae76f3949ed957b28d9f1") { (__dict) -> Void in
+//            print("关注成功",__dict)
+//        }
 //        Social_Main._getMyFocusList(_userId, __block: { (__dict) -> Void in
 //            //print("_getMyFocusList：",__dict)
 //        })
@@ -454,8 +455,12 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _likeArray = NSMutableArray()
         _likedArray =  NSMutableArray()
         _collectedArray = NSMutableArray()
+        
+        
         for var i:Int=0; i<_dataArray.count;++i{
+            
             let _album:NSDictionary = _dataArray.objectAtIndex(i) as! NSDictionary
+            
             
             _allDatasArray?.addObject(NSDictionary(object: _album.objectForKey("_id") as! String, forKey: "_id"))
             
@@ -517,7 +522,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _setting_back(){
         //_getUserInfo()
     }
-    //--------类型判断并设定，个人主页
+    //--------类型判断并设定，是自己的个人主页还是查看别人的个人主页
     func _checkType(){
         if _userId == Social_Main._userId{
             _type = "my"
@@ -567,7 +572,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         //var cell:PicAlbumMessageItem? = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
         //var cell:PicAlbumMessageItem = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as! PicAlbumMessageItem
-       // println(_heighArray?.count)
+        if  _heighArray == nil{
+            _refreshDatas()
+        }
+        
         if _heighArray!.count>=indexPath.row+1{
             return CGFloat(_heighArray!.objectAtIndex(indexPath.row) as! NSNumber)
         }

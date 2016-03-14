@@ -26,7 +26,7 @@ class UploadingList:NSObject {
         let _localId:Int = __pic.objectForKey("localId") as! Int
         
         _uploadingList.addObject(__pic)
-        MainInterface._uploadPic(__pic,__block: { (__dict) -> Void in
+        MainInterface._uploadPic(__pic,__withStr: "",__block: { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self._removeFrom(_localId,__atArray: self._uploadingList)

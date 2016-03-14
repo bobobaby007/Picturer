@@ -72,7 +72,13 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         //------判断登录，未登录则弹出登录或注册框
         if MainAction._checkLogOk(){
-            _refreshFromServer()
+            //----从服务器刷新图册列表－－－*作废
+            //_refreshFromServer()
+            
+            
+            
+            self._refresh()
+            
         }else{
              MainAction._showLogAt(self)
         }
@@ -107,6 +113,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _refreshFromServer()
         
     }
+    //-----从服务器刷新相册列表
+    
     func _refreshFromServer(){
         MainAction._refreshAlbumListFromServer { (__dict) -> Void in
             // self._refresh()
@@ -163,6 +171,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _setuped = true
     }
     func _refresh(){
+        
+        MainAction._checkAsyn()
+        
         _tableView.reloadData()
     }
     @IBAction func btnHander(btn:UIButton){
@@ -449,6 +460,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         switch action.title as String!{
             case "删除":
                 _currentIndex = index
+                
+                
                 let _alert:UIAlertView = UIAlertView()
                 _alert.delegate=self
                 _alert.title="确定删除相册？"
@@ -490,7 +503,6 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             self._addIcon.transform = CGAffineTransformMakeRotation( 45 * CGFloat(M_PI) / 180.0)
             
         })
-        
 //        let rateMenu = UIAlertController(title: "分享", message: "分享这个相册", preferredStyle: UIAlertControllerStyle.ActionSheet)
 //        let appRateAction = UIAlertAction(title: "微博", style: UIAlertActionStyle.Default, handler: nil)
 //        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
@@ -616,7 +628,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     //----弹出编辑\新建\图片到相册 代理
     func saved(dict: NSDictionary) {
-        
+        print("弹出：",dict)
         switch dict.objectForKey("Action_Type") as! String{
             
             case "new_album":
@@ -624,9 +636,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
 //                    MainAction._insertAlbum(dict)
 //                })
                 
+                MainAction._insertAlbum(dict)
+                
             break
             case "edite_album":
-                
             MainAction._changeAlbumInfoAtIndex(dict.objectForKey("albumIndex") as! Int, dict: dict)
             MainAction._insertPicsToAlbumByIndex(dict.objectForKey("images") as! NSArray, __albumIndex: dict.objectForKey("albumIndex") as! Int)
             break
@@ -656,13 +669,14 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         UIApplication.sharedApplication().statusBarHidden=false
     }
     
-    
     //---弹出浏览图片代理
+    //---删除图片成功时
     func didDeletedPics(dict: NSDictionary) {
-        
         MainAction._changeAlbumAtIndex(dict.objectForKey("albumIndex") as! Int, dict: NSDictionary(object: dict.objectForKey("restImages")!, forKey: "images"))
-        //----确定删除的图片：selectedImages
         
+        MainAction._deletePics(dict.objectForKey("selectedImages") as! NSArray)
+        
+        //----确定删除的图片：selectedImages
         _tableView.reloadData()
     }
     func didAddPics(dict: NSDictionary) {        

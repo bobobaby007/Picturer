@@ -15,7 +15,7 @@ protocol Manage_pic_delegate:NSObjectProtocol{
     func canceled()
     func _deletePic(picIndex:Int)
     func _setCover(picIndex:Int)
-    
+    func _changed(__picIndex:Int,__changingDict:NSDictionary,__toDict:NSDictionary)
 }
 
 class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_delegate,MyAlerter_delegate{
@@ -393,10 +393,13 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         case 0:
             self.changeDes()
             break
-        case 1:
+        case 1://---设为封面
             self.setToCover()
             break
-        case 2://
+        case 2://---"保存图片"
+            
+            break
+        case 3://---删除
             self._deletetPic()
             break
         default:
@@ -407,6 +410,7 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
     //----删除图片
     func _deletetPic(){
         _delegate?._deletePic(_currentIndex!)
+        
         self.navigationController?.popViewControllerAnimated(true)
     }
     func _myAlerterDidClose() {
@@ -468,13 +472,26 @@ class Manage_pic: UIViewController,UIScrollViewDelegate,Manage_description_deleg
         let _array:NSMutableArray = NSMutableArray(array: _picsArray!)
         let _picDict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(_realIndex(_currentIndex!)) as! NSDictionary)
         
-        if _albumIndex != nil{
-            MainAction._changePicAtAlbum(_realIndex(_currentIndex!), albumIndex: _albumIndex!, dict: dict)
-            _picDict.setValue(dict.objectForKey("description"), forKey: "description")
-           // print("_currentIndex:",_currentIndex)
-        }
+//        if _albumIndex != nil{
+//            //MainAction._changePicAtAlbum(_realIndex(_currentIndex!), albumIndex: _albumIndex!, dict: dict)
+//            _picDict.setValue(dict.objectForKey("description"), forKey: "description")
+//            if let _id = _picDict.objectForKey("_id") {//如果是线上已经存在id，标记为修改
+//                print("该图片存在在线id:",_id)
+//                _picDict.setObject("changed", forKey: "status")//----标记为修改过
+//            }//
+//            
+//           // print("_currentIndex:",_currentIndex)
+//        }
         
         // _array.removeObject(_pic)
+        
+        _picDict.setValue(dict.objectForKey("description"), forKey: "description")
+        if let _id = _picDict.objectForKey("_id") {//如果是线上已经存在id，标记为修改
+           // print("该图片存在在线id:",_id)
+            _picDict.setObject("changed", forKey: "status")//----标记为修改过
+        }//
+        _delegate?._changed(_realIndex(_currentIndex!), __changingDict: dict,__toDict:_picDict)
+        
         
         _array[_realIndex(_currentIndex!)] = _picDict
         

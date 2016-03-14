@@ -12,11 +12,9 @@ import AssetsLibrary
 import AVFoundation
 
 class MainInterface: AnyObject {
- 
     static var _token:String = ""//80d3897b-24af-42a9-af76-3bfdea569bba
     static var _uid_tem:String?
     static var _userInfo:NSDictionary?
-    
     static var _uid:String!{
         get{
             if _uid_tem==nil{
@@ -40,9 +38,6 @@ class MainInterface: AnyObject {
             //println(_ud.dictionaryRepresentation())
         }
     }
-    
-    
-    
     static let _basicDoman:String = "http://120.27.54.180/"
     static let _version:String = "v1"
     static let _URL_Signup:String = "user/register/"//---注册
@@ -64,6 +59,7 @@ class MainInterface: AnyObject {
     static let _URL_Album_List:String = "album/list/"//---相册列表
     static let _URL_Album_Info:String="album/info/"//---相册信息
     static let _URL_Pic_Create:String = "picture/create/"//---新建图片
+    static let _URL_Pic_Delete:String = "picture/delete/"//---新建图片
     static let _URL_Pic_update:String = "picture/update/"//---图片更新
     static let _URL_Pic_list:String = "picture/list/"//---相册里图片列表
     static let _URL_User_Info:String = "user/info/"//---用户信息
@@ -72,13 +68,10 @@ class MainInterface: AnyObject {
     static let _URL_Pic_like:String = "like/picture/"//---图片点赞
     static let _URL_Album_like:String = "like/album/"//-----相册点赞
     static let _URL_Album_unlike:String = "like/remove_album/"//-----相册点赞
-    
     static let _URL_Sms:String = "user/smscode/"//获取验证码
     static let _URL_changePassword:String = "sign/changePassword/"//修改密码
-    
     //-----判断是否登录
     static func _isLogined()->Bool{
-        
         let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if let _tok:String = _ud.valueForKey("token") as? String {
             _token = _tok
@@ -301,16 +294,25 @@ class MainInterface: AnyObject {
             __block(__dict)
         }
     }
-    //-----删除相册
+    //-----删除相册---从服务器删除
     static func _deleteAlbum(__albumId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_Delete+__albumId) { (__dict) -> Void in
             print(__dict)
             __block(__dict)
         }
     }
+    //-----删除图片---从服务器删除
+    static func _deletePic(__picId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Pic_Delete+__picId) { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
+    
+    
     //----上传图片
-    static func _uploadPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
-        
+    static func _uploadPic(__pic:NSDictionary,__withStr:String,__block:(NSDictionary)->Void){
         //559a7b34b28d4ec8e088cf0d
         if __pic.objectForKey("type") == nil{
             print("图片有问题:",__pic)
@@ -322,7 +324,7 @@ class MainInterface: AnyObject {
             _al.assetForURL(NSURL(string: __pic.objectForKey("url") as! String)! , resultBlock: { (asset:ALAsset!) -> Void in
                 if asset != nil {
                     let __image:UIImage = UIImage(CGImage: asset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
-                    CoreAction._sendToUrl("token=\(_token)&&imagend=jpg&image=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
+                    CoreAction._sendToUrl("token=\(_token)&&imagend=jpg&image=\(CoreAction._imageToString(__image))"+__withStr, __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
                        // print(__dict)
                         __block(__dict)
                     }
@@ -346,7 +348,7 @@ class MainInterface: AnyObject {
                         __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
                         return
                     }
-                    CoreAction._sendToUrl("token=\(_token)&uploadpic=\(CoreAction._imageToString(image!))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
+                    CoreAction._sendToUrl("token=\(_token)&uploadpic=\(CoreAction._imageToString(image!))"+__withStr, __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
                         //print(__dict)
                         __block(__dict)
                     }
@@ -356,7 +358,7 @@ class MainInterface: AnyObject {
                 //self._setImage(__pic.objectForKey("url") as! String)
                 let __image:UIImage = UIImage(named: __pic.objectForKey("url") as! String)!
                 
-                CoreAction._sendToUrl("token=\(_token)&uploadpic=\(CoreAction._imageToString(__image))", __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
+                CoreAction._sendToUrl("token=\(_token)&uploadpic=\(CoreAction._imageToString(__image))"+__withStr, __url: _basicDoman+_version+"/"+_URL_Pic_Create) { (__dict) -> Void in
                     //print(__dict)
                     __block(__dict)
                 }
@@ -367,9 +369,10 @@ class MainInterface: AnyObject {
         }
         
     }
+    
+    
     //-----修改图片
     static func _changePic(__picId:String,__changeingStr:String,__block:(NSDictionary)->Void){
-        
         CoreAction._sendToUrl("token=\(_token)"+__changeingStr, __url: _basicDoman+_version+"/"+_URL_Pic_update+__picId) { (__dict) -> Void in
             print("修改图片结果：",__dict.objectForKey("reason") as! String)
             __block(__dict)

@@ -408,6 +408,10 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _imagesArray.removeObjectAtIndex(picIndex)
         
     }
+    func _changed(__picIndex:Int,__changingDict:NSDictionary,__toDict:NSDictionary){
+        _imagesArray[__picIndex] = __toDict
+    }
+    
     func canceled(){
         _tableView?.reloadData()
     }
@@ -429,6 +433,10 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         self.navigationController?.pushViewController(_pic!, animated: true)
         
     }
+    
+    
+    
+    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         let identify:String = "PicsShowCell"
@@ -541,13 +549,12 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         for var i:Int = 0; i<images.count; ++i{
             let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: images.objectAtIndex(i) as! NSDictionary)
             _pic.setObject(Int(NSDate().timeIntervalSince1970)+i+10000*random(), forKey: "localId")
+            _pic.setObject("new", forKey: "status")//----标记为新图片
             _imagesArray.addObject(_pic)
             
-            //------*作废使用
+            //------添加到上传列表，上传图片到服务器，*作废使用
             //_uploadingList?._addNewPic(_pic)
         }
-        
-        
         //_imagesArray=NSMutableArray(array: images)
         _imagesCollection?.reloadData()
         refreshView()
@@ -618,6 +625,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             self.navigationController?.popViewControllerAnimated(true)
         case _btn_save!:
             checkDict()
+            _saveOk()
         case _addButton!:
             let storyboard:UIStoryboard=UIStoryboard(name: "Main", bundle: nil)
             var _controller:Manage_imagePicker?
@@ -647,32 +655,34 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             _savingDict?.setObject("", forKey: "cover")//----设置相册封面
         }
         if (_albumIndex != nil){//------不是新建相册
-            self._checkPicsToChange()
             
+            self._checkPicsToChange()
             _savingDict?.setObject(_albumIndex!, forKey: "albumIndex")
             _savingDict?.setObject("edite_album", forKey: "Action_Type")
             _savingDict?.setObject(_changedPics!, forKey: "images")
-
-           
-            print(_album?.objectForKey("_id"))
-            
-            //----
             
             
-            MainAction._changeAlbumOfId(_album?.objectForKey("_id") as! String, dict: self._savingDict!, __block: {[weak self] (__dict) -> Void in
+            
+            //----*作废
+//            MainAction._changeAlbumOfId(_album?.objectForKey("_id") as! String, dict: self._savingDict!, __block: {[weak self] (__dict) -> Void in
                 //----*作废
 //                dispatch_async(dispatch_get_main_queue(), { () -> Void in
 //                    self?._checkPicsToChange()
 //                })
-            })
+//            })
             
         }else{
             _savingDict?.setObject("new_album", forKey: "Action_Type")
-            _newAlbum()
+            //-----*作废使用
+            //_newAlbum()
+            
         }
         
     }
     
+    
+    
+    //-----直接新建相册－－－－－＊作废使用
     func _newAlbum(){
         MainAction._newAlbumFromeServer(_savingDict!, __block: { (__dict) -> Void in
             if MainAction._getResultRight(__dict){
@@ -693,29 +703,30 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         })
     }
     
-    //-------检测需要修改的图片
+    //-------检测需要修改的图片---*作废
     func _checkPicsToChange(){
         let _a:NSMutableArray = []
         for var i:Int = 0; i<_imagesArray.count; ++i{
             let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: _imagesArray.objectAtIndex(i) as! NSDictionary)
             
             
-//            if let status:String = _pic.objectForKey("status") as? String{
-//                if status == "uploaded"{
-//                    _pic.setObject(_album!.objectForKey("_id") as! String, forKey: "album")
-//                    _a.addObject(_pic)
-//                }
-//            }
+            if let status:String = _pic.objectForKey("status") as? String{
+                if status == "new" || status == "changed"{
+                    //_pic.setObject(_album!.objectForKey("_id") as! String, forKey: "album")
+                    _a.addObject(_pic)
+                }
+            }
             
-            _a.addObject(_pic)
             //print(_pic)
         }
         _changedPics = _a
-        print("_changedPics:",_changedPics)
-        _currentChangingIndex = 0
-        _changePicAtIndex(_currentChangingIndex)
+        
+        //----*取消使用
+//        print("_changedPics:",_changedPics)
+//        _currentChangingIndex = 0
+//        _changePicAtIndex(_currentChangingIndex)
     }
-    
+    //-----*取消使用
     func _changePicAtIndex(__index:Int){
         _currentChangingIndex = __index
         if _currentChangingIndex >= _changedPics!.count{

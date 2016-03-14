@@ -36,12 +36,37 @@ class Social_Main: AnyObject {
     }
     //-------获取主页图册列表＊＊当用户是本人，提取本地
     static func _getAlbumListAtUser(__userId:String,__block:(NSArray)->Void){
-        MainInterface._getAlbumListOfUser(__userId) { (__dict) -> Void in
-            if __dict.objectForKey("recode") as! Int == 200{
-                let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
-                __block(ablums)
+//        MainInterface._getAlbumListOfUser(__userId) { (__dict) -> Void in
+//            if __dict.objectForKey("recode") as! Int == 200{
+//                let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
+//                print("别人的图册列表：",ablums)
+//                __block(ablums)
+//            }
+//        }
+//        return
+        
+        if __userId == _userId{
+            let _array:NSMutableArray = NSMutableArray(array: MainAction._albumList)
+            let _n:Int = _array.count
+            for var i:Int = 0; i<_n;++i{
+                let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(i) as! NSDictionary)
+                let _pic:NSDictionary = MainAction._getCoverFromAlbumAtIndex(i)!
+                _dict.setObject(_pic, forKey: "cover")
+                _array[i] = _dict
+            }
+            print("本地图册列表：",_array)
+            __block(_array)
+            return
+        }else{
+            MainInterface._getAlbumListOfUser(__userId) { (__dict) -> Void in
+                if __dict.objectForKey("recode") as! Int == 200{
+                    let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
+                    __block(ablums)
+                }
             }
         }
+        
+        
         //        var request = HTTPTask()
         //        request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
         //            block(self._albumList)
@@ -75,7 +100,6 @@ class Social_Main: AnyObject {
         //        }
         
     }
-    
     //-----提取相册里的所有图片
     static func _getPicsListAtAlbumId(__albumId:String?,__block:(NSArray)->Void){
         

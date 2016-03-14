@@ -21,35 +21,26 @@ class ViewController: UIViewController,Manage_home_delegate,Social_home_delegate
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
         showManageHome()
-        
         //showSocialHome()
         // Do any additional setup after loading the view, typically from a nib.
     }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-        
     }
-    
     func setup()->Void{
         if _setuped{
             return
         }
-        
         ViewController._self = self
-        
         if _navgationController == nil{
             _navgationController = UINavigationController()
         }
         self.view.addSubview(_navgationController!.view)
         _navgationController!.view.backgroundColor = UIColor.clearColor()
         _navgationController!.navigationBarHidden=true
-        
         _setuped=true
-        
        // _navgationController.addChildViewController(manage_home!)
     }
     //----显示编辑首页
@@ -61,15 +52,12 @@ class ViewController: UIViewController,Manage_home_delegate,Social_home_delegate
             manage_home=self.storyboard?.instantiateViewControllerWithIdentifier("Manage_home") as? Manage_home
             manage_home?._delegate = self
         }
-        
-        
        _navgationController!.pushViewController(manage_home!, animated: false)
        // self.navigationController?.presentViewController(manage_home!, animated: true, completion: { () -> Void in
          //   println("22")
         //})
         //self.view.addSubview(manage_home!.view)
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
-        
         //UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         }
     func showSocialHome(){
