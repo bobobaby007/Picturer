@@ -11,7 +11,7 @@ import UIKit
 
 
 
-class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate,MySettings_delegate,Navi_Delegate{
+class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate,MySettings_delegate,Navi_Delegate{
     
     var _type:String = "my"//"friend/my" //类型，我的主页／朋友的主页
     
@@ -19,6 +19,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _myFrame:CGRect?
     var _userId:String = "000001"
     var _userInfo:NSDictionary? //----用户信息
+    
+    let _space:CGFloat=3 //---瀑布流的图片间隔
     
     var _signH:CGFloat?
     var _title_label:UILabel?
@@ -32,6 +34,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _tableView:UITableView?
     
+    var _alertType:String = "myPage"  //---弹出提示按钮的类型 myPage / album
+    
+    
+    var _collectionLayout:UICollectionViewFlowLayout?
+    var _imagesCollection:UICollectionView?
+    
+    
     var _dataArray:NSArray=[]
     var _setuped:Bool = false
     
@@ -40,9 +49,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     var _profilePanel:UIView?
     var _user_img:PicView?
     var _btn_edite:UIButton?
-    var _btn_share:UIButton?
+    var _btn_moreAction:UIButton?
     var _btn_follow:UIButton?
-    var _btn_message:UIButton?
     var _sign_text:UILabel?
     var _line_profile:UIView?
     
@@ -82,6 +90,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     
     var _messageTap:UITapGestureRecognizer?
     var _messageImg:PicView?
+    
+    var _btn_changeShowType:UIButton? //----是朋友的切换瀑布流方式
+    var _showType:String = "pic"// －－－－－图片展示方式 pic/collection
     
     var _hasNewMessage:Bool = false
     var _messageArray:NSArray?
@@ -161,20 +172,20 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_edite?.titleLabel?.font=Config._font_social_button
         _btn_edite?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
-        _btn_share = UIButton(frame: CGRect(x: _btn_edite!.frame.origin.x+_btn_edite!.frame.width+3,y: _btn_edite!.frame.origin.y,width: _frameW!-_btn_edite!.frame.origin.x-_btn_edite!.frame.width-3-_gap!,height: _btn_edite!.frame.height))
+        _btn_moreAction = UIButton(frame: CGRect(x: _btn_edite!.frame.origin.x+_btn_edite!.frame.width+3,y: _btn_edite!.frame.origin.y,width: _frameW!-_btn_edite!.frame.origin.x-_btn_edite!.frame.width-3-_gap!,height: _btn_edite!.frame.height))
         
-        _btn_share?.backgroundColor = UIColor(white: 1, alpha: 1)
-        _btn_share?.layer.borderWidth = 1
-        _btn_share?.layer.borderColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1).CGColor
-        _btn_share?.layer.masksToBounds = true
-        _btn_share?.layer.cornerRadius = 5
-        _btn_share?.titleLabel?.textAlignment = NSTextAlignment.Center
-        attributedString = NSMutableAttributedString(string: "分享")
+        _btn_moreAction?.backgroundColor = UIColor(white: 1, alpha: 1)
+        _btn_moreAction?.layer.borderWidth = 1
+        _btn_moreAction?.layer.borderColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1).CGColor
+        _btn_moreAction?.layer.masksToBounds = true
+        _btn_moreAction?.layer.cornerRadius = 5
+        _btn_moreAction?.titleLabel?.textAlignment = NSTextAlignment.Center
+        attributedString = NSMutableAttributedString(string: "更多")
         attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
         attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_social_gray, range: NSMakeRange(0, attributedString.length))
-        _btn_share?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
-        _btn_share?.titleLabel?.font=Config._font_social_button
-        _btn_share?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_moreAction?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+        _btn_moreAction?.titleLabel?.font=Config._font_social_button
+        _btn_moreAction?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         
@@ -191,20 +202,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _btn_follow?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
         _btn_follow?.titleLabel?.font=Config._font_social_button
         _btn_follow?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
-        
-        
-        _btn_message = UIButton(frame: _btn_share!.frame)
-        _btn_message?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        _btn_message?.backgroundColor = Config._color_yellow
-        _btn_message?.layer.masksToBounds = true
-        _btn_message?.layer.cornerRadius = 5
-        _btn_message?.titleLabel?.textAlignment = NSTextAlignment.Center
-        attributedString = NSMutableAttributedString(string: "私信")
-        attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
-        _btn_message?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
-        _btn_message?.titleLabel?.font=Config._font_social_button
-        _btn_message?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
-
         
         _btn_album = UIButton(frame: CGRect(x: 0,y: _profileH - _buttonH,width: _buttonW,height: _buttonH))
         _btn_album?.backgroundColor = Config._color_black_title
@@ -261,9 +258,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         _profilePanel?.addSubview(_user_img!)
         _profilePanel?.addSubview(_btn_edite!)
-        _profilePanel?.addSubview(_btn_share!)
+        _profilePanel?.addSubview(_btn_moreAction!)
         _profilePanel?.addSubview(_btn_follow!)
-        _profilePanel?.addSubview(_btn_message!)
         
        
         _profilePanel?.addSubview(_btn_album!)
@@ -291,8 +287,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _topBar?.addSubview(_messageImg!)
         
         
-        //----
+        //----切换展示方式按钮
+        _btn_changeShowType = UIButton(frame: CGRect(x: self.view.frame.width - 18 - Config._gap, y: 30, width: 18, height: 18))
+        _btn_changeShowType?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _topBar?.addSubview(_btn_changeShowType!)
         
+        
+        //---
         _tableView=UITableView()
         
         _tableView?.backgroundColor=UIColor.clearColor()
@@ -307,6 +308,27 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
         _scrollView = UIScrollView(frame: CGRect(x: 0, y: _barH, width: _myFrame!.width, height: _myFrame!.height-_barH))
+        
+        
+        
+        
+        _collectionLayout=UICollectionViewFlowLayout()
+        let _imagesW:CGFloat=(self.view.frame.width-2*_space)/3
+        //let _imagesH:CGFloat=ceil(CGFloat(_picsArray!.count)/4)*(_imagesW+_space)
+        
+        _collectionLayout?.minimumInteritemSpacing=_space
+        _collectionLayout?.minimumLineSpacing=_space
+        _collectionLayout!.itemSize=CGSize(width: _imagesW, height: _imagesW)
+        
+        _imagesCollection=UICollectionView(frame: CGRect(x: 0, y: _tableView!.frame.origin.y, width: self.view.frame.width, height: self.view.frame.width-_barH), collectionViewLayout: _collectionLayout!)
+        
+        //_imagesCollection?.frame=CGRect(x: _gap, y: _buttonH+2*_gap, width: self.view.frame.width-2*_gap, height: _imagesH)
+        
+        _imagesCollection?.backgroundColor=UIColor.clearColor()
+        _imagesCollection!.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
+        
+        _imagesCollection?.delegate=self
+        _imagesCollection?.dataSource=self
         
         
         self.view.backgroundColor = Config._color_social_gray_light
@@ -461,12 +483,18 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             
             let _album:NSDictionary = _dataArray.objectAtIndex(i) as! NSDictionary
             
-            
-            _allDatasArray?.addObject(NSDictionary(object: _album.objectForKey("_id") as! String, forKey: "_id"))
-            
-            Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { (array) -> Void in
+            if let _album_id = _album.objectForKey("_id") as? String{
+                _allDatasArray?.addObject(NSDictionary(object: _album_id, forKey: "_id"))
+//                Social_Main._getPicsListAtAlbumId(_album_id, __block: { (array) -> Void in
+//                    
+//                })
                 
-            })
+            }else{
+                _allDatasArray?.addObject(NSDictionary(object: "", forKey: "_id"))
+            }
+            
+            
+            
             _heighArray?.addObject(_defaultH)
             //-----获取评论列表
             Social_Main._getCommentsOfAlubm(String(i), block: { (array) -> Void in
@@ -475,8 +503,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             
             
             //---点赞数
-            self._likeArray?.addObject(_album.objectForKey("likes") as! Int)
-                        
+            if let _likeNum = _album.objectForKey("likes") as? Int{
+                self._likeArray?.addObject(_likeNum)
+            }else{
+                self._likeArray?.addObject(0)
+            }
             //----是否点过赞
             self._likedArray?.addObject(false)
             //---是否收藏过
@@ -526,31 +557,120 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
     func _checkType(){
         if _userId == Social_Main._userId{
             _type = "my"
-            _btn_share?.hidden=false
+            _btn_moreAction?.hidden=false
             _btn_edite?.hidden=false
             _btn_follow?.hidden=true
-            _btn_message?.hidden=true
+            _messageImg?.hidden = false
+            _btn_changeShowType?.hidden=true
         }else{
             _type = "friend"
-            _btn_share?.hidden=false
+            _btn_moreAction?.hidden=false
             _btn_edite?.hidden=true
             _btn_follow?.hidden=false
-            _btn_message?.hidden=true
+            _messageImg?.hidden = true
+            _btn_changeShowType?.hidden=false
             //_hasNewMessage = false
         }
+        
+        _changeTo("pic")
+    }
+    
+    
+    //-----切换查看模式，瀑布流或单张
+    func _changeTo(__type:String){
+        
+        _showType = __type
+        switch _showType{
+        case "pic"://单张
+            _imagesCollection?.removeFromSuperview()
+            _scrollView?.addSubview(_tableView!)
+            _btn_changeShowType?.setImage(UIImage(named: "changeToCollect_icon_yellow.png"), forState: UIControlState.Normal)
+            
+            break
+        case "collection":
+            _tableView?.removeFromSuperview()
+            _scrollView?.addSubview(_imagesCollection!)
+            _btn_changeShowType?.setImage(UIImage(named: "changeToPic.png"), forState: UIControlState.Normal)
+            break
+        default:
+            break
+            
+        }
+        
+        _refreshView()
     }
     
     //----------------刷新布局
     func _refreshView(){
+        
+        UIView.beginAnimations("refreshView", context: nil)
+        
         if _hasNewMessage{
         }else{
             self._messageImg?._setImage("messageBtnIcon")
         }
-        _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
-        _tableView?.scrollEnabled = false
-        _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
+//        _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
+//        _tableView?.scrollEnabled = false
+//        _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
+        
+        
+        switch _showType{
+        case "pic":
+            _tableView?.reloadData()
+            _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
+            _tableView?.scrollEnabled = false
+            _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
+            
+            break
+        case "collection":
+            _imagesCollection?.reloadData()
+            let _imagesW:CGFloat=(self.view.frame.width-2*_space)/3
+            let _h:CGFloat = CGFloat(ceil(CGFloat(_dataArray.count)/3))*(_imagesW+_space)
+            
+            _imagesCollection?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  self.view.frame.width, height: _h)
+            _imagesCollection?.scrollEnabled = false
+            _scrollView?.contentSize = CGSize(width: self.view.frame.width, height: _imagesCollection!.frame.origin.y+_imagesCollection!.frame.height)
+            break
+        default:
+            break
+        }
+        
         UIView.commitAnimations()
+        
     }
+    
+    //-----瀑布流代理
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return _dataArray.count
+    }
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        _viewAlbum(indexPath.row)
+        
+    }
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let identify:String = "PicsShowCell"
+        let cell = self._imagesCollection?.dequeueReusableCellWithReuseIdentifier(
+            identify, forIndexPath: indexPath) as! PicsShowCell
+        
+        
+        let _dict:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
+        
+        
+        if let _cover:NSDictionary = _dict.objectForKey("cover") as? NSDictionary{
+            cell._setPic(_cover)
+        }else{
+            //cell!._setDescription("")
+        }
+        
+        
+        //cell._setPic(_pic)
+        return cell
+    }
+    
+    
+    
+    
     //----table 代理
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
@@ -572,6 +692,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
         //var cell:PicAlbumMessageItem? = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
         //var cell:PicAlbumMessageItem = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as! PicAlbumMessageItem
+        
         if  _heighArray == nil{
             _refreshDatas()
         }
@@ -650,21 +771,35 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         
        // println(_heighArray)
     }
+    
+    //---进入查看相册
     func _viewAlbum(__albumIdex:Int) {
-        /*
-        if _userId == Social_Main._userId{
-            Social_Main._getPicsListAtal(__albumIdex, block: { (array) -> Void in
-                let _controller:Social_pic = Social_pic()
-                _controller._showIndexAtPics(0, __array: array)
-                self.navigationController?.pushViewController(_controller, animated: true)
-
-            })
-            return
-        }
-*/
+        
         let _album = _dataArray.objectAtIndex(__albumIdex) as! NSDictionary
         
+        if _userId == Social_Main._userId{ //-----如果是本人
+            
+            Social_Main._getImagesOfAlbumIndex(__albumIdex, __block: {[weak self] (array) -> Void in
+                if array.count<=0{
+                    print("没有图片")
+                    return
+                }
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    if self != nil{
+                        let _controller:Social_pic = Social_pic()
+                        _controller._titleBase = _album.objectForKey("title") as! String
+                        _controller._showIndexAtPics(0, __array: array)
+                        self?.navigationController?.pushViewController(_controller, animated: true)
+                    }
+                })
+                })
+            return
+        }
         Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { [weak self] (array) -> Void in
+            if array.count<=0{
+                print("没有图片")
+                return
+            }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if self != nil{
                     let _controller:Social_pic = Social_pic()
@@ -841,7 +976,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         _tableView?.reloadData() //--------使用在线接口时全部请求信息后侦听里面再重新加载
     }
     
-    //----打开更多的弹出框
+    //----打开更多的弹出框－－－单张的代理
     
     func _openMoreAction(){
         if _alerter == nil{
@@ -851,25 +986,47 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         self.addChildViewController(_alerter!)
         self.view.addSubview(_alerter!.view)
         _alerter?._setMenus(["分享","举报"])
+        _alertType = "album"
         _alerter?._show()
     }
 
-    
+    //----－整个主页的更多按钮弹出
+    func _openMoreActionForMyPage(){
+        if _alerter == nil{
+            _alerter = MyAlerter()
+            _alerter?._delegate = self
+        }
+        self.addChildViewController(_alerter!)
+        self.view.addSubview(_alerter!.view)
+        _alerter?._setMenus(["分享","举报"])
+        _alertType = "myPage"
+        _alerter?._show()
+    }
     
     //------弹出框代理
     func _myAlerterClickAtMenuId(__id:Int){
-        switch __id{
-        case 0:
-            print(_currentEditeIndex)
-            //---分享
+        
+        switch _alertType{
+            case "alum":
+                switch __id{
+                case 0:
+                    print(_currentEditeIndex)
+                    //---分享
+                    break
+                case 1:
+                    //---举报
+                    break
+                default:
+                    break
+                    
+                }
             break
-        case 1:
-            //---举报
-            break
-        default:
-            break
+            default:
             
+            break
         }
+        
+        
     }
     func _myAlerterStartToClose(){
         
@@ -928,18 +1085,24 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
             _setting._delegate=self
             _setting._userInfo = _userInfo!
             self.navigationController?.pushViewController(_setting, animated: true)
+            break
         case _btn_followed!:
             let _contr:FocusMeList=FocusMeList()
             _contr._type = FocusMeList._Type_FocusMe
             _contr._uid = _userId
             _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
+            break
         case _btn_following!:
             let _contr:FocusMeList=FocusMeList()
             _contr._type = FocusMeList._Type_Focus
             _contr._uid = _userId
             _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
+            break
+        case _btn_moreAction!:
+            _openMoreActionForMyPage()
+            break
         default:
             print("")
         }
@@ -977,6 +1140,19 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate, 
         case _btn_follow!:
             _FocusUser()
             break
+        case _btn_changeShowType!:
+            switch _showType{
+            case "pic":
+                _changeTo("collection")
+                return
+            case "collection":
+                _changeTo("pic")
+                return
+            default:
+                return
+                
+            }
+
         default:
             return
         }

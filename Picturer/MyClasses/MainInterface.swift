@@ -253,6 +253,8 @@ class MainInterface: AnyObject {
     }
     //-----创建相册
     static func _createAlbum(__Str:String,__block:(NSDictionary)->Void){
+        print("token=\(_token)"+__Str)
+        
         CoreAction._sendToUrl("token=\(_token)"+__Str, __url: _basicDoman+_version+"/"+_URL_Album_Create) { (__dict) -> Void in
            // print(__dict)
             __block(__dict)
@@ -289,6 +291,7 @@ class MainInterface: AnyObject {
     }
     //-----修改相册
     static func _changeAlbum(__albumId:String,__changeingStr:String,__block:(NSDictionary)->Void){
+        
         CoreAction._sendToUrl("token=\(_token)"+__changeingStr, __url: _basicDoman+_version+"/"+_URL_Album_Update+__albumId) { (__dict) -> Void in
             //print(__dict)
             __block(__dict)

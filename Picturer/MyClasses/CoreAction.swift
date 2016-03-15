@@ -253,6 +253,7 @@ class CoreAction {
         let path = documentsDirectory.stringByAppendingPathComponent(__fileName)
         let fileManager = NSFileManager.defaultManager()
         // If it doesn't, copy it from the default file in the Bundle
+        
         if let bundlePath = NSBundle.mainBundle().pathForResource(__fileName, ofType: "plist") {
             let resultDictionary = NSMutableDictionary(contentsOfFile: bundlePath)
             print("Bundle \(__fileName).plist file is --> \(resultDictionary?.description)")
@@ -266,6 +267,7 @@ class CoreAction {
         }
         
     }
+    
     //----判断文件是否存在于文档文件夹中
     static func _fileExistAtDocument(__fileName:String)->Bool{
         let _paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true) as NSArray

@@ -50,8 +50,19 @@ class Social_Main: AnyObject {
             let _n:Int = _array.count
             for var i:Int = 0; i<_n;++i{
                 let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(i) as! NSDictionary)
-                let _pic:NSDictionary = MainAction._getCoverFromAlbumAtIndex(i)!
-                _dict.setObject(_pic, forKey: "cover")
+                
+                let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(i)
+                
+                if _pic != nil{
+                    _dict.setObject(_pic, forKey: "cover")
+                }else{
+                    _dict.setObject(NSDictionary(objects: ["no_cover.png","file"], forKeys: ["url","type"]), forKey: "cover")
+                }
+                
+                let _pics:NSArray = MainAction._getImagesOfAlbumIndex(i)!
+                _dict.setObject(_pics.count, forKey: "counts")
+                
+                
                 _array[i] = _dict
             }
             print("本地图册列表：",_array)
@@ -102,7 +113,6 @@ class Social_Main: AnyObject {
     }
     //-----提取相册里的所有图片
     static func _getPicsListAtAlbumId(__albumId:String?,__block:(NSArray)->Void){
-        
         MainInterface._getImagesOfAlbum(__albumId!) { (__dict) -> Void in
             print(__dict)
             
@@ -112,33 +122,12 @@ class Social_Main: AnyObject {
                 __block(images)
             }
         }
+    }
+    //-----提取我自己的相册里的所有图片－－来自本地
+    static func _getImagesOfAlbumIndex(__albumIndex:Int,__block:(NSArray)->Void){
+        let _images:NSArray = MainAction._getImagesOfAlbumIndex(__albumIndex)!
         
-        
-        /*
-        
-        
-        let _array:NSMutableArray = NSMutableArray()
-        let _n:Int = 28
-        
-        for var i:Int = 0; i<_n;++i{
-        let _dict:NSMutableDictionary = NSMutableDictionary()
-        
-        let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%8+1)+".JPG","file"], forKeys: ["url","type"])
-        _dict.setObject(_pic, forKey: "pic")
-        _dict.setObject(i, forKey: "likeNumber")
-        _dict.setObject(i*3, forKey: "commentNumber")
-        
-        if i%5==0{
-        _dict.setObject("跟我鞥上的恐怕个品位女士订购扫和光缆的那个啊山东省的那个三等功上度过呢哦你感动啊就是大户个阿萨德个", forKey: "description")
-        }else{
-        _dict.setObject("旦各国那份的歌噶蛋糕给我挥洒地方", forKey: "description")
-        }
-        
-        _array.addObject(_dict)
-        }
-        // println(response.text)
-        block(_array)
-        */
+        return __block(_images)
     }
     
     //-----获取主页提示信息

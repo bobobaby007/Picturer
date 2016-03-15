@@ -473,7 +473,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             openShare()
             case "编辑":
             editeAlbum(index.row)
-            
+    
             default:
             print(action.title)
         }

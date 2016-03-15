@@ -114,6 +114,7 @@ class MainAction: AnyObject {
     }
     //----从服务器获取相册里的图片列表
     static func _getImagesOfAlbumIdFromServer(__albumId:String , __block:(NSDictionary)->Void){
+        
         MainInterface._getImagesOfAlbum(__albumId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 let images:NSArray = __dict.objectForKey("list") as! [NSDictionary]
@@ -195,6 +196,8 @@ class MainAction: AnyObject {
             if _albumHasPic(__albumIndex,__pic: _pic){
                 continue
             }
+            let _localId:Int = Int(NSDate().timeIntervalSince1970)+i
+            _pic.setObject(_localId, forKey: "localId")
             
             //----*取消
 //            let _newPic:NSDictionary = SyncAction._uploadPicToAlbum(_pic, _album: _album)
@@ -260,10 +263,14 @@ class MainAction: AnyObject {
     static func _newAlbumFromeServer(__dict:NSDictionary,__block:(NSDictionary)->Void){
             var _str:String = ""
             for (key,value) in __dict{
+                if String(value) == ""{
+                    continue
+                }
                 if String(key) == "title"{
                     _str = _str + "&title=" + String(value)
                 }
                 if String(key) == "description"{
+                    
                     _str = _str + "&description=" + String(value)
                 }
                 if String(key) == "tags"{
@@ -276,9 +283,13 @@ class MainAction: AnyObject {
                         }
                         _tagStr = _tagStr + (_tags.objectAtIndex(i) as! String)
                     }
+                    if _tagStr == ""{
+                        continue
+                    }
                     _str = _str + "&tags=" + String(_tagStr)
                 }
-            }
+        }
+        //print(_str)
         
         MainInterface._createAlbum(_str) { (__dict) -> Void in
             __block(__dict)
@@ -295,7 +306,7 @@ class MainAction: AnyObject {
             _album.setObject(NSArray(), forKey: "images")
         }
         if _album.objectForKey("title") == nil{
-            _album.setObject("", forKey: "title")
+            _album.setObject("未命名图册", forKey: "title")
         }
         let _localId:Int = Int(NSDate().timeIntervalSince1970)
         _album.setObject(_localId, forKey: "localId")
@@ -547,12 +558,19 @@ class MainAction: AnyObject {
     //-------修改相册信息到服务器
     static func _changeAlbumOfId(__id:String,dict:NSDictionary,__block:(NSDictionary)->Void){
         var _str:String = ""
+        
+        print("修改相册：",dict)
+        
+        
         for (key,value) in dict{
-            
+            if String(value) == ""{
+                continue
+            }
             if String(key) == "title"{
                 _str = _str + "&title=" + String(value)
             }
             if String(key) == "description"{
+                
                 _str = _str + "&description=" + String(value)
             }
             if String(key) == "tags"{
@@ -565,10 +583,14 @@ class MainAction: AnyObject {
                     }
                     _tagStr = _tagStr + (_tags.objectAtIndex(i) as! String)
                 }
+                if _tagStr == ""{
+                    continue
+                }
                 _str = _str + "&tags=" + String(_tagStr)
             }
-            
         }
+        
+        
         
         MainInterface._changeAlbum(__id, __changeingStr: _str, __block: { (__dict) -> Void in
             __block(__dict)
@@ -745,6 +767,7 @@ class MainAction: AnyObject {
                     _isAsyning = false
                     _checkAsyn()
                })
+                
                 return
             }else{
                 if let _status = _album.objectForKey("status") as? String{ //---修改相册
@@ -827,6 +850,8 @@ class MainAction: AnyObject {
                     MainInterface._uploadPic(_pic,__withStr: _str,__block: { (__dict) -> Void in
                         if __dict.objectForKey("recode") as! Int == 200{
                             print("上传图片完成：",__dict)
+                            
+                            
                             let _indexPath = _getPathOfPicByLoacleId(_pic.objectForKey("localId") as! Int)
                             
                             let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: __dict.objectForKey("info") as! NSDictionary)

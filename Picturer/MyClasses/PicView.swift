@@ -16,6 +16,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
     var _id:Int = 0
     static var _ScaleType_Fit:String = "Fit" //----显示全部
     static var _ScaleType_Full:String = "Full"//----满屏显示
+    static var _ScaleType_Smart:String = "Smart"//----满屏显示
     
     var _isThumb:Bool = false
     
