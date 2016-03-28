@@ -456,7 +456,6 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         if _heighArray!.count>=__indexId+1{
             _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
         }
-        print("高度比较：",_lastH,__height)
         
         if _lastH != __height{
             _heighArray![__indexId] = __height

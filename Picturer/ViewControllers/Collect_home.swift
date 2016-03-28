@@ -59,6 +59,8 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         
         setup(self.view.frame)
+        
+        ImageLoader.sharedLoader._removeAllTask()
         _getDatas()
     }
     func setup(__frame:CGRect){
@@ -205,8 +207,11 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     
     func _getDatas(){
-        Social_Main._getCollectList({ (array) -> Void in
-            self._datasIn(array)
+        Social_Main._getCollectList({[weak self] (array) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self?._datasIn(array)
+            })
+            
         })
     }
     func _datasIn(__array:NSArray){
@@ -227,12 +232,12 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _likeArray = NSMutableArray()
         for var i:Int=0; i<_dataArray.count;++i{
             _heighArray?.addObject(_defaultH)
-            Social_Main._getCommentsOfAlubm(String(i), block: { (array) -> Void in
-                self._commentsArray?.addObject(array)
-            })
-            Social_Main._getLikesOfAlubm(String(i), block: { (array) -> Void in
-                self._likeArray?.addObject(array)
-            })
+//            Social_Main._getCommentsOfAlubm(String(i), block: { (array) -> Void in
+//                self._commentsArray?.addObject(array)
+//            })
+//            Social_Main._getLikesOfAlubm(String(i), block: { (array) -> Void in
+//                self._likeArray?.addObject(array)
+//            })
         }
         _tableView?.reloadData()
         

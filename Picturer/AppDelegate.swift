@@ -9,12 +9,16 @@
 import UIKit
 import CoreData
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         WXApi.registerApp("wx6a407ed579fd647d")//---注册微信分享
+        
+       
+        
         return true
     }
     func applicationWillResignActive(application: UIApplication) {

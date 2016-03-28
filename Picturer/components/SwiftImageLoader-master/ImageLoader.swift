@@ -53,9 +53,21 @@ class ImageLoader {
                 return
             }
             
+            let _localData:NSData?=ZYHWebImageChcheCenter.readCacheFromUrl(NSString(string: urlString))
+            if let goodData = _localData {
+                let image = UIImage(data: goodData)
+                dispatch_async(dispatch_get_main_queue(), {() in
+                    completionHandler(image: image, url: urlString)
+                })
+                return
+            }
+            
+            
+            
             let downloadTask: NSURLSessionDataTask = NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: urlString)!, completionHandler: {(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 if (error != nil) {
                     completionHandler(image: nil, url: urlString)
+                    
                     self._removeTaskOf(urlString)
                     return
                 }
@@ -63,6 +75,7 @@ class ImageLoader {
                 if data != nil {
                     let image = UIImage(data: data!)
                     self.cache.setObject(data!, forKey: urlString)
+                    ZYHWebImageChcheCenter.writeCacheToUrl(NSString(string: urlString), data: data!)
                     dispatch_async(dispatch_get_main_queue(), {() in
                         completionHandler(image: image, url: urlString)
                     })
@@ -74,6 +87,8 @@ class ImageLoader {
             })
             do{
                  self._loadingTasks?.addObject(downloadTask)
+            }catch{
+                
             }
             
             downloadTask.resume()

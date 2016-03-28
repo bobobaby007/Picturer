@@ -55,7 +55,8 @@
 		7A49DC9B1B354DB4004FAF14 /* pic_unSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A49DC991B354DB4004FAF14 /* pic_unSelected.png */; };
 		7A508EF61B65E4D5000FCA87 /* CommentList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A508EF51B65E4D5000FCA87 /* CommentList.swift */; };
 		7A508EFB1B65F6F0000FCA87 /* CommentList_Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A508EFA1B65F6F0000FCA87 /* CommentList_Cell.swift */; };
-		7A5DFF351C76C3AB00FF254C /* Haneke.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7A5DFF241C76C36100FF254C /* Haneke.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7A5A6A1F1CA9809700991C30 /* ZYHWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5A6A1D1CA9809700991C30 /* ZYHWebImage.swift */; };
+		7A5A6A201CA9809700991C30 /* ZYHWebImageChcheCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5A6A1E1CA9809700991C30 /* ZYHWebImageChcheCenter.swift */; };
 		7A5DFF371C76C58C00FF254C /* PicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA9ACB21B5133C0006B41FE /* PicView.swift */; };
 		7A65D6F71C7379170077C5B5 /* Social_Setting_Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65D6F61C7379170077C5B5 /* Social_Setting_Home.swift */; };
 		7A65D6F91C7432B10077C5B5 /* Social_Setting_passw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65D6F81C7432B10077C5B5 /* Social_Setting_passw.swift */; };
@@ -208,44 +209,6 @@
 		7AFE77241B6B9A940021E35E /* Social_pic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE77231B6B9A940021E35E /* Social_pic.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		7A5DFF231C76C36100FF254C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A095C9561980418C00CD0F4C;
-			remoteInfo = "Haneke-iOS";
-		};
-		7A5DFF251C76C36100FF254C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6393C5F71C3B229200EB1FD8;
-			remoteInfo = "Haneke-tvOS";
-		};
-		7A5DFF271C76C36100FF254C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A095C9611980418C00CD0F4C;
-			remoteInfo = HanekeTests;
-		};
-		7A5DFF291C76C36100FF254C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A0026E9A19C9BFBC004DE0C6;
-			remoteInfo = HanekeDemo;
-		};
-		7A5DFF2B1C76C37700FF254C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A095C9551980418C00CD0F4C;
-			remoteInfo = "Haneke-iOS";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		7A2FCA701B5D596E00033925 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -257,15 +220,14 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		7AB5A8981C76A519007D05ED /* CopyFiles */ = {
+		7A5A69E21CA97CB000991C30 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				7A5DFF351C76C3AB00FF254C /* Haneke.framework in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -321,7 +283,8 @@
 		7A49DC991B354DB4004FAF14 /* pic_unSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic_unSelected.png; sourceTree = "<group>"; };
 		7A508EF51B65E4D5000FCA87 /* CommentList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentList.swift; sourceTree = "<group>"; };
 		7A508EFA1B65F6F0000FCA87 /* CommentList_Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentList_Cell.swift; sourceTree = "<group>"; };
-		7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Haneke.xcodeproj; path = "../../../xcode_components/HanekeSwift-master/Haneke.xcodeproj"; sourceTree = "<group>"; };
+		7A5A6A1D1CA9809700991C30 /* ZYHWebImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZYHWebImage.swift; sourceTree = "<group>"; };
+		7A5A6A1E1CA9809700991C30 /* ZYHWebImageChcheCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZYHWebImageChcheCenter.swift; sourceTree = "<group>"; };
 		7A65D6F61C7379170077C5B5 /* Social_Setting_Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Social_Setting_Home.swift; sourceTree = "<group>"; };
 		7A65D6F81C7432B10077C5B5 /* Social_Setting_passw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Social_Setting_passw.swift; sourceTree = "<group>"; };
 		7A65D6FA1C7449430077C5B5 /* Social_Setting_bg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Social_Setting_bg.swift; sourceTree = "<group>"; };
@@ -592,6 +555,7 @@
 		7A45766E1B5CA7E900DDE09A /* components */ = {
 			isa = PBXGroup;
 			children = (
+				7A5A6A1C1CA9809700991C30 /* swift-ZYHWebImage-master */,
 				7A2925761BF9C21F00A71EB4 /* ImportImageFromWeb */,
 				7A0A15D41B5E2D0B00A8C6F6 /* SwiftImageLoader-master */,
 				7AEE316D1C0A04CB000F2100 /* DoubanApis.swift */,
@@ -602,15 +566,13 @@
 			path = components;
 			sourceTree = "<group>";
 		};
-		7A5DFF1D1C76C36100FF254C /* Products */ = {
+		7A5A6A1C1CA9809700991C30 /* swift-ZYHWebImage-master */ = {
 			isa = PBXGroup;
 			children = (
-				7A5DFF241C76C36100FF254C /* Haneke.framework */,
-				7A5DFF261C76C36100FF254C /* Haneke.framework */,
-				7A5DFF281C76C36100FF254C /* HanekeTests.xctest */,
-				7A5DFF2A1C76C36100FF254C /* HanekeDemo.app */,
+				7A5A6A1D1CA9809700991C30 /* ZYHWebImage.swift */,
+				7A5A6A1E1CA9809700991C30 /* ZYHWebImageChcheCenter.swift */,
 			);
-			name = Products;
+			path = "swift-ZYHWebImage-master";
 			sourceTree = "<group>";
 		};
 		7A9C86B51B324F060051D067 /* MyClasses */ = {
@@ -807,7 +769,6 @@
 		7ADD4FFA1B2D402000E44F99 = {
 			isa = PBXGroup;
 			children = (
-				7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */,
 				7AE929681C0DF52E00EA4FBE /* Album+CoreDataProperties.swift */,
 				7AE929691C0DF52E00EA4FBE /* Album.swift */,
 				7AE9296A1C0DF52E00EA4FBE /* Image+CoreDataProperties.swift */,
@@ -902,12 +863,11 @@
 				7ADD50001B2D402000E44F99 /* Frameworks */,
 				7ADD50011B2D402000E44F99 /* Resources */,
 				7A2FCA701B5D596E00033925 /* Embed Frameworks */,
-				7AB5A8981C76A519007D05ED /* CopyFiles */,
+				7A5A69E21CA97CB000991C30 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				7A5DFF2C1C76C37700FF254C /* PBXTargetDependency */,
 			);
 			name = Picturer;
 			productName = Picturers;
@@ -942,49 +902,12 @@
 			mainGroup = 7ADD4FFA1B2D402000E44F99;
 			productRefGroup = 7ADD50041B2D402000E44F99 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 7A5DFF1D1C76C36100FF254C /* Products */;
-					ProjectRef = 7A5DFF1C1C76C36100FF254C /* Haneke.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				7ADD50021B2D402000E44F99 /* Picturer */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		7A5DFF241C76C36100FF254C /* Haneke.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Haneke.framework;
-			remoteRef = 7A5DFF231C76C36100FF254C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7A5DFF261C76C36100FF254C /* Haneke.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Haneke.framework;
-			remoteRef = 7A5DFF251C76C36100FF254C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7A5DFF281C76C36100FF254C /* HanekeTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = HanekeTests.xctest;
-			remoteRef = 7A5DFF271C76C36100FF254C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7A5DFF2A1C76C36100FF254C /* HanekeDemo.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = HanekeDemo.app;
-			remoteRef = 7A5DFF291C76C36100FF254C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7ADD50011B2D402000E44F99 /* Resources */ = {
@@ -1135,6 +1058,7 @@
 				7AB9E3D01C561AF100D23CFA /* ImageInputer.swift in Sources */,
 				7AA71CCB1C7897880073C062 /* LikeList_Cell.swift in Sources */,
 				7A6F8A8C1B62AF14007F949A /* Discover_reference.swift in Sources */,
+				7A5A6A1F1CA9809700991C30 /* ZYHWebImage.swift in Sources */,
 				7AC257D61C7E9675000C81AD /* ReferenceAlbumItem.swift in Sources */,
 				7AA71CC61C788F2B0073C062 /* LikeList.swift in Sources */,
 				7A2925781BF9C24400A71EB4 /* ImportImageFromWebController.swift in Sources */,
@@ -1188,20 +1112,13 @@
 				7AA26BA31B4D6DC0006CDC61 /* Setting_tags.swift in Sources */,
 				7AD748501C8574F0007A3FE9 /* EULA.swift in Sources */,
 				7AF02A1B1C440C300009B2BC /* Log_signin.swift in Sources */,
+				7A5A6A201CA9809700991C30 /* ZYHWebImageChcheCenter.swift in Sources */,
 				7A01C9991C85200800556366 /* FocusListCell.swift in Sources */,
 				7ADE72D71C092E8800BB6DBB /* PicsSelecter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		7A5DFF2C1C76C37700FF254C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Haneke-iOS";
-			targetProxy = 7A5DFF2B1C76C37700FF254C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7ADD500F1B2D402000E44F99 /* Main.storyboard */ = {
