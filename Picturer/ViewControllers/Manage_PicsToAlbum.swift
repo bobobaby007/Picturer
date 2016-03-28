@@ -164,7 +164,7 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
     
     }
     
-    //-----图片上传代理
+    //-----图片上传代理-----上传成功标记----*作废使用
     func _uploadOk(__oldPic: NSDictionary, __newPic: NSDictionary) {
         for var i:Int = 0; i<_imagesArray.count; ++i{
             let _pic:NSDictionary = _imagesArray.objectAtIndex(i) as! NSDictionary
@@ -285,17 +285,14 @@ class Manage_PicsToAlbum: UIViewController, ImagePickerDeletegate, UICollectionV
     
     //-----选择相册代理
     func imagePickerDidSelected(images: NSArray) {
-//        _imagesArray.addObjectsFromArray(images as [AnyObject])
-//        //_imagesArray=NSMutableArray(array: images)
-//        _imagesCollection?.reloadData()
-//        refreshView()
-        
         for var i:Int = 0; i<images.count; ++i{
             let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: images.objectAtIndex(i) as! NSDictionary)
             _pic.setObject(Int(NSDate().timeIntervalSince1970)+i+10000*random(), forKey: "localId")
+            _pic.setObject("new", forKey: "status")//----标记为新图片
             _imagesArray.addObject(_pic)
-            _uploadingList?._addNewPic(_pic)
             
+            //------添加到上传列表，上传图片到服务器，*作废使用
+            //_uploadingList?._addNewPic(_pic)
         }
         
         

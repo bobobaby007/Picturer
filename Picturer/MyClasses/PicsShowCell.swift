@@ -70,6 +70,7 @@ class PicsShowCell:UICollectionViewCell{
         super.init(frame: frame)
         _myFrame = frame
         _imgView=PicView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        _imgView.backgroundColor = Config._color_social_gray_light
         _imgView?._isThumb = true
         _imgView._scaleType = PicView._ScaleType_Full
         _imgView!._imgView!.layer.masksToBounds=true

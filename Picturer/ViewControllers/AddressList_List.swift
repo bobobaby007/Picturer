@@ -85,8 +85,14 @@ class AddressList_List:UIViewController, UITableViewDelegate,UITableViewDataSour
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
+        var cell:UserListCell
+        if let _cell = _tableView?.cellForRowAtIndexPath(indexPath) as? UserListCell{
+            cell = _cell
+        }else{
+            cell = _tableView!.dequeueReusableCellWithIdentifier("UserListCell", forIndexPath: indexPath) as! UserListCell
+        }
         
-        let cell:UserListCell = _tableView!.dequeueReusableCellWithIdentifier("UserListCell", forIndexPath: indexPath) as! UserListCell
+        //let cell:UserListCell = _tableView!.dequeueReusableCellWithIdentifier("UserListCell", forIndexPath: indexPath) as! UserListCell
         //if cell.respondsToSelector("setSeparatorInset:") {
             cell.separatorInset = UIEdgeInsetsZero
         //}
@@ -129,13 +135,12 @@ class AddressList_List:UIViewController, UITableViewDelegate,UITableViewDataSour
         //return CGFloat(((_dataArray!.objectAtIndex(indexPath.row) as! NSDictionary).objectForKey("comment") as! String).lengthOfBytesUsingEncoding(NSUnicodeStringEncoding))
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
         if let _dict = _dataArray.objectAtIndex(indexPath.row) as? NSDictionary{
             let _user:NSDictionary = _dict.objectForKey("follow") as! NSDictionary
             _viewUser(_user.objectForKey("_id") as! String)
         }
-        
-        //cell.selected = false
+        let cell:UserListCell = _tableView?.cellForRowAtIndexPath(indexPath) as! UserListCell
+        cell.selected = false
         
     }
     func _viewUser(__userId: String) {

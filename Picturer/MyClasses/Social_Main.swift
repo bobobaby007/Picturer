@@ -6,20 +6,66 @@
 //  Copyright © 2016年 4view. All rights reserved.
 //
 
+
 import Foundation
 import UIKit
 
 class Social_Main: AnyObject {
     //=========================社交部分
-    
+    static let _FRRINDS_LIST:String = "friends_list" //---朋友列表缓存文件名
+    static let _FOCUSME_LIST:String = "focusme_list" //---妙人列表缓存文件名
+    static var _fList:NSMutableArray?
+    static var _fmList:NSMutableArray?
     //--------登陆用户信息
-    
     static var _userId:String!{
         get{
             return MainInterface._uid
         }
     }
-    
+    static var _friendList:NSMutableArray!{
+        get{
+        if _fList==nil{
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        var _list:NSMutableArray?=_ud.valueForKey(_FRRINDS_LIST) as? NSMutableArray
+        //println(_list)
+        if _list==nil{
+        _list = NSMutableArray(array: [])
+        _ud.setObject(_list, forKey: _FRRINDS_LIST)
+        }
+        _fList = _list
+        }
+        return _fList
+        }
+        set{
+            //println("set")
+            _fList=newValue
+            let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            _ud.setObject(_fList, forKey: _FRRINDS_LIST)
+            //println(_ud.dictionaryRepresentation())
+        }
+    }
+    static var _focusMeList:NSMutableArray!{
+        get{
+        if _fmList==nil{
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        var _list:NSMutableArray?=_ud.valueForKey(_FOCUSME_LIST) as? NSMutableArray
+        //println(_list)
+        if _list==nil{
+        _list = NSMutableArray(array: [])
+        _ud.setObject(_list, forKey: _FOCUSME_LIST)
+        }
+        _fmList = _list
+        }
+        return _fmList
+        }
+        set{
+            //println("set")
+            _fmList=newValue
+            let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            _ud.setObject(_fmList, forKey: _FOCUSME_LIST)
+            //println(_ud.dictionaryRepresentation())
+        }
+    }
     static var _currentUser:NSDictionary{
         get{
             let _dict:NSMutableDictionary = NSMutableDictionary()
@@ -33,93 +79,118 @@ class Social_Main: AnyObject {
             _dict.setObject("浪漫的实用主义  WeChat:tianlu_3213", forKey: "sign")
             return _dict
         }
-    }
-    //-------获取主页图册列表＊＊当用户是本人，提取本地
-    static func _getAlbumListAtUser(__userId:String,__block:(NSArray)->Void){
-//        MainInterface._getAlbumListOfUser(__userId) { (__dict) -> Void in
-//            if __dict.objectForKey("recode") as! Int == 200{
-//                let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
-//                print("别人的图册列表：",ablums)
-//                __block(ablums)
-//            }
-//        }
-//        return
         
-        if __userId == _userId{
-            let _array:NSMutableArray = NSMutableArray(array: MainAction._albumList)
-            let _n:Int = _array.count
-            for var i:Int = 0; i<_n;++i{
-                let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(i) as! NSDictionary)
-                
-                let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(i)
-                
-                if _pic != nil{
-                    _dict.setObject(_pic, forKey: "cover")
-                }else{
-                    _dict.setObject(NSDictionary(objects: ["no_cover.png","file"], forKeys: ["url","type"]), forKey: "cover")
-                }
-                
-                let _pics:NSArray = MainAction._getImagesOfAlbumIndex(i)!
-                _dict.setObject(_pics.count, forKey: "counts")
-                
-                
-                _array[i] = _dict
+    }
+    //----获取本地图册列表，未在线更新
+    static func _getMyAlbumListLocal(__block:(NSArray)->Void){
+        let _array:NSMutableArray = NSMutableArray(array: MainAction._albumList)
+        let _n:Int = _array.count
+        for var i:Int = 0; i<_n;++i{
+            let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(i) as! NSDictionary)
+            
+            let _pic:NSDictionary! = MainAction._getCoverFromAlbumAtIndex(i)
+            
+            if _pic != nil{
+                _dict.setObject(_pic, forKey: "cover")
+            }else{
+                _dict.setObject(NSDictionary(objects: ["no_cover.png","file"], forKeys: ["url","type"]), forKey: "cover")
             }
-            print("本地图册列表：",_array)
-            __block(_array)
-            return
-        }else{
-            MainInterface._getAlbumListOfUser(__userId) { (__dict) -> Void in
-                if __dict.objectForKey("recode") as! Int == 200{
-                    let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
-                    __block(ablums)
-                }
+            
+            let _pics:NSArray = MainAction._getImagesOfAlbumIndex(i)!
+            _dict.setObject(_pics.count, forKey: "counts")
+            
+            _array[i] = _dict
+        }
+        print("本地图册列表：",_array)
+        __block(_array)
+    }
+    //-------获取在线主页图册列表
+    static func _getAlbumListAtUser(__userId:String,__block:(NSArray)->Void){
+        MainInterface._getAlbumListOfUser(__userId) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
+                __block(ablums)
             }
         }
-        
-        
-        //        var request = HTTPTask()
-        //        request.GET("http://www.baidu.com", parameters: nil, completionHandler: { (response) -> Void in
-        //            block(self._albumList)
-        //        })
-        
-        //        if __userId == _userId{
-        //            let _array:NSMutableArray = NSMutableArray(array: _albumList)
-        //            let _n:Int = _array.count
-        //            for var i:Int = 0; i<_n;++i{
-        //                let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _array.objectAtIndex(i) as! NSDictionary)
-        //
-        //                let _pic:NSDictionary = _getCoverFromAlbumAtIndex(i)!
-        //                _dict.setObject(_pic, forKey: "cover")
-        //                _array[i] = _dict
-        //            }
-        //            block(_array)
-        //            return
-        //        }else{
-        //            let _array:NSMutableArray = NSMutableArray()
-        //            let _n:Int = 10
-        //            for var i:Int = 0; i<_n;++i{
-        //                let _dict:NSMutableDictionary = NSMutableDictionary()
-        //                let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
-        //                _dict.setObject(_pic, forKey: "cover")
-        //                _dict.setObject("天边一朵云", forKey: "title")
-        //                _dict.setObject("个人欣赏", forKey: "description")
-        //                _array.addObject(_dict)
-        //            }
-        //            block(_array)
-        //            
-        //        }
-        
     }
     //-----提取相册里的所有图片
     static func _getPicsListAtAlbumId(__albumId:String?,__block:(NSArray)->Void){
         MainInterface._getImagesOfAlbum(__albumId!) { (__dict) -> Void in
-            print(__dict)
-            
-            
+            //print(__dict)
             if __dict.objectForKey("recode") as! Int == 200{
                 let images:NSArray = __dict.objectForKey("list") as! [NSDictionary]
                 __block(images)
+            }
+        }
+    }
+    //-----提取相册详情－－－包含评论----*取消
+    static func _getAlbumDetail(__albumId:String?,__block:(NSArray)->Void){
+        MainInterface._getAlbumDetail(__albumId!) { (__dict) -> Void in
+            print(__dict)
+            if __dict.objectForKey("recode") as! Int == 200{
+                let images:NSArray = [__dict.objectForKey("albuminfo") as! NSDictionary]
+                __block(images)
+            }
+        }
+    }
+    
+    //----评论图片
+    static func _commentPic(__id:String,__text:String, __re:String, __block:(NSDictionary)->Void){
+        MainInterface._commentPic(__id, __text: __text, __re: __re) { (__dict) -> Void in
+            print(__dict)
+            if __dict.objectForKey("recode") as! Int == 200{
+                
+            }
+        }
+    }
+    //----获取图片评论和点赞列表
+    static func _getPicCommentAndLikes(__id:String, __block:(NSDictionary)->Void){
+        MainInterface._getPicCommentAndLikes(__id) { (__dict) -> Void in
+            print(__dict)
+            if __dict.objectForKey("recode") as! Int == 200{
+                let _dict:NSDictionary = __dict.objectForKey("info") as! NSDictionary
+                let _outDict:NSDictionary = NSDictionary(objects: [_dict.objectForKey("comment") as! NSArray,_dict.objectForKey("like") as! NSArray], forKeys: ["comment","like"])
+                __block(_outDict)
+            }
+        }
+    }
+    
+    //----评论相册
+    static func _commentAlbum(__id:String,__text:String, __re:String, __block:(NSDictionary)->Void){
+        MainInterface._commentAlbum(__id, __text: __text, __re: __re) { (__dict) -> Void in
+            print(__dict)
+            if __dict.objectForKey("recode") as! Int == 200{
+                
+            }
+        }
+    }
+    //----获取相册评论和点赞列表
+    static func _getAlbumCommentAndLikes(__id:String, __block:(NSDictionary)->Void){
+        MainInterface._getAlbumCommentAndLikes(__id) { (__dict) -> Void in
+            print(__dict)
+            if __dict.objectForKey("recode") as! Int == 200{
+                let _dict:NSDictionary = __dict.objectForKey("info") as! NSDictionary
+                let _outDict:NSDictionary = NSDictionary(objects: [_dict.objectForKey("comment") as! NSArray,_dict.objectForKey("like") as! NSArray], forKeys: ["comment","like"])
+                __block(_outDict)
+            }
+        }
+    }
+    
+    //----评论状态
+    static func _commentTimeline(__id:String,__text:String, __re:String, __block:(NSDictionary)->Void){
+        MainInterface._commentTimeline(__id, __text: __text, __re: __re) { (__dict) -> Void in
+            print(__dict)
+            
+        }
+    }
+    //----获取状态评论和点赞列表
+    static func _getTimelineCommentAndLikes(__id:String, __block:(NSDictionary)->Void){
+        MainInterface._getTimelineCommentAndLikes(__id) { (__dict) -> Void in
+            print(__dict)
+            if __dict.objectForKey("recode") as! Int == 200{
+                let _dict:NSDictionary = __dict.objectForKey("info") as! NSDictionary
+                let _outDict:NSDictionary = NSDictionary(objects: [_dict.objectForKey("comments") as! NSArray,_dict.objectForKey("likes") as! NSArray], forKeys: ["comment","like"])
+                __block(_outDict)
             }
         }
     }
@@ -263,6 +334,12 @@ class Social_Main: AnyObject {
     //-----提取某个相册评论－－－－－－//－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－过渡方法
     static func _getCommentsOfAlubm(__albumId:String?,block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
+        
+        //block(_array)
+        //return
+        
+        
+        
         var _n:Int = Int(__albumId!)!
         if _n < 1{
             _n = 1
@@ -284,10 +361,12 @@ class Social_Main: AnyObject {
             
         }
         // println(response.text)
+        
+        
         block(_array)
     }
     
-    //----获取点赞列表－－－取消
+    //----获取点赞列表－－－*取消
     static func _getLikesOfAlubm(__albumId:String?,block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
         var _n:Int = Int(__albumId!)!
@@ -420,21 +499,25 @@ class Social_Main: AnyObject {
         MainInterface._getMyFocusTimeLine(__fromId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 print("关注用户更新：",__dict)
-                __block(__dict.objectForKey("list") as! NSArray)
+                let _arr = __dict.objectForKey("list") as! NSArray
+                _focusMeList = NSMutableArray(array: _arr)
+                __block(_arr)
             }else{
                 print("关注用户更新失败：",__dict)
             }
         }
     }
-    //－－－－提取朋友更新图册列表
+    //－－－－提取朋友更新图册列表，内容树
     static func _getMyFriendsTimeLine(__fromId:String,__block:(NSArray)->Void){
        
         MainInterface._getMyFriendsTimeLine(__fromId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
-                print("关注用户更新：",__dict)
-                __block(__dict.objectForKey("list") as! NSArray)
+                print("朋友更新：",__dict)
+                let _arr = __dict.objectForKey("list") as! NSArray
+                _friendList = NSMutableArray(array: _arr)
+                __block(_arr)
             }else{
-                print("关注用户更新失败：",__dict)
+                print("朋友更新失败：",__dict)
             }
         }
     }
@@ -467,21 +550,38 @@ class Social_Main: AnyObject {
     }
     //－－－－提取收藏图册列表
     static func _getCollectList(block:(NSArray)->Void){
-        let _array:NSMutableArray = NSMutableArray()
-        let _n:Int = 10
-        for var i:Int = 0; i<_n;++i{
-            let _dict:NSMutableDictionary = NSMutableDictionary()
-            var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%8+1)+".JPG","file"], forKeys: ["url","type"])
-            _dict.setObject(_pic, forKey: "cover")
-            
-            _pic = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
-            _dict.setObject(_pic, forKey: "userImg")
-            _dict.setObject(_testUserNames?.objectAtIndex(random()%31) as! String, forKey: "userName")
-            _dict.setObject("天边一朵云", forKey: "title")
-            _dict.setObject(_testDes?.objectAtIndex(random()%_testDes!.count) as! String, forKey: "description")
-            _array.addObject(_dict)
+        
+        MainInterface._getCollectList { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                print("收藏列表：",__dict)
+                
+                let _arr:NSArray = __dict.objectForKey("list") as! NSArray
+                
+                let _array:NSMutableArray = NSMutableArray()
+                
+                for var i:Int = 0; i<_arr.count;++i{
+                    let _com:NSDictionary = _arr.objectAtIndex(i) as! NSDictionary
+                    let _album:NSDictionary = _com.objectForKey("album") as! NSDictionary
+                    let _user:NSDictionary = _album.objectForKey("author") as! NSDictionary
+                    
+                    let _dict:NSMutableDictionary = NSMutableDictionary()
+                    
+                    var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%8+1)+".JPG","file"], forKeys: ["url","type"])
+                    _dict.setObject(_pic, forKey: "cover")
+                    _pic = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
+                    _dict.setObject(MainInterface._userAvatar(_user), forKey: "userImg")
+                    _dict.setObject(_user.objectForKey("nickname") as! String, forKey: "userName")
+                    _dict.setObject(_album.objectForKey("title") as! String, forKey: "title")
+                    _dict.setObject(_album.objectForKey("description") as! String, forKey: "description")
+                    _array.addObject(_dict)
+                }
+                block(_array)
+                
+                
+            }else{
+               
+            }
         }
-        block(_array)
     }
     static func _getAdvertisiongs(block:(NSArray)->Void){
         

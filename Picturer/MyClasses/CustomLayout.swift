@@ -11,7 +11,7 @@ import UIKit
 * 这个类只简单定义了一个section的布局
 */
 class CustomLayout : UICollectionViewLayout {
-    let lineSpacing:CGFloat = 1
+    let lineSpacing:CGFloat = 2
     
     let rowNumber:Int = 4
     // 内容区域总大小，不是可见区域
@@ -43,7 +43,7 @@ class CustomLayout : UICollectionViewLayout {
             let attribute =  UICollectionViewLayoutAttributes(forCellWithIndexPath:indexPath)
             
             var smallCellSide:CGFloat = CGFloat(collectionView!.bounds.size.width)
-            smallCellSide=(smallCellSide-CGFloat(2*lineSpacing))/CGFloat(rowNumber)
+            smallCellSide=(smallCellSide-CGFloat(lineSpacing))/CGFloat(rowNumber)
             
             //内部间隙，左右5
             let insets = UIEdgeInsetsMake(0, 0, 0, 0)

@@ -14,8 +14,10 @@ protocol PicAlbumMessageItem_delegate:NSObjectProtocol{
     func _moreComment(__indexId:Int)//----查看更多评论
     func _viewUser(__userId:String)
     func _viewAlbum(__albumIndex:Int)
+    func _viewAlbumDetail(__albumIndex:Int) //---查看相册详情
     func _viewPicsAtIndex(__array:NSArray,__index:Int)
     func _buttonAction(__action:String,__dict:NSDictionary)
+    
 }
 
 class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
@@ -150,6 +152,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _updateTime_label?.textAlignment = NSTextAlignment.Left
         _updateTime_label?.font = Config._font_social_time
         
+        
         _btn_moreAction = UIButton(frame: CGRect(x: _defaultSize!.width-35, y: 12.5, width: 20, height: 20))
         //_btn_moreAction?.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         _btn_moreAction?.setImage(UIImage(named: "moreAction_Social"), forState: UIControlState.Normal)
@@ -209,12 +212,19 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _toolsPanel?.addSubview(_toolsButtonPanel!)
         
         
+        
+        
         _commentsPanel = UIView(frame: CGRect(x: 0, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width, height: 36))
         _commentsPanel?.backgroundColor = UIColor.clearColor()
         
+        
+        _toolsPanel?.hidden = true
+        _commentsPanel?.hidden = true
+        
+        
         _attributeStr = NSMutableAttributedString()
         
-        _commentText = UITextView(frame: CGRect(x: 0, y: 0, width: _defaultSize!.width-_gap*2, height: 200))
+        _commentText = UITextView(frame: CGRect(x: 0, y: 0, width: _defaultSize!.width-_gap*2, height: 20))
         _commentText?.textContainerInset =  UIEdgeInsetsMake(-3, 0, 0, 0)  //{{-10,-5},{0,0}} // UIEdgeInsetsZero
         _commentText?.textContainer.lineFragmentPadding = 0
         _commentText?.font = Config._font_social_album_description  //UIFont.systemFontOfSize(14)
@@ -281,7 +291,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     //---设定图片
     func setupPic(){
         _picV = PicView(frame: CGRect(x: 0, y: 45, width: _defaultSize!.width, height: _defaultSize!.width))
-        _picV?._setImage("noPic.png")
+        _picV?._setImage("loadingPicBg.png")
         _picV?.scrollEnabled=false
         _picV?.maximumZoomScale = 1
         _picV?.minimumZoomScale = 1
@@ -338,7 +348,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _statusText?.editable=false
         _statusText?.scrollEnabled = false
         _statusText?.textAlignment = NSTextAlignment.Left
-        
+        _statusText?.delegate = self
         
         
         addSubview(_statusText!)
@@ -375,7 +385,13 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             break
         }
         
-        let _commH:CGFloat = _commentText!.contentSize.height
+        
+        _toolsPanel?.hidden = false
+        _commentsPanel?.hidden = false
+        
+//        let _commH:CGFloat = _commentText!.contentSize.height
+        let _size = _commentText!.sizeThatFits(CGSize(width: _defaultSize!.width-_gap*2, height: CGFloat.max))
+        let _commH:CGFloat = _size.height
         _commentText?.frame = CGRect(x: 0, y: 0, width: _defaultSize!.width-_gap*2, height: _commH)
         
         var _moreComentH:CGFloat = 0
@@ -422,8 +438,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         //let _lineH:CGFloat = 20
         //var _h:CGFloat
        // print("评论：",__comments)
-        
-        
+                
         let _n:Int = __comments.count
         
         
@@ -437,6 +452,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
                 _attributeStr?.appendAttributedString(NSAttributedString(string: "\n"))
             }
             let _commentDict:NSDictionary = __comments.objectAtIndex(__comments.count - 1 - i) as! NSDictionary
+            
+            print("行数",i,_commentDict)
             _attributeStr?.appendAttributedString(commentString(_commentDict))
         }
         let paragraphStyle = NSMutableParagraphStyle()
@@ -454,12 +471,44 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             _moreCommentText?.text = ""
         }
         
+        _refreshView()
     }
+    
+    
+    //---处理一遍网上数据
+    func _dealWidthComment(__commentDict:NSDictionary)->NSDictionary{
+        let _com:NSDictionary = __commentDict
+        
+        print("评论:",_com)
+        
+        let _by:NSDictionary = _com.objectForKey("by") as! NSDictionary
+        
+        
+        let from_userName:String = _by.objectForKey("nickname") as! String
+        let from_userId:String = _by.objectForKey("_id") as! String
+        let userImg:NSDictionary = MainInterface._userAvatar(_by)
+        
+        var to_userName:String = ""
+        
+        var to_userId:String = ""
+        
+        if let _re:NSDictionary = _com.objectForKey("re") as? NSDictionary{
+            to_userName = _re.objectForKey("nickname") as! String
+            to_userId = _re.objectForKey("_id") as! String
+        }
+        let comment:String = _com.objectForKey("text") as! String
+        let _d:NSDictionary = NSDictionary(objects: [from_userName,to_userName,from_userId,to_userId,comment,userImg], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg"])
+        return _d
+    }
+    
     //-----评论文字设置
     
-    func commentString(_commentDict:NSDictionary) -> NSAttributedString {
+    
+    
+    func commentString(__commentDict:NSDictionary) -> NSAttributedString {
         //let boldFont = UIFont.boldSystemFontOfSize(14)
-       
+        //var _commentDict = __commentDict
+        let _commentDict = _dealWidthComment(__commentDict)
         //var boldAttr = [NSFontAttributeName: boldFont]
         //let normalAttr = [NSForegroundColorAttributeName : UIColor.blackColor(),
          //   NSBackgroundColorAttributeName : UIColor.whiteColor()]
@@ -516,6 +565,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             //_delegate?._moreLike(_indexId)
         case "album":
             //_delegate?._moreLike(_indexId)
+            break
+        case "albumDetail":
+            _delegate?._viewAlbumDetail(_indexId)
             break
         default:
             print("")
@@ -692,9 +744,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         let attrString:NSMutableAttributedString = NSMutableAttributedString(string: "更新了\(String(__picNum))张图片至 ", attributes:normalAttr)
         
-        attrString.appendAttributedString(linkString(__albumName, withURLString: "album:"+__albumId))
-        
-        
+        attrString.appendAttributedString(linkString(__albumName, withURLString: "albumDetail:"+__albumId))
         
         _statusText?.attributedText = attrString
         
@@ -710,10 +760,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     }
     func _setUserImge(__pic:NSDictionary){
         _userImg?._setPic(__pic, __block: {[weak self](__dict) -> Void in
-            if let strongSelf = self {
-                //print("strongSelf",strongSelf)
-                strongSelf._refreshView()
-            }
+//            if let strongSelf = self {
+//                //print("strongSelf",strongSelf)
+//                strongSelf._refreshView()
+//            }
         })
     }
     
@@ -722,12 +772,16 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
        //  _pic?.image = UIImage(named: __pic.objectForKey("url") as! String)
         if let _url = __pic.objectForKey("thumbnail") as? String{
             _picV!._setPic(NSDictionary(objects:[MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{[weak self] _ in
-                 self?._refreshView()
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    self?._refreshView()
+//                })
             })
             return
         }else{
             _picV!._setPic(__pic, __block:{[weak self] _ in
-                 self?._refreshView()
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    self?._refreshView()
+//                })
             })
         }
     }

@@ -21,7 +21,7 @@ class MainAction: AnyObject {
     static var _dList:NSMutableArray?//----准备删除列表
     static var _tempAlbum:NSMutableDictionary?
     static var _isAsyning:Bool = false //---是否正在同步中
-    
+    static var _failedList:NSArray = [] //-----失败列表－－－只存在缓存中
     static func _checkLogOk()->Bool{
         return MainInterface._isLogined()
     }
@@ -75,7 +75,7 @@ class MainAction: AnyObject {
             _ud.setObject(_dList, forKey: _DELETE_LIST)
             //println(_ud.dictionaryRepresentation())
         }
-    }
+    }    
     //-----重置
     static func _reset(){
         let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
@@ -112,6 +112,7 @@ class MainAction: AnyObject {
             }
         }
     }
+    
     //----从服务器获取相册里的图片列表
     static func _getImagesOfAlbumIdFromServer(__albumId:String , __block:(NSDictionary)->Void){
         
@@ -715,6 +716,10 @@ class MainAction: AnyObject {
     //---------------------------------------------
     //---------------------同步部分－－－－－－－－－－
     //---------------------------------------------
+    static func _startCheckAsyn(){
+        _failedList = []
+        _checkAsyn()
+    }
     
     static func _checkAsyn(){
         if _isAsyning{
@@ -725,13 +730,14 @@ class MainAction: AnyObject {
         //----先做删除动作
         for var i:Int = 0 ; i < _deleteList.count ; ++i{
             let _d:NSDictionary = _deleteList.objectAtIndex(i) as! NSDictionary
-            if let _status = _d.objectForKey("status") as? String{
-                if _status == "failed"{
-                    continue
-                }
-            }
+            
+            
             if _d.objectForKey("type") as! String == "album"{
                 if  let _dict = _d.objectForKey("dict") as? NSDictionary{
+                    
+                    if _isFailed("deleteAlbum", __dict: _dict){ //--已经删除失败过一次
+                        continue
+                    }
                     
                     _deleteAlbumFromServer(_dict)
                     return
@@ -739,8 +745,12 @@ class MainAction: AnyObject {
             }
             if _d.objectForKey("type") as! String == "pic"{
                 if  let _dict = _d.objectForKey("dict") as? NSDictionary{
-                    _deletePicFromServer(_dict)
                     
+                    if _isFailed("deletePic", __dict: _dict){ //--已经删除失败过一次
+                        continue
+                    }
+                    
+                    _deletePicFromServer(_dict)
                     return
                 }
             }
@@ -751,18 +761,22 @@ class MainAction: AnyObject {
             let _id:String = _album.objectForKey("_id") as! String
             
             if _id == ""{ //----新建相册
-                if let _status = _album.objectForKey("status") as? String{
-                    if _status == "failed"{ //----跳过更新失败的
-                        print("曾经更新失败的相册：",_album)
-                        continue
-                    }
+//                if let _status = _album.objectForKey("status") as? String{
+//                    if _status == "failed"{ //----跳过更新失败的
+//                        print("曾经更新失败的相册：",_album)
+//                        continue
+//                    }
+//                }
+                if _isFailed("newAlbum", __dict: _album){ //--已经失败过一次
+                    continue
                 }
+                
                _newAlbumFromeServer(_album, __block: { (__dict) -> Void in
                     if __dict.objectForKey("recode") as! Int == 200{
                         print("提交新建相册完成：",__dict)
                         _changeAlbumAtIndex(_getAlbumIndexOfLocalId(_album.objectForKey("localId") as! Int), dict: __dict.objectForKey("albuminfo") as! NSDictionary)
                     }else{
-                        _changeAlbumAtIndex( _getAlbumIndexOfId(_album.objectForKey("_id") as! String), dict: NSDictionary(object: "failed", forKey: "status"))
+                        _addToFailedList("newAlbum", __dict: _album)
                     }
                     _isAsyning = false
                     _checkAsyn()
@@ -771,14 +785,19 @@ class MainAction: AnyObject {
                 return
             }else{
                 if let _status = _album.objectForKey("status") as? String{ //---修改相册
+                    
                     if _status == "changed"{
                         print( "需要修改图册:",_album)
+                        if _isFailed("changeAlbum", __dict: _album){ //--已经失败过一次
+                            continue
+                        }
                         _changeAlbumOfId(_album.objectForKey("_id") as! String, dict: _album, __block: { (__dict) -> Void in
                             if __dict.objectForKey("recode") as! Int == 200{
                                 print("提交相册修改完成：",__dict)
                                 _changeAlbumAtIndex( _getAlbumIndexOfId(_album.objectForKey("_id") as! String), dict: NSDictionary(object: "done", forKey: "status"))
                             }else{
-                                _changeAlbumAtIndex( _getAlbumIndexOfId(_album.objectForKey("_id") as! String), dict: NSDictionary(object: "failed", forKey: "status"))
+//                                _changeAlbumAtIndex( _getAlbumIndexOfId(_album.objectForKey("_id") as! String), dict: NSDictionary(object: "failed", forKey: "status"))
+                                _addToFailedList("changeAlbum", __dict: _album)
                             }
                             _isAsyning = false
                             _checkAsyn()
@@ -794,9 +813,12 @@ class MainAction: AnyObject {
             
             for var p:Int = 0 ; p < _pics.count ; ++p{
                 let _pic:NSDictionary = _pics.objectAtIndex(p) as! NSDictionary
-                if let _id = _pic.objectForKey("_id") as? String{
-                    if let _status = _album.objectForKey("status") as? String{
+                if let _id = _pic.objectForKey("_id") as? String{ //---有_id说明是已经在线存在的
+                    if let _status = _pic.objectForKey("status") as? String{
                         if _status == "changed"{//-----修改图片时
+                            if _isFailed("changePic", __dict: _pic){ //--已经失败过一次
+                                continue
+                            }
                             var _str:String = ""
                             for (key,value) in _pic{
                                 //println(key,value)
@@ -814,11 +836,10 @@ class MainAction: AnyObject {
                                         if __dict.objectForKey("recode") as! Int == 200{
                                             let _indexPath = _getPathOfPicByLoacleId(_pic.objectForKey("localId") as! Int)
                                             let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: __dict.objectForKey("info") as! NSDictionary)
-                                            _dict.setObject("done", forKey: "status")
+                                            //_dict.setObject("done", forKey: "status")
                                             _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict: _dict)
                                         }else{
-                                            let _indexPath = _getPathOfPicByLoacleId(_pic.objectForKey("localId") as! Int)
-                                            _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict:  NSDictionary(object: "failed", forKey: "status"))
+                                            _addToFailedList("changePic", __dict: _pic)
                                         }
                                         _isAsyning = false
                                         _checkAsyn()
@@ -830,11 +851,17 @@ class MainAction: AnyObject {
                         }
                     }
                 }else{//----新建图片
-                    if let _status = _pic.objectForKey("status") as? String{
-                        if _status == "failed"{
-                            print("曾经上传失败的图片：",_pic)
-                            continue
-                        }
+//                    if let _status = _pic.objectForKey("status") as? String{
+//                        if _status == "failed"{
+//                            print("曾经上传失败的图片：",_pic)
+//                            continue
+//                        }
+//                        
+//                    }
+                    
+                    if _isFailed("newPic", __dict: _pic){ //--已经失败过一次
+                        print("曾经上传失败的图片：",_pic)
+                        continue
                     }
                     print("需要上传的图片：",_pic)
                     var _str:String = "&album=\(_album.objectForKey("_id") as! String)"
@@ -858,8 +885,11 @@ class MainAction: AnyObject {
                             _dict.setObject("done", forKey: "status")
                             _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict: _dict)
                         }else{
-                            let _indexPath = _getPathOfPicByLoacleId(_pic.objectForKey("localId") as! Int)
-                            _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict:  NSDictionary(object: "failed", forKey: "status"))
+//                            let _indexPath = _getPathOfPicByLoacleId(_pic.objectForKey("localId") as! Int)
+//                            _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict:  NSDictionary(object: "failed", forKey: "status"))
+                            
+                            _addToFailedList("newPic", __dict: _pic)
+                            
                         
                         }
                         _isAsyning = false
@@ -876,6 +906,59 @@ class MainAction: AnyObject {
         
         _isAsyning = false
     }
+    
+    //----添加到失败列表－－－type:newPic / newAlbum / changePic / changeAlbum / deletePic / deleteAlbum
+    static func _addToFailedList(__type:String,__dict:NSDictionary){
+        if _isFailed(__type,__dict:__dict){
+            
+        }else{
+            
+            let _list:NSMutableArray=NSMutableArray(array:_failedList)
+            let _dict:NSDictionary = NSDictionary(objects: [__type,__dict], forKeys: ["type","dict"])
+            _list.addObject(_dict)
+            _failedList = _list
+            //print("失败列表：",_failedList)
+            
+        }
+    }
+    //---判断是否在失败列表中
+    static func _isFailed(__type:String,__dict:NSDictionary)->Bool{
+        var _has:Bool = false
+        for var i:Int = 0 ;  i < _failedList.count; ++i{
+            let _d:NSDictionary = _failedList.objectAtIndex(i) as! NSDictionary
+            if _d.objectForKey("type") as! String == __type{
+                
+                if  let _dict = _d.objectForKey("dict") as? NSDictionary{
+                    print("已经存在失败：",_dict,__dict)
+                    
+                    if let _id:String! = _dict.objectForKey("_id") as? String{
+                        
+                        if let _toId:String! = __dict.objectForKey("_id") as? String{
+                            if _id == _toId{
+                                _has = true
+                                break
+                            }
+                        }
+                    }
+                    if let _localId:String! = _dict.objectForKey("localId") as? String{
+                        
+                        if let _to_localId:String! = __dict.objectForKey("localId") as? String{
+                            
+                            if _localId == _to_localId{
+                                _has = true
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        print(_has)
+        
+        return _has
+    }
+    
     
     //----添加到删除列表---type: pic / album
     
@@ -901,10 +984,11 @@ class MainAction: AnyObject {
         }else{
             let _toDeleteDict:NSDictionary = NSDictionary(objects: [__type,__dict], forKeys: ["type","dict"])
             _list.addObject(_toDeleteDict)
+            _deleteList = _list
         }
         
         
-        _deleteList = _list
+        
     }
     
     //----从服务器删除相册
@@ -914,7 +998,8 @@ class MainAction: AnyObject {
             if __dict.objectForKey("recode") as! Int == 200{
                 _removeFromDeleteList("album",__dict: __album)
             }else{
-                _failInDeleteList("album",__dict: __album)
+                _addToFailedList("deleteAlbum",__dict:__album )
+                //_failInDeleteList("album",__dict: __album)
             }
             _isAsyning = false
             _checkAsyn()
@@ -929,7 +1014,8 @@ class MainAction: AnyObject {
             if __dict.objectForKey("recode") as! Int == 200{
                 _removeFromDeleteList("pic",__dict: __pic)
             }else{
-                _failInDeleteList("pic",__dict: __pic)
+                _addToFailedList("deletePic",__dict:__pic )
+                //_failInDeleteList("pic",__dict: __pic)
             }
             _isAsyning = false
             _checkAsyn()
@@ -946,25 +1032,6 @@ class MainAction: AnyObject {
                 if  let _dict = _d.objectForKey("dict") as? NSDictionary{
                     if _dict.objectForKey("_id") as! String == __dict.objectForKey("_id") as! String{
                         _list.removeObjectAtIndex(i)
-                        break
-                    }
-                }
-            }
-        }
-        _deleteList = _list
-    }
-    //----添加删除失败到列表
-    static func _failInDeleteList(__type:String,__dict:NSDictionary){
-        let _list:NSMutableArray=NSMutableArray(array:_deleteList )
-        for var i:Int = 0 ;  i < _list.count; ++i{
-            let _d:NSDictionary = _list.objectAtIndex(i) as! NSDictionary
-            if _d.objectForKey("type") as! String == __type{
-                if  let _dict = _d.objectForKey("dict") as? NSDictionary{
-                    if _dict.objectForKey("_id") as! String == __dict.objectForKey("_id") as! String{
-                        let _myDict:NSMutableDictionary = NSMutableDictionary(dictionary: _dict)
-                        _myDict.setObject("failed", forKey: "status")
-                        _list[i] = _dict
-                        
                         break
                     }
                 }

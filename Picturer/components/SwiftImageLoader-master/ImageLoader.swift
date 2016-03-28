@@ -12,12 +12,34 @@ import Foundation
 class ImageLoader {
     
     let cache = NSCache()
-
+    let _loadingTasks:NSMutableArray? = []
     class var sharedLoader : ImageLoader {
     struct Static {
         static let instance : ImageLoader = ImageLoader()
         }
         return Static.instance
+    }
+    func _removeTaskOf(urlString: String){
+        if _loadingTasks == nil{
+            return
+        }
+        for var i:Int = 0; i < _loadingTasks!.count ; ++i{
+            let _task:NSURLSessionDataTask = _loadingTasks!.objectAtIndex(i) as! NSURLSessionDataTask
+            if _task.currentRequest?.URL?.absoluteString == urlString{
+                _loadingTasks!.removeObjectAtIndex(i)
+                _task.cancel()
+            }
+        }
+    }
+    func _removeAllTask(){
+        if _loadingTasks == nil{
+            return
+        }
+        for var i:Int = 0; i < _loadingTasks!.count ; ++i{
+            let _task:NSURLSessionDataTask = _loadingTasks!.objectAtIndex(i) as! NSURLSessionDataTask
+            _task.cancel()
+        }
+        _loadingTasks?.removeAllObjects()
     }
     
     func imageForUrl(urlString: String, completionHandler:(image: UIImage?, url: String) -> ()) {
@@ -34,6 +56,7 @@ class ImageLoader {
             let downloadTask: NSURLSessionDataTask = NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: urlString)!, completionHandler: {(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 if (error != nil) {
                     completionHandler(image: nil, url: urlString)
+                    self._removeTaskOf(urlString)
                     return
                 }
                 
@@ -43,10 +66,13 @@ class ImageLoader {
                     dispatch_async(dispatch_get_main_queue(), {() in
                         completionHandler(image: image, url: urlString)
                     })
+                    self._removeTaskOf(urlString)
+                    
                     return
                 }
                 
             })
+            self._loadingTasks!.addObject(downloadTask)
             downloadTask.resume()
             
         })

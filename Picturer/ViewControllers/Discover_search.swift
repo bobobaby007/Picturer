@@ -19,7 +19,7 @@ class Discover_search: UIViewController,UITableViewDataSource,UITableViewDelegat
     var _searchBarH:CGFloat = 43
     var _searchBar:UIView = UIView()
     var _searchT:UITextField = UITextField()
-    var _gap:CGFloat = 10
+    var _gap:CGFloat = 15
     
     var _referenceTable:UITableView = UITableView()
     var _referenceTableH:CGFloat=0
@@ -141,6 +141,18 @@ class Discover_search: UIViewController,UITableViewDataSource,UITableViewDelegat
         let _view:UIView = UIView()
         let _label:UILabel = UILabel(frame: CGRect(x: _gap, y: 0, width: self.view.frame.width-2*_gap, height: 30))
         _label.font =  UIFont.systemFontOfSize(12)
+        _label.textColor = Config._color_gray_description
+        var _line:UIView = UIView(frame: CGRect(x: 0, y: 30, width: self.view.frame.width+300, height: 0.5))
+        _line.backgroundColor = Config._color_gray_time
+        _line.alpha = 0.5
+        _view.addSubview(_line)
+        
+        _line = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width+300, height: 0.5))
+        _line.backgroundColor = Config._color_gray_time
+        _line.alpha = 0.5
+        _view.addSubview(_line)
+        
+        
         switch section{
         case 0:
             _label.text="最近搜索标签"
@@ -152,7 +164,10 @@ class Discover_search: UIViewController,UITableViewDataSource,UITableViewDelegat
             _label.text="热门标签"
             break
         }
+        
+        
         _view.addSubview(_label)
+        
         
         _view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
         
@@ -182,9 +197,13 @@ class Discover_search: UIViewController,UITableViewDataSource,UITableViewDelegat
         
         
         let cell:UITableViewCell=UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "table_cell")
-        cell.textLabel?.font = UIFont.systemFontOfSize(16)
-        //cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         
+        //cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsetsZero
+        cell.layoutMargins = UIEdgeInsetsZero
+        cell.textLabel?.textColor = Config._color_social_gray
+        cell.textLabel?.font = Config._font_social_sign
         switch indexPath.section{
         case 0:
             cell.textLabel?.text=(_recentArray.objectAtIndex(indexPath.row) as! String)

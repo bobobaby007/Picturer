@@ -246,7 +246,6 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         switch _currentAction{
         case _action_normal:
             _SelectedIndexs=[]
-            
             //_collectionView.reloadData()
             _btn_back?.setTitle("", forState: UIControlState.Normal)
             _btn_edit?.setTitle("", forState: UIControlState.Normal)
@@ -261,7 +260,7 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
             _SelectedIndexs=[]
             _btn_back?.setBackgroundImage(UIImage(), forState: UIControlState.Normal)
             _btn_edit?.setBackgroundImage(UIImage(), forState: UIControlState.Normal)
-            _btn_back?.frame=CGRect(x: self.view.frame.width-50, y: _barH-44, width: 50, height: 44)
+            //_btn_back?.frame=CGRect(x: self.view.frame.width-50, y: _barH-44, width: 50, height: 44)
             _btn_edit?.frame=CGRect(x: self.view.frame.width-40-15+3, y: 20, width: 40, height: _barH-20)
             _btn_edit?.setTitleColor(UIColor(white: 0.7, alpha: 1), forState: UIControlState.Normal)
             _btn_edit?.setTitle("删除", forState: UIControlState.Normal)
@@ -357,7 +356,17 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     //-----选择相册代理
     func imagePickerDidSelected(images: NSArray) {
-        _imagesArray.addObjectsFromArray(images as [AnyObject])
+        //_imagesArray.addObjectsFromArray(images as [AnyObject])
+        for var i:Int = 0; i<images.count; ++i{
+            let _pic:NSMutableDictionary = NSMutableDictionary(dictionary: images.objectAtIndex(i) as! NSDictionary)
+            _pic.setObject(Int(NSDate().timeIntervalSince1970)+i+10000*random(), forKey: "localId")
+            _pic.setObject("new", forKey: "status")//----标记为新图片
+            _imagesArray.addObject(_pic)
+
+            //------添加到上传列表，上传图片到服务器，*作废使用
+            //_uploadingList?._addNewPic(_pic)
+        }
+        
         
         let _dict:NSMutableDictionary = NSMutableDictionary()
         

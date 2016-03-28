@@ -30,6 +30,13 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
     
     var _inputer:Inputer?
     
+    static let _Type_pic:String = "pic"
+    static let _Type_album:String = "album"
+    static let _Type_timeline:String = "timeline"
+    
+    var _type:String = "pic" //----评论类型 pic/album/timeline
+    var _id:String = "" //-----评论的id，根据类型区分
+    
     
     override func viewDidLoad() {
         setup()
@@ -65,7 +72,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         
         
         
-        _dealWidthDatas(_dataArray!)
+        //_dealWidthDatas(_dataArray!)
         
         
         _topBar?.addSubview(_btn_cancel!)
@@ -81,6 +88,9 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         _tableView?.tableHeaderView = UIView()
         
         refreshView()
+        
+        ImageLoader.sharedLoader._removeAllTask()
+        _getDatas()
 //
 //        
 //        
@@ -99,6 +109,58 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
 //            })
 //            
 //        }
+        
+        switch _type{
+        case CommentList._Type_pic:
+            Social_Main._getPicCommentAndLikes(_id, __block: { [weak self](__dict) -> Void in
+                self?._getCommentsOk(__dict)
+            })
+            break
+        case CommentList._Type_album:
+            Social_Main._getAlbumCommentAndLikes(_id, __block: { [weak self](__dict) -> Void in
+                self?._getCommentsOk(__dict)
+                })
+            break
+        case CommentList._Type_timeline:
+            Social_Main._getTimelineCommentAndLikes(_id, __block: { [weak self](__dict) -> Void in
+                self?._getCommentsOk(__dict)
+                })
+            break
+        default:
+            break
+        }
+        
+    }
+    func _getCommentsOk(__dict:NSDictionary){
+        let _comments:NSArray = __dict.objectForKey("comment") as! NSArray
+        let _array:NSMutableArray = NSMutableArray()
+        for var i:Int = 0 ; i < _comments.count ; ++i{
+            let _com:NSDictionary = _comments.objectAtIndex(i) as! NSDictionary
+            let _by:NSDictionary = _com.objectForKey("by") as! NSDictionary
+            print("评论:",_com)
+            
+            let from_userName:String = _by.objectForKey("nickname") as! String
+            let from_userId:String = _by.objectForKey("_id") as! String
+            let userImg:NSDictionary = MainInterface._userAvatar(_by)
+            
+            var to_userName:String = ""
+            
+            var to_userId:String = ""
+            
+            if let _re:NSDictionary = _com.objectForKey("re") as? NSDictionary{
+                to_userName = _re.objectForKey("nickname") as! String
+                to_userId = _re.objectForKey("_id") as! String
+            }
+            let comment:String = _com.objectForKey("text") as! String
+            let _d:NSDictionary = NSDictionary(objects: [from_userName,to_userName,from_userId,to_userId,comment,userImg,CoreAction._dateDiff(_com.objectForKey("create_at") as! String) ], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg","time"])
+            _array.addObject(_d)
+        }
+        //print("评论:",_array)
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self._dealWidthDatas(_array)
+            self._tableView?.reloadData()
+        })
     }
     func _dealWidthDatas(__array:NSArray){
         
@@ -110,7 +172,9 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         //self._tableView?.reloadData()
         
     }
-   
+    
+    
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         //var cell:UITableViewCell = _tableView!.dequeueReusableCellWithIdentifier("table_cell", forIndexPath: indexPath) as! UITableViewCell
         
@@ -198,7 +262,35 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         }
        
         
-        let _d:NSDictionary = NSDictionary(objects: [Social_Main._currentUser.objectForKey("userName") as! String,_to_userName,Social_Main._currentUser.objectForKey("userId") as! String,_to_userId,__dict.objectForKey("text") as! String,Social_Main._currentUser.objectForKey("profileImg") as! NSDictionary], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg"])
+        
+        switch _type{
+            case CommentList._Type_pic:
+                Social_Main._commentPic(_id, __text: __dict.objectForKey("text") as! String, __re: _to_userId, __block: { (__dict) -> Void in
+                    
+                })
+            break
+        case CommentList._Type_album:
+            Social_Main._commentAlbum(_id, __text: __dict.objectForKey("text") as! String, __re: _to_userId, __block: { (__dict) -> Void in
+                
+            })
+            break
+        case CommentList._Type_timeline:
+            Social_Main._commentTimeline(_id, __text: __dict.objectForKey("text") as! String, __re: _to_userId, __block: { (__dict) -> Void in
+                
+            })
+            break
+        default:
+            break
+        }
+        
+        Social_Main._currentUser
+        print(MainInterface._userInfo!)
+        
+        let _d:NSDictionary = NSDictionary(objects:
+            
+            
+            [MainInterface._userInfo!.objectForKey("nickname") as! String,_to_userName,MainInterface._userInfo!.objectForKey("_id") as! String,_to_userId,__dict.objectForKey("text") as! String,MainInterface._userAvatar(MainInterface._userInfo!)], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","userImg"])
+        
         
         
         
@@ -207,6 +299,9 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         _dealWidthDatas(_dataArray!)
         _tableView?.reloadData()
         refreshView()
+        
+        
+        
         
     }
     //----设置位置

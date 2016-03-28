@@ -55,6 +55,8 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         _messageImg?._imgView?.layer.masksToBounds = true
         _messageImg?._imgView?.layer.cornerRadius = 12.5
         
+        _messageImg?._setImage("messageBtnIcon")
+        
         
         _messageTap = UITapGestureRecognizer(target: self, action: Selector("messageTapHander:"))
         _messageImg?.addGestureRecognizer(_messageTap!)
@@ -67,7 +69,7 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _btn_close=UIButton(frame: CGRect(x: self.view.frame.width - 25 - Config._gap, y: 29, width: 24, height: 24))
+        _btn_close=UIButton(frame: CGRect(x: self.view.frame.width - 26 - Config._gap, y: 32, width: 18, height: 18))
         _btn_close?.setImage(UIImage(named: "icon_close.png"), forState: UIControlState.Normal)
         _btn_close?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
@@ -92,14 +94,14 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         
        
         
-        let _searchLableV:UIView = UIView(frame: CGRect(x: 44, y: 27, width: self.view.frame.width-100, height: _searchBarH-14))
-        _searchLableV.backgroundColor = UIColor(white: 1, alpha: 0.2)
+        let _searchLableV:UIView = UIView(frame: CGRect(x: 44, y: 30, width: self.view.frame.width-100, height: 25))
+        _searchLableV.backgroundColor = Config._color_black_title
         _searchLableV.layer.cornerRadius=5
         
         let _icon:UIImageView = UIImageView(image: UIImage(named: "search_icon.png"))
         _icon.frame=CGRect(x: 9, y: 6, width: 14.5, height: 14.5)
         
-        _searchT.frame = CGRect(x: 9+14.5+5, y: 0, width: _searchLableV.frame.width-9-14.5-5-5, height: _searchBarH-14)
+        _searchT.frame = CGRect(x: 9+14.5+5, y: -1.5, width: _searchLableV.frame.width-9-14.5-5-5, height: _searchBarH-14)
         
         
         
@@ -194,12 +196,14 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         case 1:
             _tab_controller?.selectedIndex = 0
             _btn_close?.hidden = true
+            _messageImg?.hidden = false
             _searchT.text = ""
             _searchT.resignFirstResponder()
             return
         case 2:
             _tab_controller?.selectedIndex = 1
             _btn_close?.hidden = false
+            _messageImg?.hidden = true
             return
         default:
             return
@@ -238,6 +242,20 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         }
         
     }
+    
+    //----消息按钮侦听
+    func messageTapHander(__sender:UITapGestureRecognizer){
+        
+        _openMessageList()
+    }
+    //---打开消息列表
+    func _openMessageList(){
+        let _controller:MessageList = MessageList()
+        self.navigationController?.pushViewController(_controller, animated: true)
+    }
+    
+    
+    
     override func viewWillAppear(animated: Bool) {
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
     }

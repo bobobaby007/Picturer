@@ -36,7 +36,8 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     
     
     var _userImg:PicView?
-    var _userName_label:UILabel?
+    var _userBtn:UIButton?
+    
     var _updateTime_label:UILabel?
     var _albumTitle_labelV:UIView?
     var _albumTitle_label:UITextView?
@@ -100,12 +101,25 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         _btn_collect?.setImage(UIImage(named: "collect_on"), forState: UIControlState.Normal)
         
         
-        _userName_label = UILabel(frame: CGRect(x: 55+_gap, y: 10+_gap, width: _defaultSize!.width -  2*_gap - 2*55, height: 12))
-        _userName_label?.font = Config._font_cell_subTitle
-        _userName_label?.textColor = Config._color_social_blue
         
         
-        _updateTime_label = UILabel(frame: CGRect(x: 55+_gap, y: 28+_gap, width: _defaultSize!.width -  2*_gap - 2*55, height: 12))
+        
+        
+        
+        _userBtn = UIButton(frame: CGRect(x: 55+_gap, y: 5+_gap, width: _defaultSize!.width -  2*_gap - 2*55, height: 12))
+        _userBtn?.contentEdgeInsets = UIEdgeInsetsZero
+        
+        _userBtn?.contentVerticalAlignment = UIControlContentVerticalAlignment.Top
+        _userBtn?.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
+        _userBtn?.titleLabel?.font = Config._font_social_cell_name
+        _userBtn?.setTitleColor(Config._color_social_blue, forState: UIControlState.Normal)
+        
+        
+
+        
+        
+        
+        _updateTime_label = UILabel(frame: CGRect(x: 55+_gap, y: 26+_gap, width: _defaultSize!.width -  2*_gap - 2*55, height: 12))
         _updateTime_label?.textColor = Config._color_gray_time
         //_updateTime_label?.textAlignment = NSTextAlignment.Right
         _updateTime_label?.font = Config._font_social_time
@@ -164,7 +178,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         self.addSubview(_picV!)
         
         self.addSubview(_userImg!)
-        self.addSubview(_userName_label!)
+        self.addSubview(_userBtn!)
         self.addSubview(_updateTime_label!)
         self.addSubview(_albumTitle_labelV!)
         self.addSubview(_description!)
@@ -380,7 +394,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         attrString.addAttribute(NSUnderlineStyleAttributeName, value: NSUnderlineStyle.StyleNone.rawValue, range: range)
         attrString.endEditing()
         
-        let _numString = NSMutableAttributedString(string: " "+String(__num)+"张")
+        let _numString = NSMutableAttributedString(string: "   "+String(__num)+"张")
         let _numRange = NSMakeRange(0,_numString.length)
         _numString.addAttribute(NSFontAttributeName, value: Config._font_social_album_description, range: _numRange)
         _numString.addAttribute(NSForegroundColorAttributeName, value: Config._color_gray_description, range: _numRange)
@@ -392,13 +406,19 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         _albumTitle_label?.hidden=false
         _albumTitle_labelV?.hidden=false
         
-        let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap-2*10-1, height: CGFloat.max))
+        let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap, height: CGFloat.max))
+        var _lineNum:CGFloat = 1
+        if _size.height>24{
+            _lineNum = 2
+        }
         
-        _albumTitle_label?.frame = CGRect(x: 15, y: 6, width: _size.width, height: _size.height)
-        _albumTitle_labelV?.frame = CGRect(x: _gap, y: _bottomOfPic-_size.height-12, width: _defaultSize!.width-2*_gap-3, height: _size.height+12)
+        _albumTitle_labelV?.frame = CGRect(x: _gap, y: _bottomOfPic-30*_lineNum, width: _defaultSize!.width-2*_gap-3, height: 30*_lineNum)
+        _albumTitle_label?.frame = CGRect(x: 15, y: (_albumTitle_labelV!.frame.height-_size.height)/2, width: _size.width, height: _size.height)
+        
+        
     }
     func _setUserName(__str:String){
-        _userName_label?.text=__str
+        _userBtn?.setTitle(__str, forState: UIControlState.Normal)
     }
     func _setUpdateTime(__str:String){
         _updateTime_label?.text=__str

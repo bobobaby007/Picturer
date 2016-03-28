@@ -131,6 +131,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         //_titleInput?.placeholder=_titlePlaceHold
         _titleInput?.attributedPlaceholder = NSAttributedString(string:_titlePlaceHold,
             attributes:[NSForegroundColorAttributeName: Config._color_gray_description])
+        _titleInput?.returnKeyType = UIReturnKeyType.Done
         _titleInput?.delegate=self
         _titleInput?.font = UIFont.systemFontOfSize(16)
         _titleInput?.textColor = Config._color_black_title
@@ -138,14 +139,11 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         
         _titleView?.backgroundColor=UIColor.whiteColor()
        
-        
         _titleView?.addSubview(_titleInput!)
-        
-        
         
         _desView=UIView()
         
-        _desPlaceHoldLabel = UILabel(frame: CGRect(x: _gap+2, y: _gap+1, width: self.view.frame.width-2*_gap, height: 15))
+        _desPlaceHoldLabel = UILabel(frame: CGRect(x: _gap-2, y: _gap+1, width: self.view.frame.width-2*_gap+4, height: 15))
         _desPlaceHoldLabel?.text = _desPlaceHold
         _desPlaceHoldLabel?.textColor = Config._color_gray_description
         _desPlaceHoldLabel?.font=UIFont.systemFontOfSize(16)
@@ -155,10 +153,11 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _desInput=UITextView(frame: CGRect(x: _gap, y: 6, width: self.view.frame.width-2*_gap, height: _desInputViewH-20))
         //_desInput?.text=_desPlaceHold
        _desInput?.textColor = Config._color_black_title
+        
         _desInput?.backgroundColor = UIColor.clearColor()
         _desInput?.font=UIFont.systemFontOfSize(16)
         //_desInput?.keyboardAppearance=UIKeyboardAppearance.Dark
-        //_desInput?.returnKeyType=UIReturnKeyType.Done
+        _desInput?.returnKeyType=UIReturnKeyType.Done
         _desInput?.delegate=self
         
         
@@ -233,10 +232,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
                 _desInput?.text=_album!.objectForKey("description") as! String
                 _desPlaceHoldLabel?.hidden=true
             }
-            
         }
-        
-        
         
         _line_imageBox_b?.backgroundColor = UIColor(white: 0.8, alpha: 1)
         _line_titleView_t?.backgroundColor = UIColor(white: 0.8, alpha: 1)
@@ -377,7 +373,6 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
             print("")
         }
     }
-   
     //----设置代理
     func saved(dict: NSDictionary) {
         switch dict.objectForKey("Action_Type") as! String{
@@ -482,18 +477,24 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     
     //----文字输入代理
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     func textFieldDidBeginEditing(textField: UITextField) {
         _scrollView?.addGestureRecognizer(_tapRec!)
     }
     func textViewDidEndEditing(textView: UITextView) {
-        _titleInput?.resignFirstResponder()
-        _desInput?.resignFirstResponder()
+        //_titleInput?.resignFirstResponder()
+        //_desInput?.resignFirstResponder()
         
         if _desInput?.text == ""{
             //_desInput?.text=_desPlaceHold
             _desPlaceHoldLabel?.hidden=false
         }
         _scrollView?.removeGestureRecognizer(_tapRec!)
+        textView.resignFirstResponder()
     }
     func textViewDidBeginEditing(textView: UITextView) {
         
@@ -511,12 +512,22 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         //return true
     }
     
+    
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        
+        if text == "\n"{
+            textView.resignFirstResponder()
+            return false
+        }
+        
         let _n:Int=_desInput!.text.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2
+        
+        
         
         if (_n+text.lengthOfBytesUsingEncoding(NSUnicodeStringEncoding)/2)>_maxNum{
            return false
         }
+        
        // println(text)
         return true
     }
@@ -672,7 +683,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
 //            })
             
         }else{
+            self._checkPicsToChange()
             _savingDict?.setObject("new_album", forKey: "Action_Type")
+            _savingDict?.setObject(_changedPics!, forKey: "images")
             //-----*作废使用
             //_newAlbum()
             
@@ -703,7 +716,7 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         })
     }
     
-    //-------检测需要修改的图片---*作废
+    //-------检测需要修改的图片--
     func _checkPicsToChange(){
         let _a:NSMutableArray = []
         for var i:Int = 0; i<_imagesArray.count; ++i{

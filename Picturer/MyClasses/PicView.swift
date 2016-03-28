@@ -122,22 +122,24 @@ class PicView: UIScrollView,UIScrollViewDelegate{
                 ImageLoader.sharedLoader.imageForUrl(_myUrl, completionHandler: {[weak self] (image, url) -> () in
                     // _setImage(image)
                     //println("")
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                    if image==nil{
-                        //--加载失败
-                        print("图片加载失败:",self?._myUrl)
-                        __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
-                        return
-                    }
-                    if self?._imgView != nil{
-                        
-                        self?._setImageByImage(image!)
-                        //self._imgView?.image=image
-                        __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
-                    }else{
-                        print("self out")
-                        __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
-                    }
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        if image==nil{
+                            //--加载失败
+                            print("图片加载失败:",self?._myUrl)
+                            __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
+                            return
+                        }
+                        if self?._imgView != nil{
+                            
+                            self?._setImageByImage(image!)
+                            //self._imgView?.image=image
+                            __block(NSDictionary(objects: ["success"], forKeys: ["info"]))
+                        }else{
+                            print("self out")
+                            __block(NSDictionary(objects: ["failed"], forKeys: ["info"]))
+                        }
+                    })
                     
                     })                
             }else{

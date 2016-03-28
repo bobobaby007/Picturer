@@ -43,10 +43,6 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     var _btn_follow:UIButton?
     var _btn_message:UIButton?
    
-    
-    
-    
-    
     var _profileH:CGFloat = 0//-----面板高度
     var _buttonH:CGFloat = 30 //---按钮高度
     var _buttonW:CGFloat = 125//---按钮宽度
@@ -62,7 +58,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     var _commentsArray:NSMutableArray?
     var _likeArray:NSMutableArray?
     var _likedArray:NSMutableArray?
-    var _defaultH:CGFloat = 632
+    var _defaultH:CGFloat = 513
     
     var _scrollTopH:CGFloat = 0 //达到这个高度时向上移动
     
@@ -88,8 +84,10 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         
         setup(self.view.frame)
-        _getDatas()
+        //ImageLoader.sharedLoader._removeAllTask()
+        //_getDatas()
     }
+    
     
     func setup(__frame:CGRect){
         if _setuped {
@@ -179,7 +177,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         _setuped=true
     }
-    //提取数据
+    //获取消息 --- ＊取消
     func _getMessage(){
         Social_Main._getMessages { (array) -> Void in
             self._hasNewMessage = true
@@ -218,20 +216,38 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         switch _type{
             case "friends":
-                Social_Main._getMyFriendsTimeLine(""){ (array) -> Void in
-                    self._dataArray = self._formatData(array)
+                //---先加载之前的数据
+                let _arr:NSArray = Social_Main._friendList
+                self._dataArray = self._formatData(_arr)
+                self._refreshDatas()
+//                self._tableView?.reloadData()
+//                self._refreshView()
+                Social_Main._getMyFriendsTimeLine(""){[weak self] (array) -> Void in
+                    print("刷新成功")
+                    self?._dataArray = (self?._formatData(array))!
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self._refreshDatas()
-                        self._getMessage()
+                        self?._refreshDatas()
+                        //--＊取消
+                        //self._getMessage()
+                        //self?._tableView!.reloadData()
+                        //self?._refreshView()
+                        
+                        
                     })
                 }
             break
         case "likes":
+            let _arr:NSArray = Social_Main._focusMeList
+            self._dataArray = self._formatData(_arr)
+            self._refreshDatas()
             Social_Main._getMyFocusTimeLine(""){ (array) -> Void in
                 self._dataArray = self._formatData(array)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self._refreshDatas()
-                    self._getMessage()
+                    //--＊取消
+                    //self._getMessage()
+
+                    
                 })
             }
             break
@@ -323,7 +339,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         _tableView?.frame = CGRect(x: 0, y: _profileH, width:  _myFrame!.width, height: _tableView!.contentSize.height)
         _tableView?.scrollEnabled = false
         _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
-        UIView.commitAnimations()
+        //UIView.commitAnimations()
     }
     
     //----table 代理
@@ -361,43 +377,43 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         let _pics:NSArray = _dict.objectForKey("ids") as! NSArray
     
         
-        print("朋友的单条信息：",_dict)
+        //print("朋友的单条信息：",_dict)
         
-        let _comments:NSArray = _dict.objectForKey("comments") as! NSArray
+        
         
         var cell:PicAlbumMessageItem?
         
         
         //cell = tableView.viewWithTag(100+indexPath.row) as? PicAlbumMessageItem
         cell = tableView.dequeueReusableCellWithIdentifier("PicAlbumMessageItem") as? PicAlbumMessageItem
-        cell?._type = "status"
-        cell!.setup(CGSize(width: self.view.frame.width, height: _heighArray?.objectAtIndex(indexPath.row) as! CGFloat))
-        
         
         cell!.separatorInset = UIEdgeInsetsZero
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
         
-        //cell!.tag = 100+indexPath.row
+        cell?._type = "status"
+        cell!._delegate=self
         
-        //cell!._setComments(_comments, __allNum: _comments.count)
+        cell!.setup(CGSize(width: self.view.frame.width, height: _heighArray?.objectAtIndex(indexPath.row) as! CGFloat))
+        
+        
+        
+        
         
         cell!._setLikeNum(self._likeArray?.objectAtIndex(indexPath.row) as! Int)
-        
         cell?._setLiked(_hasLikedAtIndex(indexPath.row))
         
         cell!._userId = _user.objectForKey("_id") as? String
         cell!._setUserImge(MainInterface._userAvatar(_user))
         cell!._setUserName(_user.objectForKey("nickname") as! String)
         cell!._indexId = indexPath.row
-        cell!._delegate=self
+        
         //cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
         //cell?._setPic(<#T##__pic: NSDictionary##NSDictionary#>)
         
         if _pics.count > 0{
             if let _cover:NSDictionary = _pics.objectAtIndex(0) as? NSDictionary{
                 //print("封面：",_cover,"====")
-                
                 let _pic:NSDictionary = NSDictionary(objects: [MainInterface._imageUrl(_cover.objectForKey("thumbnail") as! String),"file"], forKeys: ["url","type"])
                 
                 cell!._setPic(_pic)
@@ -408,36 +424,49 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             
         }
         
-        
-        if let _album = _dict.objectForKey("allbum") as? NSDictionary{
-            cell?._setStatusString(_pics.count, __albumName: _album.objectForKey("title") as! String, __albumId: _album.objectForKey("_id") as! String)
-        }else{
-            cell?._setStatusString(_pics.count, __albumName: "相册", __albumId: "")
+        var _albumName:String = "未命名相册"
+        var _albumId:String = ""
+        if let _album = _dict.objectForKey("album") as? NSDictionary{
+            if _album.objectForKey("title") as! String != ""{
+                _albumName = _album.objectForKey("title") as! String
+            }else{
+            }
+            _albumId = _album.objectForKey("_id") as! String
         }
+        cell?._setStatusString(_pics.count, __albumName: _albumName, __albumId: _albumId)
+        
         
         cell!._setUpdateTime(CoreAction._dateDiff(_dict.objectForKey("create_at") as! String))
         
+        
+        //cell!.tag = 100+indexPath.row
+        if let _comments:NSArray = _dict.objectForKey("comments") as? NSArray{
+            cell!._setComments(_comments, __allNum: _comments.count)
+            //cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
+        }
         
         //cell!._refreshView()
         return cell!
     }
     //------相册单元代理
     func _resized(__indexId: Int, __height: CGFloat) {
-        //println("changeH")
+        print("changeH")
         
         var _lastH:CGFloat? = -10
         if _heighArray!.count>=__indexId+1{
             _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
         }
-        _heighArray![__indexId] = __height
+        print("高度比较：",_lastH,__height)
+        
         if _lastH != __height{
-            _tableView?.reloadData()
+            _heighArray![__indexId] = __height
+            //_tableView?.reloadRowsAtIndexPaths( [NSIndexPath(forRow: __indexId, inSection: 0)] , withRowAnimation: UITableViewRowAnimation.None)
             _refreshView()
         }
         
         // println(_heighArray)
     }
-    func _viewAlbum(__albumIdex:Int) {
+    func _viewAlbum(__albumIndex:Int) {
         /*
         if _userId == Social_Main._userId{
         Social_Main._getPicsListAtal(__albumIdex, block: { (array) -> Void in
@@ -451,25 +480,40 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         
         */
-        let _album = _dataArray.objectAtIndex(__albumIdex) as! NSDictionary
-        Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { [weak self] (array) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if self != nil{
-                    let _controller:Social_pic = Social_pic()
-                    _controller._titleBase = _album.objectForKey("title") as! String
-                    _controller._showIndexAtPics(0, __array: array)
-                    self?.navigationController?.pushViewController(_controller, animated: true)
-                }
-            })
-        })
+        let _dict = _dataArray.objectAtIndex(__albumIndex) as! NSDictionary
+        
+        let _controller:Social_pic = Social_pic()
+        _controller._titleBase = ""
+        self.navigationController?.pushViewController(_controller, animated: true)
+        _controller._showIndexAtPics(0, __array: _dict.objectForKey("ids") as! NSArray)
+    }
+    
+    func _viewAlbumDetail(__albumIndex: Int) {
+        let _dict = _dataArray.objectAtIndex(__albumIndex) as! NSDictionary
+        
+        //print(_dict)
+        
+        if let _album = _dict.objectForKey("album") as? NSDictionary{
+            let _controller:AlbumDetail = AlbumDetail()
+            _controller._album = _album
+            _controller._user = _dict.objectForKey("author") as? NSDictionary
+            self.navigationController?.pushViewController(_controller, animated: true)
+            
+        }
+        
     }
     func _viewPicsAtIndex(__array: NSArray, __index: Int) {
         
     }
     func _moreComment(__indexId: Int) {
         let _controller:CommentList = CommentList()
+        _controller._type = CommentList._Type_timeline
+        
+        let _dict = _dataArray.objectAtIndex(__indexId) as! NSDictionary
+        
+        _controller._id = _dict.objectForKey("_id") as! String
         //println(__dict)
-        _controller._dealWidthDatas(_commentsArray!.objectAtIndex(__indexId) as! NSArray)
+        //_controller._dealWidthDatas(_commentsArray!.objectAtIndex(__indexId) as! NSArray)
         self.navigationController?.pushViewController(_controller, animated: true)
     }
     func _viewUser(__userId: String) {
@@ -507,8 +551,11 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             _inputer?._open()
             */
             let _controller:CommentList = CommentList()
+            _controller._type = CommentList._Type_timeline
+            let _dict = _dataArray.objectAtIndex(__dict.objectForKey("indexId") as! Int) as! NSDictionary
+            _controller._id = _dict.objectForKey("_id") as! String
             //println(__dict)
-            _controller._dealWidthDatas(_commentsArray!.objectAtIndex(_cell._indexId) as! NSArray)
+            //_controller._dealWidthDatas(_commentsArray!.objectAtIndex(_cell._indexId) as! NSArray)
             
             self.navigationController?.pushViewController(_controller, animated: true)
             
@@ -684,9 +731,13 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         if _viewIned!{
             
         }else{
-            _refreshView()
+            //_refreshView()
+            
             _viewIned=true
         }
+        
+        ImageLoader.sharedLoader._removeAllTask()
+        _getDatas()
         
     }
     func clickAction(sender:UIButton){

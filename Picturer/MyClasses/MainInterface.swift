@@ -14,7 +14,35 @@ import AVFoundation
 class MainInterface: AnyObject {
     static var _token:String = ""//80d3897b-24af-42a9-af76-3bfdea569bba
     static var _uid_tem:String?
-    static var _userInfo:NSDictionary?
+    static var _userInfo_tem:NSDictionary?
+    static var _userInfo:NSDictionary!{
+        get{
+        if _userInfo_tem==nil{
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let _info:NSDictionary?=_ud.valueForKey("userInfo") as? NSDictionary
+        //println(_list)
+        if _info==nil{
+        _userInfo_tem = NSDictionary(objects: ["01","名字"], forKeys: ["_id","nickname"])
+        
+        
+        _ud.setObject(_userInfo_tem, forKey: "userInfo")
+    }else{
+        _userInfo_tem = _info! as NSDictionary
+        }
+        }
+        return _userInfo_tem
+        }
+        set{
+            //println("set")
+            _userInfo_tem=newValue
+            let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            _ud.setObject(_userInfo_tem, forKey: "userInfo")
+            //println(_ud.dictionaryRepresentation())
+        }
+    }
+    
+    
+    
     static var _uid:String!{
         get{
             if _uid_tem==nil{
@@ -66,8 +94,23 @@ class MainInterface: AnyObject {
     static let _URL_User_Update:String = "user/update/"//---更新用户信息
     static let _URL_User_Avatar:String = "user/avatar/"//---更新用户头像
     static let _URL_Pic_like:String = "like/picture/"//---图片点赞
-    static let _URL_Album_like:String = "like/album/"//-----相册点赞
+    static let _URL_Album_like:String = "like/album/"//-----相册点赞动作
     static let _URL_Album_unlike:String = "like/remove_album/"//-----相册点赞
+    
+    
+    static let _URL_Collect_Album:String = "collection/album/"//-----收藏相册
+    static let _URL_List_Collection:String = "collection/list/"//-----收藏列表
+
+    
+    static let _URL_Comment_Pic:String = "comment/picture/"//-----评论图片
+    static let _URL_Comment_Get_Pic:String = "comment/get_picture/"//-----获取图片评论
+    
+    static let _URL_Comment_Album:String = "comment/album/"//-----评论相册
+    static let _URL_Comment_Get_Album:String = "comment/get_album/"//-----获取相册评论
+    
+    static let _URL_Comment_Timeline:String = "comment/timeline/"//-----评论状态
+    static let _URL_Comment_Get_Timeline:String = "comment/get_timeline/"//-----获取状态评论
+    
     static let _URL_Sms:String = "user/smscode/"//获取验证码
     static let _URL_changePassword:String = "sign/changePassword/"//修改密码
     //-----判断是否登录
@@ -235,6 +278,94 @@ class MainInterface: AnyObject {
         }
     }
     
+    //----评论图片
+    static func _commentPic(__id:String,__text:String, __re:String, __block:(NSDictionary)->Void){
+        var _str:String = "&text=\(__text)"
+        if __re != ""{
+            _str = _str+"&re=\(__re)"
+        }
+        
+        //let _id = "56f1e7d1d9fdeaf40d4d8848"
+        
+        CoreAction._sendToUrl("token=\(_token)"+_str, __url: _basicDoman+_version+"/"+_URL_Comment_Pic+"\(__id)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
+    //----获取图片评论和点赞列表
+    static func _getPicCommentAndLikes(__id:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Comment_Get_Pic+"\(__id)") { (__dict) -> Void in
+            print("图片的评论：",__dict)
+            __block(__dict)
+        }
+    }
+    
+    
+    //----评论相册
+    static func _commentAlbum(__id:String,__text:String, __re:String, __block:(NSDictionary)->Void){
+        var _str:String = "&text=\(__text)"
+        if __re != ""{
+            _str = _str+"&re=\(__re)"
+        }
+        
+        //let _id = "56f1e7d1d9fdeaf40d4d8848"
+        
+        CoreAction._sendToUrl("token=\(_token)"+_str, __url: _basicDoman+_version+"/"+_URL_Comment_Album+"\(__id)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
+    //----获取相册评论和点赞列表
+    static func _getAlbumCommentAndLikes(__id:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Comment_Get_Album+"\(__id)") { (__dict) -> Void in
+            print("相册的评论：",__dict)
+            __block(__dict)
+        }
+    }
+    
+    
+    //----评论相册
+    static func _commentTimeline(__id:String,__text:String, __re:String, __block:(NSDictionary)->Void){
+        var _str:String = "&text=\(__text)"
+        if __re != ""{
+            _str = _str+"&re=\(__re)"
+        }
+        
+        //let _id = "56f1e7d1d9fdeaf40d4d8848"
+        
+        CoreAction._sendToUrl("token=\(_token)"+_str, __url: _basicDoman+_version+"/"+_URL_Comment_Timeline+"\(__id)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    
+    //----获取时间树评论和点赞列表
+    static func _getTimelineCommentAndLikes(__id:String, __block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Comment_Get_Timeline+"\(__id)") { (__dict) -> Void in
+            print("时间树的评论：",__dict)
+            __block(__dict)
+        }
+    }
+    
+    
+    //----收藏相册
+    static func _collectAlbum(__id:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Collect_Album+"\(__id)") { (__dict) -> Void in
+            print("收藏成功：",__dict)
+            __block(__dict)
+        }
+    }
+    //----获取收藏列表
+    
+    static func _getCollectList(__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_List_Collection) { (__dict) -> Void in
+            print("收藏列表：",__dict)
+            __block(__dict)
+        }
+    }
+
     
     static func _getUserInfo(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_User_Info+"\(__userId)") { (__dict) -> Void in
@@ -276,6 +407,13 @@ class MainInterface: AnyObject {
     }
     //----获取相册信息
     static func _getAlbumInfo(__albumId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_Info+"\(__albumId)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    //----获取图册详情---需要接口确认----*取消
+    static func _getAlbumDetail(__albumId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_Info+"\(__albumId)") { (__dict) -> Void in
             print(__dict)
             __block(__dict)
@@ -462,10 +600,7 @@ class MainInterface: AnyObject {
         }else{
             
         }
-        
         return _dict
-        
-        
     }
     //----获取图册完整地址,用于分享
     static func _albumUrl(__albumId:String)->String{

@@ -69,14 +69,10 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         //CoreAction._printAllFonts()
         
-        
         //------判断登录，未登录则弹出登录或注册框
         if MainAction._checkLogOk(){
             //----从服务器刷新图册列表－－－*作废
             //_refreshFromServer()
-            
-            
-            
             self._refresh()
             
         }else{
@@ -172,7 +168,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     func _refresh(){
         
-        MainAction._checkAsyn()
+        MainAction._startCheckAsyn() //-----同步开始
         
         _tableView.reloadData()
     }

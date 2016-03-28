@@ -156,8 +156,9 @@ class Social_home: UIViewController, UICollectionViewDelegate, UICollectionViewD
             let _contr:Friends_Home=Friends_Home()
             _contr._type="friends"
             _contr._naviDelegate = self
+            
             self.navigationController?.pushViewController(_contr, animated: true)
-                        
+               
             return
         case 2://妙人
             let _contr:Friends_Home=Friends_Home()

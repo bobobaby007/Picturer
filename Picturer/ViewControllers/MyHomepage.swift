@@ -110,7 +110,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
     
         setup(self.view.frame)
-        _getDatas()
+        
+        
     }
     
     func setup(__frame:CGRect){
@@ -299,7 +300,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         _tableView?.backgroundColor=UIColor.clearColor()
         _tableView?.delegate=self
         _tableView?.dataSource=self
-        _tableView?.frame = CGRect(x: 0, y: _barH+_profileH+_gap!, width: _myFrame!.width, height: _myFrame!.height-_barH-_profileH-10)
+        _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width: _myFrame!.width, height: _myFrame!.height-_barH-_profileH-10)
         _tableView?.registerClass(PicAlbumMessageItem.self, forCellReuseIdentifier: "PicAlbumMessageItem")
         _tableView?.backgroundColor = UIColor.clearColor()
         _tableView?.separatorStyle = UITableViewCellSeparatorStyle.None
@@ -603,7 +604,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
     //----------------刷新布局
     func _refreshView(){
         
-        UIView.beginAnimations("refreshView", context: nil)
+        //UIView.beginAnimations("refreshView", context: nil)
         
         if _hasNewMessage{
         }else{
@@ -616,7 +617,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         
         switch _showType{
         case "pic":
-            _tableView?.reloadData()
+            //_tableView?.reloadData()
             _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
             _tableView?.scrollEnabled = false
             _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
@@ -635,7 +636,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             break
         }
         
-        UIView.commitAnimations()
+        //UIView.commitAnimations()
         
     }
     
@@ -719,8 +720,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
         //cell!.tag = 100+indexPath.row
-        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
-        cell!._setComments(_array, __allNum: _array.count)
+//        let _array:NSArray = _commentsArray?.objectAtIndex(indexPath.row) as! NSArray
+//        cell!._setComments(_array, __allNum: _array.count)
+        
+        
+        
         
         cell!._setLikeNum(self._likeArray?.objectAtIndex(indexPath.row) as! Int)
         cell?._setLiked(_hasLikedAtIndex(indexPath.row))
@@ -752,6 +756,13 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             cell!._setUserImge(MainInterface._userAvatar(_userInfo!))
             cell!._setUserName(_userInfo!.objectForKey("nickname") as! String)
         }
+        
+        
+        if let _comments:NSArray = _dict.objectForKey("comment") as? NSArray{
+            cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
+            //cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
+        }
+        
         //cell!._refreshView()
         return cell!
     }
@@ -763,9 +774,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         if _heighArray!.count>=__indexId+1{
          _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
         }
-        _heighArray![__indexId] = __height
         if _lastH != __height{
-            _tableView?.reloadData()
+            _heighArray![__indexId] = __height
+            //_tableView?.reloadRowsAtIndexPaths( [NSIndexPath(forRow: __indexId, inSection: 0)] , withRowAnimation: UITableViewRowAnimation.None)
             _refreshView()
         }
         
@@ -810,13 +821,19 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             })
         })
     }
+    func _viewAlbumDetail(__albumIndex: Int) {
+        
+    }
     func _viewPicsAtIndex(__array: NSArray, __index: Int) {
         
     }
     func _moreComment(__indexId: Int) {
         let _controller:CommentList = CommentList()
+        _controller._type = CommentList._Type_album
+        let _dict = _dataArray.objectAtIndex(__indexId) as! NSDictionary
+        _controller._id = _dict.objectForKey("_id") as! String
         //println(__dict)
-        _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(__indexId) as? NSArray)!)
+        //_controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(__indexId) as? NSArray)!)
         self.navigationController?.pushViewController(_controller, animated: true)
     }
     func _viewUser(__userId: String) {
@@ -864,8 +881,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
                 */
               
                 let _controller:CommentList = CommentList()
+                _controller._type = CommentList._Type_album
+                let _dict = _dataArray.objectAtIndex(__dict.objectForKey("indexId") as! Int) as! NSDictionary
+                _controller._id = _dict.objectForKey("_id") as! String
                 //println(__dict)
-                _controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(_cell._indexId) as? NSArray)!)
+                //_controller._dataArray = NSMutableArray(array: (_commentsArray!.objectAtIndex(_cell._indexId) as? NSArray)!)
                 
                 self.navigationController?.pushViewController(_controller, animated: true)
                 
@@ -952,10 +972,10 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         _arr[__index] = true
         self._collectedArray = _arr
         
-//        let _dict:NSDictionary = _dataArray.objectAtIndex(__index) as! NSDictionary
-//        MainInterface._likeAlbum(_dict.objectForKey("_id") as! String, __block: { (__dict) -> Void in
-//            print("成功：",__dict)
-//        })
+        let _dict:NSDictionary = _dataArray.objectAtIndex(__index) as! NSDictionary
+        MainInterface._collectAlbum(_dict.objectForKey("_id") as! String, __block: { (__dict) -> Void in
+            print("添加收藏成功：",__dict)
+        })
         _tableView?.reloadData() //--------使用在线接口时全部请求信息后侦听里面再重新加载
     }
     //----取消收藏
@@ -1124,9 +1144,11 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         if _viewIned!{
             
         }else{
-            _refreshView()
+           
             _viewIned=true
         }
+        ImageLoader.sharedLoader._removeAllTask()
+        _getDatas()
         
     }
     func clickAction(sender:UIButton){

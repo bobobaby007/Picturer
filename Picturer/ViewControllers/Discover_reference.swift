@@ -115,19 +115,19 @@ class Discover_reference: UIViewController,UICollectionViewDataSource,UICollecti
         _imagesCollection?.delegate=self
         _imagesCollection?.dataSource=self
         
-        
+        ImageLoader.sharedLoader._removeAllTask()
         _getDatas()
+        
         _changeTo("collection")
         _setuped=true
     }
-    
-    
     
     func _getDatas(){
         Social_Main._getAdvertisiongs { (array) -> Void in
             self._sliderShower?._setup(array)
         }
         Social_Main._getHotAlbums { (array) -> Void in
+            print("热门图册：",array)
             dispatch_sync(dispatch_get_main_queue(), { () -> Void in
                 self._dataArray = array
                 self._refreshView()

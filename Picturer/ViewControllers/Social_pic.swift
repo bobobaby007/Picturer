@@ -36,8 +36,9 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
     
     var _currentIndex:Int? = 0
     
-    var _picsArray:NSMutableArray?
-    var _pic:NSMutableDictionary?
+    var _picsArray:NSArray?//---图片们
+    var _pic:NSDictionary? //----当前图片
+    var _commentsArray:NSMutableArray?//---所有图片的评论列表数组
     
     var _likedArray:NSMutableArray?
     
@@ -100,6 +101,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         super.viewDidLoad()
         setup()
         self.automaticallyAdjustsScrollViewInsets=false
+        
+        ImageLoader.sharedLoader._removeAllTask()
         _getDatas()
         
     }
@@ -278,25 +281,30 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _moveToPicByIndex(_currentIndex!)
         
         
-        _setComNumAndLikeNum(40502, __LikeNum: 3000)
+        
         
         _setuped=true
     }
     
     //-----根据排列顺序调出图片
     func _getPicAtIndex(__index:Int)->NSDictionary{
-        var _dict:NSDictionary
-        if _range == 0{
-            _dict = _picsArray?.objectAtIndex(__index) as! NSDictionary
-        }else{
-            _dict = _picsArray?.objectAtIndex(_picsArray!.count-__index-1) as! NSDictionary
-        }
+        let   _dict = _picsArray?.objectAtIndex(_realIndex(__index)) as! NSDictionary
         print("调出图片:",_dict)
         return _dict
     }
+    //----根据排列顺序返回实际index
+    func _realIndex(__index:Int)->Int{
+        if _range == 0{
+            return __index
+        }else{
+            return _picsArray!.count-__index-1
+        }
+    }
+    
+    
     //外部调用直接到达指定图片
     func _showIndexAtPics(__index:Int,__array:NSArray){
-        _picsArray=NSMutableArray(array: __array)
+        _picsArray=__array
         _currentIndex=__index
         if _currentIndex > _picsArray!.count-1{
             _currentIndex = _picsArray!.count-1
@@ -420,14 +428,45 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         
         //print(_str)
         
-        _pic = NSMutableDictionary(dictionary: (_getPicAtIndex(_currentIndex!)))
+        _pic = _getPicAtIndex(_currentIndex!)
+        
+        if let _ = _pic?.objectForKey("_id") as? String{
+            _btn_like.enabled = true
+            _btn_comment.enabled = true
+            _btn_toShare.enabled = true
+            
+            _btn_like.alpha = 1
+            _btn_comment.alpha = 1
+            _btn_toShare.alpha = 1
+        }else{
+            _btn_like.enabled = false
+            _btn_comment.enabled = false
+            _btn_toShare.enabled = false
+            
+            _btn_like.alpha = 0.2
+            _btn_comment.alpha = 0.2
+            _btn_toShare.alpha = 0.2
+        }
+        
+        
         if _pic!.objectForKey("description") != nil{
             _setDescription(_pic!.objectForKey("description") as! String)
         }else{
             _setDescription("")
+        }        
+        
+        if let _comments = _pic!.objectForKey("comments") as? Int{
+            _setComNumAndLikeNum(_comments, __LikeNum: _pic!.objectForKey("likes") as! Int)
+        }else{
+            _setComNumAndLikeNum(0, __LikeNum: 0)
         }
         
+        
         _setLiked(_likedArray?.objectAtIndex(_currentIndex!) as! Bool)
+        
+        
+        
+        
         
         
         
@@ -435,6 +474,8 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _viewInAtIndex(__index+1)
         _viewInAtIndex(__index-1)
     }
+    
+    
     
     //---正在挪动的时候
     
@@ -490,11 +531,17 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         if let _url = __pic.objectForKey("link") as? String{
             _picV!._setPic(NSDictionary(objects: [MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{_ in
             })
-            return
-        }
-        _picV._setPic(__pic,__block: { (__dict) -> Void in
             
-        })
+        }else{
+            _picV._setPic(__pic,__block: { (__dict) -> Void in
+                
+            })
+        }
+        
+        
+        
+        
+        
     }
     //-----瀑布流代理
     
@@ -550,13 +597,16 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
             _setLiked(_likedArray?.objectAtIndex(_currentIndex!) as! Bool)
 
             break
-        case _btn_comment:
-            let _controller:CommentList = CommentList()
+        case _btn_comment: //----评论
+            if let _id = _pic?.objectForKey("_id") as? String{
+                let _controller:CommentList = CommentList()
+                _controller._type = CommentList._Type_pic
+                _controller._id = _id
+                _controller._dealWidthDatas(NSArray())
+                self.navigationController?.pushViewController(_controller, animated: true)
+            }
             
             
-            _controller._dealWidthDatas(NSArray())
-            
-            self.navigationController?.pushViewController(_controller, animated: true)
         default:
             print(sender)
         }
@@ -587,6 +637,21 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _arr[__index] = true
         self._likedArray = _arr
         
+        
+        let _thePic:NSMutableDictionary = NSMutableDictionary(dictionary: _picsArray!.objectAtIndex(__index) as! NSDictionary)
+        
+        if var _likes = _thePic.objectForKey("likes") as? Int{
+            _likes = _likes+1
+            _thePic.setObject(_likes, forKey: "likes")
+        }
+        
+        
+        
+        
+        _setComNumAndLikeNum(_thePic.objectForKey("comments") as! Int, __LikeNum: _thePic.objectForKey("likes") as! Int)
+        let _picArr:NSMutableArray = NSMutableArray(array: _picsArray!)
+        _picArr[__index] = _thePic
+        _picsArray = _picArr
     }
     //----取消点赞
     
@@ -599,6 +664,20 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         let _arr:NSMutableArray = NSMutableArray(array: self._likedArray!)
         _arr[__index] = false
         self._likedArray = _arr
+        
+        
+        let _thePic:NSMutableDictionary = NSMutableDictionary(dictionary: _picsArray!.objectAtIndex(__index) as! NSDictionary)
+        
+        if var _likes = _thePic.objectForKey("likes") as? Int{
+            _likes = _likes-1
+            _thePic.setObject(_likes, forKey: "likes")
+            
+            
+        }
+        _setComNumAndLikeNum(_thePic.objectForKey("comments") as! Int, __LikeNum: _thePic.objectForKey("likes") as! Int)
+        let _picArr:NSMutableArray = NSMutableArray(array: _picsArray!)
+        _picArr[__index] = _thePic
+        _picsArray = _picArr
     }
     //-----切换查看模式，瀑布流或滑动
     func _changeTo(__type:String){
