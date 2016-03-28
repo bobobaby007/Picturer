@@ -69,6 +69,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
     
     var _scrollView:UIScrollView?
     
+    var _focused:Bool = false //----是否关注过
+    
     
     var _allDatasArray:NSMutableArray? //------其他信息，以相册id为锚点
     var _coverArray:NSMutableArray?
@@ -403,35 +405,78 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
     func _getUserInfo(){
         Social_Main._getUserProfileAtId(_userId) { (__dict) -> Void in
             //print(__dict)
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self._userInfo = __dict
-                self._title_label?.text=self._userInfo?.objectForKey("nickname") as? String
-                self._setAlbumNum(self._userInfo?.objectForKey("albumcounts") as! Int)
-                self._setFollowedNum(self._userInfo?.objectForKey("followcounts") as! Int)
-                self._setFollowingNum(self._userInfo?.objectForKey("focuscounts") as! Int)
-                self._setIconImg(MainInterface._userAvatar(self._userInfo!))
-                var _sexStr:String = ""
-                if let _s:Int = self._userInfo?.objectForKey("sex") as? Int{
-                    if _sexStr != ""{
-                        _sexStr = MainInterface._sexStr(_s)+"，"
-                    }
-                }
-                self._label_sex_n_city?.text = "\(_sexStr)中国 北京"
-                if let _str:String = self._userInfo?.objectForKey("signature") as? String{
-                    self._setSign(_str)
-                }
-                self._refreshView()
+            dispatch_async(dispatch_get_main_queue(), { [weak self]() -> Void in
+                self?._getUserInfoOk(__dict)
             })
         }
     }
     
+    func _getUserInfoOk(__dict:NSDictionary){
+        
+
+        
+        
+        self._userInfo = __dict
+        self._title_label?.text=self._userInfo?.objectForKey("nickname") as? String
+        self._setAlbumNum(self._userInfo?.objectForKey("albumcounts") as! Int)
+        self._setFollowedNum(self._userInfo?.objectForKey("followcounts") as! Int)
+        self._setFollowingNum(self._userInfo?.objectForKey("focuscounts") as! Int)
+        self._setIconImg(MainInterface._userAvatar(self._userInfo!))
+        var _sexStr:String = ""
+        if let _s:Int = self._userInfo?.objectForKey("sex") as? Int{
+            if _sexStr != ""{
+                _sexStr = MainInterface._sexStr(_s)+"，"
+            }
+        }
+        
+        
+        
+        if let _Ifocus:NSDictionary = __dict.objectForKey("Ifocus") as? NSDictionary{
+            print("是否互相关注",_Ifocus)
+            if let _each = _Ifocus.objectForKey("each") as? Int{
+                switch _each{
+                case 0://---未关注
+                    _setFocused(false)
+                    break
+                case 1:
+                    _setFocused(true)
+                    break
+                
+                default:
+                    break
+                }
+                
+            }
+        }else{
+            if _type == "me"{
+                
+            }else{
+                _setFocused(false)
+            }
+        }
+        
+        
+        
+        self._label_sex_n_city?.text = "\(_sexStr)中国 北京"
+        if let _str:String = self._userInfo?.objectForKey("signature") as? String{
+            self._setSign(_str)
+        }
+        self._refreshView()
+    }
     //------关注用户
-    func _FocusUser(){        
+    func _FocusUser(){
         Social_Main._focusToUser(_userId) { (__dict) -> Void in
             print(__dict)
         }
+        _setFocused(true)
     }
-    
+    //------取消关注用户
+    func _cancelFocusUser(){
+        Social_Main._cancelFocusToUser(_userId) { (__dict) -> Void in
+            print(__dict)
+        }
+        _setFocused(false)
+    }
     
     //----图册数量
     func _setAlbumNum(__num:Int){
@@ -576,6 +621,29 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         _changeTo("pic")
     }
     
+    //----设置是否关注过
+    func _setFocused(__yes:Bool){
+        _focused = __yes
+        
+        if __yes{
+            
+            let attributedString = NSMutableAttributedString(string: "已关注")
+            attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_social_gray, range: NSMakeRange(0, attributedString.length))
+            _btn_follow?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+            _btn_follow?.backgroundColor = Config._color_yellow
+            _btn_follow?.layer.borderWidth = 0
+            
+        }else{
+            let attributedString = NSMutableAttributedString(string: "＋关注")
+            attributedString.addAttribute(NSKernAttributeName, value: 1, range: NSMakeRange(0, attributedString.length) )
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_social_gray, range: NSMakeRange(0, attributedString.length))
+            _btn_follow?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
+            _btn_follow?.backgroundColor = UIColor.whiteColor()
+            _btn_follow?.layer.borderWidth = 1
+        }
+        
+    }
     
     //-----切换查看模式，瀑布流或单张
     func _changeTo(__type:String){
@@ -756,8 +824,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             cell!._setUserImge(MainInterface._userAvatar(_userInfo!))
             cell!._setUserName(_userInfo!.objectForKey("nickname") as! String)
         }
-        
-        
         if let _comments:NSArray = _dict.objectForKey("comment") as? NSArray{
             cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
             //cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
@@ -1113,6 +1179,15 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             _contr._naviDelegate = self
             self.navigationController?.pushViewController(_contr, animated: true)
             break
+            
+        case _btn_follow!: //---关注该用户的按钮
+            if _focused{
+                _cancelFocusUser()
+            }else{
+                _FocusUser()
+            }
+            break
+            
         case _btn_following!:
             let _contr:FocusMeList=FocusMeList()
             _contr._type = FocusMeList._Type_Focus
@@ -1159,9 +1234,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             }
             self.navigationController?.popViewControllerAnimated(true)
             return
-        case _btn_follow!:
-            _FocusUser()
-            break
         case _btn_changeShowType!:
             switch _showType{
             case "pic":

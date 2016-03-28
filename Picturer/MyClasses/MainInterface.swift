@@ -23,8 +23,6 @@ class MainInterface: AnyObject {
         //println(_list)
         if _info==nil{
         _userInfo_tem = NSDictionary(objects: ["01","名字"], forKeys: ["_id","nickname"])
-        
-        
         _ud.setObject(_userInfo_tem, forKey: "userInfo")
     }else{
         _userInfo_tem = _info! as NSDictionary
@@ -40,6 +38,7 @@ class MainInterface: AnyObject {
             //println(_ud.dictionaryRepresentation())
         }
     }
+    
     
     
     
@@ -71,6 +70,7 @@ class MainInterface: AnyObject {
     static let _URL_Signup:String = "user/register/"//---注册
     static let _URL_Login:String = "user/login/"//---登录
     static let _URL_ForcusUser:String = "focus/to/"//---关注用户
+     static let _URL_CancelFocusUser:String = "focus/remove/"//---关注用户
     static let _URL_FriendsList:String = "follow/follow/"//---我的好友列表
     static let _URL_FocusOnMeList:String = "follow/followers/"//---关注我的用户列表
     static let _URL_MyFocusList:String = "follow/following/"//---我关注的用户列表
@@ -100,6 +100,11 @@ class MainInterface: AnyObject {
     
     static let _URL_Collect_Album:String = "collection/album/"//-----收藏相册
     static let _URL_List_Collection:String = "collection/list/"//-----收藏列表
+    
+    static let _URL_MessageNews:String = "info/message/"//-----新消息列表－－所有未读消息
+    static let _URL_MessageCount:String = "info/messageCount/"//-----新消息数量，包含最新用户头像
+    
+    
 
     
     static let _URL_Comment_Pic:String = "comment/picture/"//-----评论图片
@@ -113,6 +118,8 @@ class MainInterface: AnyObject {
     
     static let _URL_Sms:String = "user/smscode/"//获取验证码
     static let _URL_changePassword:String = "sign/changePassword/"//修改密码
+    
+    
     //-----判断是否登录
     static func _isLogined()->Bool{
         let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
@@ -203,6 +210,13 @@ class MainInterface: AnyObject {
     //-----关注用户
     static func _focusToUser(__userId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_ForcusUser+"\(__userId)") { (__dict) -> Void in
+            print(__dict)
+            __block(__dict)
+        }
+    }
+    //-----取消关注用户
+    static func _cancelFocusToUser(__userId:String,__block:(NSDictionary)->Void){
+        CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_CancelFocusUser+"\(__userId)") { (__dict) -> Void in
             print(__dict)
             __block(__dict)
         }

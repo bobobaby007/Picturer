@@ -137,7 +137,7 @@ class CommentList: UIViewController, UITableViewDelegate,UITableViewDataSource,I
         for var i:Int = 0 ; i < _comments.count ; ++i{
             let _com:NSDictionary = _comments.objectAtIndex(i) as! NSDictionary
             let _by:NSDictionary = _com.objectForKey("by") as! NSDictionary
-            print("评论:",_com)
+            //print("评论:",_com)
             
             let from_userName:String = _by.objectForKey("nickname") as! String
             let from_userId:String = _by.objectForKey("_id") as! String

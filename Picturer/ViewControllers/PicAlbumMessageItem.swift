@@ -453,7 +453,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
             }
             let _commentDict:NSDictionary = __comments.objectAtIndex(__comments.count - 1 - i) as! NSDictionary
             
-            print("行数",i,_commentDict)
+            
             _attributeStr?.appendAttributedString(commentString(_commentDict))
         }
         let paragraphStyle = NSMutableParagraphStyle()
@@ -479,7 +479,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     func _dealWidthComment(__commentDict:NSDictionary)->NSDictionary{
         let _com:NSDictionary = __commentDict
         
-        print("评论:",_com)
+        //print("评论:",_com)
         
         let _by:NSDictionary = _com.objectForKey("by") as! NSDictionary
         

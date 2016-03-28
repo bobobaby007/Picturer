@@ -517,29 +517,11 @@ class MainAction: AnyObject {
         let _dict:NSMutableDictionary = NSMutableDictionary()
         let _list:NSMutableArray=NSMutableArray(array:_albumList )
          let _album:NSMutableDictionary=NSMutableDictionary(dictionary: _list.objectAtIndex(index) as! NSDictionary)
-        var _str:String = ""
+        
         for (key,value) in dict{
             //println(key,value)
             if  String(key) != "images"{
                 _dict.setObject(value, forKey: key as! String)
-            }
-            if String(key) == "title"{
-                _str = _str + "&title=" + String(value)
-            }
-            if String(key) == "description"{
-                _str = _str + "&description=" + String(value)
-            }
-            if String(key) == "tags"{
-                let _tags:NSArray = value as! NSArray
-                print("tags:",_tags)
-                var _tagStr:String = ""
-                for var i:Int = 0; i<_tags.count; ++i{
-                    if i>0{
-                      _tagStr = _tagStr + ","
-                    }
-                    _tagStr = _tagStr + (_tags.objectAtIndex(i) as! String)
-                }
-                _str = _str + "&tags=" + String(_tagStr)
             }
             if let _id = _album.objectForKey("_id") as? String{ //----如果是服务器已经存在的相册，设置标记为修改
                 if _id != ""{
@@ -588,6 +570,13 @@ class MainAction: AnyObject {
                     continue
                 }
                 _str = _str + "&tags=" + String(_tagStr)
+            }
+            if String(key) == "cover"{ //---设定封面
+                let _cover:NSDictionary = value as! NSDictionary
+                if let _coverId:String = _cover.objectForKey("_id") as? String{
+                    _str = _str + "&cover=" + _coverId
+                }
+                
             }
         }
         
@@ -834,8 +823,10 @@ class MainAction: AnyObject {
                                     MainInterface._changePic(_picId, __changeingStr:_str, __block: { (__dict) -> Void in
                                         
                                         if __dict.objectForKey("recode") as! Int == 200{
+                                            print("修改图片成功:",__dict)
                                             let _indexPath = _getPathOfPicByLoacleId(_pic.objectForKey("localId") as! Int)
-                                            let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: __dict.objectForKey("info") as! NSDictionary)
+//                                            let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: __dict.objectForKey("info") as! NSDictionary)
+                                            let _dict:NSDictionary = NSDictionary(object: "done", forKey: "status")
                                             //_dict.setObject("done", forKey: "status")
                                             _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict: _dict)
                                         }else{

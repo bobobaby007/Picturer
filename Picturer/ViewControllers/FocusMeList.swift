@@ -62,7 +62,19 @@ class FocusMeList: UIViewController,UITabBarControllerDelegate,UITextFieldDelega
         _title_label?.textColor=UIColor.whiteColor()
         _title_label?.font = Config._font_topbarTitle
         _title_label?.textAlignment=NSTextAlignment.Center
-        _title_label?.text="被关注"
+        
+        switch _type {
+        case FocusMeList._Type_Focus:
+            _title_label?.text="关注"
+            break
+        case FocusMeList._Type_FocusMe:
+            _title_label?.text="被关注"
+            break
+        default:
+            break
+        }
+        
+        
         
         _topBar?.addSubview(_title_label!)
         _topBar?.addSubview(_btn_cancel!)
@@ -79,7 +91,7 @@ class FocusMeList: UIViewController,UITabBarControllerDelegate,UITextFieldDelega
         _tableView?.tableFooterView = UIView()
         _tableView?.tableHeaderView = UIView()
         self.view.addSubview(_tableView!)
-        _getData()
+        
         
         _setuped=true
     }
@@ -204,6 +216,8 @@ class FocusMeList: UIViewController,UITabBarControllerDelegate,UITextFieldDelega
             _viewUser(_user.objectForKey("_id") as! String)
         }
         
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        cell?.selected = false
         //cell.selected = false
         
     }
@@ -256,6 +270,10 @@ class FocusMeList: UIViewController,UITabBarControllerDelegate,UITextFieldDelega
             return
         }
         
+    }
+    override func viewDidAppear(animated: Bool) {
+        ImageLoader.sharedLoader._removeAllTask()
+        _getData()
     }
     override func viewWillAppear(animated: Bool) {
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent

@@ -365,7 +365,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     
     
     func _setDescription(__str:String){
-        print("描述：",__str)
+        //print("描述：",__str)
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 1
         let attributes = [NSParagraphStyleAttributeName : style,NSFontAttributeName:Config._font_social_album_description,NSForegroundColorAttributeName:Config._color_social_gray]

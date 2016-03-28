@@ -46,6 +46,7 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         
         setup()
+        ImageLoader.sharedLoader._removeAllTask()
         _getDatas()
     }
     
@@ -192,20 +193,14 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
         
         if let _cover:NSDictionary = _album?.objectForKey("cover") as? NSDictionary{
             //print("封面：",_cover,"====")
-            
             let _pic:NSDictionary = NSDictionary(objects: [MainInterface._imageUrl(_cover.objectForKey("thumbnail") as! String),"file"], forKeys: ["url","type"])
-            
             cell!._setPic(_pic)
         }else{
-            
             if  _pics?.count > 0{
                 cell!._setPic(_pics?.objectAtIndex(0) as! NSDictionary)
             }
             //cell!._setDescription("")
         }
-        
-        
-        
         
         if let _title:String = _album!.objectForKey("title") as? String{
             cell!._setAlbumTitle(_title,__num: _pics!.count)

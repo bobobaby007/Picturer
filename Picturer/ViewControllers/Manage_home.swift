@@ -168,7 +168,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     }
     func _refresh(){
         
-        MainAction._startCheckAsyn() //-----同步开始
+        
         
         _tableView.reloadData()
     }
@@ -815,6 +815,8 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         _logoAnimation?.view.alpha = 1
         _logoAnimation?._reset()
         _whiteBg!.frame.origin = CGPoint(x: 0, y: 64)
+        
+        MainAction._startCheckAsyn() //-----同步开始
     }
     override func viewWillAppear(animated: Bool) {
     

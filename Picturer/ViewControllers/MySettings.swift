@@ -326,7 +326,8 @@ class MySettings: UIViewController,ContentEditer_delegate,ImageInputerDelegate{
         self._label_sex?.text = MainInterface._sexStr(self._userInfo?.objectForKey("sex") as! Int)
         self._label_sign?.text = self._userInfo?.objectForKey("signature") as? String
         self._label_nickName?.text = self._userInfo?.objectForKey("nickname") as? String
-        print("用户信息：",__dict)
+       
+        //print("用户信息：",__dict)
 
     }
     

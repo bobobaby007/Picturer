@@ -398,6 +398,9 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
     
     func _setCover(picIndex: Int) {
         _album?.setObject(_imagesArray.objectAtIndex(picIndex), forKey: "cover")
+        
+        
+        
     }
     func _deletePic(picIndex: Int) {
         _imagesArray.removeObjectAtIndex(picIndex)

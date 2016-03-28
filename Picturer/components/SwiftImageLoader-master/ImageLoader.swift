@@ -72,7 +72,10 @@ class ImageLoader {
                 }
                 
             })
-            self._loadingTasks!.addObject(downloadTask)
+            do{
+                 self._loadingTasks?.addObject(downloadTask)
+            }
+            
             downloadTask.resume()
             
         })

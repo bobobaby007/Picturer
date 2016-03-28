@@ -14,8 +14,13 @@ class Social_Main: AnyObject {
     //=========================社交部分
     static let _FRRINDS_LIST:String = "friends_list" //---朋友列表缓存文件名
     static let _FOCUSME_LIST:String = "focusme_list" //---妙人列表缓存文件名
+    static let _MESSAGE_LIST:String = "focusme_list" //---消息列表缓存文件名
+    
     static var _fList:NSMutableArray?
     static var _fmList:NSMutableArray?
+    
+    static var _mesList:NSMutableArray?
+    
     //--------登陆用户信息
     static var _userId:String!{
         get{
@@ -46,6 +51,30 @@ class Social_Main: AnyObject {
     }
     static var _focusMeList:NSMutableArray!{
         get{
+        if _mesList==nil{
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        var _list:NSMutableArray?=_ud.valueForKey(_MESSAGE_LIST) as? NSMutableArray
+        //println(_list)
+        if _list==nil{
+        _list = NSMutableArray(array: [])
+        _ud.setObject(_list, forKey: _MESSAGE_LIST)
+        }
+        _mesList = _list
+        }
+        return _mesList
+        }
+        set{
+            //println("set")
+            _mesList=newValue
+            let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            _ud.setObject(_mesList, forKey: _MESSAGE_LIST)
+            //println(_ud.dictionaryRepresentation())
+        }
+    }
+    
+    
+    static var _messageList:NSMutableArray!{
+        get{
         if _fmList==nil{
         let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         var _list:NSMutableArray?=_ud.valueForKey(_FOCUSME_LIST) as? NSMutableArray
@@ -66,6 +95,8 @@ class Social_Main: AnyObject {
             //println(_ud.dictionaryRepresentation())
         }
     }
+    
+    
     static var _currentUser:NSDictionary{
         get{
             let _dict:NSMutableDictionary = NSMutableDictionary()
@@ -218,7 +249,7 @@ class Social_Main: AnyObject {
     static func _getUserProfileAtId(__userId:String,__block:(NSDictionary)->Void){
        MainInterface._getUserInfo(__userId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
-              print("用户信息：",__dict)
+              //print("用户信息：",__dict)
                  __block(__dict.objectForKey("userinfo") as! NSDictionary)
             }
             // print("_getUserProfileAtId",__dict)
@@ -252,6 +283,16 @@ class Social_Main: AnyObject {
         MainInterface._focusToUser(__userId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 print("关注用户成功：",__dict)
+                //__block(__dict.objectForKey("userinfo") as! NSDictionary)
+            }
+            // print("_getUserProfileAtId",__dict)
+        }
+    }
+    //----取消关注用户
+    static func _cancelFocusToUser(__userId:String,__block:(NSDictionary)->Void){
+        MainInterface._cancelFocusToUser(__userId) { (__dict) -> Void in
+            if __dict.objectForKey("recode") as! Int == 200{
+                print("取消关注用户成功：",__dict)
                 //__block(__dict.objectForKey("userinfo") as! NSDictionary)
             }
             // print("_getUserProfileAtId",__dict)
@@ -561,19 +602,25 @@ class Social_Main: AnyObject {
                 
                 for var i:Int = 0; i<_arr.count;++i{
                     let _com:NSDictionary = _arr.objectAtIndex(i) as! NSDictionary
-                    let _album:NSDictionary = _com.objectForKey("album") as! NSDictionary
-                    let _user:NSDictionary = _album.objectForKey("author") as! NSDictionary
+                    if let _album = _com.objectForKey("album") as? NSDictionary{
+                        let _user:NSDictionary = _album.objectForKey("author") as! NSDictionary
+                        
+                        let _dict:NSMutableDictionary = NSMutableDictionary()
+                        
+                        
+                        if let _cover = _album.objectForKey("cover") as? NSDictionary{
+                           _dict.setObject(_cover, forKey: "cover")
+                        }else{
+                            let _pic:NSDictionary = NSDictionary(objects: ["no_cover","file"], forKeys: ["url","type"])
+                            _dict.setObject(_pic, forKey: "cover")
+                        }
+                        _dict.setObject(MainInterface._userAvatar(_user), forKey: "userImg")
+                        _dict.setObject(_user.objectForKey("nickname") as! String, forKey: "userName")
+                        _dict.setObject(_album.objectForKey("title") as! String, forKey: "title")
+                        _dict.setObject(_album.objectForKey("description") as! String, forKey: "description")
+                        _array.addObject(_dict)
+                    }
                     
-                    let _dict:NSMutableDictionary = NSMutableDictionary()
-                    
-                    var _pic:NSDictionary = NSDictionary(objects: ["pic_"+String(i%8+1)+".JPG","file"], forKeys: ["url","type"])
-                    _dict.setObject(_pic, forKey: "cover")
-                    _pic = NSDictionary(objects: ["pic_"+String(i%4+3)+".JPG","file"], forKeys: ["url","type"])
-                    _dict.setObject(MainInterface._userAvatar(_user), forKey: "userImg")
-                    _dict.setObject(_user.objectForKey("nickname") as! String, forKey: "userName")
-                    _dict.setObject(_album.objectForKey("title") as! String, forKey: "title")
-                    _dict.setObject(_album.objectForKey("description") as! String, forKey: "description")
-                    _array.addObject(_dict)
                 }
                 block(_array)
                 
