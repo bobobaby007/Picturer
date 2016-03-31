@@ -69,15 +69,18 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _btn_close=UIButton(frame: CGRect(x: self.view.frame.width - 26 - Config._gap, y: 32, width: 18, height: 18))
-        _btn_close?.setImage(UIImage(named: "icon_close.png"), forState: UIControlState.Normal)
+        _btn_close=UIButton(frame: CGRect(x: self.view.frame.width - 32 - Config._gap, y: 12, width: 40, height: 62))
+        //_btn_close?.setImage(UIImage(named: "icon_close.png"), forState: UIControlState.Normal)
+        _btn_close?.titleLabel?.font = Config._font_cell_subTitle
+        _btn_close?.setTitle("取消", forState: UIControlState.Normal)
         _btn_close?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _topBar?.addSubview(_btn_close!)
         
         _referenceController = Discover_reference()
-        _searchController = Discover_search()
+        _referenceController?._parentController = self
         
+        _searchController = Discover_search()
         
         _tab_controller = MyTabBarController()
         
@@ -88,11 +91,7 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         _tab_controller!.delegate = self
         _tab_controller?.tabBar.hidden = true
         
-        
         self.view.addSubview(_tab_controller!.view)
-        
-        
-       
         
         let _searchLableV:UIView = UIView(frame: CGRect(x: 44, y: 30, width: self.view.frame.width-100, height: 25))
         _searchLableV.backgroundColor = Config._color_black_title
@@ -103,8 +102,6 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         
         _searchT.frame = CGRect(x: 9+14.5+5, y: -1.5, width: _searchLableV.frame.width-9-14.5-5-5, height: _searchBarH-14)
         
-        
-        
         _searchT.attributedPlaceholder =
             NSAttributedString(string: "搜索", attributes: [NSForegroundColorAttributeName : UIColor(white: 1, alpha: 0.7)])
         _searchT.textColor = UIColor.whiteColor()
@@ -113,17 +110,13 @@ class Discover_home: UIViewController,UITabBarControllerDelegate,UITextFieldDele
         _searchT.returnKeyType = UIReturnKeyType.Search
         _searchT.addTarget(self, action: "textHander:", forControlEvents: UIControlEvents.EditingChanged)
         
-        
         _searchLableV.addSubview(_icon)
         _searchLableV.addSubview(_searchT)
         
-        
         _topBar!.addSubview(_searchLableV)
         
+        
         /*---
-        
-        
-        
         _tab_reference = UIButton()
         _tab_reference?.setTitle("发现", forState: UIControlState.Normal)
         _tab_reference?.titleLabel?.font = UIFont.systemFontOfSize(14)

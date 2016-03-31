@@ -28,7 +28,7 @@ class UserListCell:UITableViewCell {
         _title?.textColor = Config._color_social_black_title
         
         
-        _des = UILabel(frame: CGRect(x: 77, y: 32, width: self.contentView.frame.width - 77 - _gap, height: 17))
+        _des = UILabel(frame: CGRect(x: 77, y: 31, width: self.contentView.frame.width - 77 - _gap, height: 17))
         _des?.font = Config._font_social_likeNum
         _des?.textColor = Config._color_gray_description
         

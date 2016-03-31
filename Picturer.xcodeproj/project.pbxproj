@@ -111,7 +111,6 @@
 		7AAD75E81B843459007C0CB1 /* MyAlerter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAD75E71B843459007C0CB1 /* MyAlerter.swift */; };
 		7AAD75EF1B845D6D007C0CB1 /* startScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD75EE1B845D6D007C0CB1 /* startScreen.png */; };
 		7AAD75F11B846027007C0CB1 /* Navi_Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAD75F01B846027007C0CB1 /* Navi_Delegate.swift */; };
-		7AAD75F31B846CAD007C0CB1 /* SearchResult_user_Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAD75F21B846CAD007C0CB1 /* SearchResult_user_Cell.swift */; };
 		7AAD76011B84BE28007C0CB1 /* shareIcons.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD76001B84BE28007C0CB1 /* shareIcons.png */; };
 		7AAD76031B84BF2B007C0CB1 /* ShareAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAD76021B84BF2B007C0CB1 /* ShareAlert.swift */; };
 		7AAEA3461B833A4300DB5F54 /* blurBg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7AAEA3451B833A4300DB5F54 /* blurBg.jpg */; };
@@ -168,6 +167,7 @@
 		7AC9B1241B70B1AC00D05787 /* search_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AC9B1231B70B1AC00D05787 /* search_icon.png */; };
 		7AC9B12D1B72437000D05787 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9B12C1B72437000D05787 /* SearchResult.swift */; };
 		7ACFB3851B591A21007F9AB8 /* Manage_PicsToAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACFB3841B591A21007F9AB8 /* Manage_PicsToAlbum.swift */; };
+		7AD6744F1CABD88B0079296E /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AD6744E1CABD88B0079296E /* refresh.png */; };
 		7AD7484B1C857305007A3FE9 /* Log_resetPassw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD7484A1C857305007A3FE9 /* Log_resetPassw.swift */; };
 		7AD748501C8574F0007A3FE9 /* EULA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD7484F1C8574F0007A3FE9 /* EULA.swift */; };
 		7AD748521C857500007A3FE9 /* EULA.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7AD748511C857500007A3FE9 /* EULA.rtf */; };
@@ -339,7 +339,6 @@
 		7AAD75E71B843459007C0CB1 /* MyAlerter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAlerter.swift; sourceTree = "<group>"; };
 		7AAD75EE1B845D6D007C0CB1 /* startScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startScreen.png; sourceTree = "<group>"; };
 		7AAD75F01B846027007C0CB1 /* Navi_Delegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Navi_Delegate.swift; sourceTree = "<group>"; };
-		7AAD75F21B846CAD007C0CB1 /* SearchResult_user_Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult_user_Cell.swift; sourceTree = "<group>"; };
 		7AAD76001B84BE28007C0CB1 /* shareIcons.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIcons.png; sourceTree = "<group>"; };
 		7AAD76021B84BF2B007C0CB1 /* ShareAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareAlert.swift; sourceTree = "<group>"; };
 		7AAEA3451B833A4300DB5F54 /* blurBg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blurBg.jpg; sourceTree = "<group>"; };
@@ -396,6 +395,7 @@
 		7AC9B1231B70B1AC00D05787 /* search_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_icon.png; sourceTree = "<group>"; };
 		7AC9B12C1B72437000D05787 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		7ACFB3841B591A21007F9AB8 /* Manage_PicsToAlbum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manage_PicsToAlbum.swift; sourceTree = "<group>"; };
+		7AD6744E1CABD88B0079296E /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		7AD7484A1C857305007A3FE9 /* Log_resetPassw.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log_resetPassw.swift; sourceTree = "<group>"; };
 		7AD7484F1C8574F0007A3FE9 /* EULA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EULA.swift; sourceTree = "<group>"; };
 		7AD748511C857500007A3FE9 /* EULA.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; name = EULA.rtf; path = ../MyClasses/EULA.rtf; sourceTree = "<group>"; };
@@ -545,7 +545,6 @@
 				7A01C9981C85200800556366 /* FocusListCell.swift */,
 				7ABBECD71C7C97220070076F /* NewsListCell.swift */,
 				7A9CD0AA1B7EFE7300152C61 /* CollectItem.swift */,
-				7AAD75F21B846CAD007C0CB1 /* SearchResult_user_Cell.swift */,
 				7AB56DFD1C6A4416008DAE77 /* MyTransitioningObject.swift */,
 				7A119DFE1CA26D60005C4A0D /* MessageSign.swift */,
 			);
@@ -611,6 +610,7 @@
 				7AC257D71C7EB842000C81AD /* changeToCollect_icon_yellow.png */,
 				7A12EB2B1C7D9A8B00C579BF /* nonAvatar.png */,
 				7A21EF731CA24E1900067CE3 /* loadingPicBg.png */,
+				7AD6744E1CABD88B0079296E /* refresh.png */,
 				7AF02A071C4328D30009B2BC /* collect_on.png */,
 				7AB9E3CB1C55DF4F00D23CFA /* moreCircle.png */,
 				7AF02A111C432A190009B2BC /* like_sign.png */,
@@ -953,6 +953,7 @@
 				7AF02A0C1C4328D30009B2BC /* collect_on.png in Resources */,
 				7A1FF2461B4AE48300CEFDAF /* newAlbum.png in Resources */,
 				7AB251A91B7F4B0F0029ED80 /* user_10.jpg in Resources */,
+				7AD6744F1CABD88B0079296E /* refresh.png in Resources */,
 				7AF02A0F1C4328D30009B2BC /* like_off.png in Resources */,
 				7AB251A51B7F4B0F0029ED80 /* user_6.jpg in Resources */,
 				7A96A0971B6A17DA00184EFF /* message_arrow.png in Resources */,
@@ -1104,7 +1105,6 @@
 				7AE152B31C3CBC96009B01F0 /* UploadingList.swift in Sources */,
 				7AE9296E1C0DF52E00EA4FBE /* Image+CoreDataProperties.swift in Sources */,
 				7AA6A8CB1B4777C200D9E604 /* MainInterface.swift in Sources */,
-				7AAD75F31B846CAD007C0CB1 /* SearchResult_user_Cell.swift in Sources */,
 				7A6F8A8E1B62AFAF007F949A /* Discover_search.swift in Sources */,
 				7AF02A151C439E810009B2BC /* Log_Main.swift in Sources */,
 				7AA4E9AE1B76F2B700B641B5 /* Friends_Home.swift in Sources */,

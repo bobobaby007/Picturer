@@ -95,6 +95,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     var _liked:Bool = false //----点过赞
     var _collected:Bool = false //---收藏过
+    
     override func willMoveToSuperview(newSuperview: UIView?) {
         //setup()
     }
@@ -122,7 +123,9 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         
         
-        _tapC = UITapGestureRecognizer(target: self, action: Selector("_tapHander:"))
+        
+        
+        
         _buttonTap = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
         //println(_defaultSize!.width)
         
@@ -217,6 +220,11 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _commentsPanel = UIView(frame: CGRect(x: 0, y: _toolsPanel!.frame.origin.y+_toolsPanel!.frame.height, width: _defaultSize!.width, height: 36))
         _commentsPanel?.backgroundColor = UIColor.clearColor()
         
+        _tapC = UITapGestureRecognizer(target: self, action: Selector("_tapHander:"))
+        
+        _commentsPanel?.addGestureRecognizer(_tapC!)
+        
+        
         
         _toolsPanel?.hidden = true
         _commentsPanel?.hidden = true
@@ -230,13 +238,16 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _commentText?.font = Config._font_social_album_description  //UIFont.systemFontOfSize(14)
         _commentText!.attributedText = _attributeStr!
         _commentText?.backgroundColor =  UIColor.clearColor()
+        
         _commentText!.delegate=self
+        
         _commentText!.selectable=true
         _commentText!.editable=false
         _commentText?.userInteractionEnabled=true
         
         _moreCommentText = UITextView()
         _moreCommentText?.textContainerInset = UIEdgeInsetsMake(-3, 0, 0, 0)
+        _moreCommentText?.scrollEnabled = false
         _moreCommentText?.textContainer.lineFragmentPadding = 0
         _moreCommentText?.backgroundColor = UIColor.clearColor()
         _moreCommentText?.delegate = self
@@ -247,6 +258,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         _commentsPanel?.addSubview(_commentText!)
         _commentsPanel?.addSubview(_moreCommentText!)
+        
     
         self.addSubview(_userImg!)
         self.addSubview(_btn_moreAction!)
@@ -355,6 +367,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
        // _setStatusString(3, __albumName: "时光的舒服的沙发电视柜第三个第三个第四个大帅哥的是非得失个大", __albumId: "3465rtdhfhdfg")
     }
     
+    func _tapHander(__sender:UIGestureRecognizer){
+        print(__sender.view)
+        _delegate?._moreComment(_indexId)
+    }
     
     //-------------------------调整布局-----------------
     
@@ -465,7 +481,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _commentText?.linkTextAttributes = [NSForegroundColorAttributeName:Config._color_social_blue]
        
         if _n>3{
-            _moreCommentText?.attributedText = linkString("全部"+String(_n)+"条评论",withURLString:"moreComment:")
+            _moreCommentText?.attributedText = linkString("全部"+String(__allNum)+"条评论",withURLString:"moreComment:")
             _moreCommentText?.linkTextAttributes = [NSForegroundColorAttributeName:Config._color_gray_time]
         }else{
             _moreCommentText?.text = ""
@@ -548,6 +564,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     }
     
     //-----文字链接代理
+//    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+//        _delegate?._moreComment(_indexId)
+//        return false
+//    }
     
     func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
         let _action:String = URL.scheme

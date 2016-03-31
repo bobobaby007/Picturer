@@ -74,7 +74,7 @@ class SearchPage: UIViewController,UITableViewDataSource,UITableViewDelegate,UIT
         _searchLableV.layer.cornerRadius=5
         
         _btn_cancel = UIButton(frame: CGRect(x: _searchLableV.frame.origin.x+_searchLableV.frame.width, y: (_searchBarH-_searchT_H)/2+_statusH, width: 55, height: _searchBarH-14))
-        _btn_cancel?.titleLabel?.font = UIFont(name: "PingFangSC-Regular", size: 14)!
+        _btn_cancel?.titleLabel?.font = Config._font_cell_subTitle
         _btn_cancel?.setTitleColor(Config._color_black_title, forState: UIControlState.Normal)
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "btnHander:", forControlEvents: UIControlEvents.TouchUpInside)

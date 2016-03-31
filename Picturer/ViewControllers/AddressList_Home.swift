@@ -116,20 +116,22 @@ class AddressList_Home: UIViewController,UITabBarControllerDelegate,UITextFieldD
         
         _btn_friends = UIButton()
         _btn_friends?.setTitle("朋友", forState: UIControlState.Normal)
-        _btn_friends?.titleLabel?.font = Config._font_social_button_2
+        
+        
+        _btn_friends?.titleLabel?.font = Config._font_social_button_3
         _btn_friends?.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
+        
         _btn_friends?.frame=CGRect(x: 0, y: 0, width: self.view.frame.width/2, height: _btnBarH-2)
         _btn_friends?.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_focus = UIButton()
         _btn_focus?.setTitle("妙人", forState: UIControlState.Normal)
-        _btn_focus?.titleLabel?.font = Config._font_social_button_2
+        _btn_focus?.titleLabel?.font = Config._font_social_button_3
         _btn_focus?.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
         _btn_focus?.frame=CGRect(x: self.view.frame.width/2, y: 0, width: self.view.frame.width/2, height: _btnBarH-2)
         _btn_focus?.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btnBarV = UIView(frame: CGRect(x: 0, y: _barH, width: self.view.frame.width, height: _btnBarH))
-        
         
         let _line:UIView = UIView(frame: CGRect(x: 0, y: _btnBarH-2, width: self.view.frame.width, height: 2))
         _line.backgroundColor = Config._color_social_gray_line

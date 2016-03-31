@@ -133,7 +133,7 @@ class MainAction: AnyObject {
     }
     //--通过图册id查找图册Index
     static func _getAlbumIndexOfId(__id:String)->Int{
-        for var i:Int = 0; i < MainAction._albumList.count; ++i{
+        for var i:Int = 0; i < MainAction._albumList.count; i += 1{
             let _dict:NSDictionary = MainAction._albumList.objectAtIndex(i) as! NSDictionary
             let _id:String = _dict.objectForKey("_id") as! String
             if _id.lowercaseString.rangeOfString(__id.lowercaseString) != nil{
@@ -144,7 +144,7 @@ class MainAction: AnyObject {
     }
      //------通过localId查找图册Index
     static func _getAlbumIndexOfLocalId(__id:Int)->Int{
-        for var i:Int = 0; i < MainAction._albumList.count; ++i{
+        for var i:Int = 0; i < MainAction._albumList.count; i += 1{
             let _dict:NSDictionary = MainAction._albumList.objectAtIndex(i) as! NSDictionary
             let _id:Int = _dict.objectForKey("localId") as! Int
             if _id == __id{
@@ -610,14 +610,14 @@ class MainAction: AnyObject {
         return NSIndexPath(forRow: -1, inSection: -1)
     }
     //------通过图片在线id获取图册和图片对应index
-    static func _getPathOfPicOnlineId(__localId:Int)->NSIndexPath{
+    static func _getPathOfPicOnlineId(__id:String)->NSIndexPath{
         for var i:Int = 0; i < MainAction._albumList.count; ++i{
             let _album:NSDictionary = MainAction._albumList.objectAtIndex(i) as! NSDictionary
             let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
             for var _d:Int = 0; _d<_images.count ; ++_d{
                 let _img:NSDictionary = _images.objectAtIndex(_d) as! NSDictionary
-                if let _id:Int = _img.objectForKey("_id") as? Int{
-                    if _id == __localId{
+                if let _id:String = _img.objectForKey("_id") as? String{
+                    if _id == __id{
                         return NSIndexPath(forRow: i, inSection: _d)
                     }
                 }
@@ -821,14 +821,17 @@ class MainAction: AnyObject {
                             if _str != ""{
                                 if let _picId = _pic.objectForKey("_id") as? String {
                                     MainInterface._changePic(_picId, __changeingStr:_str, __block: { (__dict) -> Void in
-                                        
                                         if __dict.objectForKey("recode") as! Int == 200{
                                             print("修改图片成功:",__dict)
-                                            let _indexPath = _getPathOfPicByLoacleId(_pic.objectForKey("localId") as! Int)
-//                                            let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: __dict.objectForKey("info") as! NSDictionary)
-                                            let _dict:NSDictionary = NSDictionary(object: "done", forKey: "status")
-                                            //_dict.setObject("done", forKey: "status")
-                                            _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict: _dict)
+                                             let _indexPath = _getPathOfPicOnlineId(_pic.objectForKey("_id") as! String)
+                                            print("获取到的图片路径：",_indexPath)
+                                            if _indexPath.row != -1{
+//                                                let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: __dict.objectForKey("info") as! NSDictionary)
+                                                let _dict:NSDictionary = NSDictionary(object: "done", forKey: "status")
+                                                //_dict.setObject("done", forKey: "status")
+                                                _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict: _dict)
+                                            }
+                                            //
                                         }else{
                                             _addToFailedList("changePic", __dict: _pic)
                                         }

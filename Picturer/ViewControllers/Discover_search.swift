@@ -63,7 +63,7 @@ class Discover_search: UIViewController,UITableViewDataSource,UITableViewDelegat
         
         _searchT.frame = CGRect(x: _gap+13+5, y: 1, width: self.view.frame.width-2*_gap-_gap, height: _searchBarH-14)
         _searchT.placeholder = "搜索"
-        _searchT.font = UIFont.systemFontOfSize(13)
+        _searchT.font = Config._font_input
         _searchT.delegate = self
         _searchT.returnKeyType = UIReturnKeyType.Search
         

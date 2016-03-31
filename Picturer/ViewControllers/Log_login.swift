@@ -45,7 +45,7 @@ class Log_login:UIViewController{
         _white.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(_white)
         
-        for var i:Int = 0;i<3; ++i{
+        for i:Int in 0 ..< 3{
             let _line:UIView = UIView(frame: CGRect(x: 0, y: Config._barH+_gap+CGFloat(i)*_buttonH-0.5, width: self.view.frame.width, height: 0.3))
             _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
             self.view.addSubview(_line)
@@ -58,7 +58,7 @@ class Log_login:UIViewController{
         _txt_mobile?.textColor = Config._color_black_title
         _txt_mobile?.font = Config._font_cell_title_normal
         _txt_mobile?.placeholder = "手机号码"
-        _txt_mobile?.addTarget(self, action: "textHander:", forControlEvents: UIControlEvents.EditingChanged)
+        _txt_mobile?.addTarget(self, action: #selector(Log_login.textHander(_:)), forControlEvents: UIControlEvents.EditingChanged)
         self.view.addSubview(_txt_mobile!)
         
        
@@ -69,7 +69,7 @@ class Log_login:UIViewController{
         _txt_password?.font = Config._font_cell_title_normal
         _txt_password?.secureTextEntry = true
         _txt_password?.placeholder = "输入密码"
-        _txt_password?.addTarget(self, action: "textHander:", forControlEvents: UIControlEvents.EditingChanged)
+        _txt_password?.addTarget(self, action: #selector(Log_login.textHander(_:)), forControlEvents: UIControlEvents.EditingChanged)
         self.view.addSubview(_txt_password!)
         
         
@@ -77,7 +77,7 @@ class Log_login:UIViewController{
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(Log_login.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 12, width: self.view.frame.width-100, height: 60))
         _title_label?.textColor=UIColor.whiteColor()
@@ -93,7 +93,7 @@ class Log_login:UIViewController{
         _btn_go?.backgroundColor = Config._color_yellow
         _btn_go?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
         _btn_go?.titleLabel?.font = Config._font_cell_title
-        _btn_go?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_go?.addTarget(self, action: #selector(Log_login.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         _btn_go?.setTitle("登录", forState: UIControlState.Normal)
         _btn_go?.clipsToBounds = true
         
@@ -103,8 +103,8 @@ class Log_login:UIViewController{
         _topBar?.addSubview(_btn_cancel!)
         _topBar?.addSubview(_title_label!)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardHander:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardHander:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Log_login.keyboardHander(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Log_login.keyboardHander(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
         //_txt_mobil?.becomeFirstResponder()
         

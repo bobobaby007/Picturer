@@ -52,6 +52,7 @@ class PicView: UIScrollView,UIScrollViewDelegate{
         //self.clipsToBounds = false
     }
     func _setPic(__pic:NSDictionary,__block:(NSDictionary)->Void){
+        
         let _url:String = __pic.objectForKey("url") as! String
         
         if _myUrl == _url{

@@ -42,6 +42,8 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
     
     var _range:Int = 0
     
+    let _space:CGFloat=1
+    
     func setup(){
         if _setuped{
             return
@@ -51,8 +53,18 @@ class Manage_show: UIViewController, UICollectionViewDelegate, UICollectionViewD
         
         _imagesArray = NSMutableArray(array:  MainAction._getImagesOfAlbumIndex(_albumIndex!)!)
         
-        let layout = CustomLayout()
-        _collectionView.collectionViewLayout=layout
+        
+        let _collectionLayout=UICollectionViewFlowLayout()
+        let _imagesW:CGFloat=(self.view.frame.width-3*_space)/4
+        //let _imagesH:CGFloat=ceil(CGFloat(_picsArray!.count)/4)*(_imagesW+_space)
+        
+        _collectionLayout.minimumInteritemSpacing=_space
+        _collectionLayout.minimumLineSpacing=_space
+        _collectionLayout.itemSize=CGSize(width: _imagesW, height: _imagesW)
+        
+        
+        
+        _collectionView.collectionViewLayout=_collectionLayout
         _collectionView.registerClass(PicsShowCell.self, forCellWithReuseIdentifier: "PicsShowCell")
         _collectionView.userInteractionEnabled=true
         _collectionView.bounces = true

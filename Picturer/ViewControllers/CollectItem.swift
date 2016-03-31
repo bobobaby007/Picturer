@@ -68,6 +68,9 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     var _container:UIView?
     
     
+    var _pics:NSArray?
+    var _album:NSDictionary?
+    
     override func willMoveToSuperview(newSuperview: UIView?) {
         //setup()
     }
@@ -191,6 +194,31 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
 //        self.addSubview(_commentsPanel!)
         _albumTitle_labelV?.addSubview(_albumTitle_label!)
         _setuped=true
+    }
+    
+    
+    
+    
+
+func _getPics(){
+    Social_Main._getPicsListAtAlbumId(self._album!.objectForKey("_id") as? String, __block: { (array) -> Void in
+        self._pics = array
+        dispatch_async(dispatch_get_main_queue(), {[weak self] () -> Void in
+            self?._getPicsOk()
+        })
+    })
+    
+}
+    func _getPicsOk(){
+        _setAlbumTitle(_album!.objectForKey("title") as! String, __num: _pics!.count)
+        
+        if let _cover = _album!.objectForKey("cover") as? NSDictionary{
+            _setPic(_cover)
+        }else{
+            let _pic:NSDictionary = _pics!.objectAtIndex(0) as! NSDictionary
+            _setPic(_pic)
+        }
+        
     }
     //-------------------------调整布局-----------------
     func _refreshView(){
@@ -430,11 +458,20 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
     }
     
     func _setPic(__pic:NSDictionary){
-        //println(__pic)
-        //  _pic?.image = UIImage(named: __pic.objectForKey("url") as! String)
-        _picV?._setPic(__pic, __block: { (__dict) -> Void in
-            self._refreshView()
-        })
+        if let _url = __pic.objectForKey("thumbnail") as? String{
+            _picV!._setPic(NSDictionary(objects:[MainInterface._imageUrl(_url),"file"], forKeys: ["url","type"]), __block:{[weak self] _ in
+                //                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                //                    self?._refreshView()
+                //                })
+                })
+            return
+        }else{
+            _picV!._setPic(__pic, __block:{[weak self] _ in
+                //                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                //                    self?._refreshView()
+                //                })
+                })
+        }
     }
     
     func _setPics(__pics:NSArray){

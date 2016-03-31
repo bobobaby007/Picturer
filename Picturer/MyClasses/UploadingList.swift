@@ -42,7 +42,7 @@ class UploadingList:NSObject {
     }
     func _removeFrom(__localId:Int,var __atArray:NSMutableArray){
         let _a:NSMutableArray = NSMutableArray(array: __atArray)
-        for var i:Int = 0; i<_a.count; ++i{
+        for i:Int in 0 ..< _a.count {
             let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _a.objectAtIndex(i) as! NSDictionary)
             if _dict.objectForKey("localId") as! Int == __localId{
                 _a.removeObjectAtIndex(i)
@@ -53,7 +53,7 @@ class UploadingList:NSObject {
     //-----图片是否存在于列表中
     func _isUploading(__pic:NSDictionary)->Bool{
         if let _localId:Int = __pic.objectForKey("localId") as? Int{
-            for var i:Int = 0; i<_uploadingList.count; ++i{
+            for i:Int in 0 ..< _uploadingList.count{
                 let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: _uploadingList.objectAtIndex(i) as! NSDictionary)
                 if _localId == _dict.objectForKey("localId") as! Int{
                     return true

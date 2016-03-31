@@ -280,11 +280,17 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
             return CGFloat(_heighArray!.objectAtIndex(indexPath.row) as! NSNumber)
         }
         //println(_heighArray.objectAtIndex(indexPath.row))
-        return 100
+        return 425
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:CollectItem?
         //cell = tableView.viewWithTag(100+indexPath.row) as? CollectItem
+        let _com:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
+        let _album = _com.objectForKey("album") as! NSDictionary
+        
+        print("收藏相册单条信息：",_album)
+        
+        let _user:NSDictionary = _album.objectForKey("author") as! NSDictionary
         
         
         cell = tableView.dequeueReusableCellWithIdentifier("CollectItem") as? CollectItem
@@ -300,13 +306,25 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         cell!._delegate=self
         
         
-        cell!._userId = (_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userId") as? String
-        cell!._setUserImge((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userImg") as! NSDictionary)
-        cell!._setAlbumTitle((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("title") as! String,__num: 19)
-        cell!._setDescription((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("description") as! String)
-        cell!._setUpdateTime("1小时")
-        cell!._setUserName((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("userName") as! String)
-        cell!._setPic((_dataArray.objectAtIndex(indexPath.row) as? NSDictionary)?.objectForKey("cover") as! NSDictionary)
+        cell!._userId = _user.objectForKey("_id") as? String
+        cell!._setUserImge(MainInterface._userAvatar(_user))
+        
+        cell!._setDescription(_album.objectForKey("description") as! String)
+        cell!._setUpdateTime(CoreAction._dateDiff(_com.objectForKey("create_at") as! String))
+        cell!._setUserName(_user.objectForKey("nickname") as! String)
+        
+        
+//        cell!._setAlbumTitle(_album.objectForKey("title") as! String,__num: 19)
+//        if let _cover = _album.objectForKey("cover") as? NSDictionary{
+//            cell!._setPic(_cover)
+//        }else{
+//            let _pic:NSDictionary = NSDictionary(objects: ["no_cover","file"], forKeys: ["url","type"])
+//            cell!._setPic(_pic)
+//        }
+        
+        cell?._album = _album
+        cell?._getPics()
+        
         cell!._refreshView()
         //cell!._refreshView()
         return cell!
@@ -330,12 +348,23 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     func _viewAlbum(__albumIdex:Int) {
         
+        let _com = _dataArray.objectAtIndex(__albumIdex) as! NSDictionary
+        let _album = _com.objectForKey("album") as! NSDictionary
         
-        Social_Main._getPicsListAtAlbumId("00003", __block: { (array) -> Void in
-            let _controller:Social_pic = Social_pic()
-            _controller._showIndexAtPics(0, __array: array)
-            self.navigationController?.pushViewController(_controller, animated: true)
-            
+        Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { [weak self] (array) -> Void in
+            if array.count<=0{
+                print("没有图片")
+                return
+            }
+            print("获取图片成功",array)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if self != nil{
+                    let _controller:Social_pic = Social_pic()
+                    _controller._titleBase = _album.objectForKey("title") as! String
+                    _controller._showIndexAtPics(0, __array: array)
+                    self?.navigationController?.pushViewController(_controller, animated: true)
+                }
+            })
         })
         
         

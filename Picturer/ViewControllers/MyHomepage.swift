@@ -20,7 +20,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
     var _userId:String = "000001"
     var _userInfo:NSDictionary? //----用户信息
     
-    let _space:CGFloat=3 //---瀑布流的图片间隔
+    let _space:CGFloat=1.5 //---瀑布流的图片间隔
     
     var _signH:CGFloat?
     var _title_label:UILabel?
@@ -291,7 +291,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         
         
         //----切换展示方式按钮
-        _btn_changeShowType = UIButton(frame: CGRect(x: self.view.frame.width - 18 - Config._gap, y: 30, width: 18, height: 18))
+        _btn_changeShowType = UIButton(frame: CGRect(x: self.view.frame.width - 18 - Config._gap, y: 34, width: 18, height: 18))
         _btn_changeShowType?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         _topBar?.addSubview(_btn_changeShowType!)
         
@@ -617,7 +617,6 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             _btn_changeShowType?.hidden=false
             //_hasNewMessage = false
         }
-        
         _changeTo("pic")
     }
     
@@ -832,6 +831,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         //cell!._refreshView()
         return cell!
     }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print("选择")
+    }
     //------相册单元代理
     func _resized(__indexId: Int, __height: CGFloat) {
         //println("changeH")
@@ -1040,7 +1042,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         
         let _dict:NSDictionary = _dataArray.objectAtIndex(__index) as! NSDictionary
         MainInterface._collectAlbum(_dict.objectForKey("_id") as! String, __block: { (__dict) -> Void in
-            print("添加收藏成功：",__dict)
+            //print("添加收藏成功：",__dict)
         })
         _tableView?.reloadData() //--------使用在线接口时全部请求信息后侦听里面再重新加载
     }

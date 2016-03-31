@@ -58,13 +58,13 @@ class ContentEditer: UIViewController,UITextViewDelegate {
         _btn_cancel?.titleLabel?.font = Config._font_topButton
         
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(ContentEditer.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
         _btn_save?.setTitle("保存", forState: UIControlState.Normal)
         _btn_save?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
         _btn_save?.titleLabel?.font = Config._font_topButton
-        _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_save?.addTarget(self, action: #selector(ContentEditer.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 12, width: self.view.frame.width-100, height: 60))
@@ -139,7 +139,7 @@ class ContentEditer: UIViewController,UITextViewDelegate {
         
         
         
-        _tapRec=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+        _tapRec=UITapGestureRecognizer(target: self, action: #selector(ContentEditer.tapHander(_:)))
     }
     
     func _setupForSelecter(){
@@ -147,7 +147,7 @@ class ContentEditer: UIViewController,UITextViewDelegate {
         _whiteBg = UIView(frame: CGRect(x: 0, y: _topBar!.frame.height+_gap, width: self.view.frame.width, height: _lineNum*(45)))
         _whiteBg.backgroundColor = UIColor.whiteColor()
         
-        for var i:Int = 0;i<_selecterArray!.count+1; ++i{
+        for i:Int in 0 ..< _selecterArray!.count+1{
             let _line:UIView = UIView(frame: CGRect(x: 0, y: CGFloat(i)*45, width: self.view.frame.width, height: 0.5))
             _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
             _whiteBg.addSubview(_line)
@@ -155,7 +155,7 @@ class ContentEditer: UIViewController,UITextViewDelegate {
                 let _btn:UIButton = UIButton(frame: CGRect(x: 0, y: CGFloat(i)*45, width: self.view.frame.width, height:45))
                 _btn.tag = i
                 _btn.backgroundColor = UIColor.clearColor()
-                _btn.addTarget(self, action: "_btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
+                _btn.addTarget(self, action: #selector(ContentEditer._btnHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 _whiteBg.addSubview(_btn)
                 
                 let _label:UILabel = UILabel(frame: CGRect(x: Config._gap, y: CGFloat(i)*45, width: self.view.frame.width-Config._gap-26, height: 45))
@@ -164,7 +164,7 @@ class ContentEditer: UIViewController,UITextViewDelegate {
                 _label.backgroundColor = UIColor.clearColor()
                 _label.userInteractionEnabled = false
                 _label.textColor = Config._color_social_gray
-                _label.text = _selecterArray?.objectAtIndex(i) as! String
+                _label.text = _selecterArray?.objectAtIndex(i) as? String
                 _whiteBg.addSubview(_label)
                 
                 let _sign:UIImageView = UIImageView(frame: CGRect(x: self.view.frame.width-26, y: CGFloat(i)*45+18, width: 12.5, height: 9.5))
@@ -192,7 +192,7 @@ class ContentEditer: UIViewController,UITextViewDelegate {
     func _selectedAt(_tag:Int){
         _selectedIndex = _tag
         print(_selectedIndex)
-        for var i:Int = 0 ; i < _selecterArray!.count ; ++i{
+        for i:Int in 0  ..< _selecterArray!.count {
             
             if i == _selectedIndex{
                 _whiteBg.viewWithTag(_selectedTagFrom+i)?.hidden = false

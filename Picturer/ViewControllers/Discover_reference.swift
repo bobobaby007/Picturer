@@ -10,14 +10,14 @@ import Foundation
 import UIKit
 
 
-class Discover_reference: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDataSource, UITableViewDelegate{
+class Discover_reference: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDataSource, UITableViewDelegate,ReferenceAlbumItem_delegate{
     let _gap:CGFloat = 15
     let _gapH:CGFloat = 5
     let _sectionGap:CGFloat = 5
     let _barH:CGFloat = 64
     var _sliderH:CGFloat = 184.5
     var _sliderGapH:CGFloat = 12
-    let _space:CGFloat=3
+    let _space:CGFloat=1.5
     var _sliderShower:SliderShower?
     
     var _picW:CGFloat = 20
@@ -38,6 +38,8 @@ class Discover_reference: UIViewController,UICollectionViewDataSource,UICollecti
     
     var _sectionTitle:UILabel?
     
+    weak var _parentController:Discover_home?
+    
     var _btn_changeType:UIButton?
     override func viewDidLoad() {
         setup()
@@ -57,7 +59,7 @@ class Discover_reference: UIViewController,UICollectionViewDataSource,UICollecti
         
         
         _sectionTitle = UILabel(frame: CGRect(x: _gap, y: _gap, width: 100, height: 13))
-       _sectionTitle?.textColor = Config._color_social_gray
+        _sectionTitle?.textColor = Config._color_social_gray
         _sectionTitle?.font = Config._font_social_cell_name
         _sectionTitle?.userInteractionEnabled = false
         _sectionTitle?.backgroundColor = UIColor.clearColor()
@@ -180,7 +182,30 @@ class Discover_reference: UIViewController,UICollectionViewDataSource,UICollecti
         _refreshView()
     }
     
-    
+    //-----相册单元代理
+    func _viewAlbum(__albumIndex: Int) {
+        let _album:NSDictionary = _dataArray.objectAtIndex(__albumIndex) as! NSDictionary
+        Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { [weak self] (array) -> Void in
+            if array.count<=0{
+                print("没有图片")
+                return
+            }
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if self != nil{
+                    let _controller:Social_pic = Social_pic()
+                    _controller._titleBase = _album.objectForKey("title") as! String
+                    _controller._showIndexAtPics(0, __array: array)
+                    self?._parentController!.navigationController?.pushViewController(_controller, animated: true)
+                }
+            })
+            })
+
+    }
+    func _viewUser(__userId: String) {
+        let _contr:MyHomepage=MyHomepage()
+        _contr._userId = __userId
+        _parentController?.navigationController?.pushViewController(_contr, animated: true)
+    }
     
     //---table代理
     
@@ -200,11 +225,13 @@ class Discover_reference: UIViewController,UICollectionViewDataSource,UICollecti
     //---------
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let _dict:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
-        
+        //let _user:NSDictionary = _dict.objectForKey("author") as! NSDictionary
+        let _userId:String = _dict.objectForKey("author") as! String
+
         
         var cell:ReferenceAlbumItem?
         //cell = tableView.viewWithTag(100+indexPath.row) as? ReferenceAlbumItem
-        
+        cell?._indexId = indexPath.row
         
         
         cell = tableView.dequeueReusableCellWithIdentifier("ReferenceAlbumItem") as? ReferenceAlbumItem
@@ -214,21 +241,24 @@ class Discover_reference: UIViewController,UICollectionViewDataSource,UICollecti
         cell!.preservesSuperviewLayoutMargins = false
         cell!.layoutMargins = UIEdgeInsetsZero
         
+        cell?._delegate = self
+        //cell!._setUserImge(MainInterface._userAvatar(_user))
         
-        cell!._setUserImge(NSDictionary(objects: ["user_1.jpg","file"], forKeys: ["url","type"]))
-        cell!._setUserName("小小白")
         
         if let _title:String = _dict.objectForKey("title") as? String{
-            cell!._setAlbumTitle(_title)
+            cell?._titleStr = _title
         }else{
-            cell!._setAlbumTitle("")
+            cell?._titleStr = ""
         }
+        
         if let _cover:NSDictionary = _dict.objectForKey("cover") as? NSDictionary{
             cell!._setPic(_cover)
         }else{
             //cell!._setDescription("")
         }
         
+        cell?._userId = _userId
+        cell?._getUserInfo()
         
         
         return cell!
@@ -255,25 +285,37 @@ class Discover_reference: UIViewController,UICollectionViewDataSource,UICollecti
         default:
             break
         }
-        
-        
     }
-    
     //-----瀑布流代理
-    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return _dataArray.count
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let _album:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
         
+        Social_Main._getPicsListAtAlbumId(_album.objectForKey("_id") as? String, __block: { [weak self] (array) -> Void in
+            if array.count<=0{
+                print("没有图片")
+                return
+            }
+            //print("获取图片成功",array)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if self != nil{
+                    if self?._parentController != nil {
+                        let _controller:Social_pic = Social_pic()
+                        _controller._titleBase = _album.objectForKey("title") as! String
+                        _controller._showIndexAtPics(0, __array: array)
+                        self!._parentController!.navigationController?.pushViewController(_controller, animated: true)
+                    }
+                }
+            })
+        })
         
     }
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let identify:String = "PicsShowCell"
         let cell = self._imagesCollection?.dequeueReusableCellWithReuseIdentifier(
             identify, forIndexPath: indexPath) as! PicsShowCell
-        
-        
         let _dict:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
         
         

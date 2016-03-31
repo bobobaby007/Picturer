@@ -21,7 +21,7 @@ protocol Social_pic_delegate:NSObjectProtocol{
 class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate{
     let _barH:CGFloat = 64
     let _gap:CGFloat=15
-    let _space:CGFloat=2
+    let _space:CGFloat=1
     var _titleBase:String = "" //----标题文字
     
     var _setuped:Bool=false
@@ -150,7 +150,7 @@ class Social_pic: UIViewController,UIScrollViewDelegate,UICollectionViewDataSour
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         
-        _btn_moreAction=UIButton(frame:CGRect(x: self.view.frame.width-30, y: 30, width: 18, height: 18))
+        _btn_moreAction=UIButton(frame:CGRect(x: self.view.frame.width-30, y: 34, width: 18, height: 18))
         _btn_moreAction?.setImage(UIImage(named: "changeToCollect_icon.png"), forState: UIControlState.Normal)
         _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         _topBar?.addSubview(_btn_moreAction!)

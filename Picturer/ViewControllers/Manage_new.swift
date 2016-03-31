@@ -153,7 +153,8 @@ class Manage_new: UIViewController, ImagePickerDeletegate, UICollectionViewDeleg
         _desInput=UITextView(frame: CGRect(x: _gap, y: 6, width: self.view.frame.width-2*_gap, height: _desInputViewH-20))
         //_desInput?.text=_desPlaceHold
        _desInput?.textColor = Config._color_black_title
-        
+        _desInput?.textContainerInset = UIEdgeInsetsZero
+        _desInput?.textContainer.lineFragmentPadding = 0
         _desInput?.backgroundColor = UIColor.clearColor()
         _desInput?.font=UIFont.systemFontOfSize(16)
         //_desInput?.keyboardAppearance=UIKeyboardAppearance.Dark

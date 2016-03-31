@@ -60,7 +60,7 @@ class Inputer: UIView,UITextViewDelegate {
         self.backgroundColor = UIColor.clearColor()
         //self.userInteractionEnabled=false
         
-        _tapC = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+        _tapC = UITapGestureRecognizer(target: self, action: #selector(Inputer.tapHander(_:)))
         
         _barView = UIView(frame: CGRect(x: 0, y: self.frame.height-_heightOfClosed!, width: self.frame.width, height: _heightOfClosed!))
         _barView?.backgroundColor = Config._color_bg_gray
@@ -95,7 +95,7 @@ class Inputer: UIView,UITextViewDelegate {
         _btn_send?.layer.masksToBounds = true
         _btn_send?.layer.borderWidth = 0.5
         _btn_send?.layer.borderColor = Config._color_social_gray_line.CGColor
-        _btn_send?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_send?.addTarget(self, action: #selector(Inputer.btnHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         _btn_send?.titleLabel?.font = Config._font_cell_time
         _btn_send?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         _btn_send?.setTitle("发送", forState: UIControlState.Normal)
@@ -176,8 +176,8 @@ class Inputer: UIView,UITextViewDelegate {
     override func willMoveToSuperview(newSuperview: UIView?) {
        // print(" i in")
         if newSuperview != nil{
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillAppear:"), name: UIKeyboardWillShowNotification, object: nil)
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide"), name: UIKeyboardWillHideNotification, object: nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Inputer.keyboardWillAppear(_:)), name: UIKeyboardWillShowNotification, object: nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Inputer.keyboardWillHide), name: UIKeyboardWillHideNotification, object: nil)
         }
         
     }

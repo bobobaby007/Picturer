@@ -147,10 +147,12 @@ class Social_Main: AnyObject {
     //-----提取相册里的所有图片
     static func _getPicsListAtAlbumId(__albumId:String?,__block:(NSArray)->Void){
         MainInterface._getImagesOfAlbum(__albumId!) { (__dict) -> Void in
-            //print(__dict)
+            print(__dict)
             if __dict.objectForKey("recode") as! Int == 200{
                 let images:NSArray = __dict.objectForKey("list") as! [NSDictionary]
                 __block(images)
+            }else{
+                print(__dict.objectForKey("reason"))
             }
         }
     }
@@ -220,7 +222,7 @@ class Social_Main: AnyObject {
             print(__dict)
             if __dict.objectForKey("recode") as! Int == 200{
                 let _dict:NSDictionary = __dict.objectForKey("info") as! NSDictionary
-                let _outDict:NSDictionary = NSDictionary(objects: [_dict.objectForKey("comments") as! NSArray,_dict.objectForKey("likes") as! NSArray], forKeys: ["comment","like"])
+                let _outDict:NSDictionary = NSDictionary(objects: [_dict.objectForKey("comment") as! NSArray,_dict.objectForKey("like") as! NSArray], forKeys: ["comment","like"])
                 __block(_outDict)
             }
         }
@@ -440,7 +442,7 @@ class Social_Main: AnyObject {
     }
     //-----提取热门图册
     static func _getHotAlbums(__block:(NSArray)->Void){
-        MainInterface._getAlbumListOfUser(MainInterface._uid) { (__dict) -> Void in
+        MainInterface._getAlbumListOfUser("569602ec30765c8f0c3909d8") { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 let ablums:NSArray = __dict.objectForKey("list") as! [NSDictionary]
                 __block(ablums)
@@ -603,22 +605,26 @@ class Social_Main: AnyObject {
                 for var i:Int = 0; i<_arr.count;++i{
                     let _com:NSDictionary = _arr.objectAtIndex(i) as! NSDictionary
                     if let _album = _com.objectForKey("album") as? NSDictionary{
-                        let _user:NSDictionary = _album.objectForKey("author") as! NSDictionary
                         
-                        let _dict:NSMutableDictionary = NSMutableDictionary()
+                        _array.addObject(_com)
                         
                         
-                        if let _cover = _album.objectForKey("cover") as? NSDictionary{
-                           _dict.setObject(_cover, forKey: "cover")
-                        }else{
-                            let _pic:NSDictionary = NSDictionary(objects: ["no_cover","file"], forKeys: ["url","type"])
-                            _dict.setObject(_pic, forKey: "cover")
-                        }
-                        _dict.setObject(MainInterface._userAvatar(_user), forKey: "userImg")
-                        _dict.setObject(_user.objectForKey("nickname") as! String, forKey: "userName")
-                        _dict.setObject(_album.objectForKey("title") as! String, forKey: "title")
-                        _dict.setObject(_album.objectForKey("description") as! String, forKey: "description")
-                        _array.addObject(_dict)
+//                        let _user:NSDictionary = _album.objectForKey("author") as! NSDictionary
+//                        
+//                        let _dict:NSMutableDictionary = NSMutableDictionary()
+//                        
+//                        
+//                        if let _cover = _album.objectForKey("cover") as? NSDictionary{
+//                           _dict.setObject(_cover, forKey: "cover")
+//                        }else{
+//                            let _pic:NSDictionary = NSDictionary(objects: ["no_cover","file"], forKeys: ["url","type"])
+//                            _dict.setObject(_pic, forKey: "cover")
+//                        }
+//                        _dict.setObject(MainInterface._userAvatar(_user), forKey: "userImg")
+//                        _dict.setObject(_user.objectForKey("nickname") as! String, forKey: "userName")
+//                        _dict.setObject(_album.objectForKey("title") as! String, forKey: "title")
+//                        _dict.setObject(_album.objectForKey("description") as! String, forKey: "description")
+//                        _array.addObject(_dict)
                     }
                     
                 }

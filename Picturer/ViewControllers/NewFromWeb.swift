@@ -30,6 +30,7 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
     var _btn_cancel:UIButton?
     var _btn_save:UIButton?
     
+    var _searchBarH:CGFloat = 43
     
     var _btn_close:UIButton?
     
@@ -45,7 +46,7 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
     var _btn_getImages:UIButton?
     var _btn_goForward:UIButton?
     var _btn_goBack:UIButton?
-    
+    var _btn_refresh:UIButton?
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -59,19 +60,20 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
         _searchBar.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: _barH)
         _searchBar.backgroundColor = UIColor.blackColor()
         
-        _btn_cancel=UIButton(frame:CGRect(x: _gap, y: (_barH-15)/2+12, width: 15, height: 15))
+        _btn_cancel=UIButton(frame:CGRect(x: self.view.frame.width - 16 - Config._gap, y: (_barH-15)/2+11, width: 15, height: 15))
         _btn_cancel?.setImage(UIImage(named: "icon_close.png"), forState: UIControlState.Normal)
         _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
 
         
-        let _searchLableV:UIView = UIView(frame: CGRect(x: _btn_cancel!.frame.width + 2*_gap, y: (_barH-28)/2+12, width: self.view.frame.width-7.5-2*_gap-_btn_cancel!.frame.width, height: 28))
+        let _searchLableV:UIView = UIView(frame: CGRect(x: 44, y: 30, width: self.view.frame.width-44-44, height: 25))
         _searchLableV.backgroundColor = UIColor.whiteColor()
         _searchLableV.layer.cornerRadius=5
         
-        //        let _icon:UIImageView = UIImageView(image: UIImage(named: "search_icon.png"))
-        //        _icon.frame=CGRect(x: _gap, y: 10, width: 13, height: 13)
+        _btn_refresh=UIButton(frame:CGRect(x: _searchLableV.frame.width - 13 - 5, y: 4.5, width: 13, height: 15))
+        _btn_refresh?.setImage(UIImage(named: "refresh.png"), forState: UIControlState.Normal)
+        _btn_refresh?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        _searchT.frame = CGRect(x: _gap, y: 0, width: self.view.frame.width-7.5-2*_gap-_btn_cancel!.frame.width-2*_gap, height: _searchLableV.frame.height)
+        _searchT.frame = CGRect(x: 7.5, y: -2, width: _searchLableV.frame.width-2*7.5-10, height: _searchBarH-14)
         _searchT.addTarget(self, action: "textDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
         _searchT.attributedPlaceholder = NSAttributedString(string:"输入网址",
             attributes:[NSForegroundColorAttributeName: Config._color_gray_time])
@@ -91,10 +93,12 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
         _btn_getImages?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         //        _searchLableV.addSubview(_icon)
         
-        _btn_goBack = UIButton(frame: CGRect(x: 10, y: _searchBar.frame.origin.y+_searchBar.frame.height+10, width: 20, height: 20))
-        _btn_goBack?.backgroundColor = Config._color_yellow
-        _btn_goBack?.setTitle("<", forState: UIControlState.Normal)
+        
+        _btn_goBack=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
+        _btn_goBack?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         _btn_goBack?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_goBack?.alpha = 0.5
+        _btn_goBack?.enabled = false
         
         _btn_goForward = UIButton(frame: CGRect(x: 40, y: _searchBar.frame.origin.y+_searchBar.frame.height+10, width: 20, height: 20))
         _btn_goForward?.backgroundColor = Config._color_yellow
@@ -102,6 +106,8 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
         _btn_goForward?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         _searchLableV.addSubview(_searchT)
+        _searchLableV.addSubview(_btn_refresh!)
+        
         _searchBar.addSubview(_searchLableV)
         _searchBar.addSubview(_btn_cancel!)
         
@@ -144,17 +150,21 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
         print(_searchT.text)
     }
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        //_pickFromUrl(textField.text!)
-        
-        var _str:String = textField.text!
+        _gotoUrl(_searchT.text!)
+        return true
+    }
+    
+    func _gotoUrl(__str:String){
+        var _str:String = __str
         
         let range = _str.rangeOfString("http")
         if range?.count==nil{
             _str = "http://"+_str
         }
-        
         _webView?.loadRequest(NSURLRequest(URL: NSURL(string: _str)!))
-        return true
+        
+        _btn_goBack?.alpha = 1
+        _btn_goBack?.enabled = true
     }
     
     func _pickFromUrl(__url:String){
@@ -196,7 +206,15 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
             self.navigationController?.popViewControllerAnimated(true)
             break
         case _btn_goBack!:
-            _webView?.goBack()
+            
+            
+            if ((_webView?.canGoBack) != nil){
+                _webView?.goBack()
+            }else{
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+            
+            
             break
         case _btn_goForward!:
             print("gogooooo")
@@ -204,6 +222,9 @@ class NewFromWeb:UIViewController,UITextFieldDelegate,UINavigationControllerDele
             break
         case _btn_getImages!:
             _pickFromUrl(_searchT.text!)
+            break
+        case _btn_refresh!:
+            _webView?.reload()
             break
         default:
             break

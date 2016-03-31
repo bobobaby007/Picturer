@@ -39,7 +39,7 @@ class ReferenceAlbumItem:  UITableViewCell,UITextViewDelegate{
     var _albumTitle_labelV:UIView?
     var _albumTitle_label:UITextView?
     
-    var _titleStr:String?
+    var _titleStr:String? = ""
     
     
     weak var _delegate:ReferenceAlbumItem_delegate?
@@ -82,7 +82,7 @@ class ReferenceAlbumItem:  UITableViewCell,UITextViewDelegate{
         
         _blackBg = UIView(frame: CGRect(x: 0, y: 0, width: _defaultSize!.width, height: _defaultSize!.height))
         _blackBg?.backgroundColor = UIColor(white: 0, alpha: 0.1)
-        
+        _blackBg?.userInteractionEnabled = false
         
         
         
@@ -123,7 +123,32 @@ class ReferenceAlbumItem:  UITableViewCell,UITextViewDelegate{
         self.addSubview(_userImg!)
         self.addSubview(_userBtn!)
         _albumTitle_labelV?.addSubview(_albumTitle_label!)
+        
+        
+        
+        
         _setuped=true
+    }
+    
+    func _getUserInfo(){
+        Social_Main._getUserProfileAtId(_userId!) {[weak self] (__dict) -> Void in
+            if self != nil{
+                print("用户信息：",__dict)
+                self!._user = __dict
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self?._getUserInfoOk()
+                })
+                
+            }
+            
+        }
+    }
+    func _getUserInfoOk(){
+        //_setAlbumTitle(_titleStr!)
+        _setUserImge(MainInterface._userAvatar(_user!))
+        _setUserName( _user?.objectForKey("nickname") as! String)
+        
+        _setAlbumTitle(_titleStr!)
     }
     
     //---设定图片
@@ -176,6 +201,7 @@ class ReferenceAlbumItem:  UITableViewCell,UITextViewDelegate{
             return
         }
     }
+    
     override func removeFromSuperview() {
         //print("out")
        
@@ -185,12 +211,20 @@ class ReferenceAlbumItem:  UITableViewCell,UITextViewDelegate{
         if _albumTitle_label == nil{
             return
         }
+        _titleStr = __str
+        
         if __str==""{
             _albumTitle_label?.text="未命名图册"
         }else{
-            _albumTitle_label?.text=__str
+            
+            print(_albumTitle_label)
+            _albumTitle_label!.text=__str
+            
         }
+        
+        
         let _size:CGSize = _albumTitle_label!.sizeThatFits(CGSize(width: _defaultSize!.width-2*_gap, height: CGFloat.max))
+       
         var _lineNum:CGFloat = 1
         if _size.height>24{
             _lineNum = 2

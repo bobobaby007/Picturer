@@ -291,11 +291,11 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             _heighArray?.addObject(_defaultH)
             //-----评论列表
             
-            self._commentsArray?.addObject(_dict.objectForKey("comments") as! NSArray)
+            self._commentsArray?.addObject(_dict.objectForKey("comment") as! NSArray)
             
             
             //---点赞数
-            self._likeArray?.addObject((_dict.objectForKey("likes") as! NSArray).count)
+            self._likeArray?.addObject((_dict.objectForKey("like") as! NSArray).count)
             
             //----是否点过赞
             
@@ -377,7 +377,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         let _pics:NSArray = _dict.objectForKey("ids") as! NSArray
     
         
-        //print("朋友的单条信息：",_dict)
+        print("朋友的单条信息：",_dict)
         
         
         
@@ -440,9 +440,9 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         
         //cell!.tag = 100+indexPath.row
-        if let _comments:NSArray = _dict.objectForKey("comments") as? NSArray{
-            cell!._setComments(_comments, __allNum: _comments.count)
-            //cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
+        if let _comments:NSArray = _dict.objectForKey("comment") as? NSArray{
+            //cell!._setComments(_comments, __allNum: _comments.count)
+            cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
         }
         
         //cell!._refreshView()
@@ -497,9 +497,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             _controller._album = _album
             _controller._user = _dict.objectForKey("author") as? NSDictionary
             self.navigationController?.pushViewController(_controller, animated: true)
-            
         }
-        
     }
     func _viewPicsAtIndex(__array: NSArray, __index: Int) {
         

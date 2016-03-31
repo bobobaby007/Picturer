@@ -18,7 +18,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
     var _tab_reference:UIButton = UIButton()
     var _tab_search:UIButton = UIButton()
     
-    
+    let _space:CGFloat = 1.5
     var _userArray:NSArray = NSArray()
     var _albumArray:NSArray = []
     var _userTableView:UITableView?
@@ -31,28 +31,37 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
         self.backgroundColor = UIColor.whiteColor()
         
         _tab_reference = UIButton()
+        _tab_reference.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
+        _tab_reference.titleLabel?.font = Config._font_social_cell_name
+    
         _tab_reference.setTitle("图册", forState: UIControlState.Normal)
-        _tab_reference.frame=CGRect(x: -1, y: -1, width: frame.width/2+1, height: 40)
-        _tab_reference.layer.borderColor = UIColor(white: 0.8, alpha: 1).CGColor
-        _tab_reference.layer.borderWidth = 1
+        _tab_reference.frame=CGRect(x: 0, y: 0, width: frame.width/2, height: 40)
+        _tab_reference.layer.borderColor = Config._color_gray_subTitle.CGColor
         _tab_reference.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
         
         _tab_search = UIButton()
         _tab_search.setTitle("用户", forState: UIControlState.Normal)
-        _tab_search.frame=CGRect(x: frame.width/2-1, y: -1, width: frame.width/2+2, height: 40)
-        _tab_search.layer.borderColor = UIColor(white: 0.8, alpha: 1).CGColor
-        _tab_search.layer.borderWidth = 1
+        _tab_search.setTitleColor(Config._color_social_gray, forState: UIControlState.Normal)
+        _tab_search.titleLabel?.font = Config._font_social_cell_name
+        _tab_search.frame=CGRect(x: frame.width/2, y: 0, width: frame.width/2, height: 40)
+        _tab_search.layer.borderColor = Config._color_gray_subTitle.CGColor
         _tab_search.addTarget(self, action: Selector("clickAction:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
         
         _tabBtnView = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 40))
         _tabBtnView.layer.masksToBounds = true
         _tabBtnView.addSubview(_tab_reference)
         _tabBtnView.addSubview(_tab_search)
         
+        var line:UIView = UIView(frame: CGRect(x: 0, y: 40-0.3, width: frame.width, height: 0.3))
+        line.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        _tabBtnView.addSubview(line)
         
-        let  _space:CGFloat = 2
+        line = UIView(frame: CGRect(x: (frame.width-0.3)/2, y: 0, width: 0.5, height: 40))
+        line.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        _tabBtnView.addSubview(line)
+        
         let _imagesW:CGFloat = (frame.width-2*_space)/3
-        
         
         _collectionLayout = UICollectionViewFlowLayout()
         _collectionLayout?.minimumInteritemSpacing=_space
@@ -69,7 +78,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
         
         
         _userTableView = UITableView(frame: CGRect(x: 0, y: 40, width: frame.width, height: frame.height-40))
-        _userTableView?.registerClass(SearchResult_user_Cell.self, forCellReuseIdentifier: "SearchResult_user_Cell")
+        _userTableView?.registerClass(FocusListCell.self, forCellReuseIdentifier: "FocusListCell")
         
         _userTableView?.dataSource = self
         _userTableView?.delegate = self
@@ -132,15 +141,57 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell:SearchResult_user_Cell = tableView.dequeueReusableCellWithIdentifier("SearchResult_user_Cell", forIndexPath: indexPath) as! SearchResult_user_Cell
-        cell.setup(self.frame.width)
-        cell._setUserImg((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("userImg") as! NSDictionary)
         
-        cell._setName((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("userName") as! String)
-        cell._setDes((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("sign") as! String)
+        let cell:FocusListCell = tableView.dequeueReusableCellWithIdentifier("FocusListCell", forIndexPath: indexPath) as! FocusListCell
+        //if cell.respondsToSelector("setSeparatorInset:") {
+        if indexPath.row == _userArray.count - 1 {
+            cell.separatorInset = UIEdgeInsetsMake(0, -10, 0, 0)
+        }else{
+            cell.separatorInset = UIEdgeInsetsMake(0, 10, 0, 0)
+        }
+        
+        //}
+        //if cell.respondsToSelector("setLayoutMargins:") {
+        cell.layoutMargins = UIEdgeInsetsZero
+        //}
+        //if cell.respondsToSelector("setPreservesSuperviewLayoutMargins:") {
+        cell.preservesSuperviewLayoutMargins = false
+        //}
+        
+        cell._index = indexPath.row
+        if let _user = _userArray.objectAtIndex(indexPath.row) as? NSDictionary{
             
-        
+           
+            cell._setFocusType(0)
+            
+            cell._setPic(MainInterface._userAvatar(_user))
+            cell._setTitle(_user.objectForKey("userName") as! String)
+            
+            
+            //---to do list
+            
+            //cell._setDes(_user.objectForKey("sign") as! String)
+            
+            if indexPath.row%3 == 1{
+                cell._setDes("picturerId")
+            }else{
+                cell._setDes("")
+            }
+            
+        }
         return cell
+        
+        
+//        
+//        let cell:SearchResult_user_Cell = tableView.dequeueReusableCellWithIdentifier("SearchResult_user_Cell", forIndexPath: indexPath) as! SearchResult_user_Cell
+//        cell.setup(self.frame.width)
+//        cell._setUserImg((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("userImg") as! NSDictionary)
+//        
+//        cell._setName((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("userName") as! String)
+//        cell._setDes((_userArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("sign") as! String)
+//            
+//        
+//        return cell
     }
     
     
@@ -160,6 +211,7 @@ class SearchResult: UIView,UITableViewDataSource,UITableViewDelegate,UICollectio
         _picV._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         _picV.maximumZoomScale = 1
         _picV.minimumZoomScale = 1
+        _picV.userInteractionEnabled = false
         
         _picV._setPic(((_albumArray.objectAtIndex(indexPath.item) as! NSDictionary).objectForKey("pic") as! NSDictionary), __block: { (_dict) -> Void in
             

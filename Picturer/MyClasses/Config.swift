@@ -42,7 +42,7 @@ class Config:AnyObject {
     static let _font_topbarTitle:UIFont = UIFont(name: "PingFangSC-Medium", size: 17)!// UIFont.systemFontOfSize(17, weight: 1)//----标题字体
     static let _font_topbarTitle_at_one_pic:UIFont = UIFont(name: "PingFangSC-Medium", size: 15)!//----图片详情标题字体
     static let _font_topButton:UIFont = UIFont(name: "PingFangSC-Medium", size: 16)!//UIFont.systemFontOfSize(16, weight: 1)//----导航条按钮标题
-    static let _font_input:UIFont = UIFont(name: "PingFangSC-Regular", size: 15)!//UIFont.systemFontOfSize(15, weight: 0)//----输入字体
+    static let _font_input:UIFont = UIFont(name: "PingFangSC-Regular", size: 13)!//UIFont.systemFontOfSize(15, weight: 0)//----输入字体
     
     static let _font_description_at_bottom:UIFont = UIFont(name: "PingFangSC-Light", size: 14)!//----单张图片底部描述字体
     
@@ -63,6 +63,9 @@ class Config:AnyObject {
     static let _font_social_cell_name:UIFont = UIFont(name: "PingFangSC-Regular", size: 14)!//社交页面列表用户名
     
     static let _font_social_button_2:UIFont = UIFont(name: "PingFangSC-Regular", size: 15)!//社交页面图册、关注、被关注按钮文字
+    
+    static let _font_social_button_3:UIFont = UIFont(name: "PingFangSC-Medium", size: 15)!//通讯里切换标题
+    
     static let _font_social_album_title:UIFont = UIFont(name: "PingFangSC-Regular", size: 17)!//社交页面图册标题
     static let _font_social_album_description:UIFont = UIFont(name: "PingFangSC-Regular", size: 15)!//社交页面图册描述
     static let _font_social_sex_n_city:UIFont = UIFont(name: "PingFangSC-Regular", size: 10.5)!//社交页性别和城市
