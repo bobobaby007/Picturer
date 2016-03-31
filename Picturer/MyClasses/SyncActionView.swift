@@ -42,12 +42,12 @@ class SyncActionView: UIViewController, UITableViewDataSource, UITableViewDelega
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(SyncActionView.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         _btn_moreAction=UIButton(frame:CGRect(x: self.view.frame.width-50, y: _barH-44, width: 50, height: 44))
         _btn_moreAction?.setImage(UIImage(named: "edit.png"), forState: UIControlState.Normal)
-        _btn_moreAction?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_moreAction?.addTarget(self, action: #selector(SyncActionView.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))

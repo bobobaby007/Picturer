@@ -50,7 +50,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(MessageList.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 20, width: self.view.frame.width-100, height: _barH-20))
@@ -65,7 +65,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
         _btn_deleteAll=UIButton(frame:CGRect(x: self.view.frame.width - 60, y: 20, width: 60, height: 44))
         _btn_deleteAll?.setTitle("清空", forState: UIControlState.Normal)
         _btn_deleteAll?.titleLabel?.font = Config._font_topbarTitle
-        _btn_deleteAll?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_deleteAll?.addTarget(self, action: #selector(MessageList.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         _topBar?.addSubview(_btn_deleteAll!)
         
         
@@ -159,7 +159,7 @@ class MessageList: UIViewController, UITableViewDelegate,UITableViewDataSource,M
     func _dealWidthDatas(__array:NSArray){
         self._dataArray = NSMutableArray(array: __array)
         self._heightArray = NSMutableArray()
-        for var i:Int = 0 ;i < __array.count; ++i{
+        for var i:Int = 0 ;i < __array.count; i += 1{
             _heightArray?.addObject(MessageList_Cell._getHeihtWidthDict(_dataArray!.objectAtIndex(i) as! NSDictionary,_defaultWidth: self.view.frame.width))
         }
         

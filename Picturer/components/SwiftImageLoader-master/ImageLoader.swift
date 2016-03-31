@@ -23,7 +23,7 @@ class ImageLoader {
         if _loadingTasks == nil{
             return
         }
-        for var i:Int = 0; i < _loadingTasks!.count ; ++i{
+        for i:Int in 0 ..< _loadingTasks!.count {
             let _task:NSURLSessionDataTask = _loadingTasks!.objectAtIndex(i) as! NSURLSessionDataTask
             if _task.currentRequest?.URL?.absoluteString == urlString{
                 _loadingTasks!.removeObjectAtIndex(i)
@@ -35,7 +35,7 @@ class ImageLoader {
         if _loadingTasks == nil{
             return
         }
-        for var i:Int = 0; i < _loadingTasks!.count ; ++i{
+        for i:Int in 0 ..< _loadingTasks!.count {
             let _task:NSURLSessionDataTask = _loadingTasks!.objectAtIndex(i) as! NSURLSessionDataTask
             _task.cancel()
         }

@@ -50,6 +50,11 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     
     var _setuped:Bool = false
     
+    //---下来提示
+    var _downTips:DownTips?
+    
+    var _cellH:CGFloat = 91
+    
     override func viewDidLoad() {
         
         //        var _album:AlbumObj=AlbumObj()
@@ -164,17 +169,24 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             _btn_new.backgroundColor = Config._color_yellow_bar
         }
         
+        
         _setuped = true
+        
+        
     }
     func _refresh(){
         
         
         
         _tableView.reloadData()
+        
+       // _showTips()
+        
     }
     @IBAction func btnHander(btn:UIButton){
         switch btn{
         case _btn_new:
+            
             if _shareAlert != nil && _shareAlert!._isOpened{
                 _shareAlert!._close()
                 return
@@ -285,6 +297,9 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
     }
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        
+        
         if _isOuting{
             return
         }
@@ -368,7 +383,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         //return _tableView.bounds.size.height/5
         
-        return 91
+        return _cellH
     }
     
     
@@ -396,7 +411,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         let cell:AlbumListCell=_tableView.dequeueReusableCellWithIdentifier("alum_cell", forIndexPath: indexPath) as! AlbumListCell
         
-        cell.setUp(CGSize(width: self.view.frame.width, height: 91))
+        cell.setUp(CGSize(width: self.view.frame.width, height: _cellH))
         
         //cell.separatorInset = UIEdgeInsets(top: 0, left: -1, bottom: 0, right: 0)
         cell.preservesSuperviewLayoutMargins = false
@@ -799,8 +814,19 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
         
     }
-    
-    
+    //---展示下拉提示
+    func _showTips()->Void {
+        if _downTips == nil{
+            _downTips = DownTips(frame: CGRect(x: 0, y: Config._barH, width: self.view.frame.width, height: _cellH+300))
+            
+        }
+        self.view.insertSubview(_downTips!, belowSubview: _bottomView)
+        //self.view.addSubview(_downTips!)
+        _downTips?._show()
+    }
+    func _hideTips() -> Void {
+        
+    }
     
     override func viewDidAppear(animated: Bool) {
         //UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent

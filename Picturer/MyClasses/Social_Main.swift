@@ -156,13 +156,13 @@ class Social_Main: AnyObject {
             }
         }
     }
-    //-----提取相册详情－－－包含评论----*取消
-    static func _getAlbumDetail(__albumId:String?,__block:(NSArray)->Void){
+    //-----提取相册详情－－－包含5条评论
+    static func _getAlbumDetail(__albumId:String?,__block:(NSDictionary)->Void){
         MainInterface._getAlbumDetail(__albumId!) { (__dict) -> Void in
             print(__dict)
             if __dict.objectForKey("recode") as! Int == 200{
-                let images:NSArray = [__dict.objectForKey("albuminfo") as! NSDictionary]
-                __block(images)
+                
+                __block(__dict.objectForKey("albuminfo") as! NSDictionary)
             }
         }
     }
@@ -374,40 +374,7 @@ class Social_Main: AnyObject {
         // println(response.text)
         block(_array)
     }
-    //-----提取某个相册评论－－－－－－//－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－过渡方法
-    static func _getCommentsOfAlubm(__albumId:String?,block:(NSArray)->Void){
-        let _array:NSMutableArray = NSMutableArray()
-        
-        //block(_array)
-        //return
-        
-        
-        
-        var _n:Int = Int(__albumId!)!
-        if _n < 1{
-            _n = 1
-        }
-        //_n = 0
-        for var i:Int = 0; i <= (_n-1);++i{
-            let _comment:String = _testComments?.objectAtIndex(random()%31) as! String
-            let _commentDict:NSMutableDictionary = NSMutableDictionary(objects: ["骑士","小小白","569601da109391cc5fcb5548","569602ec30765c8f0c3909d8",_comment,"15-10-9"], forKeys: ["from_userName","to_userName","from_userId","to_userId","comment","time"])
-            //            if i==0{
-            //                _commentDict.setValue("", forKey: "comment")
-            //                _commentDict.setValue("", forKey: "to_userName")
-            //                _commentDict.setValue("", forKey: "to_userId")
-            //            }
-            
-            let _pic:NSDictionary = NSDictionary(objects: ["user_"+String(i%6+1)+".jpg","file"], forKeys: ["url","type"])
-            _commentDict.setValue(_pic, forKey: "userImg")
-            
-            _array.addObject(_commentDict)
-            
-        }
-        // println(response.text)
-        
-        
-        block(_array)
-    }
+    
     
     //----获取点赞列表－－－*取消
     static func _getLikesOfAlubm(__albumId:String?,block:(NSArray)->Void){

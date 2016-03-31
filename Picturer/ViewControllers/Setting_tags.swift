@@ -52,14 +52,14 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
         _btn_cancel?.titleLabel?.font=Config._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
         _btn_cancel?.titleLabel?.font = Config._font_topButton
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(Setting_tags.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 6, width: 40, height: 62))
         _btn_save?.titleLabel?.font=Config._font_topButton
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
         _btn_save?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
         _btn_save?.titleLabel?.font = Config._font_topButton
-        _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_save?.addTarget(self, action: #selector(Setting_tags.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.textColor=UIColor.whiteColor()
@@ -117,7 +117,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
        
     }
     func _defaultTagsIn(){
-        for var i:Int=0; i<_defaultTags.count; ++i{
+        for i:Int in 0 ..< _defaultTags.count{
             
             let _gapX:CGFloat = 10
             let _width:CGFloat = (self.view.frame.width - 2*_gap - 4*_gapX)/5
@@ -135,7 +135,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
             
             _text.userInteractionEnabled=true
             
-            let _tapRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+            let _tapRec:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(Setting_tags.tapHander(_:)))
             _text.addGestureRecognizer(_tapRec)
             
             
@@ -153,7 +153,7 @@ class Setting_tags: UIViewController,UITextFieldDelegate {
         if _tags == nil{
             return
         }
-        for var i:Int=0; i<_tags!.count; ++i{
+        for var i:Int=0; i<_tags!.count; i += 1{
             _tagPutIn(_tags!.objectAtIndex(i) as! String)
         }
     }

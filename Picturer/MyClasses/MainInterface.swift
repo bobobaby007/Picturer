@@ -429,7 +429,7 @@ class MainInterface: AnyObject {
     //----获取图册详情---需要接口确认----*取消
     static func _getAlbumDetail(__albumId:String,__block:(NSDictionary)->Void){
         CoreAction._sendToUrl("token=\(_token)", __url: _basicDoman+_version+"/"+_URL_Album_Info+"\(__albumId)") { (__dict) -> Void in
-            print(__dict)
+            print("图册详情",__dict)
             __block(__dict)
         }
     }

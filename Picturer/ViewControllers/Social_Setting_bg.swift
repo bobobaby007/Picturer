@@ -50,7 +50,7 @@ class Social_Setting_bg: UIViewController,ContentEditer_delegate{
         
         //---
         
-        for var i:Int = 0;i<_setion_1_titles.count+1; ++i{
+        for i:Int in 0 ..< _setion_1_titles.count+1{
             let _line:UIView = UIView(frame: CGRect(x: 0, y: Config._barH+_gap+CGFloat(i)*_buttonH-0.5, width: self.view.frame.width, height: 0.3))
             _line.backgroundColor = UIColor(white: 0.8, alpha: 1)
             self.view.addSubview(_line)
@@ -60,7 +60,7 @@ class Social_Setting_bg: UIViewController,ContentEditer_delegate{
                 let _button:UIButton = UIButton(frame: CGRect(x: 0, y: Config._barH+_gap+CGFloat(i)*_buttonH, width: self.view.frame.width, height: _buttonH))
                 _button.tag = i
                 _button.backgroundColor = UIColor.whiteColor()
-                _button.addTarget(self, action: "_btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
+                _button.addTarget(self, action: #selector(Social_Setting_bg._btnHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 self.view.addSubview(_button)
                 
                 let _label:UILabel = UILabel(frame: CGRect(x: _gap, y: Config._barH+_gap+CGFloat(i)*_buttonH, width: self.view.frame.width-2*_gap, height: _buttonH))
@@ -86,7 +86,7 @@ class Social_Setting_bg: UIViewController,ContentEditer_delegate{
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(Social_Setting_bg.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 12, width: self.view.frame.width-100, height: 60))
         _title_label?.textColor=UIColor.whiteColor()
@@ -99,8 +99,8 @@ class Social_Setting_bg: UIViewController,ContentEditer_delegate{
         _topBar?.addSubview(_btn_cancel!)
         _topBar?.addSubview(_title_label!)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardHander:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardHander:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Social_Setting_bg.keyboardHander(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Social_Setting_bg.keyboardHander(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
         //_txt_mobil?.becomeFirstResponder()
         

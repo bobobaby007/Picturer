@@ -201,8 +201,6 @@ class ContentEditer: UIViewController,UITextViewDelegate {
             }
         }
     }
-    
-    
     //----文字输入代理
     func textViewDidBeginEditing(textView: UITextView) {
         //        if _desInput?.text == _desPlaceHold{

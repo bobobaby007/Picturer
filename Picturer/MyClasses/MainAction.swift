@@ -618,7 +618,7 @@ class MainAction: AnyObject {
                 let _img:NSDictionary = _images.objectAtIndex(_d) as! NSDictionary
                 if let _id:String = _img.objectForKey("_id") as? String{
                     if _id == __id{
-                        return NSIndexPath(forRow: i, inSection: _d)
+                        return NSIndexPath(forRow: _d, inSection: i)
                     }
                 }
             }
@@ -632,6 +632,7 @@ class MainAction: AnyObject {
         let _images:NSMutableArray = NSMutableArray(array: _album.objectForKey("images") as! NSArray)
         let _img:NSMutableDictionary = NSMutableDictionary(dictionary: _images.objectAtIndex(index) as! NSDictionary)
 //        var _str:String = ""
+        print("图片修改前：",_img)
         for (key,value) in dict{
             //println(key,value)
 //            if String(key) == "title"{
@@ -642,6 +643,9 @@ class MainAction: AnyObject {
 //            }
             _img.setObject(value, forKey: key as! String)
         }
+        
+        print("图片修改后：",_img)
+        
 //        if _str != ""{
         
             //---先不同步到服务器
@@ -804,7 +808,9 @@ class MainAction: AnyObject {
                 let _pic:NSDictionary = _pics.objectAtIndex(p) as! NSDictionary
                 if let _id = _pic.objectForKey("_id") as? String{ //---有_id说明是已经在线存在的
                     if let _status = _pic.objectForKey("status") as? String{
+                        
                         if _status == "changed"{//-----修改图片时
+                            print("需要修改的图片：",_pic)
                             if _isFailed("changePic", __dict: _pic){ //--已经失败过一次
                                 continue
                             }
@@ -822,14 +828,17 @@ class MainAction: AnyObject {
                                 if let _picId = _pic.objectForKey("_id") as? String {
                                     MainInterface._changePic(_picId, __changeingStr:_str, __block: { (__dict) -> Void in
                                         if __dict.objectForKey("recode") as! Int == 200{
-                                            print("修改图片成功:",__dict)
+                                            print("修改图片提交成功:",__dict)
                                              let _indexPath = _getPathOfPicOnlineId(_pic.objectForKey("_id") as! String)
                                             print("获取到的图片路径：",_indexPath)
                                             if _indexPath.row != -1{
 //                                                let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: __dict.objectForKey("info") as! NSDictionary)
                                                 let _dict:NSDictionary = NSDictionary(object: "done", forKey: "status")
                                                 //_dict.setObject("done", forKey: "status")
+                                                print("完成图片修改:",__dict)
                                                 _changePicAtAlbum(_indexPath.row, albumIndex: _indexPath.section, dict: _dict)
+                                            }else{
+                                                _addToFailedList("changePic", __dict: _pic)
                                             }
                                             //
                                         }else{

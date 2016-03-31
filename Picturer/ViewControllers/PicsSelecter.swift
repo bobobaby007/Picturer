@@ -54,7 +54,7 @@ class PicsSelecter:UIViewController, UICollectionViewDelegate, UICollectionViewD
         _btn_cancel?.titleLabel?.textAlignment = NSTextAlignment.Left
         _btn_cancel?.titleLabel?.font=Config._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(PicsSelecter.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-40-_gap+3, y: 20, width: 40, height: _barH-20))
         _btn_save?.titleLabel?.textAlignment = NSTextAlignment.Right
@@ -62,7 +62,7 @@ class PicsSelecter:UIViewController, UICollectionViewDelegate, UICollectionViewD
         
         _btn_save?.setTitle("保存", forState: UIControlState.Normal)
         _btn_save?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
-        _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_save?.addTarget(self, action: #selector(PicsSelecter.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 10, width: self.view.frame.width-100, height: 64))
         
@@ -99,7 +99,7 @@ class PicsSelecter:UIViewController, UICollectionViewDelegate, UICollectionViewD
        
         
         self._images=[]
-        for var i:Int = 0;i < __images.count; ++i{
+        for var i:Int = 0;i < __images.count; i += 1{
             let _dict:NSMutableDictionary = NSMutableDictionary(dictionary: __images.objectAtIndex(i) as! NSDictionary )
             _dict.setObject(0, forKey: "selected")
             self._images?.addObject(_dict)
@@ -191,7 +191,7 @@ class PicsSelecter:UIViewController, UICollectionViewDelegate, UICollectionViewD
             
             let _c:Int = _images!.count
             
-            for var i=0; i<_c;++i{
+            for var i=0; i<_c;i += 1{
                 let _pic:NSDictionary = _images!.objectAtIndex(i) as! NSDictionary
                 
                 

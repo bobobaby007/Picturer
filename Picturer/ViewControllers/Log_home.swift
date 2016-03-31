@@ -30,14 +30,14 @@ class Log_home: UIViewController {
         _btn_signin?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
         _btn_signin?.titleLabel?.font = Config._font_loginButton
         _btn_signin?.setTitle("注册", forState: UIControlState.Normal)
-        _btn_signin?.addTarget(self, action: "_buttonHander:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_signin?.addTarget(self, action: #selector(Log_home._buttonHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_login = UIButton(frame: CGRect(x: 0, y: self.view.frame.height - _btnH, width: self.view.frame.width, height: _btnH))
         _btn_login?.backgroundColor = UIColor.whiteColor()
         _btn_login?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
         _btn_login?.titleLabel?.font = Config._font_loginButton
         _btn_login?.setTitle("登录", forState: UIControlState.Normal)
-        _btn_login?.addTarget(self, action: "_buttonHander:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_login?.addTarget(self, action: #selector(Log_home._buttonHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         self.view.addSubview(_btn_signin!)
         self.view.addSubview(_btn_login!)

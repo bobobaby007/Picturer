@@ -13,6 +13,7 @@ import UIKit
 
 class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate, PicAlbumMessageItem_delegate,MyAlerter_delegate{
     var _album:NSDictionary?
+    var _albumId:String?
     var _user:NSDictionary?
     var _pics:NSArray? = []
     var _comments:NSArray = []
@@ -46,8 +47,7 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
         UIApplication.sharedApplication().statusBarStyle=UIStatusBarStyle.LightContent
         
         setup()
-        ImageLoader.sharedLoader._removeAllTask()
-        _getDatas()
+       
     }
     
     func setup(){
@@ -108,27 +108,57 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
         
         _setuped=true
     }
+    //---获取相册详情
+    func _getAlbumDetail() -> Void {
+        if _album != nil{
+            self._getUserInfo()
+        }
+        return
+        Social_Main._getAlbumDetail(_album!.objectForKey("_id") as? String) { (__dict) -> Void in
+            self._album = __dict
+            self._getUserInfo()
+        }
+    }
+    
+    
+    //---获取用户信息
+    func _getUserInfo() -> Void {
+        if _user != nil{
+            
+            self._getPics()
+            return
+        }
+        Social_Main._getUserProfileAtId(_album!.objectForKey("author") as! String) { (__dict) in
+            self._user = __dict
+            
+            self._getPics()
+        }
+    }
     
     func _getDatas(){
-        print("需要的相册：",_album)
-        _getPics()
-        
-//       Social_Main._getAlbumDetail(_album?.objectForKey("_id") as! String) { (__array) -> Void in
-//            self._dataArray = __array
-//            dispatch_async(dispatch_get_main_queue(), {[weak self] () -> Void in
-//               self?._getPics()
-//            })
-//        }
+        _getAlbumDetail()
     }
     
     func _getPics(){
-        Social_Main._getPicsListAtAlbumId(self._album!.objectForKey("_id") as? String, __block: { (array) -> Void in
-            self._pics = array
-            dispatch_async(dispatch_get_main_queue(), {[weak self] () -> Void in
+        Social_Main._getPicsListAtAlbumId(self._album!.objectForKey("_id") as? String, __block: {[weak self] (array) -> Void in
+            self?._pics = array
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self?._refreshDatas()
+                self?._getComments()
             })
         })
 
+    }
+    func _getComments() -> Void {
+        Social_Main._getAlbumCommentAndLikes(self._album!.objectForKey("_id") as! String) { [weak self](__dict) in
+            let _comments:NSArray = __dict.objectForKey("comment") as! NSArray
+            let _likes:NSArray = __dict.objectForKey("like") as! NSArray
+            self?._comments = _comments
+            self?._likes = _likes
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self?._refreshDatas()
+            })
+        }
     }
     
     
@@ -175,9 +205,8 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
         
         //cell!.tag = 100+indexPath.row
         
-        //cell!._setComments(_comments, __allNum: _comments.count)
         
-        //cell!._setLikeNum(self._likeArray?.objectAtIndex(indexPath.row) as! Int)
+        
         
         //cell?._setLiked(_hasLikedAtIndex(indexPath.row))
         
@@ -214,7 +243,13 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
         }
         
         
+        cell?._showAllComments = true
+        
         cell!._setUpdateTime(CoreAction._dateDiff(_album!.objectForKey("create_at") as! String))
+        
+        cell!._setComments(_comments, __allNum: _comments.count)
+        
+        cell!._setLikeNum(self._likes.count)
         
         //cell!._refreshView()
         return cell!
@@ -259,10 +294,6 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
     }
     func _moreComment(__indexId: Int) {
         
-        let _controller:CommentList = CommentList()
-        //println(__dict)
-        _controller._dealWidthDatas(_comments)
-        self.navigationController?.pushViewController(_controller, animated: true)
     }
     func _viewUser(__userId: String) {
         //println(__userId)
@@ -288,32 +319,10 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
             
             break
         case "comment":
-            let _cell:PicAlbumMessageItem = _tableView?.cellForRowAtIndexPath(NSIndexPath(forRow: __dict.objectForKey("indexId") as! Int, inSection: 0)) as! PicAlbumMessageItem
-            //println(_cell.frame.origin.y)
-            //UIView.beginAnimations("offset", context: nil)
-            /*-----在当前页打开输入框
-            var _offY:CGFloat=_cell.frame.origin.y+_cell.frame.height-(self.view.frame.height-258)
-            if _offY<0.8*(_barH+_profileH+10){
-            _offY = 0.8*(_barH+_profileH+10)
-            }
-            
-            _tableView?.setContentOffset(CGPoint(x: 0, y: _offY), animated: true)
-            
-            UIView.commitAnimations()
-            _inputer =  Inputer(frame: self.view.frame)
-            _inputer?.setup()
-            
-            self.view.addSubview(_inputer!)
-            _inputer?._delegate = self
-            _inputer?._open()
-            */
-            
             
             let _controller:CommentList = CommentList()
-            //println(__dict)
-            
-            _controller._dealWidthDatas(_comments)
-            
+            _controller._type = CommentList._Type_album
+            _controller._id = _album!.objectForKey("_id") as! String
             self.navigationController?.pushViewController(_controller, animated: true)
             
             break
@@ -404,8 +413,8 @@ class AlbumDetail: UIViewController, UITableViewDataSource, UITableViewDelegate,
         
     }
     override func viewDidAppear(animated: Bool) {
-        
-        
+        ImageLoader.sharedLoader._removeAllTask()
+        _getDatas()
     }
     func clickAction(sender:UIButton){
         switch sender{

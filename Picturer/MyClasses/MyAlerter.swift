@@ -43,7 +43,7 @@ class MyAlerter: UIViewController {
         _container = UIView()
         
         
-        _tap = UITapGestureRecognizer(target: self, action: "tapHander:")
+        _tap = UITapGestureRecognizer(target: self, action: #selector(MyAlerter.tapHander(_:)))
         
         _bg = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         _bg!.backgroundColor = UIColor(white: 0, alpha: 0.4)
@@ -80,7 +80,7 @@ class MyAlerter: UIViewController {
             _v.titleLabel?.textColor = Config._color_black_title
             _v.setTitle(_menus!.objectAtIndex(i) as? String, forState: UIControlState.Normal)
             _v.tag = 100+i
-            _v.addTarget(self, action: "_buttonHander:", forControlEvents: UIControlEvents.TouchUpInside)
+            _v.addTarget(self, action: #selector(MyAlerter._buttonHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             _container?.addSubview(_v)
             if i>0{
                 let _line:UIView = UIView(frame: CGRect(x: 0, y: CGFloat(i)*_gap, width: self.view.frame.width, height: 0.5))
@@ -93,7 +93,7 @@ class MyAlerter: UIViewController {
         _canelButton!.titleLabel?.font = Config._font_topbarTitle
         _canelButton!.backgroundColor = Config._color_black_bottom
         _canelButton!.setTitle("取消", forState: UIControlState.Normal)
-        _canelButton!.addTarget(self, action: "_buttonHander:", forControlEvents: UIControlEvents.TouchUpInside)
+        _canelButton!.addTarget(self, action: #selector(MyAlerter._buttonHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         _canelButton!.tag = -100
         _container?.addSubview(_canelButton!)
         

@@ -56,14 +56,14 @@ class Log_resetPassw: UIViewController{
         _btn_cancel=UIButton(frame: CGRect(x: 10, y: 22, width: 30, height: 30))
         _btn_cancel?.center = CGPoint(x: 30, y: _barH/2+8)
         _btn_cancel?.setImage(UIImage(named: "icon_back"), forState: UIControlState.Normal)
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(Log_resetPassw.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         //        let _white:UIView = UIView(frame: CGRect(x: 0, y: _barH+_gap , width: self.view.frame.width, height: 4*_buttonH))
         //        _white.backgroundColor = UIColor(white: 1, alpha: 0.1)
         
         //self.view.addSubview(_white)
         
-        for var i:Int = 0;i<3; ++i{
+        for var i:Int = 0;i<3; i += 1{
             let _line:UIView = UIView(frame: CGRect(x: _gap, y: _barH+_gap+CGFloat(i+1)*_buttonH-0.5, width: self.view.frame.width-2*_gap, height: 0.3))
             _line.backgroundColor = UIColor(white: 0, alpha: 0.2)
             self.view.addSubview(_line)

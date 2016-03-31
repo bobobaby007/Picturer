@@ -49,7 +49,7 @@ class EULA:UIViewController{
         _btn_cancel=UIButton(frame:CGRect(x: 0, y: 20, width: 44, height: 44))
         _btn_cancel?.setImage(UIImage(named: "back_icon.png"), forState: UIControlState.Normal)
         
-        _btn_cancel?.addTarget(self, action: "btnHander:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(EULA.btnHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 12, width: self.view.frame.width-100, height: 60))
         _title_label?.textColor=UIColor.whiteColor()

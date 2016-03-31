@@ -88,7 +88,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         self.backgroundColor = UIColor.clearColor()
         
         _tapC = UITapGestureRecognizer(target: self, action: Selector("_tapHander:"))
-        _buttonTap = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
+        _buttonTap = UITapGestureRecognizer(target: self, action: #selector(CollectItem._buttonTapHander(_:)))
         //println(_defaultSize!.width)
         
         _userImg = PicView(frame: CGRect(x: 11+_gap, y: 5+_gap, width: 35, height: 35))
@@ -137,7 +137,7 @@ class CollectItem:  UITableViewCell,UITextViewDelegate{
         
         _bottomOfPic = _picV!.frame.origin.y + _picV!.frame.height
         
-        let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
+        let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(CollectItem._buttonTapHander(_:)))
         _picV?.addGestureRecognizer(_tapPic)
         
         _albumTitle_labelV = UIView(frame: CGRect(x: _gap-1, y: _bottomOfPic-30, width: _defaultSize!.width-2*_gap-2, height: 30))
@@ -337,7 +337,7 @@ func _getPics(){
             let _maxNum:Int = Int(_defaultSize!.width/5)
             //println(_maxNum)
             
-            for var i:Int = 0; i < __likes.count ; ++i{
+            for var i:Int = 0; i < __likes.count ; i += 1{
                 if i>0 {
                     _attrStr.appendAttributedString(NSAttributedString(string: ", "))
                 }

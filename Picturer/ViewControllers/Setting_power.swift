@@ -44,13 +44,13 @@ class Setting_power: UIViewController, UITableViewDelegate,UITableViewDataSource
         _btn_cancel=UIButton(frame:CGRect(x: 5, y: 5, width: 40, height: 62))
         _btn_cancel?.titleLabel?.font=Config._font_topButton
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(Setting_power.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
         _btn_save?.titleLabel?.font=Config._font_topButton
         _btn_save?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
-        _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_save?.addTarget(self, action: #selector(Setting_power.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.textColor=UIColor.whiteColor()

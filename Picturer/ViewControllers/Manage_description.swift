@@ -49,13 +49,13 @@ class Manage_description: UIViewController,UITextViewDelegate {
         _btn_cancel?.titleLabel?.font = Config._font_topButton
         
         _btn_cancel?.setTitle("取消", forState: UIControlState.Normal)
-        _btn_cancel?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_cancel?.addTarget(self, action: #selector(Manage_description.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_save=UIButton(frame:CGRect(x: self.view.frame.width-50, y: 5, width: 40, height: 62))
         _btn_save?.setTitle("完成", forState: UIControlState.Normal)
         _btn_save?.setTitleColor(Config._color_yellow, forState: UIControlState.Normal)
         _btn_save?.titleLabel?.font = Config._font_topButton
-        _btn_save?.addTarget(self, action: "clickAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_save?.addTarget(self, action: #selector(Manage_description.clickAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _title_label=UILabel(frame:CGRect(x: 50, y: 5, width: self.view.frame.width-100, height: 62))
         _title_label?.font = Config._font_topbarTitle
@@ -93,7 +93,7 @@ class Manage_description: UIViewController,UITextViewDelegate {
         _topBar?.addSubview(_btn_cancel!)
         _topBar?.addSubview(_btn_save!)
         _topBar?.addSubview(_title_label!)
-        _tapRec=UITapGestureRecognizer(target: self, action: Selector("tapHander:"))
+        _tapRec=UITapGestureRecognizer(target: self, action: #selector(Manage_description.tapHander(_:)))
         _setuped=true
     }
     

@@ -87,7 +87,7 @@ class ReferenceAlbumItem:  UITableViewCell,UITextViewDelegate{
         
         
         
-        _buttonTap = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
+        _buttonTap = UITapGestureRecognizer(target: self, action: #selector(ReferenceAlbumItem._buttonTapHander(_:)))
         //println(_defaultSize!.width)
         
         
@@ -161,7 +161,7 @@ class ReferenceAlbumItem:  UITableViewCell,UITextViewDelegate{
         _picV?._imgView?.contentMode = UIViewContentMode.ScaleAspectFill
         _picV?.layer.masksToBounds = true
         
-        let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("_buttonTapHander:"))
+        let _tapPic:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ReferenceAlbumItem._buttonTapHander(_:)))
         _picV?.addGestureRecognizer(_tapPic)
         
         _bottomOfPic = _picV!.frame.origin.y + _picV!.frame.height

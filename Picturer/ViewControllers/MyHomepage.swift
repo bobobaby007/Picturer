@@ -188,7 +188,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_social_gray, range: NSMakeRange(0, attributedString.length))
         _btn_moreAction?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
         _btn_moreAction?.titleLabel?.font=Config._font_social_button
-        _btn_moreAction?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_moreAction?.addTarget(self, action: #selector(MyHomepage.btnHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         
@@ -204,7 +204,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         _btn_follow?.titleLabel?.textAlignment = NSTextAlignment.Center
         _btn_follow?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
         _btn_follow?.titleLabel?.font=Config._font_social_button
-        _btn_follow?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_follow?.addTarget(self, action: #selector(MyHomepage.btnHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_album = UIButton(frame: CGRect(x: 0,y: _profileH - _buttonH,width: _buttonW,height: _buttonH))
         _btn_album?.backgroundColor = Config._color_black_title
@@ -225,7 +225,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         attributedString.addAttribute(NSForegroundColorAttributeName, value: Config._color_white_title, range: NSMakeRange(0, attributedString.length) )
         _btn_followed?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
         _btn_followed?.titleLabel?.font=Config._font_social_button_2
-        _btn_followed?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_followed?.addTarget(self, action: #selector(MyHomepage.btnHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         _btn_following = UIButton(frame: CGRect(x: _btn_album!.frame.origin.x + 2*_buttonW + 2*_buttonGap,y: _btn_album!.frame.origin.y,width: _buttonW,height: _buttonH))
         _btn_following?.backgroundColor = Config._color_black_title
@@ -235,7 +235,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         _btn_following?.setAttributedTitle(attributedString, forState: UIControlState.Normal)
         _btn_following?.setTitleColor(Config._color_white_title, forState: UIControlState.Normal)
         _btn_following?.titleLabel?.font=Config._font_social_button_2
-        _btn_following?.addTarget(self, action: Selector("btnHander:"), forControlEvents: UIControlEvents.TouchUpInside)
+        _btn_following?.addTarget(self, action: #selector(MyHomepage.btnHander(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         
         
@@ -542,10 +542,7 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             
             
             _heighArray?.addObject(_defaultH)
-            //-----获取评论列表
-            Social_Main._getCommentsOfAlubm(String(i), block: { (array) -> Void in
-                self._commentsArray?.addObject(array)
-            })
+            
             
             
             //---点赞数

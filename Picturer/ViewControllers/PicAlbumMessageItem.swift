@@ -24,6 +24,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     var _picsW:CGFloat = 0
     let _gapForPic:CGFloat = 2
     
+    var _showAllComments:Bool = false //是否显示全部评论
+    
     var _alerter:MyAlerter?
     
     var _bottomOfPic:CGFloat = 0 //---到图片底部的位置
@@ -415,7 +417,8 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         if _moreCommentText?.text == ""{
         
         }else{
-            _moreComentH = _moreCommentText!.contentSize.height-3
+            let _size_2 = _moreCommentText!.sizeThatFits(CGSize(width: _defaultSize!.width-_gap*2, height: CGFloat.max))
+            _moreComentH = _size_2.height-3
         }
         
         let _moreCommentGap:CGFloat = 5
@@ -461,9 +464,12 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         _attributeStr = NSMutableAttributedString(string: "")
         
         for var i:Int = 0 ; i<_n; ++i{
-            if i>2 {
+            
+            if i>2  && !_showAllComments{
                 break
             }
+            
+            
             if i>0 {
                 _attributeStr?.appendAttributedString(NSAttributedString(string: "\n"))
             }
@@ -480,7 +486,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
         
         _commentText?.linkTextAttributes = [NSForegroundColorAttributeName:Config._color_social_blue]
        
-        if _n>3{
+        if _n>3 && !_showAllComments{
             _moreCommentText?.attributedText = linkString("全部"+String(__allNum)+"条评论",withURLString:"moreComment:")
             _moreCommentText?.linkTextAttributes = [NSForegroundColorAttributeName:Config._color_gray_time]
         }else{
