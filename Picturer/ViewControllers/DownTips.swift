@@ -15,7 +15,7 @@ protocol DownTips_delegate:NSObjectProtocol{
 
 class DownTips: UIView {
     var _bg:UIView?
-    var _title:UITextField?
+    var _title:UILabel?
     var _isOpened:Bool = false
     
     var _timer:NSTimer?
@@ -27,13 +27,29 @@ class DownTips: UIView {
         
         self.backgroundColor = UIColor.clearColor()
         self.userInteractionEnabled = false
-        _bg = UIView(frame: CGRect(x: 0, y: 10, width: frame.width, height: frame.height-10))
+        _bg = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        let _rectBg:UIView = UIView(frame: CGRect(x: 10, y: 8, width: frame.width-10*2, height: 75))
+        _rectBg.layer.cornerRadius = 2
+        _rectBg.backgroundColor =  Config._color_yellow
         
-        _title = UITextField(frame: _bg!.frame)
+        let _sanjiao:UIImageView = UIImageView(image: UIImage(named: "sanjiao.png"))
+        _sanjiao.frame = CGRect(x: (frame.width-12)/2, y: 8/2, width: 12, height: 8)
+       
         
-        _bg!.backgroundColor = Config._color_yellow
+        _bg?.addSubview(_rectBg)
+        _bg?.addSubview(_sanjiao)
+        
+        _title = UILabel(frame: _bg!.frame)
+        _title?.textColor = Config._color_black_title
+        _title?.font = Config._font_cell_title_normal
+        _title?.text = "试试向下滑动"
+        _title?.textAlignment = NSTextAlignment.Center
+        
+        
         _bg!.alpha = 0.95
+        
         self.addSubview(_bg!)
+        self.addSubview(_title!)
     }
     
     
@@ -52,7 +68,7 @@ class DownTips: UIView {
 
         }) { [weak self](stop) -> Void in
             if self != nil{
-                self!._timer = NSTimer.scheduledTimerWithTimeInterval(2, target: self!, selector: #selector(DownTips._timerHander(_:)), userInfo: nil, repeats: false)
+                self!._timer = NSTimer.scheduledTimerWithTimeInterval(20, target: self!, selector: #selector(DownTips._timerHander(_:)), userInfo: nil, repeats: false)
                 //self!._timer?.fire()
             }
             
@@ -70,16 +86,14 @@ class DownTips: UIView {
         }
         
         _isOpened = false
+        if self._timer != nil{
+            self._timer?.invalidate()
+            self._timer = nil
+        }
         
         UIView.animateWithDuration(0.4, animations: {[weak self] () -> Void in
             self?.alpha = 0
         }) { [weak self] (stop) -> Void in
-            if self?._timer != nil{
-                self?._timer?.invalidate()
-                self?._timer = nil
-            }
-            
-            
          self?.removeFromSuperview()
         }
     }

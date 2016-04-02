@@ -373,8 +373,14 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
     //---------
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let _dict:NSDictionary = _dataArray.objectAtIndex(indexPath.row) as! NSDictionary
+        
         let _user:NSDictionary = _dict.objectForKey("author") as! NSDictionary
-        let _pics:NSArray = _dict.objectForKey("ids") as! NSArray
+       
+        var _pics:NSArray = []
+        
+        if let _images:NSArray = _dict.objectForKey("ids") as? NSArray{
+            _pics = _images
+        }
     
         
         print("朋友的单条信息：",_dict)
@@ -433,6 +439,7 @@ class Friends_Home: UIViewController, UITableViewDataSource, UITableViewDelegate
             }
             _albumId = _album.objectForKey("_id") as! String
         }
+        
         cell?._setStatusString(_pics.count, __albumName: _albumName, __albumId: _albumId)
         
         

@@ -284,7 +284,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
     
     
     
-    //-----拖动方法
+    //-----拖动方法,下滑，下拉提醒条消失
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         if _isOuting{
@@ -304,6 +304,7 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
             return
         }
         
+        _hideTips()
         
         if _isChanging{
             
@@ -438,6 +439,11 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         }
         //cell.imageView?.image=UIImage(named: _albumArray[indexPath.row] as! String)
         
+        if indexPath.row == 0{
+            if _checkNeedfDownTipsed(){
+                _showTips()
+            }
+        }
         
         return cell
         
@@ -815,17 +821,42 @@ class Manage_home: UIViewController,UITableViewDelegate,UITableViewDataSource,Ma
         
     }
     //---展示下拉提示
+    func _checkNeedfDownTipsed() -> Bool {
+        if MainAction._albumList.count <= 0{
+            return false
+        }
+        if MainAction._albumList.count > 1{
+            return false
+        }
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        let _showed:Bool?=_ud.valueForKey("downTipShowed") as? Bool
+        if (_showed != nil){
+            return false
+        }
+        return true
+    }
     func _showTips()->Void {
         if _downTips == nil{
-            _downTips = DownTips(frame: CGRect(x: 0, y: Config._barH, width: self.view.frame.width, height: _cellH+300))
-            
+            _downTips = DownTips(frame: CGRect(x: 0, y: Config._barH, width: self.view.frame.width, height: _cellH))
         }
+        
+        
+        
+        
         self.view.insertSubview(_downTips!, belowSubview: _bottomView)
         //self.view.addSubview(_downTips!)
         _downTips?._show()
+        
+        
+        
+        let _ud:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        _ud.setObject(true, forKey: "downTipShowed")
+
     }
     func _hideTips() -> Void {
-        
+        if _downTips != nil{
+           _downTips?._close()
+        }
     }
     
     override func viewDidAppear(animated: Bool) {

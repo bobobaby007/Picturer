@@ -183,8 +183,6 @@ class ContentEditer: UIViewController,UITextViewDelegate {
         }
         
     }
-    
-    
     func _btnHander(sender:UIButton){
         let _tag:Int = sender.tag
         _selectedAt(_tag)
