@@ -336,6 +336,8 @@ class Collect_home: UIViewController, UITableViewDataSource, UITableViewDelegate
         var _lastH:CGFloat? = -10
         if _heighArray!.count>=__indexId+1{
             _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
+        }else{
+            _heighArray?.addObject(__height)
         }
         if _lastH != __height{
             //println(String(__indexId)+":"+String(stringInterpolationSegment: __height))

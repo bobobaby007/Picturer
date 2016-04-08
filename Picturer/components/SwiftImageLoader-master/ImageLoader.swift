@@ -24,11 +24,14 @@ class ImageLoader {
             return
         }
         for i:Int in 0 ..< _loadingTasks!.count {
-            let _task:NSURLSessionDataTask = _loadingTasks!.objectAtIndex(i) as! NSURLSessionDataTask
-            if _task.currentRequest?.URL?.absoluteString == urlString{
-                _loadingTasks!.removeObjectAtIndex(i)
-                _task.cancel()
+            if let _task = _loadingTasks!.objectAtIndex(i) as? NSURLSessionDataTask{
+                if _task.currentRequest?.URL?.absoluteString == urlString{
+                    _task.cancel()
+                    
+                    //_loadingTasks!.removeObjectAtIndex(i)
+                }
             }
+            
         }
     }
     func _removeAllTask(){
@@ -56,6 +59,7 @@ class ImageLoader {
             let _localData:NSData?=ZYHWebImageChcheCenter.readCacheFromUrl(NSString(string: urlString))
             if let goodData = _localData {
                 let image = UIImage(data: goodData)
+                self.cache.setObject(goodData, forKey: urlString)
                 dispatch_async(dispatch_get_main_queue(), {() in
                     completionHandler(image: image, url: urlString)
                 })

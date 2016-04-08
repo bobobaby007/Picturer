@@ -97,7 +97,10 @@ class MainAction: AnyObject {
                     
                     let _index = _getAlbumIndexOfId(_album.objectForKey("_id") as! String)
                     if _index != -1{
+                        print(_index)
+                        
                         _changeAlbumAtIndex(_index, dict: _album)
+                        
                     }else{
                         //print(_album.objectForKey("title"))
                         _insertAlbum(_album)
@@ -108,6 +111,9 @@ class MainAction: AnyObject {
                         })
                     })
                 }
+                
+                
+                
                 __block(__dict)
             }
         }
@@ -133,10 +139,13 @@ class MainAction: AnyObject {
     }
     //--通过图册id查找图册Index
     static func _getAlbumIndexOfId(__id:String)->Int{
-        for var i:Int = 0; i < MainAction._albumList.count; i += 1{
+        print(MainAction._albumList.count)
+        
+        for i:Int in 0 ..< MainAction._albumList.count{
             let _dict:NSDictionary = MainAction._albumList.objectAtIndex(i) as! NSDictionary
             let _id:String = _dict.objectForKey("_id") as! String
             if _id.lowercaseString.rangeOfString(__id.lowercaseString) != nil{
+                
                 return i
             }
         }

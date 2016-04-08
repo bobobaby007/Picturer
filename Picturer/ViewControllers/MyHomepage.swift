@@ -682,8 +682,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         switch _showType{
         case "pic":
             //_tableView?.reloadData()
-            _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
             _tableView?.scrollEnabled = false
+            _tableView?.frame = CGRect(x: 0, y: _profileH+_gap!, width:  _myFrame!.width, height: _tableView!.contentSize.height)
+            
             _scrollView?.contentSize = CGSize(width: _myFrame!.width, height: _tableView!.frame.origin.y+_tableView!.frame.height)
             
             break
@@ -821,7 +822,9 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
             cell!._setUserName(_userInfo!.objectForKey("nickname") as! String)
         }
         if let _comments:NSArray = _dict.objectForKey("comment") as? NSArray{
-            cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
+           //print("评论：",_comments,"评论数：",_dict.objectForKey("comments") as! Int)
+            
+             cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
             //cell!._setComments(_comments, __allNum: _dict.objectForKey("comments") as! Int)
         }
         
@@ -838,6 +841,8 @@ class MyHomepage: UIViewController, UITableViewDataSource, UITableViewDelegate,U
         var _lastH:CGFloat? = -10
         if _heighArray!.count>=__indexId+1{
          _lastH = CGFloat(_heighArray!.objectAtIndex(__indexId) as! NSNumber)
+        }else{
+            _heighArray?.addObject(__height)
         }
         if _lastH != __height{
             _heighArray![__indexId] = __height

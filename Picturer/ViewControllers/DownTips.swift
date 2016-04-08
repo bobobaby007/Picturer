@@ -68,7 +68,7 @@ class DownTips: UIView {
 
         }) { [weak self](stop) -> Void in
             if self != nil{
-                self!._timer = NSTimer.scheduledTimerWithTimeInterval(20, target: self!, selector: #selector(DownTips._timerHander(_:)), userInfo: nil, repeats: false)
+                self!._timer = NSTimer.scheduledTimerWithTimeInterval(6, target: self!, selector: #selector(DownTips._timerHander(_:)), userInfo: nil, repeats: false)
                 //self!._timer?.fire()
             }
             

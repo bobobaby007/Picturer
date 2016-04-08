@@ -339,8 +339,6 @@ class Social_Main: AnyObject {
             // print("_getUserProfileAtId",__dict)
         }
     }
-    
-    
     //------消息列表
     static func _getMessages(block:(NSArray)->Void){
         let _array:NSMutableArray = NSMutableArray()
@@ -509,7 +507,18 @@ class Social_Main: AnyObject {
         MainInterface._getMyFocusTimeLine(__fromId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 print("关注用户更新：",__dict)
-                let _arr = __dict.objectForKey("list") as! NSArray
+                let _arr:NSMutableArray = []
+                
+                let _array = __dict.objectForKey("list") as! NSArray
+                
+                for i:Int in 0..<_array.count{
+                    if let _dict:NSDictionary = _array.objectAtIndex(i) as? NSDictionary{
+                        if let _:NSDictionary = _dict.objectForKey("album") as? NSDictionary{
+                            _arr.addObject(_dict)
+                        }
+                    }
+                }
+                
                 _focusMeList = NSMutableArray(array: _arr)
                 __block(_arr)
             }else{
@@ -523,7 +532,19 @@ class Social_Main: AnyObject {
         MainInterface._getMyFriendsTimeLine(__fromId) { (__dict) -> Void in
             if __dict.objectForKey("recode") as! Int == 200{
                 print("朋友更新：",__dict)
-                let _arr = __dict.objectForKey("list") as! NSArray
+                
+                let _arr:NSMutableArray = []
+                
+                let _array = __dict.objectForKey("list") as! NSArray
+                
+                for i:Int in 0..<_array.count{
+                    if let _dict:NSDictionary = _array.objectAtIndex(i) as? NSDictionary{
+                        if let _:NSDictionary = _dict.objectForKey("album") as? NSDictionary{
+                            _arr.addObject(_dict)
+                        }
+                    }
+                }
+                
                 _friendList = NSMutableArray(array: _arr)
                 __block(_arr)
             }else{
@@ -531,33 +552,7 @@ class Social_Main: AnyObject {
             }
         }
     }
-    //－－－－提取妙人更新图册列表---取消
-    static func _getLikesNewsList(block:(NSArray)->Void){
-        let _array:NSMutableArray = NSMutableArray()
-        let _n:Int = 10
-        for var i:Int = 0; i<_n;++i{
-            let _dict:NSMutableDictionary = NSMutableDictionary()
-            let _pics:NSMutableArray = NSMutableArray()
-            var _num:Int = i+5
-            if _num>8{
-                _num = 8
-            }
-            for t in 0..._num{
-                let _pic:NSDictionary = NSDictionary(objects: ["pic_"+String((t+i)%5+4)+".JPG","file"], forKeys: ["url","type"])
-                _pics.addObject(_pic)
-            }
-            _dict.setObject(_pics, forKey: "pics")
-            
-            let _pic:NSDictionary = NSDictionary(objects: ["user_"+String(i%8+1)+".jpg","file"], forKeys: ["url","type"])
-            _dict.setObject(_pic, forKey: "userImg")
-            _dict.setObject(_testUserNames?.objectAtIndex(random()%31) as! String, forKey: "userName")
-            _dict.setObject("000002", forKey: "userId")
-            _dict.setObject("天边一朵云", forKey: "title")
-            _dict.setObject("个人欣赏", forKey: "description")
-            _array.addObject(_dict)
-        }
-        block(_array)
-    }
+    
     //－－－－提取收藏图册列表
     static func _getCollectList(block:(NSArray)->Void){
         

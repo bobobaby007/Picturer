@@ -456,7 +456,7 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     func _setComments(__comments:NSArray,__allNum:Int){
         //let _lineH:CGFloat = 20
         //var _h:CGFloat
-       // print("评论：",__comments)
+        print("评论：",__comments)
                 
         let _n:Int = __comments.count
         
@@ -620,7 +620,10 @@ class PicAlbumMessageItem:  UITableViewCell,UITextViewDelegate{
     
     override func removeFromSuperview() {
         //print("out")
-        self.superview?.removeGestureRecognizer(_tapC!)
+        if self.superview != nil && _tapC != nil{
+            self.superview?.removeGestureRecognizer(_tapC!)
+        }
+        
     }
     //-------点赞人----取消
     func _setLikes(__likes:NSArray,__allNum:Int){
